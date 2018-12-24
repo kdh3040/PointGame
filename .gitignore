@@ -85,3 +85,11 @@ GraphicsSettings.asset
 ProjectSettings.asset
  
 ProjectVersion.txt
+
+Temp/
+ 
+Obj/
+ 
+UnityGenerated/
+ 
+Library/
