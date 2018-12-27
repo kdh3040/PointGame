@@ -19,19 +19,12 @@ public class GamePlayManager : MonoBehaviour {
 
     public int StageCount = 1;
     public List<GameBlock> BlockList = new List<GameBlock>();
-    public GameChar Char;
+    public GameObject Char;
     public GameUI UI;
 
-    public float movePower = 1f;
-    public float jumpPower = 10f;
-
-    public Rigidbody2D rigid;
-
-    Vector3 movement;
-    bool isJumping = false;
-
-    bool isRightJump = false;
-    bool isLeftJump = false;
+    private bool IsGameStart = false;
+    private Vector3 BlockCharCenterPos = new Vector3(0, 1.2f, -1f);
+    private int BlockCharIndex = 0;
 
     void Start()
     {
@@ -79,61 +72,44 @@ public class GamePlayManager : MonoBehaviour {
 
     private void Update()
     {
-        for (int index = 0; index < BlockList.Count; ++index)
+        if (IsGameStart)
         {
-            var pos = BlockList[index].gameObject.transform.localPosition;
-            pos.y = pos.y - 0.05f;
-            BlockList[index].gameObject.transform.localPosition = pos;
+            for (int index = 0; index < BlockList.Count; ++index)
+            {
+                var pos = BlockList[index].gameObject.transform.localPosition;
+                pos.y = pos.y - 0.05f;
+                BlockList[index].gameObject.transform.localPosition = pos;
 
-            if (pos.y < -2.5f)
-                ResetBlock(index);
+                if (pos.y < -2.5f)
+                    ResetBlock(index);
+            }
         }
-
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
-        {
-            isLeftJump = true;
-            isRightJump = false;
-        }
-
-        else if (Input.GetKeyDown(KeyCode.RightArrow))
-        {
-            isLeftJump = false;
-            isRightJump = true;
-        }
-    }
-
-    private void FixedUpdate()
-    {
-        Jump();
-    }
-
-    public void Jump()
-    {
-        if (isLeftJump == false && isRightJump == false)
-            return;
-
-        rigid.velocity = Vector2.zero;
-
-        if(isLeftJump)
-        {
-            Vector2 jumpVelocity = new Vector2(-2, jumpPower);
-            rigid.AddForce(jumpVelocity, ForceMode2D.Impulse);
-        }
-        else
-        {
-            Vector2 jumpVelocity = new Vector2(2, jumpPower);
-            rigid.AddForce(jumpVelocity, ForceMode2D.Impulse);
-        }
-        
-
-        isLeftJump = false;
-        isRightJump = false;
     }
 
     public void CharJump(bool left)
     {
         // 좌우 터치가 들어 왔을떄 점프 처리
         // 점프액션이 두번 들어오지 않게 막아야함
+
+        IsGameStart = true;
+
+        BlockCharIndex = BlockCharIndex + 1;
+        if (BlockCharIndex > BlockList.Count - 1)
+            BlockCharIndex = 0;
+
+        if(left)
+        {
+            Char.transform.parent = BlockList[BlockCharIndex].LeftBlock.transform;
+            Char.transform.localPosition = BlockCharCenterPos;
+        }
+        else
+        {
+            Char.transform.parent = BlockList[BlockCharIndex].RightBlock.transform;
+            Char.transform.localPosition = BlockCharCenterPos;
+        }
+        
+        //Char.transform.position = BlockList[0].RightBlock.transform.InverseTransformPoint(BlockCharCenterPos);
+
     }
 
     public void AllResetBlock()
