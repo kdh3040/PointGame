@@ -23,7 +23,7 @@ public class GamePlayManager : MonoBehaviour {
     public GameUI UI;
 
     private bool IsGameStart = false;
-    private Vector3 BlockCharCenterPos = new Vector3(0, 1.2f, -1f);
+    private Vector3 BlockCharCenterPos = new Vector3(0, 1.2f, -9f);
     private int BlockCharIndex = 0;
     private bool LastJumpLeft = true;
     private bool IsJumping = false;
@@ -76,7 +76,7 @@ public class GamePlayManager : MonoBehaviour {
     public void CheckGameOver()
     {
         if(Char.BlockLeftDir && BlockList[BlockCharIndex].BlockType == GameBlock.BLOCK_TYPE.LEFT_SAW ||
-            Char.BlockLeftDir == false && BlockList[BlockCharIndex].BlockType == GameBlock.BLOCK_TYPE.RIGHT_SAW)
+            Char.BlockLeftDir == false && BlockList[BlockCharIndex].BlockType == GameBlock.BLOCK_TYPE.RIGHT_SAW )
             IsGameStart = false;
     }
 
@@ -93,6 +93,9 @@ public class GamePlayManager : MonoBehaviour {
                 if (pos.y < -2.5f)
                     ResetBlock(index);
             }
+
+            if( Char.gameObject.transform.TransformPoint(Vector3.zero).y < -10f)
+                IsGameStart = false;
         }
 
     }
