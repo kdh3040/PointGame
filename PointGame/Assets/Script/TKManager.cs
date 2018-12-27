@@ -2,16 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GManager : MonoBehaviour
+public class TKManager : MonoBehaviour
 {
-    public static GManager _instance = null;
-    public static GManager Instance
+    public static TKManager _instance = null;
+    public static TKManager Instance
     {
         get
         {
             if (_instance == null)
             {
-                _instance = FindObjectOfType<GManager>() as GManager;
+                _instance = FindObjectOfType<TKManager>() as TKManager;
             }
             return _instance;
         }
