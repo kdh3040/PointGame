@@ -14,8 +14,10 @@ public class GameBlock : MonoBehaviour
         RIGHT,
     }
 
+    public GameObject LeftBlockObject;
     public GameObject LeftBlock;
     public GameObject LeftSaw;
+    public GameObject RightBlockObject;
     public GameObject RightBlock;
     public GameObject RightSaw;
     public GameObject SafeBlock;

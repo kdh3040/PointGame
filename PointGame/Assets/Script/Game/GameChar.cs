@@ -5,6 +5,7 @@ using UnityEngine;
 public class GameChar : MonoBehaviour
 {
     public Animator Anim;
+    public bool BlockLeftDir = true;
 
     public void Initialize()
     {
