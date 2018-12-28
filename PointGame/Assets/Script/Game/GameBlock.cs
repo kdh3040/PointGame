@@ -8,6 +8,7 @@ public class GameBlock : MonoBehaviour
     {
         NONE,
         SAFE,
+        CLEAR,
         LEFT_SAW,
         RIGHT_SAW,
         LEFT,
@@ -40,6 +41,7 @@ public class GameBlock : MonoBehaviour
             case BLOCK_TYPE.NONE:
                 break;
             case BLOCK_TYPE.SAFE:
+            case BLOCK_TYPE.CLEAR:
                 SafeBlock.SetActive(true);
                 break;
             case BLOCK_TYPE.LEFT_SAW:

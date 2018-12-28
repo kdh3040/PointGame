@@ -18,6 +18,10 @@ public class GamePlayManager : MonoBehaviour {
     }
 
     public int StageCount = 1;
+    public int AllPoint = 0;
+    public int GamePoint = 0;
+    public int BlockLimitCount = 10;
+    public int BlockCount = 0;
     public List<GameBlock> BlockList = new List<GameBlock>();
     public GameChar Char;
     public GameUI UI;
@@ -28,56 +32,83 @@ public class GamePlayManager : MonoBehaviour {
     private bool LastJumpLeft = true;
     private bool IsJumping = false;
 
+    private float CharDeathPosY = -8.5f;
+
 
     void Start()
     {
         // 게임에 들어 올때마다 생성
-
-        //DontDestroyOnLoad(this);
-        //Screen.sleepTimeout = SleepTimeout.NeverSleep;
-        //Application.targetFrameRate = 50;
-        //Screen.SetResolution(Screen.width, (Screen.width * 16) / 9, false);
-
-        //PlayerData.Instance.Initialize();
-
-        GameFirstReady();
-
+        StageCount = 0;
+        GameReady();
     }
 
-    public void GameFirstReady()
+    public void GameReady()
     {
         // 게임 화면 들어와서 준비
-        StageCount = 1;
-
         // 블럭 생성
+        StageCount++;
+        BlockCharIndex = 0;
+        BlockCount = 0;
+        IsJumping = false;
         AllResetBlock();
+        ResetChar();
+        UI.GameReady();
     }
 
-    public void GameFirstStart()
+    public void GameStart()
     {
         // 게임 화면 들어와서 시작
+        IsGameStart = true;
     }
 
     public void GameClear()
     {
         // 스테이지 클리어
+        IsGameStart = false;
+
+        StartCoroutine(Co_StageClearMove());
     }
 
-    public void GameStart()
+    IEnumerator Co_StageClearMove()
     {
-        // 스테이지 클리어후 시작
+        while(true)
+        {
+            for (int index = 0; index < BlockList.Count; ++index)
+            {
+                var pos = BlockList[index].gameObject.transform.localPosition;
+                pos.y = pos.y - 0.5f;
+                BlockList[index].gameObject.transform.localPosition = pos;
+
+                if(BlockList[index].BlockType == GameBlock.BLOCK_TYPE.CLEAR &&
+                    BlockList[index].gameObject.transform.localPosition.y < 5.2f)
+                {
+                    UI.GameClear();
+                    yield break;
+                }
+
+                if (pos.y < -2.5f)
+                    ResetBlock(index);
+            }
+
+            yield return null;
+        }
+        
     }
 
     public void GameEnd()
     {
         // 스테이지 종료
+        IsGameStart = false;
+        UI.GameEnd();
     }
 
     public void CheckGameOver()
     {
         if(Char.BlockLeftDir && BlockList[BlockCharIndex].BlockType == GameBlock.BLOCK_TYPE.LEFT_SAW ||
             Char.BlockLeftDir == false && BlockList[BlockCharIndex].BlockType == GameBlock.BLOCK_TYPE.RIGHT_SAW )
-            IsGameStart = false;
+        {
+            GameEnd();
+        }
     }
 
     private void Update()
@@ -94,17 +125,19 @@ public class GamePlayManager : MonoBehaviour {
                     ResetBlock(index);
             }
 
-            if( Char.gameObject.transform.TransformPoint(Vector3.zero).y < -10f)
-                IsGameStart = false;
+            if (Char.gameObject.transform.TransformPoint(Vector3.zero).y < CharDeathPosY)
+                GameEnd();
         }
-
     }
 
     public void CharJump(bool left)
     {
         // 좌우 터치가 들어 왔을떄 점프 처리
         // 점프액션이 두번 들어오지 않게 막아야함
-        IsGameStart = true;
+        // 화면 밖으로 나가지 못하게 해야함
+        if (IsGameStart == false)
+            return;
+
         if(IsJumping == false)
             StartCoroutine(Co_CharJump(left));
     }
@@ -114,9 +147,18 @@ public class GamePlayManager : MonoBehaviour {
         IsJumping = true;
         float time = 1.0f;
 
+        var tempIndex = BlockCharIndex;
         BlockCharIndex = BlockCharIndex + 1;
         if (BlockCharIndex > BlockList.Count - 1)
             BlockCharIndex = 0;
+
+        if (BlockList[BlockCharIndex].gameObject.transform.localPosition.y > 17f)
+        {
+            BlockCharIndex = tempIndex;
+            IsJumping = false;
+            yield break;
+        }
+            
 
         var startPos = Vector3.zero;
         var centerPos = Vector3.zero;
@@ -158,6 +200,13 @@ public class GamePlayManager : MonoBehaviour {
             left == false && BlockList[BlockCharIndex].BlockType == GameBlock.BLOCK_TYPE.LEFT)
             yield return Co_CharDown(left);
 
+        if(BlockList[BlockCharIndex].BlockType == GameBlock.BLOCK_TYPE.CLEAR)
+        {
+            Char.transform.localPosition = endPos;
+            GameClear();
+            yield break;
+        }
+
         Char.transform.localPosition = endPos;
         CheckGameOver();
         IsJumping = false;
@@ -168,13 +217,6 @@ public class GamePlayManager : MonoBehaviour {
         BlockCharIndex -= 1;
         if (BlockCharIndex < 0)
             BlockCharIndex = BlockList.Count - 1;
-
-        if (BlockList[BlockCharIndex].gameObject.transform.localPosition.y < -9.6f)
-        {
-            // 게임오버
-            yield break;
-        }
-            
 
         var startPos = Vector3.zero;
         var endPos = Vector3.zero;
@@ -225,31 +267,51 @@ public class GamePlayManager : MonoBehaviour {
     {
         for(int index = 0; index < BlockList.Count; ++index)
         {
-            // 맨 아래 있는 블럭은 안전 블럭
-            if(index == 0)
-            {
-                BlockList[index].Initialize(GameBlock.BLOCK_TYPE.SAFE);
-            }
+            if (index == 0)
+                ResetBlock(index, true);
             else
-            {
                 ResetBlock(index);
-            }
-
-            BlockList[index].gameObject.transform.localPosition = new Vector3(0, index * 3.5f);
         }
     }
 
-    private void ResetBlock(int index)
+    private void ResetBlock(int index, bool zeroPos = false)
     {
         int posIndex = index - 1;
         if (posIndex < 0)
             posIndex = BlockList.Count - 1;
 
         var nextPos = BlockList[posIndex].transform.localPosition;
-        BlockList[index].gameObject.transform.localPosition = new Vector3(0, nextPos.y + 3.5f);
+        if(zeroPos == false)
+            BlockList[index].gameObject.transform.localPosition = new Vector3(0, nextPos.y + 3.5f);
+        else
+            BlockList[index].gameObject.transform.localPosition = new Vector3(0, 1f);
 
-        GameBlock.BLOCK_TYPE type = (GameBlock.BLOCK_TYPE)Random.Range((int)GameBlock.BLOCK_TYPE.LEFT_SAW, (int)GameBlock.BLOCK_TYPE.RIGHT + 1);
-        BlockList[index].Initialize(type);
+        if (BlockCount == 0)
+        {
+            BlockList[index].Initialize(GameBlock.BLOCK_TYPE.SAFE);
+        }
+        else if(BlockCount == BlockLimitCount)
+        {
+            BlockList[index].Initialize(GameBlock.BLOCK_TYPE.CLEAR);
+        }
+        else if (BlockCount < BlockLimitCount)
+        {
+            GameBlock.BLOCK_TYPE type = (GameBlock.BLOCK_TYPE)Random.Range((int)GameBlock.BLOCK_TYPE.LEFT_SAW, (int)GameBlock.BLOCK_TYPE.RIGHT + 1);
+            BlockList[index].Initialize(type);
+        }
+        else
+        {
+            BlockList[index].Initialize(GameBlock.BLOCK_TYPE.NONE);
+        }
+
+        BlockCount++;
+    }
+
+    private void ResetChar()
+    {
+        Char.transform.parent = BlockList[0].LeftBlockObject.transform;
+        Char.transform.localPosition = BlockCharCenterPos;
+        LastJumpLeft = true;
     }
 
 
