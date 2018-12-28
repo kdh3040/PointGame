@@ -53,6 +53,8 @@ public class GamePlayManager : MonoBehaviour {
         AllResetBlock();
         ResetChar();
         UI.GameReady();
+
+        Char.CharIdle();
     }
 
     public void GameStart()
@@ -67,6 +69,8 @@ public class GamePlayManager : MonoBehaviour {
         IsGameStart = false;
 
         StartCoroutine(Co_StageClearMove());
+
+        Char.CharIdle();
     }
 
     IEnumerator Co_StageClearMove()
@@ -100,6 +104,9 @@ public class GamePlayManager : MonoBehaviour {
         // 스테이지 종료
         IsGameStart = false;
         UI.GameEnd();
+        Char.CharIdle();
+
+        iTween.MoveTo(Char.gameObject, iTween.Hash("x", Char.gameObject.transform.localPosition.x, "y",CharDeathPosY - 3f, "islocal", true, "movetopath", false, "time", 0.8f, "easetype", iTween.EaseType.easeInBack)); 
     }
 
     public void CheckGameOver()
@@ -165,6 +172,8 @@ public class GamePlayManager : MonoBehaviour {
         var endPos = Vector3.zero;
         Char.BlockLeftDir = left;
 
+        Char.CharJump(left);
+
         if (left)
         {
             Char.transform.parent = BlockList[BlockCharIndex].LeftBlockObject.transform;
@@ -207,6 +216,7 @@ public class GamePlayManager : MonoBehaviour {
             yield break;
         }
 
+        Char.CharIdle();
         Char.transform.localPosition = endPos;
         CheckGameOver();
         IsJumping = false;

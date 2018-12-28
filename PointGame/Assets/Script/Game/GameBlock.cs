@@ -18,12 +18,23 @@ public class GameBlock : MonoBehaviour
     public GameObject LeftBlockObject;
     public GameObject LeftBlock;
     public GameObject LeftSaw;
+    public GameObject LeftSawImg;
     public GameObject RightBlockObject;
     public GameObject RightBlock;
     public GameObject RightSaw;
+    public GameObject RightSawImg;
     public GameObject SafeBlock;
 
     public BLOCK_TYPE BlockType = BLOCK_TYPE.NONE;
+
+    private void Start()
+    {
+        iTween.MoveTo(LeftSaw, iTween.Hash("position", new Vector3(1.7f, 1f, 4), "islocal", true, "movetopath", false, "looptype", iTween.LoopType.pingPong, "easetype", iTween.EaseType.easeInOutQuad));
+        iTween.RotateTo(LeftSawImg, iTween.Hash("z", -180f, "looptype", iTween.LoopType.loop, "easetype", iTween.EaseType.linear));
+
+        iTween.MoveTo(RightSaw, iTween.Hash("position", new Vector3(-1.7f, 1f, 4), "islocal", true, "movetopath", false, "looptype", iTween.LoopType.pingPong, "easetype", iTween.EaseType.easeInOutQuad));
+        iTween.RotateTo(RightSawImg, iTween.Hash("z", -180f, "looptype", iTween.LoopType.loop, "easetype", iTween.EaseType.linear));
+    }
 
     public void Initialize(BLOCK_TYPE type)
     {
@@ -65,6 +76,5 @@ public class GameBlock : MonoBehaviour
         }
 
         // 타입에 맞게 이미지 수정
-
     }
 }
