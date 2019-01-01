@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <title>Firebase Hosting</title>
+  <!-- materialize.css 포함 -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+  <!-- SyntaxHighlighter 포함 -->
+  <link href="css/shCore.css" rel="stylesheet" type="text/css" />
+  <link href="css/shThemeDefault.css" rel="stylesheet" type="text/css" />
+  <style>
+    #Summary {font-size: 1.2em; }
+    #Summary ul{ margin-left: 32px; }
+    #Summary ul li{ list-style: disc; }
+    .hint{ border-left: 0.3em #ddd solid; padding-left: 1em; color: #777;}
+    .code_block{ background-color: #eee; padding: 5px; }
+  </style>
+
+</head>
+
+<body>
+  <!-- 상단 네비게이션 -->
+  <nav class="indigo">
+    <div class="nav-wrapper">
+      <div class="container">
+        <a href="/" class="breadcrumb">Firebase</a>
+        <a href="/storage.html" class="breadcrumb">Storage</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container center"><br><br>
+
+  </div>
+
+  <!-- 내용 부분 -->
+  <div class="container" id="CONTENTS">
+    <!-- 요약본 -->
+    <h4 class="indigo-text center">:+: Code Summary :+:</h4>
+
+    <div class="row">
+      <ol>
+        <li>
+          <a href="https://firebase.google.com/docs/storage/web/upload-files" target="_blank">Storage에 업로드</a> [
+          <a href="https://firebase.google.com/docs/reference/js/firebase.storage.UploadTask" target="_blank">firebase.storage.UploadTask</a> ]
+<pre class="brush:js">
+// File or Blob, assume the file is called rivers.jpg
+var file = ...
+
+// Upload the file to the path 'images/rivers.jpg'
+// We can use the 'name' property on the File API to get our file name
+var uploadTask = storageRef.child('images/' + file.name).put(file);
+
+// Register three observers:
+// 1. 'state_changed' observer, called any time the state changes
+// 2. Error observer, called on failure
+// 3. Completion observer, called on successful completion
+uploadTask.on('state_changed', function(snapshot){
+  // Observe state change events such as progress, pause, and resume
+  // See below for more detail
+}, function(error) {
+  // Handle unsuccessful uploads
+}, function() {
+  // Handle successful uploads on complete
+  // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+  var downloadURL = uploadTask.snapshot.downloadURL;
+});
+</pre>
+        </li>
+        <li>
+          <a href="https://firebase.google.com/docs/storage/web/upload-files" target="_blank">Storage에서 다운로드 (http 주소 얻기)</a> [
+          <a href="https://firebase.google.com/docs/reference/js/firebase.storage.Reference#getDownloadURL" target="_blank">firebase.storage.Reference.getDownloadURL()</a> ]
+<pre class="brush:js">
+firebase.storage().child('images/stars.jpg').getDownloadURL().then(function(url) {
+  // Get the download URL for 'images/stars.jpg'
+  // This can be inserted into an <img> tag
+  // This can also be downloaded directly
+}).catch(function(error) {
+  // Handle any errors
+});
+</pre>
+        </li>
+        <li>
+          <a href="https://firebase.google.com/docs/storage/web/delete-files" target="_blank">Storage에서 삭제</a> [
+          <a href="https://firebase.google.com/docs/reference/js/firebase.storage.Reference#delete" target="_blank">firebase.storage.Reference.delete()</a> ]
+<pre class="brush:js">
+// Create a reference to the file to delete
+var desertRef = storageRef.child('images/desert.jpg');
+
+// Delete the file
+desertRef.delete().then(function() {
+  // File deleted successfully
+}).catch(function(error) {
+  // Uh-oh, an error occurred!
+});
+</pre>
+        </li>
+      </ol>
+    </div>
+
+    <h4 class="teal-text center">:+: Study Slide :+:</h4>
+    <p class="center"><iframe src="//www.slideshare.net/slideshow/embed_code/key/knjzfZ4QI0Ry78" width="595" height="485" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;" allowfullscreen> </iframe></p>
+
+    <h4>A. <a href="/storage_memo.html">파일 첨부 메모장</a></h4>
+    <ol>
+      <li><a href="/storage/storage_memo_step1.html" target="_blank">파일 메모 Step1 (firebase SDK 링크)</a></li>
+      <li><a href="/storage/storage_memo_step2.html" target="_blank">파일 메모 Step2 (DB에 기록하기)</a></li>
+      <li><a href="/storage/storage_memo_step3.html" target="_blank">파일 메모 Step3 (DB에서 읽어오기)</a></li>
+      <li><a href="/storage/storage_memo_step4.html" target="_blank">파일 메모 Step4 (File 객체 가져오기)</a></li>
+      <li><a href="/storage/storage_memo_step5.html" target="_blank">파일 메모 Step5 (파일 업로드)</a></li>
+      <li><a href="/storage/storage_memo_step6.html" target="_blank">파일 메모 Step6 (파일 다운로드)</a></li>
+      <li><a href="/storage/storage_memo_step7.html" target="_blank">파일 메모 Step7 (파일 삭제 및 완성)</a></li>
+    </ol>
+  </div>
+
+  <!-- 바닥글 영역 -->
+  <footer class="page-footer indigo">
+    <div class="container">
+      <div class="row center">
+        <a href="/" class="btn white indigo-text">돌아가기</a>
+      </div>
+    </div>
+    <div class="footer-copyright">
+      <div class="container">
+      &copy; 2016 Copyright <a href="http://sbsoft.kr" target="_blank" class="white-text">SBJang</a> with
+      <a href="http://abcds.kr/" target="_blank" class="white-text">ABCD</a> (
+      <a href="https://www.facebook.com/groups/aboutCoding/" target="_blank" class="white-text">Facebook</a> )
+      <a class="white-text right" href="http://materializecss.com/" target="_blank">design by Materializecss</a>
+      </div>
+    </div>
+  </footer>
+
+<!-- /////////////////////////////////// javascript 스크립트 영역 /////////////////////////////////// -->
+
+  <!--Import jQuery before materialize.js-->
+  <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script type="text/javascript" src="/js/materialize.min.js"></script>
+  <script type="text/javascript" src="/js/shCore.js"></script>
+  <script type="text/javascript" src="/js/shAutoloader.js"></script>
+  <script type="text/javascript">
+  // SyntaxHighlighter 설정 (http://alexgorbatchev.com/SyntaxHighlighter)
+    SyntaxHighlighter.autoloader(
+      'bash shell                     /js/shBrushBash.js',
+      'js javascript                  /js/shBrushJScript.js',
+      'xml xhtml xslt html xhtml      /js/shBrushXml.js'
+    );
+    SyntaxHighlighter.defaults['auto-links'] = false;
+    SyntaxHighlighter.defaults['toolbar'] = false;
+    SyntaxHighlighter.all()
+  </script>
+</body>
+</html>

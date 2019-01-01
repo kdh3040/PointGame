@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <title>firebase Database</title>
+
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link type="text/css" rel="stylesheet" href="/css/materialize.min.css"  media="screen,projection"/>
+  <style> #CONTENTS{ min-height: 1000px;}</style>
+</head>
+
+<body>
+
+  <!-- 상단 네비게이션 -->
+  <nav class="indigo">
+    <div class="nav-wrapper">
+      <div class="container">
+        <a href="/" class="breadcrumb">Firebase</a>
+        <a href="/database.html" class="breadcrumb">Real-time Database</a>
+        <a href="#" class="breadcrumb">basic usage</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 내용 부분 -->
+  <div class="container" id="CONTENTS">
+    <br>
+    <!-- 2. 로그인 버튼 확인 -->
+    <div class="row" style="margin:  0; padding: 5px;">
+      <div class="col l12 m12 s12">
+        <button id="BTN_GOOGLE_LOGIN" type="button" class="btn indigo">구글 인증</button>
+        (Database의 접근 하려면 인증을 거쳐야 합니다.)
+      </div>
+    </div>
+    <br><br>
+
+    <div class="row z-depth-1">
+      <div class="col l12 m12 s12">
+        <p>
+          데이터베이스 메세지 :
+          <!-- TODO 4. 상태 보기용 span 확인-->
+           <span id="DB_MESSAGE" class="blue-text">(Loading..)</span>
+         </p>
+      </div>
+    </div>
+
+    <!-- TODO 5. 메세지 수정 폼 확인하기 -->
+    <div class="row z-depth-1">
+      <div class="col l9 m9 s12 input-field">
+       <input id="INPUT_MESSAGE" type="text" class="validate">
+       <label for="INPUT_MESSAGE">변경할 메세지</label>
+      </div>
+      <div class="col l3 m3 s12 input-field">
+          <button id="BTN_UPDATE" type="button" class="btn indigo">변경하기</button>
+      </div>
+    </div>
+
+
+
+  </div>
+
+  <!-- 바닥글 영역 -->
+  <footer class="page-footer indigo">
+    <div class="container">
+      <div class="row center">
+        <a href="/database.html" class="btn white indigo-text">돌아가기</a>
+      </div>
+    </div>
+    <div class="footer-copyright">
+      <div class="container">
+      &copy; 2016 Copyright <a href="http://sbsoft.kr" target="_blank" class="white-text">SBJang</a> with
+      <a href="http://abcds.kr/" target="_blank" class="white-text">ABCD</a> (
+      <a href="https://www.facebook.com/groups/aboutCoding/" target="_blank" class="white-text">Facebook</a> )
+      <a class="white-text right" href="http://materializecss.com/" target="_blank">design by Materializecss</a>
+      </div>
+    </div>
+  </footer>
+
+<!-- /////////////////////////////////// javascript 스크립트 영역 /////////////////////////////////// -->
+
+  <!--Import jQuery before materialize.js-->
+  <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script type="text/javascript" src="/js/materialize.min.js"></script>
+
+  <!-- 1. firebase SDK 링크 -->
+  <script src="https://www.gstatic.com/firebasejs/3.1.0/firebase.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/3.1.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/3.1.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/3.1.0/firebase-database.js"></script>
+  <script src="/fireinit.js"></script>
+  <script type="text/javascript">
+    /* 2. 버튼을 눌렀을 경우 구글 인증 동작하게 */
+    $('#BTN_GOOGLE_LOGIN').click(function(){
+      var provider = new firebase.auth.GoogleAuthProvider();
+      firebase.auth().signInWithPopup(provider).then(function(result) {
+      }).catch(function(error) {
+        alert(error.message)
+      });
+    });
+
+    /* 3. 데이터 베이스 '/메세지' 쓰기 */
+    firebase.database().ref('/메세지').set('안녕하세요!');
+
+    /* TODO 4. DB에서 '/메세지'값 읽어오기 */
+
+    /* TODO 5. DB 메세지 값 변경 */
+
+  </script>
+
+</body>
+</html>

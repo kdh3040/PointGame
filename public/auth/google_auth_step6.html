@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <title>firebase 인증</title>
+
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link type="text/css" rel="stylesheet" href="/css/materialize.min.css"  media="screen,projection"/>
+  <style> #CONTENTS{ min-height: 1000px;}</style>
+</head>
+
+<body>
+
+  <!-- 상단 네비게이션 -->
+  <nav class="indigo">
+    <div class="nav-wrapper">
+      <div class="container">
+        <a href="/" class="breadcrumb">Firebase</a>
+        <a href="/auth.html" class="breadcrumb">Authentication</a>
+        <a href="#" class="breadcrumb">google auth step 6</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 내용 부분 -->
+  <div class="container" id="CONTENTS">
+
+    <!-- 로그인박스 -->
+    <div class="card">
+      <div class="card-content">
+        로그인 상태 : <!-- 인증 상태 보기용 span 추가-->
+        <span id="AUTH_STATE" class="blue-text">(인증되지 않음)</span>
+        <!-- 유저 정보 확인용 요소 추가 -->
+        <ol id="USER_INFO">
+          <li>UID : <span id="USER_UID" class="blue-text"></span></li>
+          <li>메일 : <span id="USER_MAIL" class="blue-text"></span></li>
+          <li>이름 : <span id="USER_NAME" class="blue-text"></span></li>
+          <li><img id="USER_PHOTO"></li>
+        </ol>
+      </div>
+
+      <div class="card-action">
+        <!-- 로그인 버튼 -->
+        <button id="BTN_GOOGLE_LOGIN" type="button" class="btn indigo">구글 인증</button>
+        <!-- 로그아웃 버튼 -->
+        <button id="BTN_LOGOUT" type="button" class="btn indigo" style="display: none;">인증해제</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 바닥글 영역 -->
+  <footer class="page-footer indigo">
+    <div class="container">
+      <div class="row center">
+        <a href="/auth.html" class="btn white indigo-text">돌아가기</a>
+      </div>
+    </div>
+    <div class="footer-copyright">
+      <div class="container">
+      &copy; 2016 Copyright <a href="http://sbsoft.kr" target="_blank" class="white-text">SBJang</a> with
+      <a href="http://abcds.kr/" target="_blank" class="white-text">ABCD</a> (
+      <a href="https://www.facebook.com/groups/aboutCoding/" target="_blank" class="white-text">Facebook</a> )
+      <a class="white-text right" href="http://materializecss.com/" target="_blank">design by Materializecss</a>
+      </div>
+    </div>
+  </footer>
+
+<!-- /////////////////////////////////// javascript 스크립트 영역 /////////////////////////////////// -->
+
+  <!--Import jQuery before materialize.js-->
+  <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script type="text/javascript" src="/js/materialize.min.js"></script>
+
+  <!--  firebase SDK 링크 -->
+  <script src="https://www.gstatic.com/firebasejs/3.1.0/firebase.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/3.1.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/3.1.0/firebase-auth.js"></script>
+  <script src="/fireinit.js"></script>
+  <script type="text/javascript">
+    /* 버튼을 눌렀을 경우 구글 인증 동작하게 */
+    $('#BTN_GOOGLE_LOGIN').click(function(){ // jQuery를 이용
+      /* 구글 인증을 provider 변수에 대체 */
+      var provider = new firebase.auth.GoogleAuthProvider();
+
+      /* provider(구글 인증) 인증으로 로그인 처리 */
+      firebase.auth().signInWithPopup(provider).then(function(result) {
+        // 구글 로그인이 성공했을 경우 수행할 코드
+      }).catch(function(error) { // 로그인이 실패 했을시
+        // 구글 로그인이 실패했을 경우 수행할 코드
+        alert(error.message)
+      });
+    });
+
+    /* 인증 상태 변화 감시하기 */
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (user) { // 인증되었을 때
+        $('#AUTH_STATE').text(user.displayName + "님 로그인 하셨습니다.");
+        $('#BTN_LOGOUT').show();
+        $('#USER_NAME').text(user.displayName);
+        $('#USER_MAIL').text(user.email);
+        $('#USER_UID').text(user.uid);
+        $('#USER_PHOTO').attr('src', user.photoURL);
+        $('#USER_INFO').show();
+      } else { // 인증되지 않았을 때
+        $('#AUTH_STATE').text("(인증되지 않음)");
+        $('#BTN_LOGOUT').hide();
+        $('#USER_INFO').hide();
+      }
+    });
+
+    /* 로그아웃 버튼을 눌렀을 때 인증 해제 하도록 하기 */
+    $('#BTN_LOGOUT').click(function(){
+      firebase.auth().signOut().then(function() {
+        alert("인증이 해제되었습니다.");
+      }, function(error) {
+        alert(error.message);
+      });
+    });
+  </script>
+</body>
+</html>

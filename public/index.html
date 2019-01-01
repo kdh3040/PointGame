@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -41,10 +40,12 @@
           <li><a href="https://www.facebook.com/groups/aboutCoding/" target="_blank" class="indigo-text">ABCD</a></li>
           <li><a href="http://sbsoft.kr/" target="_blank" class="indigo-text">MadeBy</a></li>
           <li class="divider"></li>
-          <li><a href="#" class="BTN_NETWORKING">참가자</a></li>
+          <li><a href="http://firebase.sbsoft.kr/" target="_blank">Study</a></li>
         </ul>
       <!-- 모바일에서 보이는 메인 메뉴 -->
       <ul id="nav-mobile" class="side-nav">
+        <li><a href="http://firebase.sbsoft.kr/" target="_blank" class="center">Study Home</a></li>
+        <li class="divider"></li>
         <li><a href="hosting.html">Hosting</a></li>
         <li><a href="auth.html">Auth</a></li>
         <li><a href="database.html">Database</a></li>
@@ -52,8 +53,6 @@
         <li class="divider"></li>
         <li><a href="https://m.facebook.com/groups/aboutCoding/" target="_blank">ABCD</a></li>
         <li><a href="http://sbsoft.kr/" target="_blank">MadeBy</a></li>
-        <li class="divider"></li>
-        <li><a href="#" class="BTN_NETWORKING">참가자</a></li>
       </ul>
       <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
 
@@ -72,38 +71,13 @@
       </li>
     </ul>
 
-    <!-- 프로필 -->
-    <div class="row card-panel">
-      <div class="col s12 m3 l3">
-        <img src="/images/profile.png" alt="프로필 사진" class="responsive-img">
-      </div>
-      <div class="col s12 m9 l9">
-        <h5>이름 :
-          <span id="MY_NAME"><!-- TODO 이름수정 -->장승빈</span></h5>
-        <hr>
-        <div class="row">
-          <div class="col s12 m6 l6">
-            <h5>직업 :</h5>
-            <p id="MY_JOB"><!-- TODO 직업수정 -->개발자</p>
-          </div>
-          <div class="col s12 m6 l6">
-            <h5>회사 :</h5>
-            <p><!-- TODO 회사수정 -->승빈이네 공작소</p>
-          </div>
-          <div class="col s12 m12 l12">
-            <h5>My Skills</h5>
-            <p><!-- TODO 스킬수정 -->iOS(swift), Android(JAVA), REST API, WebServer</p>
-          </div>
-        </div>
-      </div>
-      <hr>
-      <div class="col s12 m12 l12">
-        <h5>하고 싶은 말 <small>(or 도움받고 싶은 부분)</small></h5>
-        <p><!-- TODO 하고 싶은 말 수정 -->
-          <strike class="grey-text text-lighten-1">이불밖은 위험합니다..</strike>
-          반갑습니다. 많이 배우고 가셨으면 좋겠네요!
-        </p>
-      </div>
+    <div class="row center">
+      <a href="/hosting_profile.html" class="btn indigo">플로필 홈페이지</a>
+      <a href="/auth_google.html" class="btn indigo">구글 인증</a>
+      <a href="/auth_mail.html" class="btn indigo">메일 인증</a>
+      <a href="/database_basic.html" class="btn indigo">디비 기본</a>
+      <a href="/database_siteon.html" class="btn indigo">실시간 접속자</a>
+      <a href="/storage_memo.html" class="btn indigo">파일 첨부 메모장</a>
     </div>
 
     <!-- 공부할 내용들 -->
@@ -113,8 +87,10 @@
           <i class="material-icons">language</i><b>Firebase Hosting</b>
         </div>
         <div class="collapsible-body">
-          <p> 보안 글로벌 콘텐츠 전송 네트워크를 사용하면 몇 초 만에 웹 앱과 모바일 앱을 배포할 수 있습니다.
-          <a href="hosting.html" class="secondary-content btn indigo"><i class="material-icons">send</i></a>
+          <p>
+            <a href="hosting.html" class="right btn indigo"><i class="material-icons">send</i></a>
+            보안 글로벌 콘텐츠 전송 네트워크를 사용하면 몇 초 만에 웹 앱과 모바일 앱을 배포할 수 있습니다.<br>
+            <small>(Firebase CLI 도구를 설치하고 호스팅에 프로필 홈페이지를 배포해 봅니다.)</small>
           </p>
         </div>
       </li>
@@ -123,8 +99,10 @@
           <i class="material-icons">supervisor_account</i><b>Firebase Authentication</b>
         </div>
         <div class="collapsible-body">
-          <p> 서버측 코드 없이 다양한 제공업체의 사용자를 인증하고 관리할 수 있습니다.
-          <a href="auth.html" class="secondary-content btn indigo"><i class="material-icons">send</i></a>
+          <p>
+            <a href="auth.html" class="right btn indigo"><i class="material-icons">send</i></a>
+            서버측 코드 없이 다양한 제공업체의 사용자를 인증하고 관리할 수 있습니다.<br>
+            <small>(Firebase javascript SDK를 사용하여 구글 인증 및 Firebase 통합 인증 UI를 사용해봅니다.)</small>
           </p>
         </div>
       </li>
@@ -133,8 +111,10 @@
           <i class="material-icons">dns</i><b>Firebase Realtime Database</b>
         </div>
         <div class="collapsible-body">
-          <p> 연결된 모든 클라이언트에서 실시간으로 데이터를 저장하고 동기화할 수 있습니다.
-          <a href="database.html" class="secondary-content btn indigo"><i class="material-icons">send</i></a>
+          <p>
+            <a href="database.html" class="right btn indigo"><i class="material-icons">send</i></a>
+            연결된 모든 클라이언트에서 실시간으로 데이터를 저장하고 동기화할 수 있습니다.<br>
+            <small>(Firebase Database의 특징을 알아보고 실시간 접속자 웹앱을 개발해봅니다.)</small>
           </p>
         </div>
       </li>
@@ -143,8 +123,10 @@
           <i class="material-icons">perm_media</i><b>Firebase Storage</b>
         </div>
         <div class="collapsible-body">
-          <p> 서버측 코드 없이 이미지, 오디오, 동영상과 같은 사용자가 생성한 콘텐츠를 저장하고 가져올 수 있습니다.
-          <a href="storage.html" class="secondary-content btn indigo"><i class="material-icons">send</i></a>
+          <p>
+            <a href="storage.html" class="right btn indigo"><i class="material-icons">send</i></a>
+            서버측 코드 없이 이미지, 오디오, 동영상과 같은 사용자가 생성한 콘텐츠를 저장하고 가져올 수 있습니다.<br>
+            <small>(Firebase Storage를 사용법을 간단히 알아보고 파일메모 웹앱을 만들어봅니다.)</small>
           </p>
         </div>
       </li>
@@ -182,24 +164,12 @@
     </div>
   </footer>
 
-  <form action="http://firebase.sbsoft.kr/add_member.php" method="post" id="FRM">
-    <input type="hidden" name="n" id="_my_name">
-    <input type="hidden" name="j" id="_my_job">
-    <input type="hidden" name="d" id="_my_domain">
-  </form>
-
   <!--Import jQuery before materialize.js-->
   <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
   <script type="text/javascript" src="js/materialize.min.js"></script>
   <script type="text/javascript">
     $('.button-collapse').sideNav();
     $(".dropdown-button").dropdown();
-    $(".BTN_NETWORKING").click(function(){
-      $('#_my_name').val($("#MY_NAME").text());
-      $('#_my_job').val($("#MY_JOB").text());
-      $('#_my_domain').val(location.href);
-      $('#FRM').submit();
-    });
   </script>
 </body>
 
