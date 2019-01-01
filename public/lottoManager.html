@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <title>복권 관리자 페이지</title>
+  <!-- materialize.css 포함 -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+  <!-- SyntaxHighlighter 포함 -->
+  <link href="css/shCore.css" rel="stylesheet" type="text/css" />
+  <!-- <link href="css/shThemeDefault.css" rel="stylesheet" type="text/css" /> -->
+  <link href="css/shThemeMidnight.css" rel="stylesheet" type="text/css" />
+  <style>
+    #Summary {font-size: 1.2em; }
+    #Summary ul{ margin-left: 32px; }
+    #Summary ul li{ list-style: disc; }
+    .hint{ border-left: 0.3em #ddd solid; padding-left: 1em; color: #777;}
+    .code_block{ background-color: #eee; padding: 5px; }
+  </style>
+
+</head>
+
+<body>
+  <!-- 상단 네비게이션 -->
+  <nav class="indigo">
+    <div class="nav-wrapper">
+      <div class="container">
+        <a href="/" class="breadcrumb">메인 관리자</a>
+        <a href="/lottoManager.html" class="breadcrumb">복권 관리자</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container center"><br><br>
+
+  </div>
+
+  <!-- 내용영역 -->
+  <div class="container" id="CONTENTS">
+    <!-- 핵심 -->
+    <h3 class="indigo-text center">:+: 복권 번호 현황 :+:</h3>
+  </div>
+
+  <!-- 바닥글 영역 -->
+  <footer class="page-footer indigo">
+    <div class="container">
+      <div class="row center">
+        <button id="BTN_SELECT_LUCKY" type="button" class="btn white indigo-text">당첨 번호 추첨</button>
+
+      </div>
+    </div>
+  </footer>
+
+  <!--Import jQuery before materialize.js-->
+  <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js">
+  </script>
+  <script type="text/javascript" src="./js/materialize.min.js"></script>
+  <script type="text/javascript" src="./js/shCore.js"></script>
+  <script type="text/javascript" src="./js/shAutoloader.js"></script>
+  <script type="text/javascript">
+  // SyntaxHighlighter 설정 (http://alexgorbatchev.com/SyntaxHighlighter)
+    SyntaxHighlighter.autoloader(
+      'bash shell             ./js/shBrushBash.js',
+      'js jscript javascript  ./js/shBrushJScript.js'
+    );
+    SyntaxHighlighter.defaults['toolbar'] = false;
+    SyntaxHighlighter.all()
+  </script>
+
+  <script src="https://www.gstatic.com/firebasejs/5.7.2/firebase.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase-database.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase-firestore.js"></script>
+  <script src="/fireinit.js"></script>
+
+  <script type="text/javascript">
+    $("#BTN_SELECT_LUCKY").click(function() {
+      var result = Math.floor(Math.random() * 10) + 1;
+      document.write(result);
+    });
+</script>
+</body>
+
+</html>

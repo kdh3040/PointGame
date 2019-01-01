@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-  <title>안녕~ 불판!</title>
+  <title>포인트 게임 현황</title>
   <!-- materialize.css 포함 -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
@@ -24,39 +24,8 @@
   <!-- 네비게이션 영역 -->
   <nav class="indigo">
     <div class="nav-wrapper container">
-      <a href="/" class="brand-logo">Hello Firebase</a>
+      <a href="/" class="brand-logo">포인트 게임 현황</a>
       <!-- 데스크톱 모드에서 보이는 메인메뉴 -->
-      <ul class="right hide-on-med-and-down">
-        <li><a href="hosting.html"><i class="material-icons">language</i></a></li>
-        <li><a href="auth.html"><i class="material-icons">supervisor_account</i></a></li>
-        <li><a href="database.html"><i class="material-icons">dns</i></a></li>
-        <li><a href="storage.html"><i class="material-icons">perm_media</i></a></li>
-        <li><a class="dropdown-button" data-activates="dropdown1"><i class="material-icons">more_vert</i></a></li>
-      </ul>
-        <!-- 드롭다운 메뉴 -->
-        <ul id="dropdown1" class="dropdown-content">
-          <li><a class="black-text"><strong>더 보기</strong></a></li>
-          <li class="divider"></li>
-          <li><a href="https://www.facebook.com/groups/aboutCoding/" target="_blank" class="indigo-text">ABCD</a></li>
-          <li><a href="http://sbsoft.kr/" target="_blank" class="indigo-text">MadeBy</a></li>
-          <li class="divider"></li>
-          <li><a href="http://firebase.sbsoft.kr/" target="_blank">Study</a></li>
-        </ul>
-      <!-- 모바일에서 보이는 메인 메뉴 -->
-      <ul id="nav-mobile" class="side-nav">
-        <li><a href="http://firebase.sbsoft.kr/" target="_blank" class="center">Study Home</a></li>
-        <li class="divider"></li>
-        <li><a href="hosting.html">Hosting</a></li>
-        <li><a href="auth.html">Auth</a></li>
-        <li><a href="database.html">Database</a></li>
-        <li><a href="storage.html">Storage</a></li>
-        <li class="divider"></li>
-        <li><a href="https://m.facebook.com/groups/aboutCoding/" target="_blank">ABCD</a></li>
-        <li><a href="http://sbsoft.kr/" target="_blank">MadeBy</a></li>
-      </ul>
-      <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
-
-
     </div>
   </nav>
   <!-- 내용영역 -->
@@ -65,104 +34,39 @@
     <ul class="collection white z-depth-1">
       <li class="collection-item avatar">
         <i class="material-icons circle indigo">whatshot</i>
-        <span class="title"><b>Firebase for Web</b></span>
-        <p>앱 개발 및 출시 후 관리를 위한 플랫폼인 Firebase! <br>
-          웹 개발도 활용할 수 있는 DB, 호스팅, 스토리지, 인증을 하나하나씩 실습하여 알아봅니다</p>
+        <span class="title"><b>포인트 게임 관리자 페이지</b></span>
+        <p>
+          복권 및 상품권 관리 페이지 입니다.
+        </p>
       </li>
     </ul>
-
-    <div class="row center">
-      <a href="/hosting_profile.html" class="btn indigo">플로필 홈페이지</a>
-      <a href="/auth_google.html" class="btn indigo">구글 인증</a>
-      <a href="/auth_mail.html" class="btn indigo">메일 인증</a>
-      <a href="/database_basic.html" class="btn indigo">디비 기본</a>
-      <a href="/database_siteon.html" class="btn indigo">실시간 접속자</a>
-      <a href="/storage_memo.html" class="btn indigo">파일 첨부 메모장</a>
-    </div>
 
     <!-- 공부할 내용들 -->
     <ul class="collapsible collection white" data-collapsible="expandable">
       <li>
         <div class="collapsible-header active">
-          <i class="material-icons">language</i><b>Firebase Hosting</b>
+          <i class="material-icons">language</i><b>복권 관리 </b>
         </div>
         <div class="collapsible-body">
           <p>
-            <a href="hosting.html" class="right btn indigo"><i class="material-icons">send</i></a>
-            보안 글로벌 콘텐츠 전송 네트워크를 사용하면 몇 초 만에 웹 앱과 모바일 앱을 배포할 수 있습니다.<br>
-            <small>(Firebase CLI 도구를 설치하고 호스팅에 프로필 홈페이지를 배포해 봅니다.)</small>
+            <a href="lottoManager.html" class="right btn indigo"><i class="material-icons">send</i></a>
+            복권 번호 리스트 및 당첨 번호 추첨
           </p>
         </div>
       </li>
       <li>
         <div class="collapsible-header active">
-          <i class="material-icons">supervisor_account</i><b>Firebase Authentication</b>
+          <i class="material-icons">supervisor_account</i><b>상품권 관리</b>
         </div>
         <div class="collapsible-body">
           <p>
-            <a href="auth.html" class="right btn indigo"><i class="material-icons">send</i></a>
-            서버측 코드 없이 다양한 제공업체의 사용자를 인증하고 관리할 수 있습니다.<br>
-            <small>(Firebase javascript SDK를 사용하여 구글 인증 및 Firebase 통합 인증 UI를 사용해봅니다.)</small>
-          </p>
-        </div>
-      </li>
-      <li>
-        <div class="collapsible-header active">
-          <i class="material-icons">dns</i><b>Firebase Realtime Database</b>
-        </div>
-        <div class="collapsible-body">
-          <p>
-            <a href="database.html" class="right btn indigo"><i class="material-icons">send</i></a>
-            연결된 모든 클라이언트에서 실시간으로 데이터를 저장하고 동기화할 수 있습니다.<br>
-            <small>(Firebase Database의 특징을 알아보고 실시간 접속자 웹앱을 개발해봅니다.)</small>
-          </p>
-        </div>
-      </li>
-      <li>
-        <div class="collapsible-header active">
-          <i class="material-icons">perm_media</i><b>Firebase Storage</b>
-        </div>
-        <div class="collapsible-body">
-          <p>
-            <a href="storage.html" class="right btn indigo"><i class="material-icons">send</i></a>
-            서버측 코드 없이 이미지, 오디오, 동영상과 같은 사용자가 생성한 콘텐츠를 저장하고 가져올 수 있습니다.<br>
-            <small>(Firebase Storage를 사용법을 간단히 알아보고 파일메모 웹앱을 만들어봅니다.)</small>
+            <a href="giftManager.html" class="right btn indigo"><i class="material-icons">send</i></a>
+            상품권 등록 및 현황 관리
           </p>
         </div>
       </li>
     </ul>
-
-   <h5 class="indigo-text center">:+: Have a nice day :+:</h5>
   </div>
-
-  <!-- 바닥글 영역 -->
-  <footer class="page-footer indigo">
-    <div class="container">
-      <div class="row">
-        <div class="col l6 s12">
-          <h5 class="white-text">Hello Firebase for Web Study</h5>
-          <p class="grey-text text-lighten-4">이 페이지는 Firebase for Web 스터디의 실습 페이지 입니다.</p>
-        </div>
-        <div class="col l4 offset-l2 s12">
-          <h5 class="white-text">Good Links</h5>
-          <ul>
-            <li><a class="white-text" target="_blank" href="https://console.firebase.google.com/">Firebase Console</a></li>
-            <li><a class="white-text" target="_blank" href="https://firebase.google.com/docs/reference/">Firebase Reference</a></li>
-            <li><a class="white-text" target="_blank" href="https://www.youtube.com/channel/UCP4bf6IHJJQehibu6ai__cg">Firebase Youtube Channel</a></li>
-            <li><a class="white-text" target="_blank" href="https://www.facebook.com/groups/1650124438643831/">Firebase Facebook Group</a></li>
-          </ul>
-        </div>
-      </div>
-    </div>
-    <div class="footer-copyright">
-      <div class="container">
-      &copy; 2016 Copyright <a href="http://sbsoft.kr" target="_blank" class="white-text">SBJang</a> with
-      <a href="http://abcds.kr/" target="_blank" class="white-text">ABCD</a> (
-      <a href="https://www.facebook.com/groups/aboutCoding/" target="_blank" class="white-text">Facebook</a> )
-      <a class="white-text right" href="http://materializecss.com/" target="_blank">design by Materializecss</a>
-      </div>
-    </div>
-  </footer>
 
   <!--Import jQuery before materialize.js-->
   <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
