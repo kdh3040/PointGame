@@ -43,6 +43,7 @@
     <h3 class="indigo-text center">:+: 복권 번호 :+:</h3>
     <div class="row center">
       <button id="BTN_SELECT_LUCKY" type="button" class="btn white indigo-text">당첨 번호 추첨</button>
+      <button id="BTN_TEST_CREATE" type="button" class="btn white indigo-text">번호 생성</button>
     </div>
 
     <div class="row z-depth-1">
@@ -62,6 +63,13 @@
   			<ol data-role="listview">
   				<li id = "LOTTO_0">공무원</li>
   				<li id = "LOTTO_1">서비스업</li>
+          <li id = "LOTTO_2">공무원</li>
+          <li id = "LOTTO_3">공무원</li>
+          <li id = "LOTTO_4">공무원</li>
+          <li id = "LOTTO_5">공무원</li>
+          <li id = "LOTTO_6">공무원</li>
+          <li id = "LOTTO_7">공무원</li>
+          <li id = "LOTTO_8">공무원</li>
   			</ol>
   		</div>
   	</section>
@@ -116,6 +124,15 @@
     //  document.write(result);
       $("#LOTTO_GROUP").text(arrLottoUser[result]);
       	console.log(result);
+    });
+
+    $("#BTN_TEST_CREATE").click(function() {
+      var result = Math.floor(Math.random() * 100) + 1;
+    //  document.write(result);
+
+    firebase.database().ref('/lotto/' + Lottocount).set({"User": Lottocount, "Number": result})
+    Lottocount++;
+    firebase.database().ref('/lottocount').set(Lottocount)
     });
 
 </script>
