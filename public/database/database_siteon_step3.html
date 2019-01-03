@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <title>firebase Database</title>
+
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link type="text/css" rel="stylesheet" href="/css/materialize.min.css"  media="screen,projection"/>
+  <style> #CONTENTS{ min-height: 1000px;}</style>
+</head>
+
+<body>
+
+  <!-- 상단 네비게이션 -->
+  <nav class="indigo">
+    <div class="nav-wrapper">
+      <div class="container">
+        <a href="/" class="breadcrumb">Firebase</a>
+        <a href="/database.html" class="breadcrumb">Real-time Database</a>
+        <a href="#" class="breadcrumb"> [Example] Site On Users </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 내용 부분 -->
+  <div class="container" id="CONTENTS">
+    <br>
+    <!-- 1. 인증 버튼 확인 -->
+    <div class="row" style="margin: 0; padding: 5px;">
+      <div class="col l12 m12 s12">
+        <button id="BTN_GOOGLE_LOGIN" type="button" class="btn indigo">구글 인증</button>
+        <button id="BTN_LOGOUT" type="button" class="btn indigo">인증 해제</button>
+      </div>
+    </div>
+    <br><br>
+
+    <div class="row z-depth-1">
+      <div class="col l12 m12 s12">
+        <p>
+          Log :
+          <!-- 2. 인증 상태 보기용 span 확인-->
+           <span id="LOG_MESSAGE" class="blue-text">(Loading..)</span>
+         </p>
+      </div>
+    </div>
+
+    <!-- TODO 5. 접속 유저 ol박스 확인 -->
+    <div class="row z-depth-1">
+      <div class="col l12 m12 s12 input-field">
+        <h5>현재 접속 유저</h5>
+        <hr>
+        <ol id="SITE_ON_USERS"><!-- 접속한 USERS 목록을 띄울 박스 --></ol>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 바닥글 영역 -->
+  <footer class="page-footer indigo">
+    <div class="container">
+      <div class="row center">
+        <a href="/database.html" class="btn white indigo-text">돌아가기</a>
+      </div>
+    </div>
+    <div class="footer-copyright">
+      <div class="container">
+      &copy; 2016 Copyright <a href="http://sbsoft.kr" target="_blank" class="white-text">SBJang</a> with
+      <a href="http://abcds.kr/" target="_blank" class="white-text">ABCD</a> (
+      <a href="https://www.facebook.com/groups/aboutCoding/" target="_blank" class="white-text">Facebook</a> )
+      <a class="white-text right" href="http://materializecss.com/" target="_blank">design by Materializecss</a>
+      </div>
+    </div>
+  </footer>
+
+<!-- /////////////////////////////////// javascript 스크립트 영역 /////////////////////////////////// -->
+
+  <!--Import jQuery before materialize.js-->
+  <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script type="text/javascript" src="/js/materialize.min.js"></script>
+
+  <!-- 1. firebase SDK 링크 -->
+  <script src="https://www.gstatic.com/firebasejs/3.1.0/firebase.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/3.1.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/3.1.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/3.1.0/firebase-database.js"></script>
+  <script src="/fireinit.js"></script>
+  <script type="text/javascript">
+    /* 1. 버튼을 눌렀을 경우 구글 인증 동작하게 */
+    $('#BTN_GOOGLE_LOGIN').click(function(){
+      var provider = new firebase.auth.GoogleAuthProvider();
+      firebase.auth().signInWithPopup(provider).then(function(result) {
+      }).catch(function(error) {
+        alert(error.message)
+      });
+    });
+
+    /* 1. 인증 해제 */
+    $('#BTN_LOGOUT').click(function(){
+      // TODO 4. DB의 변화를 더이상 감지 하지 않음
+      // 3. 접속상태값을 변경
+      firebase.database().ref("/onUsers/"+_uid+"/siteOn").set(0);
+      // 인증 해제
+      firebase.auth().signOut().then(function() {
+        alert("인증이 해제되었습니다.");
+      }, function(error) {
+        alert(error.message);
+      });
+    });
+
+    /* 2. 접속한 경우 Database의 상태 변경 */
+    var _uid = null; // 유저의 uid를 저장해둘 전역 변수
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (user) {
+        _uid = user.uid;
+        $("#LOG_MESSAGE").text(user.displayName+"님 접속하셨습니다");
+        // 3. 디비에 접속 하면 상태 변경 (등록이 안된 상태면 새로 쓰기)
+        firebase.database().ref('/onUsers/' + user.uid).set({"username": user.displayName, "siteOn": 1});
+        // TODO 4. 상태가 바뀔 때를 감지할 리스너(JS옵저버) 장착
+        // TODO 7. 디비에 접속 끊길때 이벤트 감지하하면 특정값 변경 (siteOn 상태를 0으로 변경)
+      } else { // 2. 인증이 해제 되거나 인증되지 않은 경우
+        $("#LOG_MESSAGE").text("(인증하셔야 볼 수 있습니다)");
+        _uid = null;
+      }
+    });
+
+    // TODO 6. 페이지 떠나게 되면
+
+  </script>
+
+</body>
+</html>

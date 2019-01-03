@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <title>Firebase Storage</title>
+
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link type="text/css" rel="stylesheet" href="/css/materialize.min.css"  media="screen,projection"/>
+  <style> #CONTENTS{ min-height: 1000px; }</style>
+</head>
+
+<body>
+
+  <!-- 상단 네비게이션 -->
+  <nav class="indigo">
+    <div class="nav-wrapper">
+      <div class="container">
+        <a href="/" class="breadcrumb">Firebase</a>
+        <a href="/storage.html" class="breadcrumb">Storage</a>
+        <a href="#" class="breadcrumb">memo app</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 내용 부분 -->
+  <div class="container" id="CONTENTS">
+    <form id="FRM">
+    <div class="row z-depth-1">
+      <div class="col s12"><h3>파일 첨부 메모장</h3></div>
+      <div class="col l12 m12 s12 input-field">
+        <div class="file-field input-field">
+          <div class="btn">
+          <!-- TODO 첨부파일 input 태그 확인 -->
+            <span>파일선택</span><input type="file" id="INPUT_FILE">
+          </div>
+          <div class="file-path-wrapper">
+            <input class="file-path validate" type="text">
+          </div>
+        </div>
+      </div>
+      <div class="col l12 m12 s12 input-field">
+        <!-- TODO 메모 내용 input 태그 확인 -->
+       <input id="INPUT_MESSAGE" type="text" class="validate">
+       <label for="INPUT_MESSAGE">메모할 내용</label>
+      </div>
+      <div class="col l12 m12 s12 input-field">
+        <!-- TODO 1. 구글 인증 버튼 확인 -->
+        <span class="right"><button id="BTN_GOOGLE_LOGIN" type="button" class="btn indigo">구글 인증</button></span>
+        <!-- TODO 메모 작성 버튼 확인 -->
+        <button id="BTN_WRITE" type="button" class="btn indigo">메모 작성하기</button>
+      </div>
+      <br><br><br><br><span class="white-text">dummy string</span>
+    </div>
+    </form>
+
+    <!-- 메모 내용 읽어오기 영역 -->
+    <div class="row">
+      <div class="col s12 center">
+        <!-- TODO 로딩 프로그래스용 프리로더 -->
+        <div class="preloader-wrapper big active" id="PROGRESS">
+          <div class="spinner-layer spinner-blue-only">
+            <div class="circle-clipper left"><div class="circle"></div></div>
+            <div class="gap-patch"><div class="circle"></div></div>
+            <div class="circle-clipper right"><div class="circle"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- TODO 기록된 메모들을 읽어올 UL 태그 -->
+    <ul class="collapsible" data-collapsible="expandable" id="READ_MEMO"></ul>
+  </div>
+
+  <!-- 바닥글 영역 -->
+  <footer class="page-footer indigo">
+    <div class="container">
+      <div class="row center">
+        <a href="/storage.html" class="btn white indigo-text">돌아가기</a>
+      </div>
+    </div>
+    <div class="footer-copyright">
+      <div class="container">
+      &copy; 2016 Copyright <a href="http://sbsoft.kr" target="_blank" class="white-text">SBJang</a> with
+      <a href="http://abcds.kr/" target="_blank" class="white-text">ABCD</a> (
+      <a href="https://www.facebook.com/groups/aboutCoding/" target="_blank" class="white-text">Facebook</a> )
+      <a class="white-text right" href="http://materializecss.com/" target="_blank">design by Materializecss</a>
+      </div>
+    </div>
+  </footer>
+
+<!-- /////////////////////////////////// javascript 스크립트 영역 /////////////////////////////////// -->
+
+  <!--Import jQuery before materialize.js-->
+  <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script type="text/javascript" src="/js/materialize.min.js"></script>
+  <!-- 1. firebase SDK 링크 (auth, db, storage 모두) -->
+  <script src="https://www.gstatic.com/firebasejs/3.2.1/firebase.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/3.2.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/3.2.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/3.2.1/firebase-database.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/3.2.1/firebase-storage.js"></script>
+  <script src="/fireinit.js"></script>
+  <script type="text/javascript">
+    /* TODO 1. 버튼을 눌렀을 경우 구글 인증 동작하게 */
+    $("#BTN_GOOGLE_LOGIN").click(function() {
+      var provider = new firebase.auth.GoogleAuthProvider();
+      firebase.auth().signInWithRedirect(provider).catch(function(error) { // 로그인이 실패 했을시
+        console.log(error.message);
+      });
+    });
+
+    /* 2. 메모하기 눌렀을 떄 DB에 기록 */
+    $("#BTN_WRITE").click(function(){
+      // 5. 파일 선택이 안됬을 경우 등록 방지
+      if( _file == null ){
+        alert("업로드할 파일을 선택해 주세요");
+        return false;
+      }
+      $("#PROGRESS").show(); // 프리로더 보이기
+      /* 5. uploadTask를 이용해 선택된 파일을 등록 */
+      var storageRef = firebase.storage().ref(); // 스토리지의 root
+      var uploadTask = storageRef.child('filememo/' + _file.name).put(_file);
+      uploadTask.on('state_changed', function(snapshot){
+        var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log('Upload is ' + progress + '% done');
+        // 참고 : https://firebase.google.com/docs/storage/web/upload-files#monitor_upload_progress
+      }, function(error) { // 오류났을때
+        alert(error.message);
+        return false;
+      }, function() { // 업로드 완료 시에
+        /* 2. DB에 내용을 기록 */
+        var new_memo = $("#INPUT_MESSAGE").val();
+        var _filename = _file.name; // 4. 파일명으로 수정
+        firebase.database().ref('/filememo').push({
+          "memo" : new_memo ,
+          "time" : firebase.database.ServerValue.TIMESTAMP ,
+          "filename" : _filename
+        });
+
+        /* 2. 폼 및 요소 초기화 */
+        $("form").each(function() {
+            this.reset();
+        });
+        _file = null; // 4. 전역 파일 객체 초기화
+        $("#PROGRESS").hide(); // 프리로더 감추기
+      });
+    });
+
+    /* 4. 파일객체 가져오기 */
+    var _file = null;
+    document.getElementById("INPUT_FILE").addEventListener("change", handleFiles, false);
+    function handleFiles() {
+      _file = (this.files)[0];
+    }
+
+    /* 3. DB에서 메모 내용 읽어오기 */
+    firebase.database().ref('/filememo').on('value', function(snapshot) {
+      $("#PROGRESS").show(); // 프리로더 보이기
+      $("#READ_MEMO").html("");
+      if (snapshot.val() == null ) {
+        $("#READ_MEMO").append('<div class="collapsible-header">아직 등록된 파일이 없습니다.</div>');
+        $("#PROGRESS").hide();
+        return false;
+      }
+      /* 3. 매모 객체 하나씩 li요소로 변경해서 ul(#READ_MEMO)에 추가  */
+      var _keys = Object.keys(snapshot.val());
+      for (var i=_keys.length; 0<i; i--){
+        var child = snapshot.child(_keys[(i-1)]).val()
+        var uploadDate = new Date(child.time*1000);
+        var appendHTML =
+ '        <li>'
++'          <div class="collapsible-header"><i class="material-icons">subject</i>'+child.memo+'</div>'
++'          <div class="collapsible-body">'
++'              <p><span class="right"><button data-f="'+child.filename+'" data-k="'+_keys[(i-1)]+'" class="btn red BTN_DELETE">삭제</button>'
++'              <button data-f="'+child.filename+'" class="btn BTN_DOWNLOAD">다운로드</button>'
++'              </span>파일명 : '+child.filename+'<br>등록일 : '+uploadDate+'</p>'
++'            </div>'
++'        </li>';
+        $("#READ_MEMO").append(appendHTML);
+      }
+      $("#PROGRESS").hide(); // 프리로더 감추기
+
+      /* 3. 삭제 이벤트 연결 */
+      $(".BTN_DELETE").off("click");
+      $(".BTN_DELETE").click(function(){
+        // TODO 7. 파일도 삭제 하기
+        var _key = $(this).data("k");
+        firebase.database().ref('/filememo').child(_key).remove();
+      });
+      /* 6. 다운로드 작성 */
+      $(".BTN_DOWNLOAD").off("click");
+      $(".BTN_DOWNLOAD").click(function(){
+        var _filename = $(this).data("f");
+        firebase.storage().ref('filememo/'+_filename).getDownloadURL().then(function(url) {
+          console.log(url);
+          location.href=url;
+        }).catch(function(error) {
+          alert(error.message);
+        });
+      });
+    });
+
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <title>Firebase Hosting</title>
+  <!-- materialize.css 포함 -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+  <!-- SyntaxHighlighter 포함 -->
+  <link href="/css/shCore.css" rel="stylesheet" type="text/css" />
+  <link href="/css/shThemeDefault.css" rel="stylesheet" type="text/css" />
+  <style>
+    #Summary {font-size: 1.2em; }
+    #Summary ul{ margin-left: 32px; }
+    #Summary ul li{ list-style: disc; }
+    .hint{ border-left: 0.3em #ddd solid; padding-left: 1em; color: #777;}
+    .code_block{ background-color: #eee; padding: 5px; }
+  </style>
+
+</head>
+
+<body>
+  <!-- 상단 네비게이션 -->
+  <nav class="indigo">
+    <div class="nav-wrapper">
+      <div class="container">
+        <a href="/" class="breadcrumb">Firebase</a>
+        <a href="/database.html" class="breadcrumb">Real-time Database</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container center"><br><br>
+
+  </div>
+
+  <!-- 내용 부분 -->
+  <div class="container" id="CONTENTS">
+    <!-- 요약본 -->
+    <h4 class="indigo-text center">:+: Code Summary :+:</h4>
+
+    <div class="row">
+      <ol>
+        <li>
+          <a href="https://firebase.google.com/docs/database/web/save-data#top_of_page" target="_blank">DB에 쓰기</a> [
+          <a href="https://firebase.google.com/docs/reference/js/firebase.database.Reference#set" target="_blank">firebase.database.Reference.set()</a>,
+          <a href="https://firebase.google.com/docs/reference/js/firebase.database.Reference#push" target="_blank">firebase.database.Reference.push()</a> ]
+<pre class="brush:js">
+/* 1. set() 메소드 */
+firebase.database().ref('[키Refs]').set('[값]');
+// JSON으로 여러 값을 한번에 입력도 가능합니다
+firebase.database().ref('[키Refs]').set( {'[키]':'[값]', '[키]':'[값]', '[키]':'[값]', .. } );
+
+/* 2. push() 메소드 (자동으로 unique key를 만들어서 주입) */
+firebase.database().ref('[키Refs]').push([값]);
+// push key 사용 방법
+var messageListRef = firebase.database().ref('message_list');
+var newMessageRef = messageListRef.push();
+newMessageRef.set( {'user_id': 'ada', 'text': 'The Analytical Engine...'} );
+</pre>
+        </li>
+        <li>
+          <a href="https://firebase.google.com/docs/database/web/offline-capabilities#how-ondisconnect-works" target="_blank">DB에서 삭제</a> [
+          <a href="https://firebase.google.com/docs/reference/js/firebase.database.Reference#remove" target="_blank">firebase.database.Reference.remove()</a> ]
+<pre class="brush:js">
+/* firebase.database.Reference.remove() */
+firebase.database().ref('[키Refs]').remove();
+</pre>
+        </li>
+        <li>
+          <a href="https://firebase.google.com/docs/database/web/save-data#update_specific_fields" target="_blank">DB에 업데이트</a> [
+          <a href="https://firebase.google.com/docs/reference/js/firebase.database.Reference#update" target="_blank">firebase.database.Reference.update()</a> ]
+<pre class="brush:js">
+/* firebase.database.Reference.update() */
+firebase.database().ref('[키Refs]').update( {'[키]':'[값]', '[키]':'[값]', '[키]':'[값]', .. } );
+</pre>
+        </li>
+        <li>
+          <a href="https://firebase.google.com/docs/database/web/retrieve-data#read_data_once" target="_blank">DB에서 한번만 읽기</a> [
+          <a href="https://firebase.google.com/docs/reference/js/firebase.database.Reference#once" target="_blank">firebase.database.Reference.once()</a> ]
+<pre class="brush:js">
+/* firebase.database.Reference.once() */
+firebase.database().ref('[키Refs]').once('[값]').then(function(snapshot) {
+  // console.log( snapshot.val() );
+});
+</pre>
+        </li>
+        <li>
+          <a href="https://firebase.google.com/docs/database/web/retrieve-data#listen_for_events" target="_blank">DB에서 변화 감지 </a> [
+          <a href="https://firebase.google.com/docs/reference/js/firebase.database.Reference#on" target="_blank">firebase.database.Reference.on()</a> ]
+<pre class="brush:js">
+/* value : 모든 데이터 변화 감지 */
+var starCountRef = firebase.database().ref('posts/' + postId + '/starCount');
+starCountRef.on('value', function(snapshot) {
+  updateStarCount(postElement, snapshot.val());
+});
+
+var commentsRef = firebase.database().ref('post-comments/' + postId);
+/* child_added : 자식 노드가 추가됨을 감지 */
+commentsRef.on('child_added', function(data) {
+  addCommentElement(postElement, data.key, data.val().text, data.val().author);
+});
+/* child_added : 자식 노드의 값이 변화를 감지 */
+commentsRef.on('child_changed', function(data) {
+  setCommentValues(postElement, data.key, data.val().text, data.val().author);
+});
+/* child_removed : 자식 노드의 위치 변화를 감지 (미리 정렬 되어 있어야 함) */
+commentsRef.on('child_removed', function(data) {
+  deleteComment(postElement, data.key);
+});
+</pre>
+        </li>
+        <li>
+          <a href="https://firebase.google.com/docs/database/web/retrieve-data#read_data_once" target="_blank">데이터 객체</a> [
+          <a href="https://firebase.google.com/docs/reference/js/firebase.database.DataSnapshot" target="_blank">DataSnapshot</a> ]
+<pre class="brush:js">
+/* 데이터의 예 */
+{
+  "users": {
+    "ada": {
+      "first": "Ada",
+      "last": "Lovelace"
+    },
+    "alan": {
+      "first": "Alan",
+      "last": "Turing"
+    }
+  }
+}
+
+/* forEach() 메소드 사용의 예 */
+var query = firebase.database().ref("users").orderByKey();
+query.once("value")
+  .then(function(snapshot) {
+    snapshot.forEach(function(childSnapshot) {
+      var key = childSnapshot.key;
+      var childData = childSnapshot.val();
+  });
+});
+</pre>
+        </li>
+        <li>
+          <a href="https://firebase.google.com/docs/database/web/retrieve-data#sort_data" target="_blank">정렬</a>
+          <ol>
+            <li><a href="https://firebase.google.com/docs/reference/js/firebase.database.Reference#orderByChild" target="_blank">orderByChild()</a></li>
+            <li><a href="https://firebase.google.com/docs/reference/js/firebase.database.Reference#orderByKey" target="_blank">orderByKey()</a></li>
+            <li><a href="https://firebase.google.com/docs/reference/js/firebase.database.Reference#orderByValue" target="_blank">orderByValue()</a></li>
+          </ol>
+        </li>
+        <li>
+          <a href="https://firebase.google.com/docs/database/web/retrieve-data#filtering_data" target="_blank">필터링</a>
+          <ol>
+            <li><a href="https://firebase.google.com/docs/reference/js/firebase.database.Reference#limitToFirst" target="_blank">limitToFirst()</a></li>
+            <li><a href="https://firebase.google.com/docs/reference/js/firebase.database.Reference#limitToLast" target="_blank">limitToLast()</a></li>
+            <li><a href="https://firebase.google.com/docs/reference/js/firebase.database.Reference#startAt" target="_blank">startAt()</a></li>
+            <li><a href="https://firebase.google.com/docs/reference/js/firebase.database.Reference#endAt" target="_blank">endAt()</a></li>
+            <li><a href="https://firebase.google.com/docs/reference/js/firebase.database.Reference#equalTo" target="_blank">equalTo()</a></li>
+          </ol>
+        </li>
+        <li>
+          <a href="https://firebase.google.com/docs/database/web/offline-capabilities#server-timestamps" target="_blank">타임 스템프</a> [
+          <a href="https://firebase.google.com/docs/reference/js/firebase.database#.ServerValue" target="_blank">firebase.database.ServerValue.TIMESTAMP</a> ]
+<pre class="brush:js">
+// 단독으로 사용은 불가능하고 DB에 값을 넣을때만 사용 가능
+firebase.database().ref("접속시간").set( firebase.database.ServerValue.TIMESTAMP );
+</pre>
+        </li>
+        <li>
+          <a href="https://firebase.google.com/docs/database/web/offline-capabilities#how-ondisconnect-works" target="_blank">접속 끊김 감지</a> [
+          <a href="https://firebase.google.com/docs/reference/js/firebase.database.OnDisconnect" target="_blank">firebase.database.OnDisconnect</a> ]
+<pre class="brush:js">
+// 서버에서 리스너가 장착되고 뒤에 수행할 메소드를 덧붙이는 방식
+firebase.database().ref("접속종료").onDisconnect().set( firebase.database.ServerValue.TIMESTAMP );
+
+</pre>
+        </li>
+        <li><a href="https://firebase.googleblog.com/2013/10/queries-part-1-common-sql-queries.html" target="_blank">SQL 변환의 예</a></li>
+      </ol>
+
+    </div>
+
+    <h4 class="teal-text center">:+: Study Slide :+:</h4>
+    <p class="center"><iframe src="//www.slideshare.net/slideshow/embed_code/key/3dB9wfYqR2SKSl" width="595" height="485" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;" allowfullscreen> </iframe></p>
+
+    <h4>A. <a href="/database_basic.html">기본적인 DATABASE</a></h4>
+    <ol>
+      <li><a href="/database/database_basic_step1.html" target="_blank">데이터베이스 사용법 Step1 (firebase SDK 링크)</a></li>
+      <li><a href="/database/database_basic_step2.html" target="_blank">데이터베이스 사용법 Step2 (구글 인증 넣기)</a></li>
+      <li><a href="/database/database_basic_step3.html" target="_blank">데이터베이스 사용법 Step3 (DB 데이터 쓰기)</a></li>
+      <li><a href="/database/database_basic_step4.html" target="_blank">데이터베이스 사용법 Step4 (DB 데이터 읽어오기)</a></li>
+      <li><a href="/database/database_basic_step5.html" target="_blank">데이터베이스 사용법 Step5 (DB 데이터 갱신)</a></li>
+      <li><a href="/database/database_basic_step6.html" target="_blank">데이터베이스 사용법 Step6 (DB 데이터 리스닝)</a></li>
+    </ol>
+    <h4>B. <a href="/database_siteon.html">실시간 접속자 웹앱 만들기</a></h4>
+    <ol>
+      <li><a href="/database/database_siteon_step1.html" target="_blank">실시간 접속자 웹앱 만들기 Step1 (SDK 링크 + 구글인증)</a></li>
+      <li><a href="/database/database_siteon_step2.html" target="_blank">실시간 접속자 웹앱 만들기 Step2 (인증 상태 감지)</a></li>
+      <li><a href="/database/database_siteon_step3.html" target="_blank">실시간 접속자 웹앱 만들기 Step3 (접속 상태 기록하기)</a></li>
+      <li><a href="/database/database_siteon_step4.html" target="_blank">실시간 접속자 웹앱 만들기 Step4 (접속 상태 감지하기)</a></li>
+      <li><a href="/database/database_siteon_step5.html" target="_blank">실시간 접속자 웹앱 만들기 Step5 (접속자 목록 보여주기)</a></li>
+      <li><a href="/database/database_siteon_step6.html" target="_blank">실시간 접속자 웹앱 만들기 Step6 (페이지 이탈시 상태 변경)</a></li>
+      <li><a href="/database/database_siteon_step7.html" target="_blank">실시간 접속자 웹앱 만들기 Step7 (접속 해제시 상태 변경)</a></li>
+    </ol>
+  </div>
+
+  <!-- 바닥글 영역 -->
+  <footer class="page-footer indigo">
+    <div class="container">
+      <div class="row center">
+        <a href="/" class="btn white indigo-text">돌아가기</a>
+      </div>
+    </div>
+    <div class="footer-copyright">
+      <div class="container">
+      &copy; 2016 Copyright <a href="http://sbsoft.kr" target="_blank" class="white-text">SBJang</a> with
+      <a href="http://abcds.kr/" target="_blank" class="white-text">ABCD</a> (
+      <a href="https://www.facebook.com/groups/aboutCoding/" target="_blank" class="white-text">Facebook</a> )
+      <a class="white-text right" href="http://materializecss.com/" target="_blank">design by Materializecss</a>
+      </div>
+    </div>
+  </footer>
+
+<!-- /////////////////////////////////// javascript 스크립트 영역 /////////////////////////////////// -->
+
+  <!--Import jQuery before materialize.js-->
+  <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script type="text/javascript" src="/js/materialize.min.js"></script>
+  <script type="text/javascript" src="/js/shCore.js"></script>
+  <script type="text/javascript" src="/js/shAutoloader.js"></script>
+  <script type="text/javascript">
+  // SyntaxHighlighter 설정 (http://alexgorbatchev.com/SyntaxHighlighter)
+    SyntaxHighlighter.autoloader(
+      'bash shell                     /js/shBrushBash.js',
+      'js javascript                  /js/shBrushJScript.js',
+      'xml xhtml xslt html xhtml      /js/shBrushXml.js'
+    );
+    SyntaxHighlighter.defaults['auto-links'] = false;
+    SyntaxHighlighter.defaults['toolbar'] = false;
+    SyntaxHighlighter.all()
+  </script>
+</body>
+
+</html>
