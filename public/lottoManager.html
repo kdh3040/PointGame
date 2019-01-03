@@ -95,11 +95,12 @@
   <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase-database.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase-firestore.js"></script>
   <script src="/fireinit.js"></script>
 
   <script type="text/javascript">
 
+
+    $("#PROGRESS").show();
 
       var Lottocount;
       firebase.database().ref('/lottocount').once('value', function(snapshot) {
