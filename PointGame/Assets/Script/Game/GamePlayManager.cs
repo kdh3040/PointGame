@@ -17,8 +17,9 @@ public class GamePlayManager : MonoBehaviour {
         }
     }
 
+    public static int GameGetPoint = 10;
+
     public int StageCount = 1;
-    public int AllPoint = 0;
     public int GamePoint = 0;
     public int BlockLimitCount = 10;
     public int BlockCount = 0;
@@ -67,6 +68,10 @@ public class GamePlayManager : MonoBehaviour {
     {
         // 스테이지 클리어
         IsGameStart = false;
+
+        GamePoint += GameGetPoint;
+
+        UI.UpdateGameInfo();
 
         StartCoroutine(Co_StageClearMove());
 
@@ -128,7 +133,7 @@ public class GamePlayManager : MonoBehaviour {
                 pos.y = pos.y - 0.05f;
                 BlockList[index].gameObject.transform.localPosition = pos;
 
-                if (pos.y < -2.5f)
+                if (pos.y < -6.5f)
                     ResetBlock(index);
             }
 
@@ -249,12 +254,15 @@ public class GamePlayManager : MonoBehaviour {
         {
             time -= 0.1f;
             Char.transform.localPosition = BezierCurve(1.0f - time, startPos, endPos);
+            if (IsGameStart == false)
+                yield break;
             yield return null;
         }
 
         if (left && BlockList[BlockCharIndex].BlockType == GameBlock.BLOCK_TYPE.RIGHT ||
             left == false && BlockList[BlockCharIndex].BlockType == GameBlock.BLOCK_TYPE.LEFT)
             yield return Co_CharDown(left);
+
 
         Char.transform.localPosition = endPos;
         CheckGameOver();

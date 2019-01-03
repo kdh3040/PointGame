@@ -17,6 +17,8 @@ public class TKManager : MonoBehaviour
         }
     }
 
+    public int AllPoint = 0;
+
     void Start()
     {
         DontDestroyOnLoad(this);

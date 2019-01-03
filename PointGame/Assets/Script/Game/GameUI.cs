@@ -73,7 +73,7 @@ public class GameUI : MonoBehaviour {
     public void UpdateGameInfo()
     {
         GameInfoStageCount.text = string.Format("Stage {0}", GamePlayManager.Instance.StageCount);
-        GameAllPoint.text = string.Format("총 포인트 : {0:n0}", GamePlayManager.Instance.AllPoint);
+        GameAllPoint.text = string.Format("총 포인트 : {0:n0}", TKManager.Instance.AllPoint);
         GamePoint.text = string.Format("게임 포인트 : {0:n0}", GamePlayManager.Instance.GamePoint);
     }
 

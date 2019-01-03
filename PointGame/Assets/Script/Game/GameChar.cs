@@ -18,7 +18,7 @@ public class GameChar : MonoBehaviour
         // 캐릭터 점프
         Anim.Rebind();
         Anim.SetTrigger("run");
-        gameObject.transform.localScale = new Vector3(left ? 1 : -1, 1, 1);
+        gameObject.transform.localScale = new Vector3(left ? -1 : 1, 1, 1);
     }
 
     public void CharIdle()
