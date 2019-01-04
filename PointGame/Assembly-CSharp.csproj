@@ -67,8 +67,8 @@
     <Compile Include="Assets\Script\Game\GamePlayManager.cs" />
     <Compile Include="Assets\Script\Game\GameUI.cs" />
     <Compile Include="Assets\Script\MainUI.cs" />
-    <Compile Include="Assets\Script\MyData.cs" />
     <Compile Include="Assets\Script\TKManager.cs" />
+    <Compile Include="Assets\Script\UserData.cs" />
     <Reference Include="UnityEditor.StandardEvents">
       <HintPath>F:/Project/Ttuktaksoft/PointGame/PointGame/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>
     </Reference>
