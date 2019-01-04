@@ -169,6 +169,8 @@ public class MainUI : MonoBehaviour {
     public void ViewLottoObj()
     {
         LottoObj.SetActive(true);
+
+        Lotto_AllPointText.text = string.Format("총 포인트 : {0:n0}", TKManager.Instance.MyData.Point);
     }
     public void OnClickLottoGet()
     {

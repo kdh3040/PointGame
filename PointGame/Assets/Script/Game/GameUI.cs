@@ -74,7 +74,7 @@ public class GameUI : MonoBehaviour {
     public void UpdateGameInfo()
     {
         GameInfoStageCount.text = string.Format("Stage {0}", GamePlayManager.Instance.StageCount);
-        GameAllPoint.text = string.Format("총 포인트 : {0:n0}", TKManager.Instance.AllPoint);
+        GameAllPoint.text = string.Format("총 포인트 : {0:n0}", TKManager.Instance.MyData.Point);
         GamePoint.text = string.Format("게임 포인트 : {0:n0}", GamePlayManager.Instance.GamePoint);
     }
 
@@ -96,6 +96,7 @@ public class GameUI : MonoBehaviour {
 
     private void OnClickRoulette()
     {
+        TKManager.Instance.MyData.AddPoint(GamePlayManager.Instance.GamePoint);
         TKManager.Instance.GameOverRouletteStart = true;
         SceneManager.LoadScene("MainScene", LoadSceneMode.Single);
     }
