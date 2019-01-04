@@ -17,10 +17,13 @@ public class TKManager : MonoBehaviour
         }
     }
 
-    public int AllPoint = 0;
+    public UserData MyData = null;
+
+    public bool GameOverRouletteStart = false;
 
     void Start()
     {
+        MyData = new UserData();
         DontDestroyOnLoad(this);
         //Screen.sleepTimeout = SleepTimeout.NeverSleep;
         //Application.targetFrameRate = 50;

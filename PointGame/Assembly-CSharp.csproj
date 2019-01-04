@@ -67,6 +67,7 @@
     <Compile Include="Assets\Script\Game\GamePlayManager.cs" />
     <Compile Include="Assets\Script\Game\GameUI.cs" />
     <Compile Include="Assets\Script\MainUI.cs" />
+    <Compile Include="Assets\Script\MyData.cs" />
     <Compile Include="Assets\Script\TKManager.cs" />
     <None Include="Assets\Firebase\m2repository\com\google\firebase\firebase-app-unity\maven-metadata.xml" />
     <None Include="Assets\Firebase\m2repository\com\google\firebase\firebase-database-unity\maven-metadata.xml" />
