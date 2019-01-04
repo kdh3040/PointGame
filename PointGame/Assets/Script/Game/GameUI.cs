@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameUI : MonoBehaviour {
@@ -95,7 +96,8 @@ public class GameUI : MonoBehaviour {
 
     private void OnClickRoulette()
     {
-        GamePlayManager.Instance.GameReady();
+        TKManager.Instance.GameOverRouletteStart = true;
+        SceneManager.LoadScene("MainScene", LoadSceneMode.Single);
     }
 
     private void OnClickGameClear()

@@ -38,6 +38,7 @@ public class GamePlayManager : MonoBehaviour {
 
     void Start()
     {
+        TKManager.Instance.GameOverRouletteStart = false;
         // 게임에 들어 올때마다 생성
         StageCount = 0;
         GameReady();

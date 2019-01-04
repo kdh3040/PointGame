@@ -19,6 +19,8 @@ public class TKManager : MonoBehaviour
 
     public int AllPoint = 0;
 
+    public bool GameOverRouletteStart = false;
+
     void Start()
     {
         DontDestroyOnLoad(this);
