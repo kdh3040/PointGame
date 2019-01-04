@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class UserData
 {
-    public int Index { get; private set; }
+    public string Index { get; private set; }
     public string NickName = "";
     public int Point { get; private set; }
 
-    public void SetData(int index, string nickName, int point)
+    public void SetData(string index, string nickName, int point)
     {
         Index = index;
         NickName = nickName;
