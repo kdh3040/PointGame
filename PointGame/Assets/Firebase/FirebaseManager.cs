@@ -39,6 +39,8 @@ public class FirebaseManager : MonoBehaviour {
 
         GetUserData();
         GetLottoRefNumber();
+        GetGiftProb();
+
         if (!SingedInFirebase())
         {
 //            LogInByGoogle();
@@ -80,7 +82,6 @@ public class FirebaseManager : MonoBehaviour {
                 newUser.DisplayName, newUser.UserId);
         });
     }
-
 
     // 사용자 정보 파이어베이스에 세팅
     public void SetUserData()
@@ -137,6 +138,33 @@ public class FirebaseManager : MonoBehaviour {
               rtPoint = (int)snapshot.Value;              
           }
          });
+    }
+
+    // 상품권 걸릴 확률
+    public void GetGiftProb()
+    {
+        int GiftProb = 0;
+
+        mDatabaseRef.Child("GiftProb").GetValueAsync().ContinueWith(task => {
+
+            if (task.IsFaulted)
+            {
+                // Handle the error...
+            }
+            else if (task.IsCompleted)
+            {
+                DataSnapshot snapshot = task.Result;
+
+                foreach(var tempChild in snapshot.Children)
+                {
+                    var tempData = tempChild.Value as Dictionary<string, object>;
+                    String tempPoint = tempData["Prob"].ToString();
+                    String tempName = tempData["Name"].ToString();
+                    //TKManager.Instance.MyData.SetData(tempData["Index"].ToString(), tempData["NickName"].ToString(), Convert.ToInt32(tempPoint));
+                }
+                GiftProb = (int)snapshot.Value;
+            }
+        });
     }
 
     // 상품권 이미지 주소
