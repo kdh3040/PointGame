@@ -20,12 +20,11 @@ public class TKManager : MonoBehaviour
     public UserData MyData = null;
 
     public bool GameOverRouletteStart = false;
+    public List<KeyValuePair<int, int>> RoulettePercent = new List<KeyValuePair<int, int>>();
 
     void Start()
     {
         MyData = new UserData();
-
-        ImageCache.Instance.LoadImageCache("http://mblogthumb2.phinf.naver.net/20130120_157/liebe3722_13586901613759XDol_JPEG/%C7%C7%C0%DA%C7%EA%B1%E2%C7%C1%C6%BC%C4%DC.jpg?type=w2");
 
         DontDestroyOnLoad(this);
         //Screen.sleepTimeout = SleepTimeout.NeverSleep;

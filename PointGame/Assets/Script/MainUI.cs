@@ -163,6 +163,15 @@ public class MainUI : MonoBehaviour {
 
     public void ViewRouletteObj()
     {
+        // 기프티콘 갯수 파베에서 확인
+
+
+
+
+
+
+
+
         RouletteObj.SetActive(true);
     }
     public void OnClickRouletteStart()
