@@ -123,7 +123,10 @@ public class MainUI : MonoBehaviour {
 
     public void OnClickMainGiftBox()
     {
-
+        Popup.ShowPopup(new GiftconPopup.GiftconPopupData("https://fimg4.pann.com/new/download.jsp?FileID=43800105"));
+        //Texture2D texture = ImageCache.Instance.GetImage("http://mblogthumb2.phinf.naver.net/20130120_157/liebe3722_13586901613759XDol_JPEG/%C7%C7%C0%DA%C7%EA%B1%E2%C7%C1%C6%BC%C4%DC.jpg?type=w2");
+        //Rect rect = new Rect(0, 0, texture.width, texture.height);
+        //test.sprite = Sprite.Create(texture, rect, new Vector2(0.5f, 0.5f));
     }
 
     public void OnClickMainSignUp()

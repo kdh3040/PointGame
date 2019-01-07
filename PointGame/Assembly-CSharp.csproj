@@ -66,6 +66,7 @@
     <Compile Include="Assets\Script\Game\GameChar.cs" />
     <Compile Include="Assets\Script\Game\GamePlayManager.cs" />
     <Compile Include="Assets\Script\Game\GameUI.cs" />
+    <Compile Include="Assets\Script\ImageCache.cs" />
     <Compile Include="Assets\Script\MainUI.cs" />
     <Compile Include="Assets\Script\Popup\GiftconListPopup.cs" />
     <Compile Include="Assets\Script\Popup\GiftconPopup.cs" />

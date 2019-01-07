@@ -1,12 +1,22 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GiftconListPopup : Popup
 {
+    public Button OkButton;
 
-	// Use this for initialization
-	void Start () {
+    public class GiftconListPopupData : PopupData
+    {
+        public GiftconListPopupData()
+        {
+            PopupType = POPUP_TYPE.GIFT_CON_LIST;
+        }
+    }
+
+    // Use this for initialization
+    void Start () {
 		
 	}
 	
