@@ -67,6 +67,13 @@
     <Compile Include="Assets\Script\Game\GamePlayManager.cs" />
     <Compile Include="Assets\Script\Game\GameUI.cs" />
     <Compile Include="Assets\Script\MainUI.cs" />
+    <Compile Include="Assets\Script\Popup\GiftconListPopup.cs" />
+    <Compile Include="Assets\Script\Popup\GiftconPopup.cs" />
+    <Compile Include="Assets\Script\Popup\MsgPopup.cs" />
+    <Compile Include="Assets\Script\Popup\Popup.cs" />
+    <Compile Include="Assets\Script\Popup\RouletteResultPopup.cs" />
+    <Compile Include="Assets\Script\Popup\SignUpPopup.cs" />
+    <Compile Include="Assets\Script\PopupUI.cs" />
     <Compile Include="Assets\Script\TKManager.cs" />
     <Compile Include="Assets\Script\UserData.cs" />
     <None Include="Assets\Firebase\m2repository\com\google\firebase\firebase-app-unity\maven-metadata.xml" />
@@ -282,38 +289,38 @@
     <Reference Include="UnityEngine.SpatialTracking">
       <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/UnitySpatialTracking/RuntimeEditor/UnityEngine.SpatialTracking.dll</HintPath>
     </Reference>
+    <Reference Include="Firebase.Analytics">
+      <HintPath>F:/Project/Ttuktaksoft/PointGame/PointGame/Assets/Firebase/Plugins/Firebase.Analytics.dll</HintPath>
+    </Reference>
+    <Reference Include="Firebase.App">
+      <HintPath>F:/Project/Ttuktaksoft/PointGame/PointGame/Assets/Firebase/Plugins/Firebase.App.dll</HintPath>
+    </Reference>
+    <Reference Include="Firebase.Auth">
+      <HintPath>F:/Project/Ttuktaksoft/PointGame/PointGame/Assets/Firebase/Plugins/Firebase.Auth.dll</HintPath>
+    </Reference>
+    <Reference Include="Firebase.Platform">
+      <HintPath>F:/Project/Ttuktaksoft/PointGame/PointGame/Assets/Firebase/Plugins/Firebase.Platform.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.MiniJson">
+      <HintPath>F:/Project/Ttuktaksoft/PointGame/PointGame/Assets/Firebase/Plugins/Google.MiniJson.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Sharpen">
+      <HintPath>F:/Project/Ttuktaksoft/PointGame/PointGame/Assets/Firebase/Plugins/Google.Sharpen.dll</HintPath>
+    </Reference>
+    <Reference Include="Firebase.Database">
+      <HintPath>F:/Project/Ttuktaksoft/PointGame/PointGame/Assets/Firebase/Plugins/Mono/Firebase.Database.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Compat">
+      <HintPath>F:/Project/Ttuktaksoft/PointGame/PointGame/Assets/Parse/Plugins/Unity.Compat.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Tasks">
+      <HintPath>F:/Project/Ttuktaksoft/PointGame/PointGame/Assets/Parse/Plugins/Unity.Tasks.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.Analytics">
       <HintPath>C:/Users/Mangomilik/AppData/Local/Unity/cache/packages/packages.unity.com/com.unity.analytics@2.0.16/UnityEngine.Analytics.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.StandardEvents">
       <HintPath>C:/Users/Mangomilik/AppData/Local/Unity/cache/packages/packages.unity.com/com.unity.standardevents@1.0.13/UnityEngine.StandardEvents.dll</HintPath>
-    </Reference>
-    <Reference Include="Firebase.App">
-      <HintPath>F:/Project/Ttuktaksoft/PointGame/PointGame/Assets/Firebase/Plugins/Firebase.App.dll</HintPath>
-    </Reference>
-    <Reference Include="Firebase.Database">
-      <HintPath>F:/Project/Ttuktaksoft/PointGame/PointGame/Assets/Firebase/Plugins/Mono/Firebase.Database.dll</HintPath>
-    </Reference>
-    <Reference Include="Firebase.Analytics">
-      <HintPath>F:/Project/Ttuktaksoft/PointGame/PointGame/Assets/Firebase/Plugins/Firebase.Analytics.dll</HintPath>
-    </Reference>
-    <Reference Include="Firebase.Platform">
-      <HintPath>F:/Project/Ttuktaksoft/PointGame/PointGame/Assets/Firebase/Plugins/Firebase.Platform.dll</HintPath>
-    </Reference>
-    <Reference Include="Google.Sharpen">
-      <HintPath>F:/Project/Ttuktaksoft/PointGame/PointGame/Assets/Firebase/Plugins/Google.Sharpen.dll</HintPath>
-    </Reference>
-    <Reference Include="Google.MiniJson">
-      <HintPath>F:/Project/Ttuktaksoft/PointGame/PointGame/Assets/Firebase/Plugins/Google.MiniJson.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Tasks">
-      <HintPath>F:/Project/Ttuktaksoft/PointGame/PointGame/Assets/Parse/Plugins/Unity.Tasks.dll</HintPath>
-    </Reference>
-    <Reference Include="Firebase.Auth">
-      <HintPath>F:/Project/Ttuktaksoft/PointGame/PointGame/Assets/Firebase/Plugins/Firebase.Auth.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Compat">
-      <HintPath>F:/Project/Ttuktaksoft/PointGame/PointGame/Assets/Parse/Plugins/Unity.Compat.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib">
       <HintPath>C:/Program Files/Unity/Editor/Data/MonoBleedingEdge/lib/mono/2.0-api/mscorlib.dll</HintPath>
