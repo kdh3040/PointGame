@@ -42,6 +42,8 @@ public class MainUI : MonoBehaviour {
     public GameObject LottoResultObj;
     public Button LottoResult_ReturnButton;
 
+    public PopupUI Popup;
+
     private MAIN_UI_TYPE UIType = MAIN_UI_TYPE.MAIN;
 
     private void Awake()
@@ -126,7 +128,7 @@ public class MainUI : MonoBehaviour {
 
     public void OnClickMainSignUp()
     {
-
+        Popup.ShowPopup(new SignUpPopup.SignUpPopupData());
     }
 
     public void ViewReadyObj()
