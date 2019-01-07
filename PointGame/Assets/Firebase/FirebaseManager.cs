@@ -28,7 +28,7 @@ public class FirebaseManager : MonoBehaviour {
     private string googleIdToken;
     private string googleAccessToken;
     private DatabaseReference mDatabaseRef;
-    
+    int LottoRefNnumber = 0;
 
     // Use this for initialization
     void Start () {
@@ -38,13 +38,11 @@ public class FirebaseManager : MonoBehaviour {
         mDatabaseRef = FirebaseDatabase.DefaultInstance.RootReference;
 
         GetUserData();
-
+        GetLottoRefNumber();
         if (!SingedInFirebase())
         {
 //            LogInByGoogle();
         }
-
-
     }
 
     public bool SingedInFirebase()
@@ -141,27 +139,6 @@ public class FirebaseManager : MonoBehaviour {
          });
     }
 
-
-    // 로또 당첨 번호 파이어베이스에서 로드
-    public void GetLottoNumber()
-    {
-        int rtLottonumber = 0;
-
-        mDatabaseRef.Child("lottonumber").GetValueAsync().ContinueWith(task => {
-
-            if (task.IsFaulted)
-            {
-                // Handle the error...
-            }
-            else if (task.IsCompleted)
-            {
-                DataSnapshot snapshot = task.Result;
-                rtLottonumber = (int)snapshot.Value;
-            }
-        }
-      );
-    }
-
     // 상품권 이미지 주소
     public void GetGiftImage()
     {
@@ -177,10 +154,71 @@ public class FirebaseManager : MonoBehaviour {
            {
                DataSnapshot snapshot = task.Result;
                GiftImageSrc = (string)snapshot.Value;
-
-
            }
        });
+    }
+
+    // 로또 당첨 번호 파이어베이스에서 로드
+    public void SetLottoNumber()
+    {
+        int lottoCount = 0;
+
+        mDatabaseRef.Child("lottocount").GetValueAsync().ContinueWith(task => {
+
+            if (task.IsFaulted)
+            {
+                // Handle the error...
+            }
+            else if (task.IsCompleted)
+            {
+                DataSnapshot snapshot = task.Result;
+                lottoCount = (int)snapshot.Value;
+
+                mDatabaseRef.Child("lotto").Child(lottoCount.ToString()).Child("User").SetValueAsync(TKManager.Instance.MyData.Index);
+                mDatabaseRef.Child("lotto").Child(lottoCount.ToString()).Child("Number").SetValueAsync(LottoRefNnumber * lottoCount);
+
+                mDatabaseRef.Child("lottocount").SetValueAsync(lottoCount++);
+            }
+        }
+      );
+    }
+
+    // 로또 레퍼런스 번호 파이어베이스에서 로드
+    public void GetLottoRefNumber()
+    {
+        mDatabaseRef.Child("lottoRefNumber").GetValueAsync().ContinueWith(task => {
+
+            if (task.IsFaulted)
+            {
+                // Handle the error...
+            }
+            else if (task.IsCompleted)
+            {
+                DataSnapshot snapshot = task.Result;
+                LottoRefNnumber = (int)snapshot.Value;
+            }
+        }
+      );
+    }
+
+    // 로또 당첨 번호 파이어베이스에서 로드
+    public void GetLottoLuckyNumber()
+    {
+        int rtLottonumber = 0;
+
+        mDatabaseRef.Child("lottoLuckyNumber").GetValueAsync().ContinueWith(task => {
+
+            if (task.IsFaulted)
+            {
+                // Handle the error...
+            }
+            else if (task.IsCompleted)
+            {
+                DataSnapshot snapshot = task.Result;
+                rtLottonumber = (int)snapshot.Value;
+            }
+        }
+      );
     }
 
     // Update is called once per frame

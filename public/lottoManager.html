@@ -109,6 +109,13 @@
         console.log(Lottocount);
       });
 
+	  var LottoRefNumber;
+	  firebase.database().ref('/lottoRefNumber').once('value', function(snapshot) {
+        var message = snapshot.val();
+        LottoRefNumber = message;
+        console.log(LottoRefNumber);
+      });
+
     var arrLottoUser = new Array();
 
       var dbTestRef = firebase.database().ref('/lotto')
@@ -125,10 +132,14 @@
     //  document.write(result);
       $("#LOTTO_GROUP").text(arrLottoUser[result]);
       	console.log(result);
+		firebase.database().ref('/lottoLuckyNumber').set(arrLottoUser[result])
+
+	  var LottoRandNumber = Math.floor(Math.random() * 100) + 1;
+	   firebase.database().ref('/lottoRefNumber').set(LottoRandNumber)
     });
 
     $("#BTN_TEST_CREATE").click(function() {
-      var result = Math.floor(Math.random() * 100) + 1;
+      var result = LottoRefNumber * Lottocount;
     //  document.write(result);
 
     firebase.database().ref('/lotto/' + Lottocount).set({"User": Lottocount, "Number": result})
