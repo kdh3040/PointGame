@@ -37,6 +37,7 @@ public class FirebaseManager : MonoBehaviour {
         FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://pointgame-2177a.firebaseio.com/");
         mDatabaseRef = FirebaseDatabase.DefaultInstance.RootReference;
 
+        GetUserData();
 
         if (!SingedInFirebase())
         {
@@ -86,20 +87,15 @@ public class FirebaseManager : MonoBehaviour {
     // 사용자 정보 파이어베이스에 세팅
     public void SetUserData()
     {
-        string userIdx = null;
-        string userNickName = null;
-        int userPoint = 0;
-
-        mDatabaseRef.Child("Users").Child(userIdx).Child("Index").SetValueAsync(userIdx);
-        mDatabaseRef.Child("Users").Child(userIdx).Child("NickName").SetValueAsync(userNickName);
-        mDatabaseRef.Child("Users").Child(userIdx).Child("Point").SetValueAsync(userPoint);
+        mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("Index").SetValueAsync(TKManager.Instance.MyData.Index);
+        mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("NickName").SetValueAsync(TKManager.Instance.MyData.NickName);
+        mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("Point").SetValueAsync(TKManager.Instance.MyData.Point);
     }
 
     // 사용자 정보 파이어베이스에서 로드
     public void GetUserData()
     {
-        string userIdx = null;
-        int rtPoint = 0;
+        string userIdx = "0";
 
         mDatabaseRef.Child("Users").Child(userIdx).GetValueAsync().ContinueWith(task => {
 
@@ -110,7 +106,11 @@ public class FirebaseManager : MonoBehaviour {
             else if (task.IsCompleted)
             {
                 DataSnapshot snapshot = task.Result;
-                rtPoint = (int)snapshot.Value;
+
+                var tempData = snapshot.Value as Dictionary<string, object>;
+                String tempPoint = tempData["Point"].ToString();
+                TKManager.Instance.MyData.SetData(tempData["Index"].ToString(), tempData["NickName"].ToString(), Convert.ToInt32(tempPoint));
+                Debug.LogFormat("UserInfo: Index : {0} NickName {1} Point {2}", TKManager.Instance.MyData.Index, TKManager.Instance.MyData.NickName, TKManager.Instance.MyData.Point);
             }
         });
     }
@@ -119,18 +119,15 @@ public class FirebaseManager : MonoBehaviour {
     // 사용자 보유 포인트 파이어베이스에 셋팅
     public void SetPoint(int point)
     {
-        string userIdx = null;
-        
-        mDatabaseRef.Child("Users").Child(userIdx).Child("Point").SetValueAsync(point);
+        mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("Point").SetValueAsync(point);
     }
 
     // 사용자 보유 포인트 파이어베이스에서 로드
     public void GetPoint()
     {
-        string userIdx = null;
         int rtPoint = 0;
-
-        mDatabaseRef.Child("Users").Child(userIdx).Child("Point").GetValueAsync().ContinueWith(task => {
+        
+        mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("Point").GetValueAsync().ContinueWith(task => {
 
           if (task.IsFaulted)
           {
