@@ -43,6 +43,8 @@ public class FirebaseManager : MonoBehaviour
         GetLottoRefNumber();
         GetGiftProb();
 
+       // SetLottoNumber();
+
         if (!SingedInFirebase())
         {
             //            LogInByGoogle();
@@ -140,7 +142,7 @@ public class FirebaseManager : MonoBehaviour
             else if (task.IsCompleted)
             {
                 DataSnapshot snapshot = task.Result;
-                rtPoint = (int)snapshot.Value;
+                rtPoint = Convert.ToInt32(snapshot.Value);
             }
         });
     }
@@ -168,9 +170,8 @@ public class FirebaseManager : MonoBehaviour
 
                     TKManager.Instance.RoulettePercent.Add(new KeyValuePair<int, int>(Convert.ToInt32(tempName), Convert.ToInt32(tempProb)));
 
-                    Debug.LogFormat("UserInfo: Index : {0} NickName {1} Point {2}", TKManager.Instance.MyData.Index, TKManager.Instance.MyData.NickName, TKManager.Instance.MyData.Point);
-
-                    //TKManager.Instance.MyData.SetData(tempData["Index"].ToString(), tempData["NickName"].ToString(), Convert.ToInt32(tempPoint));
+                  //  Debug.LogFormat("UserInfo: Index : {0} NickName {1} Point {2}", TKManager.Instance.MyData.Index, TKManager.Instance.MyData.NickName, TKManager.Instance.MyData.Point);
+                  
                 }
             }
         });
@@ -191,7 +192,7 @@ public class FirebaseManager : MonoBehaviour
            else if (task.IsCompleted)
            {
                DataSnapshot snapshot = task.Result;
-               GiftImageSrc = (string)snapshot.Value;
+               GiftImageSrc = snapshot.Value.ToString();
            }
        });
     }
@@ -199,38 +200,25 @@ public class FirebaseManager : MonoBehaviour
     // 로또 번호 파이어베이스에서 로드
     public void SetLottoNumber()
     {
-        int lottoCount = 0;
-
-        mDatabaseRef.Child("lottocount").GetValueAsync().ContinueWith(task =>
+        mDatabaseRef.Child("lottocount").RunTransaction(mutableData =>
         {
+            int tempCount = Convert.ToInt32(mutableData.Value); 
 
-            if (task.IsFaulted)
+            if (tempCount == 0)
             {
-                // Handle the error...
+                tempCount = 0;
             }
-            else if (task.IsCompleted)
+            else
             {
-                DataSnapshot snapshot = task.Result;
-                lottoCount = (int)snapshot.Value;
+                mDatabaseRef.Child("lotto").Child(tempCount.ToString()).Child("User").SetValueAsync(TKManager.Instance.MyData.Index);
+                mDatabaseRef.Child("lotto").Child(tempCount.ToString()).Child("Number").SetValueAsync(LottoRefNnumber * tempCount);
 
-                mDatabaseRef.Child("lotto").Child(lottoCount.ToString()).Child("User").SetValueAsync(TKManager.Instance.MyData.Index);
-                mDatabaseRef.Child("lotto").Child(lottoCount.ToString()).Child("Number").SetValueAsync(LottoRefNnumber * lottoCount);
-
-                mDatabaseRef.Child("lottocount").RunTransaction(mutableData =>
-                {
-                    int tempCount = (int)mutableData.Value;
-
-                    if (tempCount == 0)
-                    {
-                        tempCount = 0;
-                    }
-
-                    mutableData.Value = tempCount++;
-                    return TransactionResult.Success(mutableData);
-                });
+                mutableData.Value = tempCount + 1;
             }
-        }
-      );
+
+          
+            return TransactionResult.Success(mutableData);
+        });
     }
 
     // 로또 레퍼런스 번호 파이어베이스에서 로드
@@ -246,7 +234,7 @@ public class FirebaseManager : MonoBehaviour
             else if (task.IsCompleted)
             {
                 DataSnapshot snapshot = task.Result;
-                LottoRefNnumber = (int)snapshot.Value;
+                LottoRefNnumber = Convert.ToInt32(snapshot.Value);
             }
         }
       );
@@ -267,7 +255,8 @@ public class FirebaseManager : MonoBehaviour
             else if (task.IsCompleted)
             {
                 DataSnapshot snapshot = task.Result;
-                rtLottonumber = (int)snapshot.Value;
+                rtLottonumber = Convert.ToInt32(snapshot.Value);
+
             }
         }
       );
