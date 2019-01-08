@@ -42,6 +42,7 @@ public class FirebaseManager : MonoBehaviour
         GetUserData();
         GetLottoRefNumber();
         GetGiftProb();
+        GetLottoLuckyNumber();
 
        // SetLottoNumber();
 
@@ -185,10 +186,17 @@ public class FirebaseManager : MonoBehaviour
                     String tempProb = tempData["Prob"].ToString();
                     String tempName = tempData["Name"].ToString();
 
-                    TKManager.Instance.RoulettePercent.Add(new KeyValuePair<int, int>(Convert.ToInt32(tempName), Convert.ToInt32(tempProb)));
+                    if(TKManager.Instance.RoulettePercent.Count <= 0)
+                        TKManager.Instance.RoulettePercent.Add(new KeyValuePair<int, int>(Convert.ToInt32(tempName), Convert.ToInt32(tempProb)));
+                    else
+                    {
+                        var tempValue = TKManager.Instance.RoulettePercent[TKManager.Instance.RoulettePercent.Count - 1].Value;
+                        TKManager.Instance.RoulettePercent.Add(new KeyValuePair<int, int>(Convert.ToInt32(tempName), tempValue + Convert.ToInt32(tempProb)));
+                    }
 
-                  //  Debug.LogFormat("UserInfo: Index : {0} NickName {1} Point {2}", TKManager.Instance.MyData.Index, TKManager.Instance.MyData.NickName, TKManager.Instance.MyData.Point);
-                  
+
+                    //  Debug.LogFormat("UserInfo: Index : {0} NickName {1} Point {2}", TKManager.Instance.MyData.Index, TKManager.Instance.MyData.NickName, TKManager.Instance.MyData.Point);
+
                 }
             }
         });
@@ -273,7 +281,7 @@ public class FirebaseManager : MonoBehaviour
             {
                 DataSnapshot snapshot = task.Result;
                 rtLottonumber = Convert.ToInt32(snapshot.Value);
-
+                TKManager.Instance.ResultLottoNumber = rtLottonumber;
             }
         }
       );

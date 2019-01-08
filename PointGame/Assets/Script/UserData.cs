@@ -18,19 +18,6 @@ public class UserData
         Index = index;
         NickName = nickName;
         Point = point;
-
-        /*
-        GiftconURLList.Add(new KeyValuePair<int, string>(1,"http://mblogthumb2.phinf.naver.net/20130120_157/liebe3722_13586901613759XDol_JPEG/%C7%C7%C0%DA%C7%EA%B1%E2%C7%C1%C6%BC%C4%DC.jpg?type=w2"));
-        GiftconURLList.Add(new KeyValuePair<int, string>(2,"http://attach.s.op.gg/forum/20171221114845_549392.jpg"));
-        GiftconURLList.Add(new KeyValuePair<int, string>(3,"http://mblogthumb2.phinf.naver.net/20130120_157/liebe3722_13586901613759XDol_JPEG/%C7%C7%C0%DA%C7%EA%B1%E2%C7%C1%C6%BC%C4%DC.jpg?type=w2"));
-        GiftconURLList.Add(new KeyValuePair<int, string>(4,"http://attach.s.op.gg/forum/20171221114845_549392.jpg"));
-        GiftconURLList.Add(new KeyValuePair<int, string>(5,"http://mblogthumb2.phinf.naver.net/20130120_157/liebe3722_13586901613759XDol_JPEG/%C7%C7%C0%DA%C7%EA%B1%E2%C7%C1%C6%BC%C4%DC.jpg?type=w2"));
-        GiftconURLList.Add(new KeyValuePair<int, string>(6,"http://attach.s.op.gg/forum/20171221114845_549392.jpg"));
-        GiftconURLList.Add(new KeyValuePair<int, string>(7,"http://mblogthumb2.phinf.naver.net/20130120_157/liebe3722_13586901613759XDol_JPEG/%C7%C7%C0%DA%C7%EA%B1%E2%C7%C1%C6%BC%C4%DC.jpg?type=w2"));
-        GiftconURLList.Add(new KeyValuePair<int, string>(8,"http://attach.s.op.gg/forum/20171221114845_549392.jpg"));
-        GiftconURLList.Add(new KeyValuePair<int, string>(9,"http://mblogthumb2.phinf.naver.net/20130120_157/liebe3722_13586901613759XDol_JPEG/%C7%C7%C0%DA%C7%EA%B1%E2%C7%C1%C6%BC%C4%DC.jpg?type=w2"));
-        GiftconURLList.Add(new KeyValuePair<int, string>(10, "http://attach.s.op.gg/forum/20171221114845_549392.jpg"));
-        */
     }
 
     public void SetLottoData(int LottoSeries, int LottoNumber)
