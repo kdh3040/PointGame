@@ -32,15 +32,19 @@ public class MainUI : MonoBehaviour {
     public Button Roulette_StartButton;
 
     public GameObject LottoObj;
-    public Text Lotto_AllPointText;
+    public Text Lotto_AllPointText; 
     public Button Lotto_GetButton;
 
     public GameObject LottoNumberGetObj;
+    public Text LottoNumberGet_MyNumber;
     public Text LottoNumberGet_AllPointText;
     public Button LottoNumberGet_ResultButton;
     
     public GameObject LottoResultObj;
+    public Text LottoResult_MyNumber;
+    public Text LottoResult_ResultNumber;
     public Button LottoResult_ReturnButton;
+    public Text LottoResult_ReturnButtonText;
 
     public PopupUI Popup;
 
@@ -123,10 +127,7 @@ public class MainUI : MonoBehaviour {
 
     public void OnClickMainGiftBox()
     {
-        Popup.ShowPopup(new GiftconPopup.GiftconPopupData("https://fimg4.pann.com/new/download.jsp?FileID=43800105"));
-        //Texture2D texture = ImageCache.Instance.GetImage("http://mblogthumb2.phinf.naver.net/20130120_157/liebe3722_13586901613759XDol_JPEG/%C7%C7%C0%DA%C7%EA%B1%E2%C7%C1%C6%BC%C4%DC.jpg?type=w2");
-        //Rect rect = new Rect(0, 0, texture.width, texture.height);
-        //test.sprite = Sprite.Create(texture, rect, new Vector2(0.5f, 0.5f));
+        Popup.ShowPopup(new GiftconListPopup.GiftconListPopupData());
     }
 
     public void OnClickMainSignUp()
@@ -157,8 +158,16 @@ public class MainUI : MonoBehaviour {
 
     public void OnClickReadyLotto()
     {
-        UIType = MAIN_UI_TYPE.LOTTO;
-        UpdateUIType();
+        if(TKManager.Instance.MyData.MyLottoNumber <= 0)
+        {
+            UIType = MAIN_UI_TYPE.LOTTO_RESULT;
+            UpdateUIType();
+        }
+        else
+        {
+            UIType = MAIN_UI_TYPE.LOTTO;
+            UpdateUIType();
+        }
     }
 
     public void ViewRouletteObj()
@@ -176,6 +185,33 @@ public class MainUI : MonoBehaviour {
     }
     public void OnClickRouletteStart()
     {
+        // 룰렛 진행 하고
+
+        var percentValue = Random.Range(0, 101); // 100으로 하면 99까지만 나옴
+
+        var roulettePercent = TKManager.Instance.RoulettePercent;
+
+        for(int index = 0; index < roulettePercent.Count; ++index)
+        {
+            if(index == 0)
+            {
+                if(roulettePercent[index].Value >= percentValue)
+                {
+                    Popup.ShowPopup(new RouletteResultPopup.RouletteResultPopupData(TKManager.Instance.RouletteGiftconUrl, RouletteResultClose));
+                    break;
+                }
+            }
+            else if(roulettePercent[index - 1].Value < percentValue &&
+                roulettePercent[index].Value >= percentValue)
+            {
+                Popup.ShowPopup(new RouletteResultPopup.RouletteResultPopupData(roulettePercent[index].Key, RouletteResultClose));
+                break;
+            }
+        }
+    }
+
+    public void RouletteResultClose()
+    {
         UIType = MAIN_UI_TYPE.READY;
         UpdateUIType();
     }
@@ -188,27 +224,65 @@ public class MainUI : MonoBehaviour {
     }
     public void OnClickLottoGet()
     {
+        // 번호 획득
+        TKManager.Instance.MyData.MyLottoSeriesCount = 1;
+        TKManager.Instance.MyData.MyLottoNumber = 10;
+
         UIType = MAIN_UI_TYPE.LOTTO_NUMBER_GET;
         UpdateUIType();
     }
 
     public void ViewLottoNumberGetObj()
     {
+        LottoNumberGet_MyNumber.text = string.Format("{0}회 Happy 번호\n{1}", TKManager.Instance.MyData.MyLottoSeriesCount, TKManager.Instance.MyData.MyLottoNumber);
         LottoNumberGetObj.SetActive(true);
     }
     public void OnClickLottoResult()
     {
-        UIType = MAIN_UI_TYPE.LOTTO_RESULT;
-        UpdateUIType();
+        if(TKManager.Instance.MyData.MyLottoSeriesCount == TKManager.Instance.CurrentLottoSeriesCount)
+        {
+            Popup.ShowPopup(new MsgPopup.MsgPopupData("아직 당첨번호가 생성되지 않았습니다."));
+        }
+        else
+        {
+            UIType = MAIN_UI_TYPE.LOTTO_RESULT;
+            UpdateUIType();
+        }
     }
 
     public void ViewLottoResultObj()
     {
+        LottoResult_MyNumber.text = string.Format("{0}회 Happy 번호\n{1}", TKManager.Instance.MyData.MyLottoSeriesCount, TKManager.Instance.MyData.MyLottoNumber);
+        LottoResult_ResultNumber.text = string.Format("{0}회 Happy 당첨번호\n{1}", TKManager.Instance.ResultLottoSeriesCount, TKManager.Instance.ResultLottoNumber);
+
+        if(TKManager.Instance.MyData.MyLottoSeriesCount == TKManager.Instance.ResultLottoSeriesCount &&
+            TKManager.Instance.MyData.MyLottoNumber == TKManager.Instance.ResultLottoNumber)
+        {
+            Popup.ShowPopup(new MsgPopup.MsgPopupData("당첨을 축하 드립니다!"));
+            LottoResult_ReturnButtonText.text = "당첨금 받기";
+        }
+        else
+        {
+            LottoResult_ReturnButtonText.text = "다음 기회에..";
+        }
+
+        
         LottoResultObj.SetActive(true);
     }
     public void OnClickReturn()
     {
-        UIType = MAIN_UI_TYPE.MAIN;
-        UpdateUIType();
+        if (TKManager.Instance.MyData.MyLottoSeriesCount == TKManager.Instance.ResultLottoSeriesCount &&
+            TKManager.Instance.MyData.MyLottoNumber == TKManager.Instance.ResultLottoNumber)
+        {
+            Popup.ShowPopup(new LottoWinPopup.LottoWinPopupData());
+        }
+        else
+        {
+            UIType = MAIN_UI_TYPE.MAIN;
+            UpdateUIType();
+        }
+
+        // TODO 배환웅 로또 번호 제거
+        TKManager.Instance.MyData.MyLottoNumber = 0;
     }
 }

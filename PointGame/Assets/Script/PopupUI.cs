@@ -10,6 +10,7 @@ public enum POPUP_TYPE
     ROULETTE_RESULT,
     GIFT_CON_LIST,
     GIFT_CON,
+    LOTTO_WIN_INFO,
 }
 
 public class PopupUI : MonoBehaviour {
@@ -22,6 +23,7 @@ public class PopupUI : MonoBehaviour {
     public GiftconListPopup GiftconListPopupObj;
     public GiftconPopup GiftconPopupObj;
     public MsgPopup MsgPopupObj;
+    public LottoWinPopup LottoWinPopupObj;
 
     public void Start()
     {
@@ -35,6 +37,8 @@ public class PopupUI : MonoBehaviour {
         GiftconPopupObj.Initialize(this, ClosePopup);
         MsgPopupObj.gameObject.SetActive(false);
         MsgPopupObj.Initialize(this, ClosePopup);
+        LottoWinPopupObj.gameObject.SetActive(false);
+        LottoWinPopupObj.Initialize(this, ClosePopup);
     }
 
     public void ShowPopup(Popup.PopupData data)
@@ -66,6 +70,10 @@ public class PopupUI : MonoBehaviour {
                 GiftconPopupObj.gameObject.SetActive(true);
                 GiftconPopupObj.SetData(data);
                 break;
+            case POPUP_TYPE.LOTTO_WIN_INFO:
+                LottoWinPopupObj.gameObject.SetActive(true);
+                LottoWinPopupObj.SetData(data);
+                break;
             default:
                 break;
         }
@@ -95,12 +103,19 @@ public class PopupUI : MonoBehaviour {
             case POPUP_TYPE.GIFT_CON:
                 GiftconPopupObj.gameObject.SetActive(false);
                 break;
+            case POPUP_TYPE.LOTTO_WIN_INFO:
+                LottoWinPopupObj.gameObject.SetActive(false);
+                break;
             default:
                 break;
         }
 
-        CurrPopupType = QueuePopupType[QueuePopupType.Count - 1];
+        
         QueuePopupType.RemoveAt(QueuePopupType.Count - 1);
+        if (QueuePopupType.Count <= 0)
+            CurrPopupType = POPUP_TYPE.NONE;
+        else
+            CurrPopupType = QueuePopupType[QueuePopupType.Count - 1];
     }
     
 }

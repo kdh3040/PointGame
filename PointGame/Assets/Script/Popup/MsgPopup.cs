@@ -42,7 +42,6 @@ public class MsgPopup : Popup
     public void OnClickOk()
     {
         CloseAction();
-        ParentPopup.ShowPopup(new MsgPopupData("우왕굳222222"));
     }
 
 }
