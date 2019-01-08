@@ -47,6 +47,7 @@ public class RouletteResultPopup : Popup
 
         if(popupData.Point > 0)
         {
+            TKManager.Instance.MyData.AddPoint(popupData.Point);
             PointImg.gameObject.SetActive(true);
             PointImg.SetValue(popupData.Point.ToString(), CountImgFont.IMG_RANGE.CENTER, CountImgFont.IMG_TYPE.YELLOW);
         }
