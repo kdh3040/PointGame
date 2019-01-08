@@ -8,15 +8,18 @@ public class MsgPopup : Popup
 {
     public Text Msg;
     public Button OkButton;
+    private Action CloseEndAction;
 
     public class MsgPopupData : PopupData
     {
         public string Msg;
+        public Action CloseEndAction;
 
-        public MsgPopupData(string msg)
+        public MsgPopupData(string msg, Action closeEndAction = null)
         {
             PopupType = POPUP_TYPE.MSG;
             Msg = msg;
+            CloseEndAction = closeEndAction;
         }
     }
 
@@ -31,6 +34,7 @@ public class MsgPopup : Popup
         if (popupData == null)
             return;
 
+        CloseEndAction = popupData.CloseEndAction;
         SetMsg(popupData.Msg);
     }
 
@@ -42,6 +46,8 @@ public class MsgPopup : Popup
     public void OnClickOk()
     {
         CloseAction();
+        if (CloseEndAction != null)
+            CloseEndAction();
     }
 
 }

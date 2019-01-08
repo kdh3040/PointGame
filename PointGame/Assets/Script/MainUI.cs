@@ -153,19 +153,20 @@ public class MainUI : MonoBehaviour {
 
     public void OnClickReadyPointReward()
     {
-
+        // 광고 보면 100포인트
+        TKManager.Instance.MyData.AddPoint(CommonData.AdsPointReward);
     }
 
     public void OnClickReadyLotto()
     {
         if(TKManager.Instance.MyData.MyLottoNumber <= 0)
         {
-            UIType = MAIN_UI_TYPE.LOTTO_RESULT;
+            UIType = MAIN_UI_TYPE.LOTTO;
             UpdateUIType();
         }
         else
         {
-            UIType = MAIN_UI_TYPE.LOTTO;
+            UIType = MAIN_UI_TYPE.LOTTO_RESULT;
             UpdateUIType();
         }
     }
@@ -173,14 +174,6 @@ public class MainUI : MonoBehaviour {
     public void ViewRouletteObj()
     {
         // 기프티콘 갯수 파베에서 확인
-
-
-
-
-
-
-
-
         RouletteObj.SetActive(true);
     }
     public void OnClickRouletteStart()
@@ -224,11 +217,21 @@ public class MainUI : MonoBehaviour {
     }
     public void OnClickLottoGet()
     {
-        // 번호 획득
-        TKManager.Instance.MyData.MyLottoSeriesCount = 1;
-        TKManager.Instance.MyData.MyLottoNumber = 10;
+        if(CommonData.LottoNumberCost > TKManager.Instance.MyData.Point)
+        {
+            Popup.ShowPopup(new MsgPopup.MsgPopupData("포인트가 충분하지 않습니다.", LottoGetMsgClose));
+        }
+        else
+        {
+            // 번호 획득
+            UIType = MAIN_UI_TYPE.LOTTO_NUMBER_GET;
+            UpdateUIType();
+        }
+    }
 
-        UIType = MAIN_UI_TYPE.LOTTO_NUMBER_GET;
+    public void LottoGetMsgClose()
+    {
+        UIType = MAIN_UI_TYPE.READY;
         UpdateUIType();
     }
 
