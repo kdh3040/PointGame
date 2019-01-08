@@ -113,8 +113,25 @@ public class FirebaseManager : MonoBehaviour
                 DataSnapshot snapshot = task.Result;
 
                 var tempData = snapshot.Value as Dictionary<string, object>;
-                String tempPoint = tempData["Point"].ToString();
-                TKManager.Instance.MyData.SetData(tempData["Index"].ToString(), tempData["NickName"].ToString(), Convert.ToInt32(tempPoint));
+                int tempPoint = Convert.ToInt32(tempData["Point"]);
+                TKManager.Instance.MyData.SetData(tempData["Index"].ToString(), tempData["NickName"].ToString(), tempPoint);
+
+          
+                var LottoInfo = tempData["Lotto"] as Dictionary<string, object>;
+                int tempLottoSeries = Convert.ToInt32(LottoInfo["Series"]);
+                int tempLottoNumber = Convert.ToInt32(LottoInfo["Number"]);
+                TKManager.Instance.MyData.SetLottoData(tempLottoSeries, tempLottoNumber);
+
+
+                var GiftInfo = tempData["Gift"] as List<object>;
+                foreach (var pair in GiftInfo)
+                {
+                    TKManager.Instance.MyData.GiftconURLList.Add(new KeyValuePair<int, string>(TKManager.Instance.MyData.GiftconURLList.Count, pair.ToString()));
+
+                }
+
+
+
                 Debug.LogFormat("UserInfo: Index : {0} NickName {1} Point {2}", TKManager.Instance.MyData.Index, TKManager.Instance.MyData.NickName, TKManager.Instance.MyData.Point);
             }
         });
