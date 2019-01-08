@@ -18,6 +18,7 @@ public class GamePlayManager : MonoBehaviour {
     }
 
     public static int GameGetPoint = 10;
+    public static int GameCoinGetPoint = 5;
 
     public int StageCount = 1;
     public int GamePoint = 0;
@@ -124,6 +125,15 @@ public class GamePlayManager : MonoBehaviour {
         }
     }
 
+    public void CheckGameCoinGet()
+    {
+       if( BlockList[BlockCharIndex].isGetCoin(Char.BlockLeftDir))
+        {
+            GamePoint += GameCoinGetPoint;
+            UI.UpdateGameInfo();
+        }
+    }
+
     private void Update()
     {
         if (IsGameStart)
@@ -225,6 +235,7 @@ public class GamePlayManager : MonoBehaviour {
         Char.CharIdle();
         Char.transform.localPosition = endPos;
         CheckGameOver();
+        CheckGameCoinGet();
         IsJumping = false;
     }
 
@@ -267,6 +278,7 @@ public class GamePlayManager : MonoBehaviour {
 
         Char.transform.localPosition = endPos;
         CheckGameOver();
+        CheckGameCoinGet();
     }
 
 
