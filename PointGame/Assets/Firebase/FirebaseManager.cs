@@ -7,7 +7,8 @@ using Firebase.Database;
 using Firebase.Unity.Editor;
 
 
-public class FirebaseManager : MonoBehaviour {
+public class FirebaseManager : MonoBehaviour
+{
 
     public static FirebaseManager _instance = null;
     public static FirebaseManager Instance
@@ -31,7 +32,8 @@ public class FirebaseManager : MonoBehaviour {
     int LottoRefNnumber = 0;
 
     // Use this for initialization
-    void Start () {
+    void Start()
+    {
         DontDestroyOnLoad(this);
         Firebase.Auth.FirebaseAuth auth = Firebase.Auth.FirebaseAuth.DefaultInstance;
         FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://pointgame-2177a.firebaseio.com/");
@@ -41,16 +43,18 @@ public class FirebaseManager : MonoBehaviour {
         GetLottoRefNumber();
         GetGiftProb();
 
+       // SetLottoNumber();
+
         if (!SingedInFirebase())
         {
-//            LogInByGoogle();
+            //            LogInByGoogle();
         }
     }
 
     public bool SingedInFirebase()
     {
 
-        auth = Firebase.Auth.FirebaseAuth.DefaultInstance; 
+        auth = Firebase.Auth.FirebaseAuth.DefaultInstance;
 
         if (auth.CurrentUser != null)
         {
@@ -65,7 +69,8 @@ public class FirebaseManager : MonoBehaviour {
     {
         Firebase.Auth.Credential credential =
        Firebase.Auth.GoogleAuthProvider.GetCredential(googleIdToken, googleAccessToken);
-        auth.SignInWithCredentialAsync(credential).ContinueWith(task => {
+        auth.SignInWithCredentialAsync(credential).ContinueWith(task =>
+        {
             if (task.IsCanceled)
             {
                 Debug.LogError("SignInWithCredentialAsync was canceled.");
@@ -96,7 +101,8 @@ public class FirebaseManager : MonoBehaviour {
     {
         string userIdx = "0";
 
-        mDatabaseRef.Child("Users").Child(userIdx).GetValueAsync().ContinueWith(task => {
+        mDatabaseRef.Child("Users").Child(userIdx).GetValueAsync().ContinueWith(task =>
+        {
 
             if (task.IsFaulted)
             {
@@ -125,27 +131,28 @@ public class FirebaseManager : MonoBehaviour {
     public void GetPoint()
     {
         int rtPoint = 0;
-        
-        mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("Point").GetValueAsync().ContinueWith(task => {
 
-          if (task.IsFaulted)
-          {
+        mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("Point").GetValueAsync().ContinueWith(task =>
+        {
+
+            if (task.IsFaulted)
+            {
                 // Handle the error...
-          }
-          else if (task.IsCompleted)
-          {
-              DataSnapshot snapshot = task.Result;
-              rtPoint = (int)snapshot.Value;              
-          }
-         });
+            }
+            else if (task.IsCompleted)
+            {
+                DataSnapshot snapshot = task.Result;
+                rtPoint = Convert.ToInt32(snapshot.Value);
+            }
+        });
     }
 
     // 상품권 걸릴 확률
     public void GetGiftProb()
     {
-        int GiftProb = 0;
 
-        mDatabaseRef.Child("GiftProb").GetValueAsync().ContinueWith(task => {
+        mDatabaseRef.Child("GiftProb").GetValueAsync().ContinueWith(task =>
+        {
 
             if (task.IsFaulted)
             {
@@ -155,14 +162,17 @@ public class FirebaseManager : MonoBehaviour {
             {
                 DataSnapshot snapshot = task.Result;
 
-                foreach(var tempChild in snapshot.Children)
+                foreach (var tempChild in snapshot.Children)
                 {
                     var tempData = tempChild.Value as Dictionary<string, object>;
-                    String tempPoint = tempData["Prob"].ToString();
+                    String tempProb = tempData["Prob"].ToString();
                     String tempName = tempData["Name"].ToString();
-                    //TKManager.Instance.MyData.SetData(tempData["Index"].ToString(), tempData["NickName"].ToString(), Convert.ToInt32(tempPoint));
+
+                    TKManager.Instance.RoulettePercent.Add(new KeyValuePair<int, int>(Convert.ToInt32(tempName), Convert.ToInt32(tempProb)));
+
+                  //  Debug.LogFormat("UserInfo: Index : {0} NickName {1} Point {2}", TKManager.Instance.MyData.Index, TKManager.Instance.MyData.NickName, TKManager.Instance.MyData.Point);
+                  
                 }
-                GiftProb = (int)snapshot.Value;
             }
         });
     }
@@ -173,48 +183,49 @@ public class FirebaseManager : MonoBehaviour {
         string GiftImageSrc = null;
 
         FirebaseDatabase.DefaultInstance.GetReference("Gift").OrderByKey().LimitToLast(1)
-       .GetValueAsync().ContinueWith(task => {
+       .GetValueAsync().ContinueWith(task =>
+       {
            if (task.IsFaulted)
            {
-                    // Handle the error...
+               // Handle the error...
            }
            else if (task.IsCompleted)
            {
                DataSnapshot snapshot = task.Result;
-               GiftImageSrc = (string)snapshot.Value;
+               GiftImageSrc = snapshot.Value.ToString();
            }
        });
     }
 
-    // 로또 당첨 번호 파이어베이스에서 로드
+    // 로또 번호 파이어베이스에서 로드
     public void SetLottoNumber()
     {
-        int lottoCount = 0;
+        mDatabaseRef.Child("lottocount").RunTransaction(mutableData =>
+        {
+            int tempCount = Convert.ToInt32(mutableData.Value); 
 
-        mDatabaseRef.Child("lottocount").GetValueAsync().ContinueWith(task => {
-
-            if (task.IsFaulted)
+            if (tempCount == 0)
             {
-                // Handle the error...
+                tempCount = 0;
             }
-            else if (task.IsCompleted)
+            else
             {
-                DataSnapshot snapshot = task.Result;
-                lottoCount = (int)snapshot.Value;
+                mDatabaseRef.Child("lotto").Child(tempCount.ToString()).Child("User").SetValueAsync(TKManager.Instance.MyData.Index);
+                mDatabaseRef.Child("lotto").Child(tempCount.ToString()).Child("Number").SetValueAsync(LottoRefNnumber * tempCount);
 
-                mDatabaseRef.Child("lotto").Child(lottoCount.ToString()).Child("User").SetValueAsync(TKManager.Instance.MyData.Index);
-                mDatabaseRef.Child("lotto").Child(lottoCount.ToString()).Child("Number").SetValueAsync(LottoRefNnumber * lottoCount);
-
-                mDatabaseRef.Child("lottocount").SetValueAsync(lottoCount++);
+                mutableData.Value = tempCount + 1;
             }
-        }
-      );
+
+          
+            return TransactionResult.Success(mutableData);
+        });
     }
 
     // 로또 레퍼런스 번호 파이어베이스에서 로드
     public void GetLottoRefNumber()
     {
-        mDatabaseRef.Child("lottoRefNumber").GetValueAsync().ContinueWith(task => {
+        mDatabaseRef.Child("lottoRefNumber").GetValueAsync().ContinueWith(task =>
+        {
 
             if (task.IsFaulted)
             {
@@ -223,7 +234,7 @@ public class FirebaseManager : MonoBehaviour {
             else if (task.IsCompleted)
             {
                 DataSnapshot snapshot = task.Result;
-                LottoRefNnumber = (int)snapshot.Value;
+                LottoRefNnumber = Convert.ToInt32(snapshot.Value);
             }
         }
       );
@@ -234,7 +245,8 @@ public class FirebaseManager : MonoBehaviour {
     {
         int rtLottonumber = 0;
 
-        mDatabaseRef.Child("lottoLuckyNumber").GetValueAsync().ContinueWith(task => {
+        mDatabaseRef.Child("lottoLuckyNumber").GetValueAsync().ContinueWith(task =>
+        {
 
             if (task.IsFaulted)
             {
@@ -243,14 +255,16 @@ public class FirebaseManager : MonoBehaviour {
             else if (task.IsCompleted)
             {
                 DataSnapshot snapshot = task.Result;
-                rtLottonumber = (int)snapshot.Value;
+                rtLottonumber = Convert.ToInt32(snapshot.Value);
+
             }
         }
       );
     }
 
     // Update is called once per frame
-    void Update () {
-		
-	}
+    void Update()
+    {
+
+    }
 }
