@@ -6,26 +6,35 @@ using UnityEngine.UI;
 
 public class MsgPopup : Popup
 {
+    public enum MSGPOPUP_TYPE
+    {
+        ONE,
+        TWO,
+    }
+
     public Text Msg;
     public Button OkButton;
-    private Action CloseEndAction;
+    private Action OkEndAction;
+    public Button CancelButton;
+    private MSGPOPUP_TYPE MsgPopupType = MSGPOPUP_TYPE.ONE;
 
     public class MsgPopupData : PopupData
     {
         public string Msg;
-        public Action CloseEndAction;
+        public Action OkEndAction;
 
-        public MsgPopupData(string msg, Action closeEndAction = null)
+        public MsgPopupData(string msg, Action okEndAction = null, MSGPOPUP_TYPE type = MSGPOPUP_TYPE.ONE)
         {
             PopupType = POPUP_TYPE.MSG;
             Msg = msg;
-            CloseEndAction = closeEndAction;
+            OkEndAction = okEndAction;
         }
     }
 
     private void Awake()
     {
         OkButton.onClick.AddListener(OnClickOk);
+        CancelButton.onClick.AddListener(OnClickCancel);
     }
 
     public override void SetData(PopupData data)
@@ -34,7 +43,23 @@ public class MsgPopup : Popup
         if (popupData == null)
             return;
 
-        CloseEndAction = popupData.CloseEndAction;
+        OkButton.gameObject.SetActive(false);
+        CancelButton.gameObject.SetActive(false);
+
+        switch (MsgPopupType)
+        {
+            case MSGPOPUP_TYPE.ONE:
+                OkButton.gameObject.SetActive(true);
+                break;
+            case MSGPOPUP_TYPE.TWO:
+                OkButton.gameObject.SetActive(true);
+                CancelButton.gameObject.SetActive(true);
+                break;
+            default:
+                break;
+        }
+
+        OkEndAction = popupData.OkEndAction;
         SetMsg(popupData.Msg);
     }
 
@@ -46,8 +71,13 @@ public class MsgPopup : Popup
     public void OnClickOk()
     {
         CloseAction();
-        if (CloseEndAction != null)
-            CloseEndAction();
+        if (OkEndAction != null)
+            OkEndAction();
+    }
+
+    public void OnClickCancel()
+    {
+        CloseAction();
     }
 
 }

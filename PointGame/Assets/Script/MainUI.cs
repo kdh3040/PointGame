@@ -127,7 +127,8 @@ public class MainUI : MonoBehaviour {
 
     public void OnClickMainGiftBox()
     {
-        Popup.ShowPopup(new GiftconListPopup.GiftconListPopupData());
+        Popup.ShowPopup(new MsgPopup.MsgPopupData("아직 당첨번호가 생성되지 않았습니다."));
+        //Popup.ShowPopup(new GiftconListPopup.GiftconListPopupData());
     }
 
     public void OnClickMainSignUp()

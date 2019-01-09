@@ -41,13 +41,19 @@ public class GiftconListPopup : Popup
 
     public void RefreshUI()
     {
+        for(int index = 0; index < GiftconListSlotList.Count; ++index)
+        {
+            DestroyImmediate(GiftconListSlotList[index].gameObject);
+        }
+        GiftconListSlotList.Clear();
+
         var urlList = TKManager.Instance.MyData.GiftconURLList;
         for (int i = 0; i < urlList.Count; i++)
         {
             var obj = Instantiate(Resources.Load("Prefab/GiftconListSlot"), GiftconListSlotGrid.gameObject.transform) as GameObject;
             var slot = obj.GetComponent<GiftconListSlot>();
             slot.ParentPopup = ParentPopup;
-            slot.SetData(urlList[i].Value);
+            slot.SetData(urlList[i].Key, urlList[i].Value);
             GiftconListSlotList.Add(slot);
             //int index = i;
             //slot.SlotButton.onClick.AddListener(() => { OnClickSkin(index); });

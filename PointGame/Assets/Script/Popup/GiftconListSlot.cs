@@ -10,19 +10,21 @@ public class GiftconListSlot : MonoBehaviour {
     public Button GiftConClickButton;
 
     private string GiftConUrl;
+    private int GiftConIndex;
 
     private void Awake()
     {
         GiftConClickButton.onClick.AddListener(OnClickGiftcon);
     }
 
-    public void SetData(string url)
+    public void SetData(int index, string url)
     {
+        GiftConIndex = index;
         GiftConUrl = url;
     }
 
     public void OnClickGiftcon()
     {
-        ParentPopup.ShowPopup(new GiftconPopup.GiftconPopupData(GiftConUrl));
+        ParentPopup.ShowPopup(new GiftconPopup.GiftconPopupData(GiftConIndex, GiftConUrl));
     }
 }
