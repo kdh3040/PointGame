@@ -35,5 +35,26 @@ public class TKManager : MonoBehaviour
         Screen.sleepTimeout = SleepTimeout.NeverSleep;
         Application.targetFrameRate = 50;
         Screen.SetResolution(Screen.width, (Screen.width * 16) / 9, false);
+
+        // TODO 임시
+        CurrentLottoSeriesCount = 1;
+    }
+
+    public void Temp_LottoNumberGet()
+    {
+        MyData.MyLottoNumber = Random.Range(52534, 123424);
+        MyData.MyLottoSeriesCount = CurrentLottoSeriesCount;
+    }
+
+    public void Temp_LuckyLotto()
+    {
+        ResultLottoSeriesCount = CurrentLottoSeriesCount;
+
+        if (Random.Range(0, 2) == 1)
+            ResultLottoNumber = MyData.MyLottoNumber;
+        else
+            ResultLottoNumber = Random.Range(52534, 123424);
+
+        CurrentLottoSeriesCount++;
     }
 }
