@@ -28,9 +28,11 @@ public class MainUI : MonoBehaviour {
     public Button Ready_PointRewardButton;
     public Button Ready_LottoButton;
     public Button Temp_LuckyLottoButton;
+    public Button Ready_GiftBoxButton;
 
     public GameObject RouletteObj;
     public Button Roulette_StartButton;
+    public Image Roulette_Img;
 
     public GameObject LottoObj;
     public Text Lotto_AllPointText;
@@ -63,6 +65,7 @@ public class MainUI : MonoBehaviour {
         Ready_AdViewButton.onClick.AddListener(OnClickReadyAdView);
         Ready_PointRewardButton.onClick.AddListener(OnClickReadyPointReward);
         Ready_LottoButton.onClick.AddListener(OnClickReadyLotto);
+        Ready_GiftBoxButton.onClick.AddListener(OnClickMainGiftBox);
         Roulette_StartButton.onClick.AddListener(OnClickRouletteStart);
         Lotto_GetButton.onClick.AddListener(OnClickLottoGet);
         Lotto_ResultButton.onClick.AddListener(OnClickLottoResult);
@@ -82,13 +85,25 @@ public class MainUI : MonoBehaviour {
         if (TKManager.Instance.GameOverRouletteStart == false)
             UIType = MAIN_UI_TYPE.MAIN;
         else
+        {
+            StartCoroutine(Co_Test());
+            
             UIType = MAIN_UI_TYPE.ROULETTE;
+        }
 
         UpdateUIType();
     }
-	
-	// Update is called once per frame
-	void Update () {
+    IEnumerator Co_Test()
+    {
+        yield return null;
+        yield return null;
+        yield return null;
+        yield return null;
+        Popup.ShowPopup(new AdsPopup.AdsPopupData());
+    }
+   
+    // Update is called once per frame
+    void Update () {
 		
 	}
 
@@ -159,6 +174,8 @@ public class MainUI : MonoBehaviour {
 
     public void OnClickReadyAdView()
     {
+        Popup.ShowPopup(new AdsPopup.AdsPopupData());
+
         UIType = MAIN_UI_TYPE.ROULETTE;
         UpdateUIType();
     }
@@ -167,6 +184,8 @@ public class MainUI : MonoBehaviour {
     {
         // 광고 보면 100포인트
         TKManager.Instance.MyData.AddPoint(CommonData.AdsPointReward);
+
+        Popup.ShowPopup(new AdsPopup.AdsPopupData());
     }
 
     public void OnClickReadyLotto()
@@ -184,21 +203,30 @@ public class MainUI : MonoBehaviour {
     {
         // 룰렛 진행 하고
 
+        iTween.RotateTo(Roulette_Img.gameObject, iTween.Hash("z", 1800f, "time", 3.5f,"easetype", iTween.EaseType.linear));
+
+        StartCoroutine(Co_Test2());
+    }
+
+    IEnumerator Co_Test2()
+    {
+        yield return new WaitForSeconds(4f);
+
         var percentValue = Random.Range(0, 101); // 100으로 하면 99까지만 나옴
 
         var roulettePercent = TKManager.Instance.RoulettePercent;
 
-        for(int index = 0; index < roulettePercent.Count; ++index)
+        for (int index = 0; index < roulettePercent.Count; ++index)
         {
-            if(index == 0)
+            if (index == 0)
             {
-                if(roulettePercent[index].Value >= percentValue)
+                if (roulettePercent[index].Value >= percentValue)
                 {
                     Popup.ShowPopup(new RouletteResultPopup.RouletteResultPopupData(TKManager.Instance.RouletteGiftconUrl, RouletteResultClose));
                     break;
                 }
             }
-            else if(roulettePercent[index - 1].Value < percentValue &&
+            else if (roulettePercent[index - 1].Value < percentValue &&
                 roulettePercent[index].Value >= percentValue)
             {
                 Popup.ShowPopup(new RouletteResultPopup.RouletteResultPopupData(roulettePercent[index].Key, RouletteResultClose));
@@ -206,6 +234,8 @@ public class MainUI : MonoBehaviour {
             }
         }
     }
+
+
 
     public void RouletteResultClose()
     {
@@ -229,6 +259,8 @@ public class MainUI : MonoBehaviour {
     }
     public void OnClickLottoGet()
     {
+        Popup.ShowPopup(new AdsPopup.AdsPopupData());
+
         if (TKManager.Instance.MyData.MyLottoSeriesCount == TKManager.Instance.CurrentLottoSeriesCount)
         {
             UIType = MAIN_UI_TYPE.LOTTO_NUMBER_GET;
@@ -258,6 +290,7 @@ public class MainUI : MonoBehaviour {
         }
         else
         {
+            Popup.ShowPopup(new AdsPopup.AdsPopupData());
             UIType = MAIN_UI_TYPE.LOTTO_RESULT;
             UpdateUIType();
         }

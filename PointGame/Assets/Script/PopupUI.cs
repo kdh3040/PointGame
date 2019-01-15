@@ -11,6 +11,7 @@ public enum POPUP_TYPE
     GIFT_CON_LIST,
     GIFT_CON,
     LOTTO_WIN_INFO,
+    ADS,
 }
 
 public class PopupUI : MonoBehaviour {
@@ -24,6 +25,7 @@ public class PopupUI : MonoBehaviour {
     public GiftconPopup GiftconPopupObj;
     public MsgPopup MsgPopupObj;
     public LottoWinPopup LottoWinPopupObj;
+    public AdsPopup AdsPopupObj;
 
     public void Start()
     {
@@ -39,6 +41,8 @@ public class PopupUI : MonoBehaviour {
         MsgPopupObj.Initialize(this, ClosePopup);
         LottoWinPopupObj.gameObject.SetActive(false);
         LottoWinPopupObj.Initialize(this, ClosePopup);
+        AdsPopupObj.gameObject.SetActive(false);
+        AdsPopupObj.Initialize(this, ClosePopup);
     }
 
     public void ShowPopup(Popup.PopupData data)
@@ -74,6 +78,10 @@ public class PopupUI : MonoBehaviour {
                 LottoWinPopupObj.gameObject.SetActive(true);
                 LottoWinPopupObj.SetData(data);
                 break;
+            case POPUP_TYPE.ADS:
+                AdsPopupObj.gameObject.SetActive(true);
+                AdsPopupObj.SetData(data);
+                break;
             default:
                 break;
         }
@@ -105,6 +113,9 @@ public class PopupUI : MonoBehaviour {
                 break;
             case POPUP_TYPE.LOTTO_WIN_INFO:
                 LottoWinPopupObj.gameObject.SetActive(false);
+                break;
+            case POPUP_TYPE.ADS:
+                AdsPopupObj.gameObject.SetActive(false);
                 break;
             default:
                 break;
