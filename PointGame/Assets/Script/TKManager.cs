@@ -23,6 +23,8 @@ public class TKManager : MonoBehaviour
     public List<KeyValuePair<int, int>> RoulettePercent = new List<KeyValuePair<int, int>>();
     public string RouletteGiftconUrl = "http://attach.s.op.gg/forum/20171221114845_549392.jpg";
 
+    public List<KeyValuePair<int, int>> LottoLuckyNumber = new List<KeyValuePair<int, int>>();
+
     public int CurrentLottoSeriesCount = 0;
     public int ResultLottoSeriesCount = 0;
     public int ResultLottoNumber = 0;
@@ -56,5 +58,10 @@ public class TKManager : MonoBehaviour
             ResultLottoNumber = Random.Range(52534, 123424);
 
         CurrentLottoSeriesCount++;
+    }
+
+    public void SetLottoLuckyNumber(int LottoSeries, int LottoNumber)
+    {
+        LottoLuckyNumber.Add(new KeyValuePair<int, int>(LottoSeries, LottoNumber));
     }
 }

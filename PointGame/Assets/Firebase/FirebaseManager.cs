@@ -43,8 +43,9 @@ public class FirebaseManager : MonoBehaviour
         GetLottoRefNumber();
         GetGiftProb();
         GetLottoLuckyNumber();
+      //  GetGiftImage();
 
-       // SetLottoNumber();
+      //  SetLottoNumber();
 
         if (!SingedInFirebase())
         {
@@ -117,23 +118,32 @@ public class FirebaseManager : MonoBehaviour
                 int tempPoint = Convert.ToInt32(tempData["Point"]);
                 TKManager.Instance.MyData.SetData(tempData["Index"].ToString(), tempData["NickName"].ToString(), tempPoint);
 
-          
-                var LottoInfo = tempData["Lotto"] as Dictionary<string, object>;
-                int tempLottoSeries = Convert.ToInt32(LottoInfo["Series"]);
-                int tempLottoNumber = Convert.ToInt32(LottoInfo["Number"]);
-                TKManager.Instance.MyData.SetLottoData(tempLottoSeries, tempLottoNumber);
-
-
-                var GiftInfo = tempData["Gift"] as List<object>;
-                foreach (var pair in GiftInfo)
+                int tempLottoCount = Convert.ToInt32(tempData["LottoCount"]);
+                if (tempLottoCount != 0)
                 {
-                    TKManager.Instance.MyData.GiftconURLList.Add(new KeyValuePair<int, string>(TKManager.Instance.MyData.GiftconURLList.Count, pair.ToString()));
-
+                    var LottoInfo = tempData["Lotto"] as Dictionary<string, object>;
+                    foreach (var pair in LottoInfo)
+                    {
+                        string tempLottoSeries = pair.Key.Substring(0, pair.Key.IndexOf("_"));
+                        int tempLottoNumber = Convert.ToInt32(pair.Value);
+                        TKManager.Instance.MyData.SetLottoData(Convert.ToInt32(tempLottoSeries), tempLottoNumber);
+                          Debug.LogFormat("UserInfo: Index : {0} NickName {1} Point {2}", TKManager.Instance.MyData.Index, TKManager.Instance.MyData.NickName, TKManager.Instance.MyData.Point);
+                    }
                 }
 
-
-
-                Debug.LogFormat("UserInfo: Index : {0} NickName {1} Point {2}", TKManager.Instance.MyData.Index, TKManager.Instance.MyData.NickName, TKManager.Instance.MyData.Point);
+                int tempGiftCount = Convert.ToInt32(tempData["GiftCount"]);
+                if (tempGiftCount != 0)
+                {
+                    var GiftInfo = tempData["Gift"] as Dictionary<string, object>;
+                    foreach (var pair in GiftInfo)
+                    {
+                        string tempIndex = pair.Key.Substring(0, pair.Key.IndexOf("_"));
+                        TKManager.Instance.MyData.SetGiftconData(Convert.ToInt32(tempIndex), pair.Value.ToString());
+                      //  Debug.LogFormat("UserInfo: Index : {0} NickName {1} Point {2}", TKManager.Instance.MyData.Index, TKManager.Instance.MyData.NickName, TKManager.Instance.MyData.Point);
+                    }
+                }
+              
+              //  Debug.LogFormat("UserInfo: Index : {0} NickName {1} Point {2}", TKManager.Instance.MyData.Index, TKManager.Instance.MyData.NickName, TKManager.Instance.MyData.Point);
             }
         });
     }
@@ -207,7 +217,7 @@ public class FirebaseManager : MonoBehaviour
     {
         string GiftImageSrc = null;
 
-        FirebaseDatabase.DefaultInstance.GetReference("Gift").OrderByKey().LimitToLast(1)
+        FirebaseDatabase.DefaultInstance.GetReference("Gift").OrderByKey().LimitToFirst(1)
        .GetValueAsync().ContinueWith(task =>
        {
            if (task.IsFaulted)
@@ -217,15 +227,26 @@ public class FirebaseManager : MonoBehaviour
            else if (task.IsCompleted)
            {
                DataSnapshot snapshot = task.Result;
-               GiftImageSrc = snapshot.Value.ToString();
+
+               foreach (var tempChild in snapshot.Children)
+               {
+                   String tempIndex = tempChild.Key;
+                   String tempSrc = tempChild.Value.ToString();
+              
+                   mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("Gift").Child(tempIndex).SetValueAsync(tempSrc);
+                   tempIndex = tempIndex.Substring(0, tempIndex.IndexOf("_"));
+                   TKManager.Instance.MyData.SetGiftconData(Convert.ToInt32(tempIndex), tempSrc);
+
+               }
            }
        });
+
     }
 
     // 로또 번호 파이어베이스에서 로드
     public void SetLottoNumber()
     {
-        mDatabaseRef.Child("lottocount").RunTransaction(mutableData =>
+        mDatabaseRef.Child("LottoCount").RunTransaction(mutableData =>
         {
             int tempCount = Convert.ToInt32(mutableData.Value); 
 
@@ -235,10 +256,13 @@ public class FirebaseManager : MonoBehaviour
             }
             else
             {
-                mDatabaseRef.Child("lotto").Child(tempCount.ToString()).Child("User").SetValueAsync(TKManager.Instance.MyData.Index);
-                mDatabaseRef.Child("lotto").Child(tempCount.ToString()).Child("Number").SetValueAsync(LottoRefNnumber * tempCount);
+                int tempSeries = GetCurrSeries();
+
+               mDatabaseRef.Child("Lotto").Child(tempSeries + "_L").Child(tempCount.ToString()).SetValueAsync(LottoRefNnumber * tempCount);
+               mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("Lotto").Child(tempSeries + "_L").SetValueAsync(LottoRefNnumber * tempCount);
 
                 mutableData.Value = tempCount + 1;
+                mDatabaseRef.Child("LottoCount").SetValueAsync(mutableData.Value);
             }
 
           
@@ -249,7 +273,7 @@ public class FirebaseManager : MonoBehaviour
     // 로또 레퍼런스 번호 파이어베이스에서 로드
     public void GetLottoRefNumber()
     {
-        mDatabaseRef.Child("lottoRefNumber").GetValueAsync().ContinueWith(task =>
+        mDatabaseRef.Child("LottoRefNumber").GetValueAsync().ContinueWith(task =>
         {
 
             if (task.IsFaulted)
@@ -268,9 +292,8 @@ public class FirebaseManager : MonoBehaviour
     // 로또 당첨 번호 파이어베이스에서 로드
     public void GetLottoLuckyNumber()
     {
-        int rtLottonumber = 0;
 
-        mDatabaseRef.Child("lottoLuckyNumber").GetValueAsync().ContinueWith(task =>
+        mDatabaseRef.Child("LottoLuckyNumber").GetValueAsync().ContinueWith(task =>
         {
 
             if (task.IsFaulted)
@@ -280,13 +303,49 @@ public class FirebaseManager : MonoBehaviour
             else if (task.IsCompleted)
             {
                 DataSnapshot snapshot = task.Result;
-                rtLottonumber = Convert.ToInt32(snapshot.Value);
-                TKManager.Instance.ResultLottoNumber = rtLottonumber;
+
+                foreach (var tempChild in snapshot.Children)
+                {
+                    String tempSeries = tempChild.Key;
+                    int tempNumber = Convert.ToInt32(tempChild.Value.ToString());
+
+                    tempSeries = tempSeries.Substring(0, tempSeries.IndexOf("_"));
+                    TKManager.Instance.SetLottoLuckyNumber(Convert.ToInt32(tempSeries), tempNumber);
+                }
+
             }
         }
       );
     }
 
+    private int GetCurrSeries()
+    {
+        int rtSeries = 0;
+        System.DateTime.Now.ToString("yyyy");
+        DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss");
+        rtSeries = Convert.ToInt32(DateTime.Now.ToString("hh"));
+
+        Debug.LogFormat("asdasdasd    {0} ", rtSeries);
+
+        if (rtSeries < 9)
+        {
+            rtSeries = 0;
+        }
+        else if( 9 <= rtSeries && rtSeries < 12)
+        {
+            rtSeries = 1;
+        }
+        else if (12 <= rtSeries && rtSeries < 15)
+        {
+            rtSeries = 2;
+        }
+        else if (15 <= rtSeries && rtSeries < 18)
+        {
+            rtSeries = 3;
+        }
+    
+        return rtSeries;
+    }
     // Update is called once per frame
     void Update()
     {
