@@ -173,7 +173,7 @@
       uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
          console.log('File available at', downloadURL);
 
-         firebase.database().ref('/Gift/' + GiftCount).set({"Gift": downloadURL})
+         firebase.database().ref('/Gift/' + GiftCount).set(downloadURL)
          GiftCount++;
          firebase.database().ref('/GiftCount').set(GiftCount)
 

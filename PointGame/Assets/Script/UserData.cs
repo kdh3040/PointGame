@@ -10,6 +10,7 @@ public class UserData
 
     public List<KeyValuePair<int, string>> GiftconURLList = new List<KeyValuePair<int, string>>();
 
+    public List<KeyValuePair<int, int>> LottoLList = new List<KeyValuePair<int, int>>();
     public int MyLottoSeriesCount = 0;
     public int MyLottoNumber = 0;
 
@@ -19,13 +20,12 @@ public class UserData
         NickName = nickName;
         Point = point;
 
-        GiftconURLList.Add(new KeyValuePair<int, string>(1, "https://d2192bm55jmxp1.cloudfront.net/resize/l/article/201807/e213537fb5e07554dbad59654c51f4e289e6d33844aeeddb8480ccf7b357de16.jpg"));
+       // GiftconURLList.Add(new KeyValuePair<int, string>(1, "https://d2192bm55jmxp1.cloudfront.net/resize/l/article/201807/e213537fb5e07554dbad59654c51f4e289e6d33844aeeddb8480ccf7b357de16.jpg"));
     }
 
     public void SetLottoData(int LottoSeries, int LottoNumber)
     {
-        MyLottoSeriesCount = LottoSeries;
-        MyLottoNumber = LottoNumber;
+        LottoLList.Add(new KeyValuePair<int, int>(LottoSeries, LottoNumber));
     }
 
     public void SetGiftconData(int index, string src)
@@ -44,8 +44,7 @@ public class UserData
             }
         }
     }
-
-
+    
     public void AddPoint(int point)
     {
         Point += point;
