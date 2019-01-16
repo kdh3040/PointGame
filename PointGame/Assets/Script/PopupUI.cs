@@ -32,20 +32,20 @@ public class PopupUI : MonoBehaviour {
 
     public void Start()
     {
-        //SignUpPopupObj.gameObject.SetActive(false);
-        //SignUpPopupObj.Initialize(this, ClosePopup);
-        //RoulettePopupObj.gameObject.SetActive(false);
-        //RoulettePopupObj.Initialize(this, ClosePopup);
-        //RoulettePointResultPopupObj.gameObject.SetActive(false);
-        //RoulettePointResultPopupObj.Initialize(this, ClosePopup);
+        SignUpPopupObj.gameObject.SetActive(false);
+        SignUpPopupObj.Initialize(this, ClosePopup);
+        RoulettePopupObj.gameObject.SetActive(false);
+        RoulettePopupObj.Initialize(this, ClosePopup);
+        RoulettePointResultPopupObj.gameObject.SetActive(false);
+        RoulettePointResultPopupObj.Initialize(this, ClosePopup);
         //GiftconListPopupObj.gameObject.SetActive(false);
         //GiftconListPopupObj.Initialize(this, ClosePopup);
-        //GiftconPopupObj.gameObject.SetActive(false);
-        //GiftconPopupObj.Initialize(this, ClosePopup);
-        //MsgPopupObj.gameObject.SetActive(false);
-        //MsgPopupObj.Initialize(this, ClosePopup);
-        //LottoWinPopupObj.gameObject.SetActive(false);
-        //LottoWinPopupObj.Initialize(this, ClosePopup);
+        GiftconPopupObj.gameObject.SetActive(false);
+        GiftconPopupObj.Initialize(this, ClosePopup);
+        MsgPopupObj.gameObject.SetActive(false);
+        MsgPopupObj.Initialize(this, ClosePopup);
+        LottoWinPopupObj.gameObject.SetActive(false);
+        LottoWinPopupObj.Initialize(this, ClosePopup);
     }
 
     public void ShowPopup(Popup.PopupData data)

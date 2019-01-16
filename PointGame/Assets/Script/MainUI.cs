@@ -19,6 +19,8 @@ public class MainUI : MonoBehaviour {
     public GameObject LoadingHUDObj;
     public Text LoadingText;
 
+    public PopupUI Popup;
+
     private void Awake()
     {
         FreePoint.onClick.AddListener(OnClickFreePoint);
@@ -46,7 +48,8 @@ public class MainUI : MonoBehaviour {
 
     public void OnClickGiftBox()
     {
-
+        var giftconList = TKManager.Instance.MyData.GiftconURLList;
+        Popup.ShowPopup(new GiftconPopup.GiftconPopupData(giftconList));
     }
 
     public void OnClickLotto()
@@ -56,7 +59,8 @@ public class MainUI : MonoBehaviour {
 
     public void OnClickFreeRoulette()
     {
-
+        // TODO 전면광고
+        Popup.ShowPopup(new RoulettePopup.RoulettePopupData());
     }
 
 
