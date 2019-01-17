@@ -61,5 +61,7 @@ public class UserData
         Point -= point;
         if (Point < 0)
             Point = 0;
+
+        FirebaseManager.Instance.SetPoint(point);
     }
 }

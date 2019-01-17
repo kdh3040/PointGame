@@ -30,6 +30,8 @@ public class FirebaseManager : MonoBehaviour
     private string googleAccessToken;
     private DatabaseReference mDatabaseRef;
     int LottoRefNnumber = 0;
+    int LottoCurSeries = 0;
+    int LottoTodaySeries = 0;
 
     // Use this for initialization
     void Start()
@@ -41,8 +43,13 @@ public class FirebaseManager : MonoBehaviour
 
         GetUserData();
         GetLottoRefNumber();
-        GetGiftProb();
+        GetLottoTodaySeries();
+        GetLottoCurSeries();
         GetLottoLuckyNumber();
+        GetLottoLuckGroup();
+
+        GetGiftProb();
+        
       //  GetGiftImage();
 
       //  SetLottoNumber();
@@ -256,13 +263,16 @@ public class FirebaseManager : MonoBehaviour
             }
             else
             {
-                int tempSeries = GetCurrSeries();
+                //int tempSeries = GetCurrSeries();
+                int tempSeries = LottoCurSeries;
 
-               mDatabaseRef.Child("Lotto").Child(tempSeries + "_L").Child(tempCount.ToString()).SetValueAsync(LottoRefNnumber * tempCount);
+               mDatabaseRef.Child("Lotto").Child(tempSeries + "_L").Child(TKManager.Instance.MyData.NickName).SetValueAsync(LottoRefNnumber * tempCount);
                mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("Lotto").Child(tempSeries + "_L").SetValueAsync(LottoRefNnumber * tempCount);
 
-                mutableData.Value = tempCount + 1;
-                mDatabaseRef.Child("LottoCount").SetValueAsync(mutableData.Value);
+               TKManager.Instance.MyData.SetLottoData(tempSeries, LottoRefNnumber * tempCount);
+
+               mutableData.Value = tempCount + 1;
+               mDatabaseRef.Child("LottoCount").SetValueAsync(mutableData.Value);
             }
 
           
@@ -270,6 +280,84 @@ public class FirebaseManager : MonoBehaviour
         });
     }
 
+    public void GetLottoLuckGroup()
+    {
+
+
+        FirebaseDatabase.DefaultInstance.GetReference("LottoLuckyGroup").OrderByKey().LimitToLast(4)
+       .GetValueAsync().ContinueWith(task =>
+       {
+           if (task.IsFaulted)
+           {
+               // Handle the error...
+           }
+           else if (task.IsCompleted)
+           {
+               DataSnapshot snapshot = task.Result;
+
+               foreach (var tempChild in snapshot.Children)
+               {
+                   String tempIndex = tempChild.Key;
+                   String tempSrc = tempChild.Value.ToString();
+                   
+                   tempIndex = tempIndex.Substring(0, tempIndex.IndexOf("_"));
+                   TKManager.Instance.SetLottoWinUserData(Convert.ToInt32(tempIndex), tempSrc);
+
+               }
+           }
+       });
+
+
+        mDatabaseRef.Child("LottoLuckyGroup").GetValueAsync().ContinueWith(task =>
+        {
+            if (task.IsFaulted)
+            {
+                // Handle the error...
+            }
+            else if (task.IsCompleted)
+            {
+                DataSnapshot snapshot = task.Result;
+                LottoTodaySeries = Convert.ToInt32(snapshot.Value);
+                TKManager.Instance.SetTodayLottoSeriesMinCount(LottoTodaySeries);
+            }
+        }
+     );
+
+    }
+    public void GetLottoTodaySeries()
+    {
+        mDatabaseRef.Child("LottoTodaySeries").GetValueAsync().ContinueWith(task =>
+        {
+            if (task.IsFaulted)
+            {
+                // Handle the error...
+            }
+            else if (task.IsCompleted)
+            {
+                DataSnapshot snapshot = task.Result;
+                LottoTodaySeries = Convert.ToInt32(snapshot.Value);
+                TKManager.Instance.SetTodayLottoSeriesMinCount(LottoTodaySeries);
+            }
+        }
+     );
+    }
+
+    public void GetLottoCurSeries()
+    {
+        mDatabaseRef.Child("LottoCurSeries").GetValueAsync().ContinueWith(task =>
+        {
+            if (task.IsFaulted)
+            {
+                // Handle the error...
+            }
+            else if (task.IsCompleted)
+            {
+                DataSnapshot snapshot = task.Result;
+                LottoCurSeries = Convert.ToInt32(snapshot.Value);
+            }
+        }
+    );
+    }
     // 로또 레퍼런스 번호 파이어베이스에서 로드
     public void GetLottoRefNumber()
     {
