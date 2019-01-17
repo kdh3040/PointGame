@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -30,6 +31,16 @@ public class MainUI : MonoBehaviour {
 
     void Start()
     {
+        var winList = TKManager.Instance.LottoWinUserList;
+        StringBuilder winUser = new StringBuilder();
+
+        for (int i = 0; i < winList.Count; i++)
+        {
+            winUser.Append(string.Format("{0:n0}회 당첨자 : {1}", winList[i].Key, winList[i].Value));
+            winUser.AppendLine();
+        }
+
+        LottoWin.text = winUser.ToString();
     }
 
     public void OnClickFreePoint()

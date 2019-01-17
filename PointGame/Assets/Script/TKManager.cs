@@ -25,6 +25,7 @@ public class TKManager : MonoBehaviour
     public List<KeyValuePair<int, int>> RoulettePercent = new List<KeyValuePair<int, int>>();
     public string RouletteGiftconUrl = "http://attach.s.op.gg/forum/20171221114845_549392.jpg";
 
+    public List<KeyValuePair<int, string>> LottoWinUserList = new List<KeyValuePair<int, string>>();
     public List<KeyValuePair<int, int>> LottoLuckyNumber = new List<KeyValuePair<int, int>>();
     // 0 베이스
     public int CurrLottoSeriesCount = 0;
@@ -42,6 +43,11 @@ public class TKManager : MonoBehaviour
         Screen.sleepTimeout = SleepTimeout.NeverSleep;
         Application.targetFrameRate = 50;
         Screen.SetResolution(Screen.width, (Screen.width * 16) / 9, false);
+    }
+
+    public void SetLottoWinUserData(int series, string nickName)
+    {
+        LottoWinUserList.Add(new KeyValuePair<int, string>(series, nickName));
     }
 
     public void SetTodayLottoSeriesMinCount(int min)
