@@ -173,7 +173,7 @@ public class LottoSlotUI : MonoBehaviour {
                 {
                     // TODO 번호 뽑기
                     TKManager.Instance.MyData.RemovePoint(CommonData.LottoNumberCost);
-                    TKManager.Instance.MyData.SetLottoData(SeriesCount, Random.Range(234523, 123144545));
+                    FirebaseManager.Instance.SetLottoNumber();
                     RefreshUI();
                 }
             },
