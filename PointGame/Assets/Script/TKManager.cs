@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 
 public class TKManager : MonoBehaviour
@@ -24,44 +26,154 @@ public class TKManager : MonoBehaviour
     public string RouletteGiftconUrl = "http://attach.s.op.gg/forum/20171221114845_549392.jpg";
 
     public List<KeyValuePair<int, int>> LottoLuckyNumber = new List<KeyValuePair<int, int>>();
+    // 0 베이스
+    public int CurrLottoSeriesCount = 0;
+    public int LottoSeriesCountMin = 0;
+    public int LottoSeriesCountMax = 0;
 
-    public int CurrentLottoSeriesCount = 0;
-    public int ResultLottoSeriesCount = 0;
-    public int ResultLottoNumber = 0;
+    public LoadingHUD HUD;
+    private SaveData MySaveData = new SaveData();
 
     void Start()
     {
         MyData = new UserData();
-
+        
         DontDestroyOnLoad(this);
         Screen.sleepTimeout = SleepTimeout.NeverSleep;
         Application.targetFrameRate = 50;
         Screen.SetResolution(Screen.width, (Screen.width * 16) / 9, false);
-
-        // TODO 임시
-        CurrentLottoSeriesCount = 1;
     }
 
-    public void Temp_LottoNumberGet()
+    public void SetTodayLottoSeriesMinCount(int min)
     {
-        MyData.MyLottoNumber = Random.Range(52534, 123424);
-        MyData.MyLottoSeriesCount = CurrentLottoSeriesCount;
-    }
-
-    public void Temp_LuckyLotto()
-    {
-        ResultLottoSeriesCount = CurrentLottoSeriesCount;
-
-        if (Random.Range(0, 2) == 1)
-            ResultLottoNumber = MyData.MyLottoNumber;
-        else
-            ResultLottoNumber = Random.Range(52534, 123424);
-
-        CurrentLottoSeriesCount++;
+        LottoSeriesCountMin = min;
+        LottoSeriesCountMax = LottoSeriesCountMin + 3;
+        CurrLottoSeriesCount = LottoSeriesCountMin;
     }
 
     public void SetLottoLuckyNumber(int LottoSeries, int LottoNumber)
     {
-        LottoLuckyNumber.Add(new KeyValuePair<int, int>(LottoSeries, LottoNumber));
+        if (IsLottoLuckyNumber(LottoSeries))
+        {
+            for (int i = 0; i < LottoLuckyNumber.Count; i++)
+            {
+                if (LottoLuckyNumber[i].Key == LottoSeries)
+                {
+                    LottoLuckyNumber[i] = new KeyValuePair<int, int>(LottoSeries, LottoNumber);
+                    break;
+                }
+            }
+        }
+        else
+            LottoLuckyNumber.Add(new KeyValuePair<int, int>(LottoSeries, LottoNumber));
+
+        LottoLuckyNumber.Sort(delegate (KeyValuePair<int, int> a, KeyValuePair<int, int> b)
+        {
+            if (a.Key < b.Key)
+                return -1;
+            return 1;
+        });
+
+        CurrLottoSeriesCount = LottoLuckyNumber[LottoLuckyNumber.Count - 1].Key + 1;
+    }
+
+    public bool IsLottoLuckyNumber(int LottoSeries)
+    {
+        for (int i = 0; i < LottoLuckyNumber.Count; i++)
+        {
+            if (LottoLuckyNumber[i].Key == LottoSeries)
+                return true;
+        }
+
+        return false;
+    }
+
+    public KeyValuePair<int, int> GetLottoLuckyNumber(int LottoSeries)
+    {
+        for (int i = 0; i < LottoLuckyNumber.Count; i++)
+        {
+            if (LottoLuckyNumber[i].Key == LottoSeries)
+                return LottoLuckyNumber[i];
+        }
+
+        return new KeyValuePair<int, int>(0,0);
+    }
+
+
+    public void ShowHUD()
+    {
+        HUD.gameObject.SetActive(true);
+    }
+
+    public void HideHUD()
+    {
+        HUD.gameObject.SetActive(false);
+    }
+
+
+
+
+
+    [System.Serializable]
+    public class SaveData
+    {
+        public Dictionary<int, bool> LottoResultShowSeriesList = new Dictionary<int, bool>();
+
+        public void Save()
+        {
+            LottoResultShowSeriesList = TKManager.Instance.MyData.LottoResultShowSeriesList;
+        }
+
+        public void Load()
+        {
+            TKManager.Instance.MyData.LottoResultShowSeriesList = LottoResultShowSeriesList;
+        }
+    }
+
+
+
+    public void SaveFile()
+    {
+        MySaveData.Save();
+        BinaryFormatter formatter = new BinaryFormatter();
+        string path = pathForDocumentsFile("PlayerData.ini");
+        FileStream stream = new FileStream(path, FileMode.Create);
+        formatter.Serialize(stream, MySaveData);
+        stream.Close();
+    }
+
+    public void LoadFile()
+    {
+        string path = pathForDocumentsFile("PlayerData.ini");
+        FileInfo fileInfo = new FileInfo(path);
+        if (fileInfo.Exists)
+        {
+            BinaryFormatter formatter = new BinaryFormatter();
+            FileStream stream = new FileStream(path, FileMode.Open);
+            MySaveData = (SaveData)formatter.Deserialize(stream);
+            stream.Close();
+            MySaveData.Load();
+        }
+        else
+        {
+            SaveFile();
+        }
+    }
+
+    public string pathForDocumentsFile(string filename)
+    {
+#if UNITY_EDITOR
+        string path_pc = Application.dataPath;
+        path_pc = path_pc.Substring(0, path_pc.LastIndexOf('/'));
+        return Path.Combine(path_pc, filename);
+#elif UNITY_ANDROID
+        string path = Application.persistentDataPath;
+        path = path.Substring(0, path.LastIndexOf('/'));
+        return Path.Combine(path, filename);
+#elif UNITY_IOS
+        string path = Application.dataPath.Substring(0, Application.dataPath.Length - 5);
+        path = path.Substring(0, path.LastIndexOf('/'));
+        return Path.Combine(Path.Combine(path, "Documents"), filename);
+#endif
     }
 }

@@ -22,12 +22,14 @@ public class MsgPopup : Popup
     {
         public string Msg;
         public Action OkEndAction;
+        public MSGPOPUP_TYPE MsgPopupType = MSGPOPUP_TYPE.ONE;
 
         public MsgPopupData(string msg, Action okEndAction = null, MSGPOPUP_TYPE type = MSGPOPUP_TYPE.ONE)
         {
             PopupType = POPUP_TYPE.MSG;
             Msg = msg;
             OkEndAction = okEndAction;
+            MsgPopupType = type;
         }
     }
 
@@ -42,6 +44,8 @@ public class MsgPopup : Popup
         MsgPopupData popupData = data as MsgPopupData;
         if (popupData == null)
             return;
+
+        MsgPopupType = popupData.MsgPopupType;
 
         OkButton.gameObject.SetActive(false);
         CancelButton.gameObject.SetActive(false);

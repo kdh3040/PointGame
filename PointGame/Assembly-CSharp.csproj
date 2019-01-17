@@ -70,12 +70,14 @@
     <Compile Include="Assets\Script\Game\GamePlayManager.cs" />
     <Compile Include="Assets\Script\Game\GameUI.cs" />
     <Compile Include="Assets\Script\ImageCache.cs" />
+    <Compile Include="Assets\Script\LoadingHUD.cs" />
     <Compile Include="Assets\Script\LoadingUI.cs" />
     <Compile Include="Assets\Script\MainUI.cs" />
     <Compile Include="Assets\Script\Popup\GiftconListPopup.cs" />
     <Compile Include="Assets\Script\Popup\GiftconListSlot.cs" />
     <Compile Include="Assets\Script\Popup\GiftconPopup.cs" />
     <Compile Include="Assets\Script\Popup\LottoPopup.cs" />
+    <Compile Include="Assets\Script\Popup\LottoSlotUI.cs" />
     <Compile Include="Assets\Script\Popup\LottoWinPopup.cs" />
     <Compile Include="Assets\Script\Popup\MsgPopup.cs" />
     <Compile Include="Assets\Script\Popup\Popup.cs" />

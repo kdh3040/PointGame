@@ -10,20 +10,23 @@ public class GiftconPopup : Popup
     public Button DeleteButton;
     public Button NextButton;
     public Button PrevButton;
+    public Text EmptyText;
 
     private int CurrViewGiftconIndex = 0;
     
     private string Url;
     private int Index;
     private List<KeyValuePair<int, string>> UrlList = new List<KeyValuePair<int, string>>();
+    private bool MyGiftconList = false;
     private int CurrViewUrlListIndex = 0;
+    
 
     public class GiftconPopupData : PopupData
     {
         public string Url;
         public int Index;
-        public List<KeyValuePair<int, string>> UrlList = new List<KeyValuePair<int, string>>();
         public bool DeleteEnable = true;
+        public bool MyGiftconList = false;
 
         public GiftconPopupData(int index, string url, bool deleteEnable = true)
         {
@@ -31,11 +34,12 @@ public class GiftconPopup : Popup
             Index = index;
             Url = url;
             DeleteEnable = deleteEnable;
+            MyGiftconList = false;
         }
-        public GiftconPopupData(List<KeyValuePair<int, string>> urlList)
+        public GiftconPopupData()
         {
             PopupType = POPUP_TYPE.GIFT_CON;
-            UrlList = urlList;
+            MyGiftconList = true;
         }
     }
 
@@ -61,8 +65,8 @@ public class GiftconPopup : Popup
 
         Index = popupData.Index;
         Url = popupData.Url;
-        UrlList = popupData.UrlList;
 
+        MyGiftconList = popupData.MyGiftconList;
         CurrViewUrlListIndex = 0;
 
         DeleteButton.gameObject.SetActive(popupData.DeleteEnable);
@@ -72,23 +76,38 @@ public class GiftconPopup : Popup
 
     public void RefreshUI()
     {
+        UrlList = TKManager.Instance.MyData.GiftconURLList;
         NextButton.gameObject.SetActive(false);
         PrevButton.gameObject.SetActive(false);
+        EmptyText.gameObject.SetActive(false);
+        GiftconImage.gameObject.SetActive(false);
 
-        if (UrlList.Count == 0)
+        if (MyGiftconList == false)
         {
+            GiftconImage.gameObject.SetActive(true);
             CurrViewGiftconIndex = Index;
             ImageCache.Instance.SetImage(Url, GiftconImage);
         }
         else
         {
-            if(UrlList.Count > CurrViewUrlListIndex + 1)
-                NextButton.gameObject.SetActive(true);
-            if(CurrViewUrlListIndex - 1 >= 0)
-                PrevButton.gameObject.SetActive(true);
+            if(UrlList.Count == 0)
+            {
+                GiftconImage.gameObject.SetActive(false);
+                EmptyText.gameObject.SetActive(true);
+                DeleteButton.gameObject.SetActive(false);
+            }
+            else
+            {
+                GiftconImage.gameObject.SetActive(true);
+                if (UrlList.Count > CurrViewUrlListIndex + 1)
+                    NextButton.gameObject.SetActive(true);
+                if (CurrViewUrlListIndex - 1 >= 0)
+                    PrevButton.gameObject.SetActive(true);
 
-            CurrViewGiftconIndex = UrlList[CurrViewUrlListIndex].Key;
-            ImageCache.Instance.SetImage(UrlList[CurrViewUrlListIndex].Value, GiftconImage);
+                CurrViewGiftconIndex = UrlList[CurrViewUrlListIndex].Key;
+                ImageCache.Instance.SetImage(UrlList[CurrViewUrlListIndex].Value, GiftconImage);
+            }
+            
         }
     }
 
@@ -98,8 +117,17 @@ public class GiftconPopup : Popup
     }
     public void OnClickDelete()
     {
-        RefreshUI();
-        TKManager.Instance.MyData.DeleteGiftconData(CurrViewGiftconIndex);
+        ParentPopup.ShowPopup(new MsgPopup.MsgPopupData("기프티콘을 삭제 하시겠습니까?",
+            () =>
+            {
+                CurrViewUrlListIndex -= 1;
+                if (CurrViewUrlListIndex < 0)
+                    CurrViewUrlListIndex = 0;
+
+                TKManager.Instance.MyData.DeleteGiftconData(CurrViewGiftconIndex);
+                RefreshUI();
+            },
+            MsgPopup.MSGPOPUP_TYPE.TWO));
     }
 
     public void OnClickNext()

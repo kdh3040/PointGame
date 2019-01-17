@@ -6,5 +6,5 @@ public class CommonData : MonoBehaviour
 {
     public static int[] RouletteReward = { 0, 10, 20, 30, 40, 50 };
     public static int AdsPointReward = 100;
-    public static int LottoNumberCost = 1000;
+    public static int LottoNumberCost = 1;
 }

@@ -13,6 +13,8 @@ public class LoadingUI : MonoBehaviour {
     IEnumerator LoadingData()
     {
         yield return null;
+        TKManager.Instance.LoadFile();
+        yield return null;
         SceneManager.LoadScene("MainScene", LoadSceneMode.Single);
     }
 }

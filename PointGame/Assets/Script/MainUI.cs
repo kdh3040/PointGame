@@ -16,9 +16,6 @@ public class MainUI : MonoBehaviour {
     public Button LottoButton;
     public Button FreeRoulette;
 
-    public GameObject LoadingHUDObj;
-    public Text LoadingText;
-
     public PopupUI Popup;
 
     private void Awake()
@@ -33,12 +30,17 @@ public class MainUI : MonoBehaviour {
 
     void Start()
     {
-        LoadingHUDObj.gameObject.SetActive(false);
     }
 
     public void OnClickFreePoint()
     {
-        TKManager.Instance.MyData.AddPoint(CommonData.AdsPointReward);
+        Popup.ShowPopup(new MsgPopup.MsgPopupData(string.Format("광고를 보시고 {0:n0}를 획득 하시겠습니까?", CommonData.AdsPointReward),
+            () =>
+            {
+                // TODO 동영상 광고
+                TKManager.Instance.MyData.AddPoint(CommonData.AdsPointReward);
+            }, 
+            MsgPopup.MSGPOPUP_TYPE.TWO));
     }
 
     public void OnClickGamePlay()
@@ -48,19 +50,23 @@ public class MainUI : MonoBehaviour {
 
     public void OnClickGiftBox()
     {
-        var giftconList = TKManager.Instance.MyData.GiftconURLList;
-        Popup.ShowPopup(new GiftconPopup.GiftconPopupData(giftconList));
+        Popup.ShowPopup(new GiftconPopup.GiftconPopupData());
     }
 
     public void OnClickLotto()
     {
-
+        Popup.ShowPopup(new LottoPopup.LottoPopupData());
     }
 
     public void OnClickFreeRoulette()
     {
         // TODO 전면광고
         Popup.ShowPopup(new RoulettePopup.RoulettePopupData());
+    }
+
+    private void Update()
+    {
+        AllPoint.text = string.Format("총 포인트 : {0:n0}", TKManager.Instance.MyData.Point);
     }
 
 

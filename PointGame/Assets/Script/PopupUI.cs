@@ -44,12 +44,17 @@ public class PopupUI : MonoBehaviour {
         GiftconPopupObj.Initialize(this, ClosePopup);
         MsgPopupObj.gameObject.SetActive(false);
         MsgPopupObj.Initialize(this, ClosePopup);
+        LottoPopupObj.gameObject.SetActive(false);
+        LottoPopupObj.Initialize(this, ClosePopup);
         LottoWinPopupObj.gameObject.SetActive(false);
         LottoWinPopupObj.Initialize(this, ClosePopup);
     }
 
     public void ShowPopup(Popup.PopupData data)
     {
+        if (CurrPopupType == data.PopupType)
+            ClosePopup();
+
         QueuePopupType.Add(data.PopupType);
         CurrPopupType = data.PopupType;
 

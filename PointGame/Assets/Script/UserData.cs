@@ -9,11 +9,12 @@ public class UserData
     public int Point { get; private set; }
 
     public List<KeyValuePair<int, string>> GiftconURLList = new List<KeyValuePair<int, string>>();
+    
+    public Dictionary<int, int> LottoList = new Dictionary<int, int>();
+    public Dictionary<int, bool> LottoResultShowSeriesList = new Dictionary<int, bool>();
+    public Dictionary<int, bool> LottoWinSeriesList = new Dictionary<int, bool>();
 
-    public List<KeyValuePair<int, int>> LottoLList = new List<KeyValuePair<int, int>>();
-    public int MyLottoSeriesCount = 0;
-    public int MyLottoNumber = 0;
-
+    // TODO 내정보, 로또정보, 가지고 있는 기프티콘 이미지 로드 할때까지 로딩 페이지에서 머무르게끔 해야함
     public void SetData(string index, string nickName, int point)
     {
         Index = index;
@@ -25,7 +26,7 @@ public class UserData
 
     public void SetLottoData(int LottoSeries, int LottoNumber)
     {
-        LottoLList.Add(new KeyValuePair<int, int>(LottoSeries, LottoNumber));
+        LottoList.Add(LottoSeries, LottoNumber);
     }
 
     public void SetGiftconData(int index, string src)
@@ -35,6 +36,7 @@ public class UserData
 
     public void DeleteGiftconData(int index)
     {
+        // TODO 파베 연동
         for(int i = 0; i < GiftconURLList.Count; ++i)
         {
             if(GiftconURLList[i].Key == index)
@@ -48,5 +50,11 @@ public class UserData
     public void AddPoint(int point)
     {
         Point += point;
+    }
+    public void RemovePoint(int point)
+    {
+        Point -= point;
+        if (Point < 0)
+            Point = 0;
     }
 }
