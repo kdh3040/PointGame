@@ -103,14 +103,14 @@
     $("#PROGRESS").show();
 
       var Lottocount;
-      firebase.database().ref('/lottocount').once('value', function(snapshot) {
+      firebase.database().ref('/LottoCount').once('value', function(snapshot) {
         var message = snapshot.val();
         Lottocount = message;
         console.log(Lottocount);
       });
 
 	  var LottoRefNumber;
-	  firebase.database().ref('/lottoRefNumber').once('value', function(snapshot) {
+	  firebase.database().ref('/LottoRefNumber').once('value', function(snapshot) {
         var message = snapshot.val();
         LottoRefNumber = message;
         console.log(LottoRefNumber);
@@ -118,7 +118,7 @@
 
     var arrLottoUser = new Array();
 
-      var dbTestRef = firebase.database().ref('/lotto')
+      var dbTestRef = firebase.database().ref('/Lotto')
       dbTestRef.on('child_added', function(data){
       	//console.log(data.val().Number, 'key: ', data.key)
         arrLottoUser[data.val().User] = data.val().Number;
@@ -132,19 +132,19 @@
     //  document.write(result);
       $("#LOTTO_GROUP").text(arrLottoUser[result]);
       	console.log(result);
-		firebase.database().ref('/lottoLuckyNumber').set(arrLottoUser[result])
+		firebase.database().ref('/LottoLuckyNumber').set(arrLottoUser[result])
 
 	  var LottoRandNumber = Math.floor(Math.random() * 100) + 1;
-	   firebase.database().ref('/lottoRefNumber').set(LottoRandNumber)
+	   firebase.database().ref('/LottoRefNumber').set(LottoRandNumber)
     });
 
     $("#BTN_TEST_CREATE").click(function() {
       var result = LottoRefNumber * Lottocount;
     //  document.write(result);
 
-    firebase.database().ref('/lotto/' + Lottocount).set({"User": Lottocount, "Number": result})
+    firebase.database().ref('/Lotto/' + Lottocount).set({"User": Lottocount, "Number": result})
     Lottocount++;
-    firebase.database().ref('/lottocount').set(Lottocount)
+    firebase.database().ref('/LottoCount').set(Lottocount)
     });
 
 </script>
