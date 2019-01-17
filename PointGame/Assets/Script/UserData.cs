@@ -29,6 +29,11 @@ public class UserData
         LottoList.Add(LottoSeries, LottoNumber);
     }
 
+    public void SetLottoWinSeriesData(int LottoSeries)
+    {
+        LottoWinSeriesList.Add(LottoSeries, true);
+    }
+
     public void SetGiftconData(int index, string src)
     {
        GiftconURLList.Add(new KeyValuePair<int, string>(index, src));        

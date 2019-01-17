@@ -118,7 +118,7 @@ public class LottoSlotUI : MonoBehaviour {
                     LottoResult_WinNumberText.text = string.Format("당첨번호 : {0}", lottoWinNumber);
                 }
 
-                if(lottoMyNumber == lottoWinNumber)
+                if(lottoWinNumber != 0 && lottoMyNumber == lottoWinNumber)
                 {
                     if(TKManager.Instance.MyData.LottoWinSeriesList.ContainsKey(SeriesCount))
                     {
