@@ -141,7 +141,7 @@
   dbTestRef.on('child_added', function(data){
     console.log(data.val(), 'key: ', data.key)
 
-    $("#LOTTO_"+arrGift).text(data.val().Gift);
+    $("#LOTTO_"+arrGift).text(data.val());
     arrGift ++;
 
     if(arrGift == GiftCount)
@@ -173,7 +173,7 @@
       uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
          console.log('File available at', downloadURL);
 
-         firebase.database().ref('/Gift/' + GiftCount).set(downloadURL)
+         firebase.database().ref('/Gift/' + GiftCount+'_G').set(downloadURL)
          GiftCount++;
          firebase.database().ref('/GiftCount').set(GiftCount)
 
