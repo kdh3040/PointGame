@@ -7,6 +7,8 @@ public class RoulettePopup : Popup
 {
     public Button StartButton;
     public Button OkButton;
+    public GameObject RoulettePanObj;
+    public List<Text> RoulettePointText;
 
     public class RoulettePopupData : PopupData
     {
