@@ -6,9 +6,12 @@ using UnityEngine.UI;
 public class RoulettePopup : Popup
 {
     public Button StartButton;
-    public Button OkButton;
     public GameObject RoulettePanObj;
     public List<Text> RoulettePointText;
+    public List<Image> RouletteGiftconImg;
+
+    private List<KeyValuePair<int, int>> RoulettePercent = new List<KeyValuePair<int, int>>();
+    private List<int> RouletteAngle = new List<int>();
 
     public class RoulettePopupData : PopupData
     {
@@ -20,19 +23,38 @@ public class RoulettePopup : Popup
 
     private void Awake()
     {
-        OkButton.onClick.AddListener(OnClickOk);
         StartButton.onClick.AddListener(OnClickStart);
+
+        // 룰렛 최소값 최대값 에서 약 10도씩 뺴야할것 같음 
+        RouletteAngle.Add(0);
+        RouletteAngle.Add(60);
+        RouletteAngle.Add(120);
+        RouletteAngle.Add(180);
+        RouletteAngle.Add(240);
+        RouletteAngle.Add(300);
     }
 
-    public override void SetData(PopupData data)
+    public override void SetData(PopupData data) 
     {
-        RefreshUI(false);
-    }
+        RoulettePanObj.gameObject.transform.localRotation = Quaternion.Euler(0, 0, 0) ;
 
-    public void RefreshUI(bool resultView)
-    {
-        OkButton.gameObject.SetActive(resultView);
-        StartButton.gameObject.SetActive(!resultView);
+        RoulettePercent.Clear();
+        RoulettePercent.AddRange(TKManager.Instance.RoulettePercent);
+        //ShuffleList(RoulettePercent);
+
+        for (int i = 0; i < RoulettePercent.Count; i++)
+        {
+            RoulettePointText[i].gameObject.SetActive(false);
+            RouletteGiftconImg[i].gameObject.SetActive(false);
+
+            if (RoulettePercent[i].Key == 0)
+                RouletteGiftconImg[i].gameObject.SetActive(true);
+            else
+            {
+                RoulettePointText[i].gameObject.SetActive(true);
+                RoulettePointText[i].text = string.Format("{0:n0}P", RoulettePercent[i].Key);
+            }
+        }
     }
 
     public void OnClickOk()
@@ -46,10 +68,12 @@ public class RoulettePopup : Popup
 
     IEnumerator Co_Roulette()
     {
-        yield return null;
+        iTween.RotateAdd(RoulettePanObj, iTween.Hash("z", 360 * 5, "time", 0.8f, "easetype", iTween.EaseType.linear));
+        yield return new WaitForSeconds(0.8f);
 
-        RefreshUI(true);
 
+
+        KeyValuePair<int, int> keyValue = new KeyValuePair<int, int>();
         var percentValue = Random.Range(0, 101); // 100으로 하면 99까지만 나옴
 
         var roulettePercent = TKManager.Instance.RoulettePercent;
@@ -59,15 +83,43 @@ public class RoulettePopup : Popup
             if ((index == 0 && roulettePercent[index].Value >= percentValue) ||
                 (index > 0 && roulettePercent[index - 1].Value < percentValue && roulettePercent[index].Value >= percentValue))
             {
-                if (roulettePercent[index].Key == 0)
-                {
-                    // TODO 룰렛 결과에서 받을 기프티콘의 url과 index를 받아야함
-                    ParentPopup.ShowPopup(new GiftconPopup.GiftconPopupData(0, TKManager.Instance.RouletteGiftconUrl, false));
-                }
-                else
-                    ParentPopup.ShowPopup(new RoulettePointResultPopup.RoulettePointResultPopupData(roulettePercent[index].Key));
+                keyValue = roulettePercent[index];
+
+                iTween.RotateTo(RoulettePanObj, iTween.Hash("z", RouletteAngle[index], "time", 1f, "easetype", iTween.EaseType.linear));
+                yield return new WaitForSeconds(1f);
+
                 break;
             }
+        }
+
+        yield return new WaitForSeconds(1f);
+
+        CloseAction();
+
+        if (keyValue.Key == 0)
+        {
+            // TODO 룰렛 결과에서 받을 기프티콘의 url과 index를 받아야함
+            ParentPopup.ShowPopup(new GiftconPopup.GiftconPopupData(0, TKManager.Instance.RouletteGiftconUrl, false));
+        }
+        else
+            ParentPopup.ShowPopup(new RoulettePointResultPopup.RoulettePointResultPopupData(keyValue.Key));
+    }
+
+    public void ShuffleList<T>(List<T> list)
+    {
+        int random1;
+        int random2;
+
+        T tmp;
+
+        for (int index = 0; index < list.Count; ++index)
+        {
+            random1 = UnityEngine.Random.Range(0, list.Count);
+            random2 = UnityEngine.Random.Range(0, list.Count);
+
+            tmp = list[random1];
+            list[random1] = list[random2];
+            list[random2] = tmp;
         }
     }
 }
