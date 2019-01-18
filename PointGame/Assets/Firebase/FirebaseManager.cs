@@ -33,6 +33,9 @@ public class FirebaseManager : MonoBehaviour
     int LottoCurSeries = 0;
     int LottoTodaySeries = 0;
 
+    public bool FirstLoadingComplete = false;
+    public int LoadingCount = 0;
+
     // Use this for initialization
     void Start()
     {
@@ -40,6 +43,9 @@ public class FirebaseManager : MonoBehaviour
         Firebase.Auth.FirebaseAuth auth = Firebase.Auth.FirebaseAuth.DefaultInstance;
         FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://pointgame-2177a.firebaseio.com/");
         mDatabaseRef = FirebaseDatabase.DefaultInstance.RootReference;
+
+        LoadingCount = 0;
+        FirstLoadingComplete = false;
 
         GetUserData();
         GetLottoRefNumber();
@@ -58,6 +64,15 @@ public class FirebaseManager : MonoBehaviour
         {
             //            LogInByGoogle();
         }
+    }
+
+    private void AddFirstLoadingComplete()
+    {
+        if (FirstLoadingComplete == false)
+            LoadingCount++;
+
+        if (LoadingCount == 7)
+            FirstLoadingComplete = true;
     }
 
     public bool SingedInFirebase()
@@ -149,7 +164,9 @@ public class FirebaseManager : MonoBehaviour
                       //  Debug.LogFormat("UserInfo: Index : {0} NickName {1} Point {2}", TKManager.Instance.MyData.Index, TKManager.Instance.MyData.NickName, TKManager.Instance.MyData.Point);
                     }
                 }
-              
+
+                AddFirstLoadingComplete();
+
               //  Debug.LogFormat("UserInfo: Index : {0} NickName {1} Point {2}", TKManager.Instance.MyData.Index, TKManager.Instance.MyData.NickName, TKManager.Instance.MyData.Point);
             }
         });
@@ -215,6 +232,8 @@ public class FirebaseManager : MonoBehaviour
                     //  Debug.LogFormat("UserInfo: Index : {0} NickName {1} Point {2}", TKManager.Instance.MyData.Index, TKManager.Instance.MyData.NickName, TKManager.Instance.MyData.Point);
 
                 }
+
+                AddFirstLoadingComplete();
             }
         });
     }
@@ -304,6 +323,8 @@ public class FirebaseManager : MonoBehaviour
                    TKManager.Instance.SetLottoWinUserData(Convert.ToInt32(tempIndex), tempSrc);
 
                }
+
+               AddFirstLoadingComplete();
            }
        });
 
@@ -337,6 +358,8 @@ public class FirebaseManager : MonoBehaviour
                 DataSnapshot snapshot = task.Result;
                 LottoTodaySeries = Convert.ToInt32(snapshot.Value);
                 TKManager.Instance.SetTodayLottoSeriesMinCount(LottoTodaySeries);
+
+                AddFirstLoadingComplete();
             }
         }
      );
@@ -354,6 +377,8 @@ public class FirebaseManager : MonoBehaviour
             {
                 DataSnapshot snapshot = task.Result;
                 LottoCurSeries = Convert.ToInt32(snapshot.Value);
+
+                AddFirstLoadingComplete();
             }
         }
     );
@@ -372,6 +397,8 @@ public class FirebaseManager : MonoBehaviour
             {
                 DataSnapshot snapshot = task.Result;
                 LottoRefNnumber = Convert.ToInt32(snapshot.Value);
+
+                AddFirstLoadingComplete();
             }
         }
       );
@@ -400,6 +427,8 @@ public class FirebaseManager : MonoBehaviour
                     tempSeries = tempSeries.Substring(0, tempSeries.IndexOf("_"));
                     TKManager.Instance.SetLottoLuckyNumber(Convert.ToInt32(tempSeries), tempNumber);
                 }
+
+                AddFirstLoadingComplete();
 
             }
         }
