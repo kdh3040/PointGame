@@ -39,6 +39,17 @@ public class UserData
        GiftconURLList.Add(new KeyValuePair<int, string>(index, src));        
     }
 
+    public KeyValuePair<int, string> GetGiftconData(int index)
+    {
+        for (int i = 0; i < GiftconURLList.Count; i++)
+        {
+            if (GiftconURLList[i].Key == index)
+                return GiftconURLList[i];
+        }
+
+        return new KeyValuePair<int, string>(0, "");
+    }
+
     public void DeleteGiftconData(int index)
     {
         // TODO 파베 연동
@@ -55,6 +66,8 @@ public class UserData
     public void AddPoint(int point)
     {
         Point += point;
+
+        FirebaseManager.Instance.SetPoint(point);
     }
     public void RemovePoint(int point)
     {

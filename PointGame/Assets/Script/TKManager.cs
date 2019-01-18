@@ -23,7 +23,6 @@ public class TKManager : MonoBehaviour
 
     public bool GameOverRouletteStart = false;
     public List<KeyValuePair<int, int>> RoulettePercent = new List<KeyValuePair<int, int>>();
-    public string RouletteGiftconUrl = "http://attach.s.op.gg/forum/20171221114845_549392.jpg";
 
     public List<KeyValuePair<int, string>> LottoWinUserList = new List<KeyValuePair<int, string>>();
     public List<KeyValuePair<int, int>> LottoLuckyNumber = new List<KeyValuePair<int, int>>();
@@ -34,6 +33,8 @@ public class TKManager : MonoBehaviour
 
     public LoadingHUD HUD;
     private SaveData MySaveData = new SaveData();
+
+    public bool GetLottoNumberProgress = false;
 
     void Start()
     {

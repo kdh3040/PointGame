@@ -41,6 +41,18 @@ public class MainUI : MonoBehaviour {
         }
 
         LottoWin.text = winUser.ToString();
+
+        if (TKManager.Instance.GameOverRouletteStart)
+            StartCoroutine(Co_GameOverRouletteStart());
+    }
+
+    IEnumerator Co_GameOverRouletteStart()
+    {
+        yield return null;
+        yield return null;
+        yield return null;
+        yield return null;
+        Popup.ShowPopup(new RoulettePopup.RoulettePopupData());
     }
 
     public void OnClickFreePoint()

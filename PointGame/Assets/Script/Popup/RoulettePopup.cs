@@ -98,11 +98,16 @@ public class RoulettePopup : Popup
 
         if (keyValue.Key == 0)
         {
-            // TODO 룰렛 결과에서 받을 기프티콘의 url과 index를 받아야함
-            ParentPopup.ShowPopup(new GiftconPopup.GiftconPopupData(0, TKManager.Instance.RouletteGiftconUrl, false));
+            FirebaseManager.Instance.GetGiftImage(RouletteGiftconResult);
         }
         else
             ParentPopup.ShowPopup(new RoulettePointResultPopup.RoulettePointResultPopupData(keyValue.Key));
+    }
+
+    public void RouletteGiftconResult(int giftconIndex)
+    {
+        KeyValuePair<int, string>  data = TKManager.Instance.MyData.GetGiftconData(giftconIndex);
+        ParentPopup.ShowPopup(new GiftconPopup.GiftconPopupData(data.Key, data.Value, false));
     }
 
     public void ShuffleList<T>(List<T> list)

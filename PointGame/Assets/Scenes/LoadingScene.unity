@@ -382,7 +382,7 @@ GameObject:
   - component: {fileID: 1138029430}
   - component: {fileID: 1138029429}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: LoadingUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -591,6 +591,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 487b4acb3f1f85e40a3a77a2d8a5c6b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  FirstLoadingComplete: 0
+  LoadingCount: 0
 --- !u!4 &1556224094
 Transform:
   m_ObjectHideFlags: 0
@@ -694,10 +696,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GameOverRouletteStart: 0
-  RouletteGiftconUrl: http://attach.s.op.gg/forum/20171221114845_549392.jpg
-  CurrentLottoSeriesCount: 0
-  ResultLottoSeriesCount: 0
-  ResultLottoNumber: 0
+  CurrLottoSeriesCount: 0
+  LottoSeriesCountMin: 0
+  LottoSeriesCountMax: 0
   HUD: {fileID: 1015879527}
 --- !u!4 &2065145996
 Transform:

@@ -239,8 +239,9 @@ public class FirebaseManager : MonoBehaviour
     }
 
     // 상품권 이미지 주소
-    public void GetGiftImage()
+    public void GetGiftImage(Action<int> endAction)
     {
+        TKManager.Instance.ShowHUD();
         string GiftImageSrc = null;
 
         FirebaseDatabase.DefaultInstance.GetReference("Gift").OrderByKey().LimitToFirst(1)
@@ -253,20 +254,34 @@ public class FirebaseManager : MonoBehaviour
            else if (task.IsCompleted)
            {
                DataSnapshot snapshot = task.Result;
-
+               var giftUrlList = new List<string>();
+               String tempIndex = "";
+               String tempSrc = "";
                foreach (var tempChild in snapshot.Children)
                {
-                   String tempIndex = tempChild.Key;
-                   String tempSrc = tempChild.Value.ToString();
-              
+                   tempIndex = tempChild.Key;
+                   tempSrc = tempChild.Value.ToString();
+                   giftUrlList.Add(tempSrc);
+
                    mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("Gift").Child(tempIndex).SetValueAsync(tempSrc);
                    tempIndex = tempIndex.Substring(0, tempIndex.IndexOf("_"));
                    TKManager.Instance.MyData.SetGiftconData(Convert.ToInt32(tempIndex), tempSrc);
 
                }
+
+               StartCoroutine(GetGiftconTexture(giftUrlList, Convert.ToInt32(tempIndex), endAction));
            }
        });
 
+    }
+
+    IEnumerator GetGiftconTexture(List<string> urlList, int giftconIndex, Action<int> endAction)
+    {
+        yield return ImageCache.Instance.GetTexture(urlList);
+
+        TKManager.Instance.HideHUD();
+
+        endAction(giftconIndex);
     }
 
     // 로또 번호 파이어베이스에서 로드
@@ -292,6 +307,8 @@ public class FirebaseManager : MonoBehaviour
 
                mutableData.Value = tempCount + 1;
                mDatabaseRef.Child("LottoCount").SetValueAsync(mutableData.Value);
+
+                TKManager.Instance.GetLottoNumberProgress = false;
             }
 
           
@@ -301,8 +318,6 @@ public class FirebaseManager : MonoBehaviour
 
     public void GetLottoLuckGroup()
     {
-
-
         FirebaseDatabase.DefaultInstance.GetReference("LottoLuckyGroup").OrderByKey().LimitToLast(4)
        .GetValueAsync().ContinueWith(task =>
        {

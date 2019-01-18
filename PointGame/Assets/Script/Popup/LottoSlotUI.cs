@@ -173,13 +173,46 @@ public class LottoSlotUI : MonoBehaviour {
                 {
                     // TODO 번호 뽑기
                     TKManager.Instance.MyData.RemovePoint(CommonData.LottoNumberCost);
+                    TKManager.Instance.GetLottoNumberProgress = true;
+                    StartCoroutine(Co_SetLottoNumber());
                     FirebaseManager.Instance.SetLottoNumber();
-                    RefreshUI();
+                    
                 }
             },
             MsgPopup.MSGPOPUP_TYPE.TWO));
         
     }
+
+    IEnumerator Co_SetLottoNumber()
+    {
+        TKManager.Instance.ShowHUD();
+        while (true)
+        {
+            if (TKManager.Instance.GetLottoNumberProgress == false)
+                break;
+
+            yield return null;
+        }
+
+        TKManager.Instance.HideHUD();
+
+        RefreshUI();
+    }
+
+
+    /*
+     * StartCoroutine(Co_GameOverRouletteStart());
+    }
+
+    IEnumerator Co_GameOverRouletteStart()
+    {
+        yield return null;
+        yield return null;
+        yield return null;
+        yield return null;
+        Popup.ShowPopup(new RoulettePopup.RoulettePopupData());
+    }
+     */
 
     public void OnClickLottoResult()
     {
