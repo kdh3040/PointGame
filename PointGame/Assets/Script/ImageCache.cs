@@ -36,7 +36,7 @@ public class ImageCache : MonoBehaviour
     {
         StartCoroutine(GetTexture(urlList));
     }
-    private IEnumerator GetTexture(List<string> urlList)
+    public IEnumerator GetTexture(List<string> urlList)
     {
         for (int index = 0; index < urlList.Count; ++index)
         {
