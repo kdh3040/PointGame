@@ -109,12 +109,21 @@ public class AdsManager : MonoBehaviour {
         AdRequest request = new AdRequest.Builder().Build();
         // Load the interstitial with the request.
         this.interstitial.LoadAd(request);
-  
+ 
+
     }
 
     public void ShowInterstitialAds()
     {
-        this.interstitial.Show();
+        if (this.interstitial.IsLoaded())
+        {
+            this.interstitial.Show();
+        }
+        else
+        {
+            this.RequestInterstitial();
+            this.interstitial.Show();
+        }
     }
 
 
