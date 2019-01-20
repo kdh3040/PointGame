@@ -18,6 +18,12 @@
     #Summary ul li{ list-style: disc; }
     .hint{ border-left: 0.3em #ddd solid; padding-left: 1em; color: #777;}
     .code_block{ background-color: #eee; padding: 5px; }
+    table, th, td {
+           border: 1px solid #bcbcbc;
+         }
+         table {
+   width: 1000px;
+ }
   </style>
 
 </head>
@@ -40,39 +46,36 @@
   <!-- 내용영역 -->
   <div class="container" id="CONTENTS">
     <!-- 핵심 -->
-    <h3 class="indigo-text center">:+: 복권 번호 :+:</h3>
+    <h3 class="indigo-text center">:+: 복권 당첨자 내역 :+:</h3>
+<!--
     <div class="row center">
       <button id="BTN_SELECT_LUCKY" type="button" class="btn white indigo-text">당첨 번호 추첨</button>
       <button id="BTN_TEST_CREATE" type="button" class="btn white indigo-text">번호 생성</button>
     </div>
-
+-->
     <div class="row z-depth-1">
       <div class="col l12 m12 s12">
         <p>
-        당첨 번호 :
+        최근 당첨 번호 :
           <!-- TODO 4. 상태 보기용 span 확인-->
            <span id="LOTTO_GROUP" class="blue-text">추첨 버튼을 눌러주세요</span>
          </p>
       </div>
     </div>
 
+    <table>
+      <thead>
+        <th>회차</th>
+        <th>당첨자</th>
+        <th>당첨번호</th>
+      </thead>
+      <tbody id="my-tbody"></tbody>
+    </table>
   </div>
 
-  <section id="page1" data-role="page">
-  		<div class="content" data-role="content">
-  			<ol data-role="listview">
-  				<li id = "LOTTO_0">공무원</li>
-  				<li id = "LOTTO_1">서비스업</li>
-          <li id = "LOTTO_2">공무원</li>
-          <li id = "LOTTO_3">공무원</li>
-          <li id = "LOTTO_4">공무원</li>
-          <li id = "LOTTO_5">공무원</li>
-          <li id = "LOTTO_6">공무원</li>
-          <li id = "LOTTO_7">공무원</li>
-          <li id = "LOTTO_8">공무원</li>
-  			</ol>
-  		</div>
-  	</section>
+
+
+
 
 
   <!--Import jQuery before materialize.js-->
@@ -99,6 +102,8 @@
 
 
   <script type="text/javascript">
+
+
   var config = {
     apiKey: "AIzaSyAjp9nSk0Ah1SrZXIcNfNpKJF-RIxkt3zM",
     authDomain: "pointgame-2177a.firebaseapp.com",
@@ -118,6 +123,13 @@
         console.log(Lottocount);
       });
 
+      firebase.database().ref('/Lotto/2_L').once('value', function(snapshot) {
+        var message = snapshot.val();
+        console.log(snapshot);
+
+
+      });
+
 	  var LottoRefNumber;
 	  firebase.database().ref('/LottoRefNumber').once('value', function(snapshot) {
         var message = snapshot.val();
@@ -134,18 +146,32 @@
         var message = snapshot.val();
         LottoCurSeries = message;
 
-
+        LottoCurSeries = 2;
         console.log('/Lotto/'+LottoCurSeries+'_L');
 
         var tempIdx = 0;
           var dbTestRef = firebase.database().ref('/Lotto/'+LottoCurSeries+'_L')
           dbTestRef.on('child_added', function(data){
+
+            var my_tbody = document.getElementById('my-tbody');
+            // var row = my_tbody.insertRow(0); // 상단에 추가
+            var row = my_tbody.insertRow( my_tbody.rows.length ); // 하단에 추가
+            var cell1 = row.insertCell(0);
+            var cell2 = row.insertCell(1);
+            var cell3 = row.insertCell(2);
+            cell1.innerHTML = tempIdx;
+            cell2.innerHTML = data.key;
+            cell3.innerHTML = data.val();
+
+
+
             console.log(data.val(), 'key: ', data.key)
             arrLottoUser[data.key] = data.val();
             arrLottoUserKey[tempIdx] = data.key;
             tempIdx++;
             console.log(arrLottoUserKey);
-            $("#LOTTO_"+data.key).text(data.val());
+
+            $("#LOTTO_GROUP").text(data.val());
           })
 
 

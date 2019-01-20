@@ -40,6 +40,10 @@ public class LottoWinPopup : Popup
 
     public void OnClickOk()
     {
+        int tempSeries = 2;
+
+        FirebaseManager.Instance.SetLottoWinUserData(tempSeries, Name.text.ToString(), Bank.text.ToString(), AccountNumber.text.ToString());
+
         // TODO 김도형 파베로 데이터 넘기기
         if (EndAction != null)
             EndAction();

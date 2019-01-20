@@ -152,9 +152,22 @@ public class FirebaseManager : MonoBehaviour
                         Debug.LogFormat("UserInfo: Index : {0} NickName {1} Point {2}", TKManager.Instance.MyData.Index, TKManager.Instance.MyData.NickName, TKManager.Instance.MyData.Point);
                     }
                 }
+
+
+                if (tempData.ContainsKey("LottoWin"))
+                {
+                    var LottoWinInfo = tempData["LottoWin"] as Dictionary<string, object>;
+                    foreach (var pair in LottoWinInfo)
+                    {
+                        string tempLottoSeries = pair.Key.Substring(0, pair.Key.IndexOf("_"));
+                        TKManager.Instance.MyData.SetLottoWinSeriesData(Convert.ToInt32(tempLottoSeries));
+                        Debug.LogFormat("UserInfo: Index : {0} NickName {1} Point {2}", TKManager.Instance.MyData.Index, TKManager.Instance.MyData.NickName, TKManager.Instance.MyData.Point);
+                    }
+                }
+
                 
 
-                if(tempData.ContainsKey("Gift"))
+                if (tempData.ContainsKey("Gift"))
                 {
                     var GiftInfo = tempData["Gift"] as Dictionary<string, object>;
                     foreach (var pair in GiftInfo)
@@ -464,6 +477,18 @@ public class FirebaseManager : MonoBehaviour
             }
         }
       );
+    }
+
+    public void SetLottoWinUserData(int Series, String Name, String Bank, String Account)
+    {
+        String LottoWinSeries = Series.ToString() + "_L";
+
+        mDatabaseRef.Child("LottoWinUsers").Child(LottoWinSeries).Child("Name").SetValueAsync(Name);
+        mDatabaseRef.Child("LottoWinUsers").Child(LottoWinSeries).Child("Bank").SetValueAsync(Bank);
+        mDatabaseRef.Child("LottoWinUsers").Child(LottoWinSeries).Child("Account").SetValueAsync(Account);
+
+        mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("LottoWin").Child(LottoWinSeries).SetValueAsync(1);
+
     }
 
     private int GetCurrSeries()
