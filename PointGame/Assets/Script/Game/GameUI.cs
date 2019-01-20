@@ -49,7 +49,7 @@ public class GameUI : MonoBehaviour {
     {
         ResetUI();
         GameStartObj.SetActive(true);
-        GameStageCount.text = string.Format("Stage {0}", GamePlayManager.Instance.StageCount);
+        //GameStageCount.text = string.Format("Stage {0}", GamePlayManager.Instance.StageCount);
     }
 
     public void GameStart()
