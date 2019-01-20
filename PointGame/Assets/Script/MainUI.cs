@@ -44,6 +44,8 @@ public class MainUI : MonoBehaviour {
 
         if (TKManager.Instance.GameOverRouletteStart)
             StartCoroutine(Co_GameOverRouletteStart());
+
+        //AdmobManager.Instance.ShowBannerAd();
     }
 
     IEnumerator Co_GameOverRouletteStart()
@@ -57,6 +59,8 @@ public class MainUI : MonoBehaviour {
 
     public void OnClickFreePoint()
     {
+        //AdmobManager.Instance.ShowRewardedAd();
+        return;
         Popup.ShowPopup(new MsgPopup.MsgPopupData(string.Format("광고를 보시고 {0:n0}를 획득 하시겠습니까?", CommonData.AdsPointReward),
             () =>
             {
