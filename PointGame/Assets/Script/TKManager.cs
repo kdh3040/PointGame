@@ -35,6 +35,7 @@ public class TKManager : MonoBehaviour
     private SaveData MySaveData = new SaveData();
 
     public bool GetLottoNumberProgress = false;
+    
 
     void Start()
     {
@@ -44,6 +45,11 @@ public class TKManager : MonoBehaviour
         Screen.sleepTimeout = SleepTimeout.NeverSleep;
         Application.targetFrameRate = 50;
         Screen.SetResolution(Screen.width, (Screen.width * 16) / 9, false);
+    }
+
+    public void init()
+    {
+
     }
 
     public void SetLottoWinUserData(int series, string nickName)
@@ -124,16 +130,19 @@ public class TKManager : MonoBehaviour
     [System.Serializable]
     public class SaveData
     {
+        public string UserIndex = "";
         public Dictionary<int, bool> LottoResultShowSeriesList = new Dictionary<int, bool>();
 
         public void Save()
         {
             LottoResultShowSeriesList = TKManager.Instance.MyData.LottoResultShowSeriesList;
+            UserIndex = TKManager.Instance.MyData.Index;
         }
 
         public void Load()
         {
             TKManager.Instance.MyData.LottoResultShowSeriesList = LottoResultShowSeriesList;
+            TKManager.Instance.MyData.SetUserIndex(UserIndex);
         }
     }
 

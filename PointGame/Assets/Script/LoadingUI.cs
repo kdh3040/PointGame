@@ -9,9 +9,13 @@ using Firebase.Unity.Editor;
 
 public class LoadingUI : MonoBehaviour {
 
+    public SignUpPopup SignUpPopupObj;
+    public bool GetLoginProgress = false;
+
     void Start()
     {
         FirebaseManager.Instance.Init();
+        TKManager.Instance.init();
 
         if (FirebaseManager.Instance.SingedInFirebase())
         {
@@ -19,6 +23,9 @@ public class LoadingUI : MonoBehaviour {
         }
         else
         {
+            GetLoginProgress = true;
+
+            StartCoroutine(Co_Login());
             SignUpAnonymously();
         }
     }
@@ -42,8 +49,8 @@ public class LoadingUI : MonoBehaviour {
             Debug.LogFormat("User signed in successfully: {0} ({1})",
                 newUser.DisplayName, newUser.UserId);
 
-            SignUpUser(newUser.UserId);
-
+            SignUpPopupObj.gameObject.SetActive(true);
+            SignUpPopupObj.init(SignUpUser);
         });
     }
 
@@ -59,7 +66,6 @@ public class LoadingUI : MonoBehaviour {
             }
             else
             {
-
                 TKManager.Instance.MyData.SetData(tempCount.ToString(), NickName, CommonData.UserDefaultPoint);
 
                 FirebaseManager.Instance.mDatabaseRef.Child("Users").Child(tempCount.ToString()).Child("Index").SetValueAsync(tempCount);
@@ -69,17 +75,31 @@ public class LoadingUI : MonoBehaviour {
                 mutableData.Value = tempCount + 1;
                 FirebaseManager.Instance.mDatabaseRef.Child("UsersCount").SetValueAsync(mutableData.Value);
 
+                GetLoginProgress = false;
             }
 
             return TransactionResult.Success(mutableData);
         });
     }
 
+    IEnumerator Co_Login()
+    {
+        while (true)
+        {
+            if (GetLoginProgress == false)
+                break;
+
+            yield return null;
+        }
+
+        TKManager.Instance.SaveFile();
+
+        StartCoroutine(LoadingData());
+    }
+
     IEnumerator LoadingData()
     {
         TKManager.Instance.ShowHUD();
-        yield return null;
-        TKManager.Instance.LoadFile();
         yield return null;
         FirebaseManager.Instance.GetData();
         yield return null;

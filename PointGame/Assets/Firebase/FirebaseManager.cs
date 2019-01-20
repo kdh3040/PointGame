@@ -124,7 +124,7 @@ public class FirebaseManager : MonoBehaviour
     // 사용자 정보 파이어베이스에서 로드
     public void GetUserData()
     {
-        string userIdx = "0";
+        string userIdx = TKManager.Instance.MyData.Index;
 
         mDatabaseRef.Child("Users").Child(userIdx).GetValueAsync().ContinueWith(task =>
         {
@@ -141,30 +141,37 @@ public class FirebaseManager : MonoBehaviour
                 int tempPoint = Convert.ToInt32(tempData["Point"]);
                 TKManager.Instance.MyData.SetData(tempData["Index"].ToString(), tempData["NickName"].ToString(), tempPoint);
 
-                int tempLottoCount = Convert.ToInt32(tempData["LottoCount"]);
-                if (tempLottoCount != 0)
+                if(tempData.ContainsKey("LottoCount"))
                 {
-                    var LottoInfo = tempData["Lotto"] as Dictionary<string, object>;
-                    foreach (var pair in LottoInfo)
+                    int tempLottoCount = Convert.ToInt32(tempData["LottoCount"]);
+                    if (tempLottoCount != 0)
                     {
-                        string tempLottoSeries = pair.Key.Substring(0, pair.Key.IndexOf("_"));
-                        int tempLottoNumber = Convert.ToInt32(pair.Value);
-                        TKManager.Instance.MyData.SetLottoData(Convert.ToInt32(tempLottoSeries), tempLottoNumber);
-                          Debug.LogFormat("UserInfo: Index : {0} NickName {1} Point {2}", TKManager.Instance.MyData.Index, TKManager.Instance.MyData.NickName, TKManager.Instance.MyData.Point);
+                        var LottoInfo = tempData["Lotto"] as Dictionary<string, object>;
+                        foreach (var pair in LottoInfo)
+                        {
+                            string tempLottoSeries = pair.Key.Substring(0, pair.Key.IndexOf("_"));
+                            int tempLottoNumber = Convert.ToInt32(pair.Value);
+                            TKManager.Instance.MyData.SetLottoData(Convert.ToInt32(tempLottoSeries), tempLottoNumber);
+                            Debug.LogFormat("UserInfo: Index : {0} NickName {1} Point {2}", TKManager.Instance.MyData.Index, TKManager.Instance.MyData.NickName, TKManager.Instance.MyData.Point);
+                        }
                     }
                 }
-
-                int tempGiftCount = Convert.ToInt32(tempData["GiftCount"]);
-                if (tempGiftCount != 0)
+                
+                if(tempData.ContainsKey("GiftCount"))
                 {
-                    var GiftInfo = tempData["Gift"] as Dictionary<string, object>;
-                    foreach (var pair in GiftInfo)
+                    int tempGiftCount = Convert.ToInt32(tempData["GiftCount"]);
+                    if (tempGiftCount != 0)
                     {
-                        string tempIndex = pair.Key.Substring(0, pair.Key.IndexOf("_"));
-                        TKManager.Instance.MyData.SetGiftconData(Convert.ToInt32(tempIndex), pair.Value.ToString());
-                      //  Debug.LogFormat("UserInfo: Index : {0} NickName {1} Point {2}", TKManager.Instance.MyData.Index, TKManager.Instance.MyData.NickName, TKManager.Instance.MyData.Point);
+                        var GiftInfo = tempData["Gift"] as Dictionary<string, object>;
+                        foreach (var pair in GiftInfo)
+                        {
+                            string tempIndex = pair.Key.Substring(0, pair.Key.IndexOf("_"));
+                            TKManager.Instance.MyData.SetGiftconData(Convert.ToInt32(tempIndex), pair.Value.ToString());
+                            //  Debug.LogFormat("UserInfo: Index : {0} NickName {1} Point {2}", TKManager.Instance.MyData.Index, TKManager.Instance.MyData.NickName, TKManager.Instance.MyData.Point);
+                        }
                     }
                 }
+                
 
                 AddFirstLoadingComplete();
 

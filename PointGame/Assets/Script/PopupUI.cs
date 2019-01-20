@@ -6,7 +6,6 @@ public enum POPUP_TYPE
 {
     NONE,
     MSG,
-    SIGN_UP,
     ROULETTE,
     ROULETTE_POINT_RESULT,
     GIFT_CON_LIST,
@@ -21,7 +20,6 @@ public class PopupUI : MonoBehaviour {
     public List<POPUP_TYPE> QueuePopupType = new List<POPUP_TYPE>();
     public POPUP_TYPE CurrPopupType = POPUP_TYPE.NONE;
 
-    public SignUpPopup SignUpPopupObj;
     public RoulettePopup RoulettePopupObj;
     public RoulettePointResultPopup RoulettePointResultPopupObj;
     public GiftconListPopup GiftconListPopupObj;
@@ -32,8 +30,6 @@ public class PopupUI : MonoBehaviour {
 
     public void Start()
     {
-        SignUpPopupObj.gameObject.SetActive(false);
-        SignUpPopupObj.Initialize(this, ClosePopup);
         RoulettePopupObj.gameObject.SetActive(false);
         RoulettePopupObj.Initialize(this, ClosePopup);
         RoulettePointResultPopupObj.gameObject.SetActive(false);
@@ -65,10 +61,6 @@ public class PopupUI : MonoBehaviour {
             case POPUP_TYPE.MSG:
                 MsgPopupObj.gameObject.SetActive(true);
                 MsgPopupObj.SetData(data);
-                break;
-            case POPUP_TYPE.SIGN_UP:
-                SignUpPopupObj.gameObject.SetActive(true);
-                SignUpPopupObj.SetData(data);
                 break;
             case POPUP_TYPE.ROULETTE:
                 RoulettePopupObj.gameObject.SetActive(true);
@@ -110,9 +102,6 @@ public class PopupUI : MonoBehaviour {
                 break;
             case POPUP_TYPE.MSG:
                 MsgPopupObj.gameObject.SetActive(false);
-                break;
-            case POPUP_TYPE.SIGN_UP:
-                SignUpPopupObj.gameObject.SetActive(false);
                 break;
             case POPUP_TYPE.ROULETTE:
                 RoulettePopupObj.gameObject.SetActive(false);

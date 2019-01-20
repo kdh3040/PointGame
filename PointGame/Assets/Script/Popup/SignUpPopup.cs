@@ -1,9 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SignUpPopup : Popup
+public class SignUpPopup : MonoBehaviour
 {
     public GameObject Login;
     public Button KakaoLogin;
@@ -13,13 +14,7 @@ public class SignUpPopup : Popup
     public InputField NickName;
     public Button OkButton;
 
-    public class SignUpPopupData : PopupData
-    {
-        public SignUpPopupData()
-        {
-            PopupType = POPUP_TYPE.SIGN_UP;
-        }
-    }
+    private Action<string> EndAction;
 
     private void Awake()
     {
@@ -28,16 +23,18 @@ public class SignUpPopup : Popup
         NaverLogin.onClick.AddListener(OnClickNaverLogin);
     }
 
-    public override void SetData(PopupData data)
+    public void init(Action<string> endAction)
     {
-        Login.gameObject.SetActive(true);
-        InfoInput.gameObject.SetActive(false);
+        EndAction = endAction;
+
+        Login.gameObject.SetActive(false);
+        InfoInput.gameObject.SetActive(true);
     }
 
     public void OnClickOkButton()
     {
-        // TODO 닉네임 파베로 전송!!!!!!!
-        CloseAction();
+        EndAction(NickName.text);
+        //CloseAction();
     }
 
     public void OnClickKakaoLogin()
