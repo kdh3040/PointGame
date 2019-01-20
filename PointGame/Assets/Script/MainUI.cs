@@ -31,6 +31,8 @@ public class MainUI : MonoBehaviour {
 
     void Start()
     {
+    
+
         var winList = TKManager.Instance.LottoWinUserList;
         StringBuilder winUser = new StringBuilder();
 
@@ -45,7 +47,6 @@ public class MainUI : MonoBehaviour {
         if (TKManager.Instance.GameOverRouletteStart)
             StartCoroutine(Co_GameOverRouletteStart());
 
-        //AdmobManager.Instance.ShowBannerAd();
     }
 
     IEnumerator Co_GameOverRouletteStart()
@@ -70,11 +71,13 @@ public class MainUI : MonoBehaviour {
 
     public void OnClickGamePlay()
     {
+    
         SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
     }
 
     public void OnClickGiftBox()
     {
+       
         Popup.ShowPopup(new GiftconPopup.GiftconPopupData());
     }
 
@@ -86,6 +89,7 @@ public class MainUI : MonoBehaviour {
     public void OnClickFreeRoulette()
     {
         // TODO 전면광고
+        AdsManager.Instance.ShowInterstitialAds();
         Popup.ShowPopup(new RoulettePopup.RoulettePopupData());
     }
 
