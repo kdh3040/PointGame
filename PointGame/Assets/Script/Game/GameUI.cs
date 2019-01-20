@@ -12,8 +12,8 @@ public class GameUI : MonoBehaviour {
 
     public GameObject GameInfoObj;
     public Text GameAllPoint;
-    public Text GamePoint;
-    public Text GameInfoStageCount;
+    public CountImgFont GamePoint;
+    public CountImgFont GameInfoStageCount;
 
     public GameObject GameOverObj;
     public GameObject GameOverPopupObj;
@@ -87,8 +87,8 @@ public class GameUI : MonoBehaviour {
 
     public void UpdateGameInfo()
     {
-        GameInfoStageCount.text = string.Format("Stage {0}", GamePlayManager.Instance.StageCount);
-        GamePoint.text = string.Format("{0:n0}", GamePlayManager.Instance.GamePoint);
+        GameInfoStageCount.SetValue(string.Format("s{0}", GamePlayManager.Instance.StageCount), CountImgFont.IMG_RANGE.RIGHT, CountImgFont.IMG_TYPE.YELLOW);
+        GamePoint.SetValue(string.Format("{0:n0}", GamePlayManager.Instance.GamePoint), CountImgFont.IMG_RANGE.LEFT, CountImgFont.IMG_TYPE.YELLOW);
     }
 
     private void OnClickLeftJump()

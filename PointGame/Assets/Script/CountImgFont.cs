@@ -37,7 +37,7 @@ public class CountImgFont : MonoBehaviour {
         switch (imgType)
         {
             case IMG_TYPE.YELLOW:
-                formString = "icon_number_1_{0}";
+                formString = "num_{0}";
                 break;
             default:
                 break;
@@ -46,10 +46,13 @@ public class CountImgFont : MonoBehaviour {
         for (int i = 0; i < countLength; i++)
         {
             char oneStr = countSrt[i];
-            if (oneStr == '+')
-                oneStr = 'p';
-
-            string imgfileName = string.Format(formString, oneStr);
+            string imgfileName = "";
+            if (oneStr == ',')
+                imgfileName = string.Format(formString, 'p');
+            else if (oneStr == 's')
+                imgfileName = "str_stage";
+            else
+                imgfileName = string.Format(formString, oneStr);
 
             if (ImgFontList.Count <= i)
             {
@@ -116,7 +119,7 @@ public class CountImgFont : MonoBehaviour {
                 Image currImg = ImgFontList[i];
                 Vector3 currImgLocalPosition = currImg.gameObject.transform.localPosition;
 
-                currImgLocalPosition = new Vector3(currImgLocalPosition.x - allWidthSize + ImgFontList[0].sprite.rect.size.x / 2, 0);
+                currImgLocalPosition = new Vector3(currImgLocalPosition.x - allWidthSize, 0);
                 currImg.gameObject.transform.localPosition = currImgLocalPosition;
             }
         }

@@ -9,7 +9,7 @@ public class MainUI : MonoBehaviour {
 
     public Text LottoWin;
 
-    public Text AllPoint;
+    public CountImgFont AllPoint;
     public Button FreePoint;
 
     public Button GamePlayButton;
@@ -96,7 +96,7 @@ public class MainUI : MonoBehaviour {
 
     private void Update()
     {
-        AllPoint.text = string.Format("{0:n0}", TKManager.Instance.MyData.Point);
+        AllPoint.SetValue(string.Format("{0:n0}", TKManager.Instance.MyData.Point), CountImgFont.IMG_RANGE.LEFT, CountImgFont.IMG_TYPE.YELLOW);
     }
 
 

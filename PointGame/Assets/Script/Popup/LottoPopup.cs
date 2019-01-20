@@ -7,7 +7,7 @@ public class LottoPopup : Popup
 {
     public Button OkButton;
     public List<LottoSlotUI> LottoSlotList = new List<LottoSlotUI>();
-    public Text AllPoint;
+    public CountImgFont AllPoint;
 
     public class LottoPopupData : PopupData
     {
@@ -24,7 +24,7 @@ public class LottoPopup : Popup
 
     private void Update()
     {
-        AllPoint.text = string.Format("{0:n0}", TKManager.Instance.MyData.Point);
+        AllPoint.SetValue(string.Format("{0:n0}", TKManager.Instance.MyData.Point), CountImgFont.IMG_RANGE.LEFT, CountImgFont.IMG_TYPE.YELLOW);
     }
 
     public override void SetData(PopupData data)
