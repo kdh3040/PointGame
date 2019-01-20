@@ -67,6 +67,15 @@
 
     <table>
       <thead>
+        <th>종류</th>
+        <th>확률</th>
+      </thead>
+      <tbody id="GiftProb"></tbody>
+    </table>
+
+
+    <table>
+      <thead>
         <th>기프티콘 이미지 번호</th>
         <th>기프티콘 이미지 주소</th>
       </thead>
@@ -164,6 +173,30 @@
       $("#PROGRESS").hide();
   })
 
+
+  var dbTestRef = firebase.database().ref('/GiftProb')
+  dbTestRef.on('child_added', function(data){
+    console.log(data.val(), 'key: ', data.key)
+
+    var GiftProb = document.getElementById('GiftProb');
+    // var row = my_tbody.insertRow(0); // 상단에 추가
+    var row = GiftProb.insertRow( GiftProb.rows.length ); // 하단에 추가
+
+    var cell1 = row.insertCell(0);
+    var cell2 = row.insertCell(1);
+    if(data.val().Name == '0')
+    {
+      cell1.innerHTML = '기프티콘';
+    }
+    else
+    {
+      cell1.innerHTML = data.val().Name + '포인트';
+    }
+
+      cell2.innerHTML = data.val().Prob + '%';
+
+        $("#PROGRESS").hide();
+    })
 
 
   /* 2. 메모하기 눌렀을 떄 DB에 기록 */
