@@ -17,6 +17,8 @@ public class LoadingUI : MonoBehaviour {
         FirebaseManager.Instance.Init();
         TKManager.Instance.init();
 
+        TKManager.Instance.ShowHUD();
+        SignUpPopupObj.gameObject.SetActive(false);
         if (FirebaseManager.Instance.SingedInFirebase())
         {
             StartCoroutine(LoadingData());
@@ -49,6 +51,7 @@ public class LoadingUI : MonoBehaviour {
             Debug.LogFormat("User signed in successfully: {0} ({1})",
                 newUser.DisplayName, newUser.UserId);
 
+            TKManager.Instance.HideHUD();
             SignUpPopupObj.gameObject.SetActive(true);
             SignUpPopupObj.init(SignUpUser);
         });
