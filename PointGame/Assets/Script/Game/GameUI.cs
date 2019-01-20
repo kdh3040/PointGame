@@ -16,6 +16,8 @@ public class GameUI : MonoBehaviour {
     public Text GameInfoStageCount;
 
     public GameObject GameOverObj;
+    public GameObject GameOverPopupObj;
+    public Text GameOverGetPoint;
     public Button GameOverRouletteButton;
 
     public GameObject GameClearObj;
@@ -68,14 +70,25 @@ public class GameUI : MonoBehaviour {
     public void GameEnd()
     {
         ResetUI();
+        GameOverPopupObj.gameObject.SetActive(false);
         GameOverObj.SetActive(true);
+
+        StartCoroutine(Co_GameOverRouletteStart());
+    }
+
+
+    IEnumerator Co_GameOverRouletteStart()
+    {
+        yield return new WaitForSeconds(1f);
+        GameOverPopupObj.gameObject.SetActive(true);
+
+        GameOverGetPoint.text = string.Format("{0:n0} 포인트\n획득!", GamePlayManager.Instance.GamePoint);
     }
 
     public void UpdateGameInfo()
     {
         GameInfoStageCount.text = string.Format("Stage {0}", GamePlayManager.Instance.StageCount);
-        GameAllPoint.text = string.Format("총 포인트 : {0:n0}", TKManager.Instance.MyData.Point);
-        GamePoint.text = string.Format("게임 포인트 : {0:n0}", GamePlayManager.Instance.GamePoint);
+        GamePoint.text = string.Format("{0:n0}", GamePlayManager.Instance.GamePoint);
     }
 
     private void OnClickLeftJump()

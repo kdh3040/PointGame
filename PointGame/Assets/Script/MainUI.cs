@@ -96,7 +96,7 @@ public class MainUI : MonoBehaviour {
 
     private void Update()
     {
-        AllPoint.text = string.Format("총 포인트 : {0:n0}", TKManager.Instance.MyData.Point);
+        AllPoint.text = string.Format("{0:n0}", TKManager.Instance.MyData.Point);
     }
 
 

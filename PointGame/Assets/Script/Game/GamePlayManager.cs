@@ -113,7 +113,7 @@ public class GamePlayManager : MonoBehaviour {
         UI.GameEnd();
         Char.CharIdle();
 
-        iTween.MoveTo(Char.gameObject, iTween.Hash("x", Char.gameObject.transform.localPosition.x, "y",CharDeathPosY - 3f, "islocal", true, "movetopath", false, "time", 0.8f, "easetype", iTween.EaseType.easeInBack)); 
+        iTween.MoveTo(Char.gameObject, iTween.Hash("x", Char.gameObject.transform.localPosition.x, "y",CharDeathPosY - 10f, "islocal", true, "movetopath", false, "time", 0.8f, "easetype", iTween.EaseType.easeInBack)); 
     }
 
     public void CheckGameOver()
