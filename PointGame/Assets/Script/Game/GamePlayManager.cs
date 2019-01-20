@@ -141,7 +141,7 @@ public class GamePlayManager : MonoBehaviour {
             for (int index = 0; index < BlockList.Count; ++index)
             {
                 var pos = BlockList[index].gameObject.transform.localPosition;
-                pos.y = pos.y - 0.05f;
+                pos.y = pos.y - (0.05f + (StageCount * 0.025f));
                 BlockList[index].gameObject.transform.localPosition = pos;
 
                 if (pos.y < -6.5f)
