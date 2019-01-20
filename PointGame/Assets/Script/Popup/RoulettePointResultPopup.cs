@@ -31,6 +31,7 @@ public class RoulettePointResultPopup : Popup
         var popupData = data as RoulettePointResultPopupData;
 
         Point.text = string.Format("{0:n0} Point", popupData.Point);
+        TKManager.Instance.MyData.AddPoint(popupData.Point);
     }
 
     public void OnClickOk()
