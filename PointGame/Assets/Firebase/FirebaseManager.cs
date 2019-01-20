@@ -240,6 +240,12 @@ public class FirebaseManager : MonoBehaviour
         });
     }
 
+    public void DelGiftImage(int Index)
+    {
+        String tempIndex = Index.ToString() + "_G";
+        mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("Gift").Child(tempIndex).RemoveValueAsync();
+    }
+
     // 상품권 이미지 주소
     public void GetGiftImage(Action<int> endAction)
     {
@@ -265,9 +271,13 @@ public class FirebaseManager : MonoBehaviour
                    tempSrc = tempChild.Value.ToString();
                    giftUrlList.Add(tempSrc);
 
+                   mDatabaseRef.Child("Gift").Child(tempIndex).RemoveValueAsync();
+
                    mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("Gift").Child(tempIndex).SetValueAsync(tempSrc);
                    tempIndex = tempIndex.Substring(0, tempIndex.IndexOf("_"));
                    TKManager.Instance.MyData.SetGiftconData(Convert.ToInt32(tempIndex), tempSrc);
+
+                 
 
                }
 
