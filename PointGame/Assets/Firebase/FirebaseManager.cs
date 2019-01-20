@@ -23,12 +23,13 @@ public class FirebaseManager : MonoBehaviour
         }
     }
 
-    Firebase.Auth.FirebaseAuth auth;
+    public Firebase.Auth.FirebaseAuth auth;
     Firebase.Auth.FirebaseUser user;
+   
 
     private string googleIdToken;
     private string googleAccessToken;
-    private DatabaseReference mDatabaseRef;
+    public DatabaseReference mDatabaseRef;
     int LottoRefNnumber = 0;
     int LottoCurSeries = 0;
     int LottoTodaySeries = 0;
@@ -40,14 +41,23 @@ public class FirebaseManager : MonoBehaviour
     void Start()
     {
         DontDestroyOnLoad(this);
-        Firebase.Auth.FirebaseAuth auth = Firebase.Auth.FirebaseAuth.DefaultInstance;
-        FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://pointgame-2177a.firebaseio.com/");
-        mDatabaseRef = FirebaseDatabase.DefaultInstance.RootReference;
-
+   
         LoadingCount = 0;
         FirstLoadingComplete = false;
 
+    }
+
+    public void Init()
+    {
+        FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://pointgame-2177a.firebaseio.com/");
+        auth = Firebase.Auth.FirebaseAuth.DefaultInstance;
+        mDatabaseRef = FirebaseDatabase.DefaultInstance.RootReference;
+    }
+
+    public void GetData()
+    {
         GetUserData();
+
         GetLottoRefNumber();
         GetLottoTodaySeries();
         GetLottoCurSeries();
@@ -55,16 +65,9 @@ public class FirebaseManager : MonoBehaviour
         GetLottoLuckGroup();
 
         GetGiftProb();
-        
-      //  GetGiftImage();
-
-      //  SetLottoNumber();
-
-        if (!SingedInFirebase())
-        {
-            //            LogInByGoogle();
-        }
     }
+
+
 
     private void AddFirstLoadingComplete()
     {
@@ -77,9 +80,7 @@ public class FirebaseManager : MonoBehaviour
 
     public bool SingedInFirebase()
     {
-
         auth = Firebase.Auth.FirebaseAuth.DefaultInstance;
-
         if (auth.CurrentUser != null)
         {
             user = auth.CurrentUser;

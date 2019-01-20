@@ -1,13 +1,78 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Firebase;
+using Firebase.Database;
+using Firebase.Unity.Editor;
 
 public class LoadingUI : MonoBehaviour {
 
     void Start()
     {
-        StartCoroutine(LoadingData());
+        FirebaseManager.Instance.Init();
+
+        if (FirebaseManager.Instance.SingedInFirebase())
+        {
+            StartCoroutine(LoadingData());
+        }
+        else
+        {
+            SignUpAnonymously();
+        }
+    }
+
+
+    public void SignUpAnonymously()
+    {
+        FirebaseManager.Instance.auth.SignInAnonymouslyAsync().ContinueWith(task => {
+            if (task.IsCanceled)
+            {
+                Debug.LogError("SignInAnonymouslyAsync was canceled.");
+                return;
+            }
+            if (task.IsFaulted)
+            {
+                Debug.LogError("SignInAnonymouslyAsync encountered an error: " + task.Exception);
+                return;
+            }
+
+            Firebase.Auth.FirebaseUser newUser = task.Result;
+            Debug.LogFormat("User signed in successfully: {0} ({1})",
+                newUser.DisplayName, newUser.UserId);
+
+            SignUpUser(newUser.UserId);
+
+        });
+    }
+
+    public void SignUpUser(string NickName)
+    {
+        FirebaseManager.Instance.mDatabaseRef.Child("UsersCount").RunTransaction(mutableData =>
+        {
+            int tempCount = Convert.ToInt32(mutableData.Value);
+
+            if (tempCount == 0)
+            {
+                tempCount = 0;
+            }
+            else
+            {
+
+                TKManager.Instance.MyData.SetData(tempCount.ToString(), NickName, CommonData.UserDefaultPoint);
+
+                FirebaseManager.Instance.mDatabaseRef.Child("Users").Child(tempCount.ToString()).Child("Index").SetValueAsync(tempCount);
+                FirebaseManager.Instance.mDatabaseRef.Child("Users").Child(tempCount.ToString()).Child("NickName").SetValueAsync(NickName);
+                FirebaseManager.Instance.mDatabaseRef.Child("Users").Child(tempCount.ToString()).Child("Point").SetValueAsync(CommonData.UserDefaultPoint);
+
+                mutableData.Value = tempCount + 1;
+                FirebaseManager.Instance.mDatabaseRef.Child("UsersCount").SetValueAsync(mutableData.Value);
+
+            }
+
+            return TransactionResult.Success(mutableData);
+        });
     }
 
     IEnumerator LoadingData()
@@ -16,6 +81,9 @@ public class LoadingUI : MonoBehaviour {
         yield return null;
         TKManager.Instance.LoadFile();
         yield return null;
+        FirebaseManager.Instance.GetData();
+        yield return null;
+
         while (true)
         {
             if (FirebaseManager.Instance.FirstLoadingComplete)
