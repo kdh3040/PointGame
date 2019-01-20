@@ -249,7 +249,7 @@ function SetData(Index, data)
     });
 
 
-    var arrLottoSelectTime = ['00:00:00', '09:00:00', '12:00:00', '15:00:00', '18:00:00'];
+    var arrLottoSelectTime = ['22:25:00', '09:00:00', '12:00:00', '15:00:00', '18:00:00'];
 
 
 
@@ -260,7 +260,7 @@ function SetData(Index, data)
      }
 
      function ResetLotto(){
-            LottoTodaySeries += 1;
+            LottoTodaySeries += 4;
             firebase.database().ref('/LottoTodaySeries').set(LottoTodaySeries)
      }
 
