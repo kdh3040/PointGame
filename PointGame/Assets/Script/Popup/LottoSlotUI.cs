@@ -74,9 +74,9 @@ public class LottoSlotUI : MonoBehaviour {
             LottoResultObj.gameObject.SetActive(true);
 
             LottoResult_MyNumber.gameObject.SetActive(false);
-            LottoResult_MyNumber.gameObject.transform.localPosition = new Vector3(0, 106.2f, 0);
+            LottoResult_MyNumber.gameObject.transform.localPosition = new Vector3(0, 96f, 0);
             LottoResult_WinNumber.gameObject.SetActive(false);
-            LottoResult_WinNumber.gameObject.transform.localPosition = new Vector3(0, 9, 0);
+            LottoResult_WinNumber.gameObject.transform.localPosition = new Vector3(0, 0, 0);
             LottoResult_WinButton.gameObject.SetActive(false);
             LottoResult_WinButton.onClick.RemoveAllListeners();
             LottoResult_WinButtonText.text = "결과 확인";
