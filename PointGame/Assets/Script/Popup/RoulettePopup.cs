@@ -74,9 +74,6 @@ public class RoulettePopup : Popup
     IEnumerator Co_Roulette()
     {
         RoulettePlay = true;
-        iTween.RotateAdd(RoulettePanObj, iTween.Hash("z", 360 * 5, "time", 0.8f, "easetype", iTween.EaseType.linear));
-        yield return new WaitForSeconds(0.8f);
-
 
 
         KeyValuePair<int, int> keyValue = new KeyValuePair<int, int>();
@@ -91,8 +88,8 @@ public class RoulettePopup : Popup
             {
                 keyValue = roulettePercent[index];
 
-                iTween.RotateTo(RoulettePanObj, iTween.Hash("z", RouletteAngle[index], "time", 1f, "easetype", iTween.EaseType.linear));
-                yield return new WaitForSeconds(1f);
+                iTween.RotateAdd(RoulettePanObj, iTween.Hash("z", 360 * 2 + RouletteAngle[index], "time", 2f, "easetype", iTween.EaseType.easeInOutQuart));
+                yield return new WaitForSeconds(2f);
 
                 break;
             }

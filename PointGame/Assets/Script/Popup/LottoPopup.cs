@@ -24,7 +24,7 @@ public class LottoPopup : Popup
 
     private void Update()
     {
-        AllPoint.text = string.Format("총 포인트 : {0:n0}", TKManager.Instance.MyData.Point);
+        AllPoint.text = string.Format("{0:n0}", TKManager.Instance.MyData.Point);
     }
 
     public override void SetData(PopupData data)
