@@ -141,37 +141,31 @@ public class FirebaseManager : MonoBehaviour
                 int tempPoint = Convert.ToInt32(tempData["Point"]);
                 TKManager.Instance.MyData.SetData(tempData["Index"].ToString(), tempData["NickName"].ToString(), tempPoint);
 
-                if(tempData.ContainsKey("LottoCount"))
+                if(tempData.ContainsKey("Lotto"))
                 {
-                    int tempLottoCount = Convert.ToInt32(tempData["LottoCount"]);
-                    if (tempLottoCount != 0)
+                    var LottoInfo = tempData["Lotto"] as Dictionary<string, object>;
+                    foreach (var pair in LottoInfo)
                     {
-                        var LottoInfo = tempData["Lotto"] as Dictionary<string, object>;
-                        foreach (var pair in LottoInfo)
-                        {
-                            string tempLottoSeries = pair.Key.Substring(0, pair.Key.IndexOf("_"));
-                            int tempLottoNumber = Convert.ToInt32(pair.Value);
-                            TKManager.Instance.MyData.SetLottoData(Convert.ToInt32(tempLottoSeries), tempLottoNumber);
-                            Debug.LogFormat("UserInfo: Index : {0} NickName {1} Point {2}", TKManager.Instance.MyData.Index, TKManager.Instance.MyData.NickName, TKManager.Instance.MyData.Point);
-                        }
+                        string tempLottoSeries = pair.Key.Substring(0, pair.Key.IndexOf("_"));
+                        int tempLottoNumber = Convert.ToInt32(pair.Value);
+                        TKManager.Instance.MyData.SetLottoData(Convert.ToInt32(tempLottoSeries), tempLottoNumber);
+                        Debug.LogFormat("UserInfo: Index : {0} NickName {1} Point {2}", TKManager.Instance.MyData.Index, TKManager.Instance.MyData.NickName, TKManager.Instance.MyData.Point);
                     }
                 }
                 
-                if(tempData.ContainsKey("GiftCount"))
-                {
-                    int tempGiftCount = Convert.ToInt32(tempData["GiftCount"]);
-                if (tempGiftCount != 0)
+
+                if(tempData.ContainsKey("Gift"))
                 {
                     var GiftInfo = tempData["Gift"] as Dictionary<string, object>;
                     foreach (var pair in GiftInfo)
                     {
                         string tempIndex = pair.Key.Substring(0, pair.Key.IndexOf("_"));
                         TKManager.Instance.MyData.SetGiftconData(Convert.ToInt32(tempIndex), pair.Value.ToString());
-                      //  Debug.LogFormat("UserInfo: Index : {0} NickName {1} Point {2}", TKManager.Instance.MyData.Index, TKManager.Instance.MyData.NickName, TKManager.Instance.MyData.Point);
+                        //  Debug.LogFormat("UserInfo: Index : {0} NickName {1} Point {2}", TKManager.Instance.MyData.Index, TKManager.Instance.MyData.NickName, TKManager.Instance.MyData.Point);
                     }
                 }
-                }
                 
+
 
                 AddFirstLoadingComplete();
 
@@ -361,8 +355,8 @@ public class FirebaseManager : MonoBehaviour
             else if (task.IsCompleted)
             {
                 DataSnapshot snapshot = task.Result;
-                LottoTodaySeries = Convert.ToInt32(snapshot.Value);
-                TKManager.Instance.SetTodayLottoSeriesMinCount(LottoTodaySeries);
+                //LottoTodaySeries = Convert.ToInt32(snapshot.Value);
+                //TKManager.Instance.SetTodayLottoSeriesMinCount(LottoTodaySeries);
             }
         }
      );
@@ -430,7 +424,7 @@ public class FirebaseManager : MonoBehaviour
     // 로또 당첨 번호 파이어베이스에서 로드
     public void GetLottoLuckyNumber()
     {
-
+        Debug.LogFormat("GetLottoLuckyNumber_1");
         mDatabaseRef.Child("LottoLuckyNumber").GetValueAsync().ContinueWith(task =>
         {
 
@@ -442,15 +436,19 @@ public class FirebaseManager : MonoBehaviour
             {
                 DataSnapshot snapshot = task.Result;
 
+                Debug.LogFormat("GetLottoLuckyNumber_2");
                 foreach (var tempChild in snapshot.Children)
                 {
+                    
                     String tempSeries = tempChild.Key;
                     int tempNumber = Convert.ToInt32(tempChild.Value.ToString());
 
                     tempSeries = tempSeries.Substring(0, tempSeries.IndexOf("_"));
                     TKManager.Instance.SetLottoLuckyNumber(Convert.ToInt32(tempSeries), tempNumber);
-                }
 
+                    Debug.LogFormat("GetLottoLuckyNumber_3 {0} {1}", Convert.ToInt32(tempSeries), tempNumber);
+                }
+                Debug.LogFormat("GetLottoLuckyNumber_4");
                 AddFirstLoadingComplete();
 
             }

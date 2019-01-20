@@ -74,7 +74,7 @@ public class UserData
     {
         Point += point;
 
-        FirebaseManager.Instance.SetPoint(point);
+        FirebaseManager.Instance.SetPoint(Point);
     }
     public void RemovePoint(int point)
     {
@@ -82,6 +82,6 @@ public class UserData
         if (Point < 0)
             Point = 0;
 
-        FirebaseManager.Instance.SetPoint(point);
+        FirebaseManager.Instance.SetPoint(Point);
     }
 }

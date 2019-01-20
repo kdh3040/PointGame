@@ -61,7 +61,8 @@ public class TKManager : MonoBehaviour
     {
         LottoSeriesCountMin = min;
         LottoSeriesCountMax = LottoSeriesCountMin + 3;
-        CurrLottoSeriesCount = LottoSeriesCountMin;
+        if(LottoLuckyNumber.Count <= 0)
+            CurrLottoSeriesCount = LottoSeriesCountMin;
     }
 
     public void SetLottoLuckyNumber(int LottoSeries, int LottoNumber)
