@@ -12,6 +12,7 @@ public class RoulettePopup : Popup
 
     private List<KeyValuePair<int, int>> RoulettePercent = new List<KeyValuePair<int, int>>();
     private List<int> RouletteAngle = new List<int>();
+    private bool RoulettePlay = false;
 
     public class RoulettePopupData : PopupData
     {
@@ -36,6 +37,7 @@ public class RoulettePopup : Popup
 
     public override void SetData(PopupData data) 
     {
+        RoulettePlay = false;
         RoulettePanObj.gameObject.transform.localRotation = Quaternion.Euler(0, 0, 0) ;
 
         RoulettePercent.Clear();
@@ -63,11 +65,15 @@ public class RoulettePopup : Popup
     }
     public void OnClickStart()
     {
+        if (RoulettePlay)
+            return;
+
         StartCoroutine(Co_Roulette());
     }
 
     IEnumerator Co_Roulette()
     {
+        RoulettePlay = true;
         iTween.RotateAdd(RoulettePanObj, iTween.Hash("z", 360 * 5, "time", 0.8f, "easetype", iTween.EaseType.linear));
         yield return new WaitForSeconds(0.8f);
 
