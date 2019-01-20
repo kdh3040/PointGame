@@ -125,6 +125,7 @@ public class GiftconPopup : Popup
                     CurrViewUrlListIndex = 0;
 
                 TKManager.Instance.MyData.DeleteGiftconData(CurrViewGiftconIndex);
+                FirebaseManager.Instance.DelGiftImage(CurrViewGiftconIndex);
                 RefreshUI();
             },
             MsgPopup.MSGPOPUP_TYPE.TWO));
