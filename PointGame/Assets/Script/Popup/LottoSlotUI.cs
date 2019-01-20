@@ -222,9 +222,8 @@ public class LottoSlotUI : MonoBehaviour {
     }
     public void OnClickLottoWin()
     {
-        ParentPopup.ShowPopup(new LottoWinPopup.LottoWinPopupData(() =>
+        ParentPopup.ShowPopup(new LottoWinPopup.LottoWinPopupData(SeriesCount, () =>
         {
-            // TODO 로또 당첨금 수령
             TKManager.Instance.MyData.LottoWinSeriesList.Add(SeriesCount, true);
             RefreshUI();
         }));
