@@ -101,6 +101,8 @@ public class LoadingUI : MonoBehaviour {
     {
         TKManager.Instance.ShowHUD();
         yield return null;
+        TKManager.Instance.LoadFile();
+        yield return null;
         FirebaseManager.Instance.GetData();
         yield return null;
 

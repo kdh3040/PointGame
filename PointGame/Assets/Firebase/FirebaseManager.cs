@@ -160,16 +160,16 @@ public class FirebaseManager : MonoBehaviour
                 if(tempData.ContainsKey("GiftCount"))
                 {
                     int tempGiftCount = Convert.ToInt32(tempData["GiftCount"]);
-                    if (tempGiftCount != 0)
+                if (tempGiftCount != 0)
+                {
+                    var GiftInfo = tempData["Gift"] as Dictionary<string, object>;
+                    foreach (var pair in GiftInfo)
                     {
-                        var GiftInfo = tempData["Gift"] as Dictionary<string, object>;
-                        foreach (var pair in GiftInfo)
-                        {
-                            string tempIndex = pair.Key.Substring(0, pair.Key.IndexOf("_"));
-                            TKManager.Instance.MyData.SetGiftconData(Convert.ToInt32(tempIndex), pair.Value.ToString());
-                            //  Debug.LogFormat("UserInfo: Index : {0} NickName {1} Point {2}", TKManager.Instance.MyData.Index, TKManager.Instance.MyData.NickName, TKManager.Instance.MyData.Point);
-                        }
+                        string tempIndex = pair.Key.Substring(0, pair.Key.IndexOf("_"));
+                        TKManager.Instance.MyData.SetGiftconData(Convert.ToInt32(tempIndex), pair.Value.ToString());
+                      //  Debug.LogFormat("UserInfo: Index : {0} NickName {1} Point {2}", TKManager.Instance.MyData.Index, TKManager.Instance.MyData.NickName, TKManager.Instance.MyData.Point);
                     }
+                }
                 }
                 
 
