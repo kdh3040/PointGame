@@ -75,6 +75,8 @@ public class GamePlayManager : MonoBehaviour {
 
     public void GameClear()
     {
+        AdsManager.Instance.ShowSkipRewardedAd();
+
         // 스테이지 클리어
         IsGameReady = true;
         IsGameStart = false;
@@ -116,6 +118,8 @@ public class GamePlayManager : MonoBehaviour {
 
     public void GameEnd()
     {
+        AdsManager.Instance.ShowSkipRewardedAd();
+
         // 스테이지 종료
         IsGameReady = false;
         IsGameStart = false;

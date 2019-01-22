@@ -90,7 +90,7 @@ public class MainUI : MonoBehaviour {
     public void OnClickFreeRoulette()
     {
         // TODO 전면광고
-        AdsManager.Instance.ShowInterstitialAds();
+        AdsManager.Instance.ShowSkipRewardedAd();
         Popup.ShowPopup(new RoulettePopup.RoulettePopupData());
     }
 

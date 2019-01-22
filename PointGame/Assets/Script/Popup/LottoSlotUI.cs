@@ -171,6 +171,8 @@ public class LottoSlotUI : MonoBehaviour {
                 }
                 else
                 {
+                    AdsManager.Instance.ShowSkipRewardedAd();
+
                     // TODO 번호 뽑기
                     TKManager.Instance.MyData.RemovePoint(CommonData.LottoNumberCost);
                     TKManager.Instance.GetLottoNumberProgress = true;
@@ -216,6 +218,8 @@ public class LottoSlotUI : MonoBehaviour {
 
     public void OnClickLottoResult()
     {
+        AdsManager.Instance.ShowRewardedAd();
+
         TKManager.Instance.MyData.LottoResultShowSeriesList.Add(SeriesCount, true);
         TKManager.Instance.SaveFile();
         RefreshUI();
