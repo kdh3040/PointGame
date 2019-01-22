@@ -186,9 +186,10 @@ public class TKManager : MonoBehaviour
         path = path.Substring(0, path.LastIndexOf('/'));
         return Path.Combine(path, filename);
 #elif UNITY_IOS
-        string path = Application.dataPath.Substring(0, Application.dataPath.Length - 5);
-        path = path.Substring(0, path.LastIndexOf('/'));
-        return Path.Combine(Path.Combine(path, "Documents"), filename);
+        return Application.persistentDataPath + "/" + filename;
+        //string path = Application.dataPath.Substring(0, Application.dataPath.Length);
+        //path = path.Substring(0, path.LastIndexOf('/'));
+        //return Path.Combine(Path.Combine(path, "Documents"), filename);
 #endif
     }
 }
