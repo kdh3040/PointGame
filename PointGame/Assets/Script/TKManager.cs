@@ -43,7 +43,7 @@ public class TKManager : MonoBehaviour
         DontDestroyOnLoad(this);
         Screen.sleepTimeout = SleepTimeout.NeverSleep;
         Application.targetFrameRate = 50;
-        Screen.SetResolution((int)Screen.safeArea.width, ((int)Screen.safeArea.width * 16) / 9, false);
+      //  Screen.SetResolution((int)Screen.safeArea.width, ((int)Screen.safeArea.width * 16) / 9, false);
     }
 
     public void init()
