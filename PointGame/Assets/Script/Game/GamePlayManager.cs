@@ -88,6 +88,13 @@ public class GamePlayManager : MonoBehaviour {
         Char.CharIdle();
     }
 
+    public void GameRestart()
+    {
+        BlockClearCount = 0;
+        StageCount = 0;
+        GameReady();
+    }
+
     IEnumerator Co_StageClearMove()
     {
         while(true)
