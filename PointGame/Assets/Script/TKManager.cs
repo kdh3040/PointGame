@@ -29,7 +29,7 @@ public class TKManager : MonoBehaviour
     // 0 베이스
     public int CurrLottoSeriesCount = 0;
     public int LottoSeriesCountMin = 0;
-    public int LottoSeriesCountMax = 0;
+    //public int LottoSeriesCountMax = 0;
 
     public LoadingHUD HUD;
     private SaveData MySaveData = new SaveData();
@@ -57,12 +57,10 @@ public class TKManager : MonoBehaviour
         LottoWinUserList.Add(new KeyValuePair<int, string>(series, nickName));
     }
 
-    public void SetTodayLottoSeriesMinCount(int min)
+    public void SetCurrentLottoSeriesCount(int count)
     {
-        LottoSeriesCountMin = min;
-        LottoSeriesCountMax = LottoSeriesCountMin + 3;
-        if(LottoLuckyNumber.Count <= 0)
-            CurrLottoSeriesCount = LottoSeriesCountMin;
+        CurrLottoSeriesCount = count;
+        LottoSeriesCountMin = CurrLottoSeriesCount - 3;
     }
 
     public void SetLottoLuckyNumber(int LottoSeries, int LottoNumber)
@@ -88,7 +86,7 @@ public class TKManager : MonoBehaviour
             return 1;
         });
 
-        CurrLottoSeriesCount = LottoLuckyNumber[LottoLuckyNumber.Count - 1].Key + 1;
+        //CurrLottoSeriesCount = LottoLuckyNumber[LottoLuckyNumber.Count - 1].Key + 1;
     }
 
     public bool IsLottoLuckyNumber(int LottoSeries)

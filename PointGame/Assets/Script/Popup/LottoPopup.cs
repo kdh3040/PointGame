@@ -31,7 +31,11 @@ public class LottoPopup : Popup
     {
         for (int i = 0; i < LottoSlotList.Count; i++)
         {
-            LottoSlotList[i].SetData(TKManager.Instance.LottoSeriesCountMin + i);
+            if(TKManager.Instance.LottoSeriesCountMin < 0)
+                LottoSlotList[i].SetData(i);
+            else
+                LottoSlotList[i].SetData(TKManager.Instance.LottoSeriesCountMin + i);
+
             LottoSlotList[i].ParentPopup = ParentPopup;
         }
     }
