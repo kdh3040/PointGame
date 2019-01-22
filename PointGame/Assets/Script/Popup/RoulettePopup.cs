@@ -77,9 +77,13 @@ public class RoulettePopup : Popup
 
 
         KeyValuePair<int, int> keyValue = new KeyValuePair<int, int>();
-        var percentValue = Random.Range(0, 101); // 100으로 하면 99까지만 나옴
-
         var roulettePercent = TKManager.Instance.RoulettePercent;
+        if (roulettePercent.Count == 0)
+            yield break;
+
+        int maxValue = roulettePercent[roulettePercent.Count - 1].Value;
+
+        var percentValue = Random.Range(0, maxValue + 1); // 100으로 하면 99까지만 나옴
 
         for (int index = 0; index < roulettePercent.Count; ++index)
         {
