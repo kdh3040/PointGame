@@ -28,6 +28,7 @@ public class GamePlayManager : MonoBehaviour {
     public GameChar Char;
     public GameUI UI;
 
+    private bool IsGameReady = false;
     private bool IsGameStart = false;
     private Vector3 BlockCharCenterPos = new Vector3(0, 1.2f, -9f);
     private int BlockCharIndex = 0;
@@ -63,12 +64,13 @@ public class GamePlayManager : MonoBehaviour {
     public void GameStart()
     {
         // 게임 화면 들어와서 시작
-        IsGameStart = true;
+        IsGameReady = true;
     }
 
     public void GameClear()
     {
         // 스테이지 클리어
+        IsGameReady = true;
         IsGameStart = false;
 
         GamePoint += GameGetPoint;
@@ -109,6 +111,7 @@ public class GamePlayManager : MonoBehaviour {
     public void GameEnd()
     {
         // 스테이지 종료
+        IsGameReady = false;
         IsGameStart = false;
         UI.GameEnd();
         Char.CharIdle();
@@ -158,9 +161,6 @@ public class GamePlayManager : MonoBehaviour {
         // 좌우 터치가 들어 왔을떄 점프 처리
         // 점프액션이 두번 들어오지 않게 막아야함
         // 화면 밖으로 나가지 못하게 해야함
-        if (IsGameStart == false)
-            return;
-
         if(IsJumping == false)
             StartCoroutine(Co_CharJump(left));
     }
@@ -221,9 +221,14 @@ public class GamePlayManager : MonoBehaviour {
             yield return null;
         }
 
+        bool charDown = false;
         if (left && BlockList[BlockCharIndex].BlockType == GameBlock.BLOCK_TYPE.RIGHT ||
             left == false && BlockList[BlockCharIndex].BlockType == GameBlock.BLOCK_TYPE.LEFT)
+        {
+            charDown = true;
             yield return Co_CharDown(left);
+        }
+            
 
         if(BlockList[BlockCharIndex].BlockType == GameBlock.BLOCK_TYPE.CLEAR)
         {
@@ -237,6 +242,11 @@ public class GamePlayManager : MonoBehaviour {
         CheckGameOver();
         CheckGameCoinGet();
         IsJumping = false;
+        if(charDown == false && IsGameReady == true)
+        {
+            IsGameReady = false;
+            IsGameStart = true;
+        }
     }
 
     IEnumerator Co_CharDown(bool left)
