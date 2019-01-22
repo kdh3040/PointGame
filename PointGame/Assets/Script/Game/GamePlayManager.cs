@@ -17,13 +17,14 @@ public class GamePlayManager : MonoBehaviour {
         }
     }
 
-    public static int GameGetPoint = 10;
-    public static int GameCoinGetPoint = 5;
+    public static int GameGetPoint = 20;
+    public static int GameCoinGetPoint = 2;
 
     public int StageCount = 1;
     public int GamePoint = 0;
-    public int BlockLimitCount = 10;
+    public int BlockLimitCount = 20;
     public int BlockCount = 0;
+    public int BlockClearCount = 0;
     public List<GameBlock> BlockList = new List<GameBlock>();
     public GameChar Char;
     public GameUI UI;
@@ -37,11 +38,16 @@ public class GamePlayManager : MonoBehaviour {
 
     private float CharDeathPosY = -8.5f;
 
+    private float BlockSpeed = 0.05f;
+    private float BlockSpeedOffset = 0.0001f;
+    private float BlockSpeedStageClearOffset = 0.005f;
+
 
     void Start()
     {
         TKManager.Instance.GameOverRouletteStart = false;
         // 게임에 들어 올때마다 생성
+        BlockClearCount = 0;
         StageCount = 0;
         GameReady();
     }
@@ -144,7 +150,7 @@ public class GamePlayManager : MonoBehaviour {
             for (int index = 0; index < BlockList.Count; ++index)
             {
                 var pos = BlockList[index].gameObject.transform.localPosition;
-                pos.y = pos.y - (0.05f + (StageCount * 0.025f));
+                pos.y = pos.y - (BlockSpeed + (BlockSpeedOffset * BlockClearCount)+ (BlockSpeedStageClearOffset * StageCount));
                 BlockList[index].gameObject.transform.localPosition = pos;
 
                 if (pos.y < -6.5f)
@@ -154,6 +160,8 @@ public class GamePlayManager : MonoBehaviour {
             if (Char.gameObject.transform.TransformPoint(Vector3.zero).y < CharDeathPosY)
                 GameEnd();
         }
+
+        Debug.LogFormat("{0} {1} {2} {3}", BlockSpeed, BlockSpeedOffset, (BlockSpeedStageClearOffset * StageCount), (BlockSpeed + BlockSpeedOffset + (BlockSpeedStageClearOffset * StageCount)));
     }
 
     public void CharJump(bool left)
@@ -247,6 +255,9 @@ public class GamePlayManager : MonoBehaviour {
             IsGameReady = false;
             IsGameStart = true;
         }
+
+        if (charDown == false)
+            BlockClearCount++;
     }
 
     IEnumerator Co_CharDown(bool left)
