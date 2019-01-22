@@ -18,6 +18,9 @@ public class LoadingUI : MonoBehaviour {
         TKManager.Instance.init();
 
         TKManager.Instance.ShowHUD();
+
+        TKManager.Instance.LoadFile();
+#if (UNITY_ANDROID && !UNITY_EDITOR)
         SignUpPopupObj.gameObject.SetActive(false);
         if (FirebaseManager.Instance.SingedInFirebase())
         {
@@ -30,6 +33,24 @@ public class LoadingUI : MonoBehaviour {
             StartCoroutine(Co_Login());
             SignUpAnonymously();
         }
+#elif (UNITY_ANDROID && UNITY_EDITOR) || UNITY_IOS
+        SignUpPopupObj.gameObject.SetActive(false);
+        if (TKManager.Instance.FirebaseUserId != string.Empty)
+        {
+            StartCoroutine(LoadingData());
+        }
+        else
+        {
+            GetLoginProgress = true;
+
+            StartCoroutine(Co_Login());
+            SignUpAnonymously();
+        }
+#endif
+
+
+
+
     }
 
 
@@ -48,6 +69,11 @@ public class LoadingUI : MonoBehaviour {
             }
 
             Firebase.Auth.FirebaseUser newUser = task.Result;
+
+#if UNITY_IOS || UNITY_EDITOR
+            TKManager.Instance.FirebaseUserId = newUser.UserId;
+            TKManager.Instance.SaveFile();
+#endif
             Debug.LogFormat("User signed in successfully: {0} ({1})",
                 newUser.DisplayName, newUser.UserId);
 

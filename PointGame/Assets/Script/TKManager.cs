@@ -35,12 +35,11 @@ public class TKManager : MonoBehaviour
     private SaveData MySaveData = new SaveData();
 
     public bool GetLottoNumberProgress = false;
-    
+
+    public string FirebaseUserId = "";
 
     void Start()
     {
-        MyData = new UserData();
-        
         DontDestroyOnLoad(this);
         Screen.sleepTimeout = SleepTimeout.NeverSleep;
         Application.targetFrameRate = 50;
@@ -49,7 +48,7 @@ public class TKManager : MonoBehaviour
 
     public void init()
     {
-
+        MyData = new UserData();
     }
 
     public void SetLottoWinUserData(int series, string nickName)
@@ -131,17 +130,25 @@ public class TKManager : MonoBehaviour
     {
         public string UserIndex = "";
         public Dictionary<int, bool> LottoResultShowSeriesList = new Dictionary<int, bool>();
+        public string FirebaseUserId = "";
 
         public void Save()
         {
             LottoResultShowSeriesList = TKManager.Instance.MyData.LottoResultShowSeriesList;
             UserIndex = TKManager.Instance.MyData.Index;
+            FirebaseUserId = TKManager.Instance.FirebaseUserId;
         }
 
         public void Load()
         {
-            TKManager.Instance.MyData.LottoResultShowSeriesList = LottoResultShowSeriesList;
-            TKManager.Instance.MyData.SetUserIndex(UserIndex);
+            if(LottoResultShowSeriesList != null)
+                TKManager.Instance.MyData.LottoResultShowSeriesList = LottoResultShowSeriesList;
+
+            if(UserIndex != null)
+                TKManager.Instance.MyData.SetUserIndex(UserIndex);
+
+            if(FirebaseUserId != null)
+                TKManager.Instance.FirebaseUserId = FirebaseUserId;
         }
     }
 
