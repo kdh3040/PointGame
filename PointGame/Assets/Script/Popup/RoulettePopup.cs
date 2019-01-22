@@ -83,6 +83,9 @@ public class RoulettePopup : Popup
 
         for (int index = 0; index < roulettePercent.Count; ++index)
         {
+            if (roulettePercent[index].Value <= 0)
+                continue;
+
             if ((index == 0 && roulettePercent[index].Value >= percentValue) ||
                 (index > 0 && roulettePercent[index - 1].Value < percentValue && roulettePercent[index].Value >= percentValue))
             {
