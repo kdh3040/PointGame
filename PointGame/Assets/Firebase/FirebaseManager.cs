@@ -417,7 +417,7 @@ public class FirebaseManager : MonoBehaviour
             {
                 DataSnapshot snapshot = task.Result;
                 LottoCurSeries = Convert.ToInt32(snapshot.Value);
-
+                TKManager.Instance.CurrLottoSeriesCount = LottoCurSeries;
                 AddFirstLoadingComplete();
             }
         }
@@ -448,7 +448,9 @@ public class FirebaseManager : MonoBehaviour
     public void GetLottoLuckyNumber()
     {
         Debug.LogFormat("GetLottoLuckyNumber_1");
-        mDatabaseRef.Child("LottoLuckyNumber").GetValueAsync().ContinueWith(task =>
+        mDatabaseRef.Child("LottoLuckyNumber").OrderByKey().LimitToLast(3)
+       .GetValueAsync().ContinueWith(task => 
+       
         {
 
             if (task.IsFaulted)
