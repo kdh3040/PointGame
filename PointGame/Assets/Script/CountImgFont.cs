@@ -48,7 +48,8 @@ public class CountImgFont : MonoBehaviour {
             char oneStr = countSrt[i];
             string imgfileName = "";
             if (oneStr == ',')
-                imgfileName = string.Format(formString, 'p');
+                continue;
+            //imgfileName = string.Format(formString, 'p');
             else if (oneStr == 's')
                 imgfileName = "str_stage";
             else

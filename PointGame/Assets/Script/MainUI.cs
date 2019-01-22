@@ -96,7 +96,7 @@ public class MainUI : MonoBehaviour {
 
     private void Update()
     {
-        AllPoint.SetValue(string.Format("{0:n0}", TKManager.Instance.MyData.Point), CountImgFont.IMG_RANGE.LEFT, CountImgFont.IMG_TYPE.YELLOW);
+        AllPoint.SetValue(string.Format("{0}", TKManager.Instance.MyData.Point), CountImgFont.IMG_RANGE.LEFT, CountImgFont.IMG_TYPE.YELLOW);
     }
 
 

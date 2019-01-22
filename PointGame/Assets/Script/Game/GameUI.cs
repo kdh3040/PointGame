@@ -19,6 +19,7 @@ public class GameUI : MonoBehaviour {
     public GameObject GameOverPopupObj;
     public Text GameOverGetPoint;
     public Button GameOverRouletteButton;
+    public Button GameOverRestartButton;
 
     public GameObject GameClearObj;
     public Button GameClearButton;
@@ -34,6 +35,7 @@ public class GameUI : MonoBehaviour {
         GameStartButton.onClick.AddListener(OnClickGameStart);
         GameClearButton.onClick.AddListener(OnClickGameClear);
         GameOverRouletteButton.onClick.AddListener(OnClickRoulette);
+        GameOverRestartButton.onClick.AddListener(OnClickGameRestart);
     }
 
     public void ResetUI()
@@ -88,7 +90,7 @@ public class GameUI : MonoBehaviour {
     public void UpdateGameInfo()
     {
         GameInfoStageCount.SetValue(string.Format("s{0}", GamePlayManager.Instance.StageCount), CountImgFont.IMG_RANGE.RIGHT, CountImgFont.IMG_TYPE.YELLOW);
-        GamePoint.SetValue(string.Format("{0:n0}", GamePlayManager.Instance.GamePoint), CountImgFont.IMG_RANGE.LEFT, CountImgFont.IMG_TYPE.YELLOW);
+        GamePoint.SetValue(string.Format("{0}", GamePlayManager.Instance.GamePoint), CountImgFont.IMG_RANGE.LEFT, CountImgFont.IMG_TYPE.YELLOW);
     }
 
     private void OnClickLeftJump()
@@ -112,6 +114,11 @@ public class GameUI : MonoBehaviour {
         TKManager.Instance.MyData.AddPoint(GamePlayManager.Instance.GamePoint);
         TKManager.Instance.GameOverRouletteStart = true;
         SceneManager.LoadScene("MainScene", LoadSceneMode.Single);
+    }
+
+    private void OnClickGameRestart()
+    {
+        GamePlayManager.Instance.GameRestart();
     }
 
     private void OnClickGameClear()
