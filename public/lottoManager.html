@@ -47,12 +47,12 @@
   <div class="container" id="CONTENTS">
     <!-- 핵심 -->
     <h3 class="indigo-text center">:+: 복권 당첨자 내역 :+:</h3>
-<!--
+
     <div class="row center">
       <button id="BTN_SELECT_LUCKY" type="button" class="btn white indigo-text">당첨 번호 추첨</button>
       <button id="BTN_TEST_CREATE" type="button" class="btn white indigo-text">번호 생성</button>
     </div>
--->
+
     <div class="row z-depth-1">
       <div class="col l12 m12 s12">
         <p>
@@ -114,39 +114,25 @@
   };
   firebase.initializeApp(config);
 
-    $("#PROGRESS").show();
 
-      var Lottocount;
-      firebase.database().ref('/LottoCount').once('value', function(snapshot) {
-        var message = snapshot.val();
-        Lottocount = message;
-        console.log(Lottocount);
-      });
+  var LottoRefNumber;
+  var Lottocount;
+  var arrLottoUser = {}//new Array();
+  var arrLottoUserKey = new Array();
+  var LottoCurSeries;
+  var LottoTodaySeries;
 
-      firebase.database().ref('/Lotto/2_L').once('value', function(snapshot) {
-        var message = snapshot.val();
-        console.log(snapshot);
+  function SetLottoUserData()
+  {
 
-
-      });
-
-	  var LottoRefNumber;
-	  firebase.database().ref('/LottoRefNumber').once('value', function(snapshot) {
-        var message = snapshot.val();
-        LottoRefNumber = message;
-        console.log(LottoRefNumber);
-      });
-
-      var arrLottoUser = {}//new Array();
-      var arrLottoUserKey = new Array();
-
-      var LottoCurSeries;
+    firebase.database().ref('/LottoCount').once('value', function(snapshot) {
+      var message = snapshot.val();
+      Lottocount = message;
 
       firebase.database().ref('/LottoCurSeries').once('value', function(snapshot) {
         var message = snapshot.val();
         LottoCurSeries = message;
-
-        LottoCurSeries = 2;
+        LottoCurSeries = 7;
         console.log('/Lotto/'+LottoCurSeries+'_L');
 
         var tempIdx = 0;
@@ -158,6 +144,26 @@
             arrLottoUserKey[tempIdx] = data.key;
             tempIdx++;
             console.log(arrLottoUserKey);
+            console.log(Lottocount + '___' + arrLottoUserKey.length);
+            if( Lottocount == arrLottoUserKey.length)
+            {
+              var result = Math.floor(Math.random() * arrLottoUserKey.length);
+              console.log(result);
+              result = arrLottoUserKey[result];
+
+              console.log(result);
+
+              firebase.database().ref('/LottoLuckyNumber/'+LottoCurSeries+'_L').set(arrLottoUser[result])
+              firebase.database().ref('/LottoLuckyGroup/'+LottoCurSeries+'_L').set(result)
+
+              var LottoRandNumber = Math.floor(Math.random() * 100) + 1;
+              firebase.database().ref('/LottoRefNumber').set(LottoRandNumber)
+
+              firebase.database().ref('/Lotto/'+LottoCurSeries+'_L').remove();
+              LottoCurSeries += 1;
+              firebase.database().ref('/LottoCurSeries').set(LottoCurSeries)
+              firebase.database().ref('/LottoCount').set(0)
+            }
 
             $("#LOTTO_GROUP").text(data.val());
           })
@@ -165,26 +171,61 @@
 
         console.log(LottoCurSeries);
       });
+  });
 
-      var LottoTodaySeries;
+  }
+
+    function SetData(Index, data)
+    {
+    var my_tbody = document.getElementById('my-tbody');
+    // var row = my_tbody.insertRow(0); // 상단에 추가
+    var row = my_tbody.insertRow( my_tbody.rows.length ); // 하단에 추가
+    var cell1 = row.insertCell(0);
+    var cell2 = row.insertCell(1);
+    var cell3 = row.insertCell(2);
+    cell1.innerHTML = Index;
+    cell2.innerHTML = data.val();
+    cell3.innerHTML = '지급';
+    }
+
+
+  function SetLottoRefData()
+  {
+    firebase.database().ref('/LottoRefNumber').once('value', function(snapshot) {
+        var message = snapshot.val();
+        LottoRefNumber = message;
+        console.log(LottoRefNumber);
+      });
+  }
+
+  function SetLottoLuckyGroup()
+  {
+    firebase.database().ref('/LottoRefNumber').once('value', function(snapshot) {
+        var message = snapshot.val();
+        LottoRefNumber = message;
+        console.log(LottoRefNumber);
+      });
+  }
+
+
+
+
+      firebase.database().ref('/Lotto/2_L').once('value', function(snapshot) {
+        var message = snapshot.val();
+        console.log(snapshot);
+      });
+
+      $("#PROGRESS").show();
+
+
       firebase.database().ref('/LottoTodaySeries').once('value', function(snapshot) {
         var message = snapshot.val();
         LottoTodaySeries = message;
         console.log(LottoTodaySeries);
       });
 
-function SetData(Index, data)
-{
-  var my_tbody = document.getElementById('my-tbody');
-  // var row = my_tbody.insertRow(0); // 상단에 추가
-  var row = my_tbody.insertRow( my_tbody.rows.length ); // 하단에 추가
-  var cell1 = row.insertCell(0);
-  var cell2 = row.insertCell(1);
-  var cell3 = row.insertCell(2);
-  cell1.innerHTML = Index;
-  cell2.innerHTML = data.val();
-  cell3.innerHTML = '지급';
-}
+      //SetLottoUserData();
+
 
 
                 var tempIdx = 0;
@@ -202,6 +243,8 @@ function SetData(Index, data)
                       console.log(data.key);
                       console.log(data.val());
 
+    
+
                       /*
                       var my_tbody = document.getElementById('my-tbody');
                       // var row = my_tbody.insertRow(0); // 상단에 추가
@@ -218,22 +261,7 @@ function SetData(Index, data)
 
 
     $("#BTN_SELECT_LUCKY").click(function() {
-      var result = Math.floor(Math.random() * arrLottoUserKey.length) + 1;
-      result = arrLottoUserKey[result];
-
-    //  document.write(result);
-      $("#LOTTO_GROUP").text(arrLottoUser[result]);
-       console.log(result);
-
-   firebase.database().ref('/LottoLuckyNumber/'+LottoCurSeries+'_L').set(arrLottoUser[result])
-   firebase.database().ref('/LottoLuckyGroup/'+LottoCurSeries+'_L').set(result)
-
-   var LottoRandNumber = Math.floor(Math.random() * 100) + 1;
-   firebase.database().ref('/LottoRefNumber').set(LottoRandNumber)
-
-   firebase.database().ref('/Lotto/'+LottoCurSeries+'_L').remove();
-   LottoCurSeries += 1;
-   firebase.database().ref('/LottoCurSeries').set(LottoCurSeries)
+       SetLottoUserData();
     });
 
 
@@ -249,7 +277,7 @@ function SetData(Index, data)
     });
 
 
-    var arrLottoSelectTime = ['00:00:00', '09:00:00', '12:00:00', '15:00:00', '18:00:00'];
+    var arrLottoSelectTime = ['09:00:00', '12:00:00', '15:00:00', '18:00:00'];
 
 
 
@@ -259,58 +287,27 @@ function SetData(Index, data)
                 + this.getSeconds().to2();
      }
 
-     function ResetLotto(){
-            LottoTodaySeries += 4;
-            firebase.database().ref('/LottoTodaySeries').set(LottoTodaySeries)
-     }
-
-
-
      function GetLotto(){
              console.log('지금 시각 : ' + (new Date()).getHMS() );
             //arrLottoUserKey = object.keys(arrLottoUser);
 
-             var result = Math.floor(Math.random() * arrLottoUserKey.length) + 1;
-             result = arrLottoUserKey[result];
 
-           //  document.write(result);
-             $("#LOTTO_GROUP").text(arrLottoUser[result]);
-              console.log(result);
-
-          firebase.database().ref('/LottoLuckyNumber/'+LottoCurSeries+'_L').set(arrLottoUser[result])
-          firebase.database().ref('/LottoLuckyGroup/'+LottoCurSeries+'_L/'+result).set(arrLottoUser[result])
-
-          var LottoRandNumber = Math.floor(Math.random() * 100) + 1;
-          firebase.database().ref('/LottoRefNumber').set(LottoRandNumber)
-
-          firebase.database().ref('/Lotto/'+LottoCurSeries+'_L').remove();
-          LottoCurSeries += 1;
-          firebase.database().ref('/LottoCurSeries').set(LottoCurSeries)
      }
 
      function GetTime(){
      //        var 자정='00:00:00';
            var time ='16:01:00';
 
-           if((new Date()).getHMS() == arrLottoSelectTime[0])
-           {
-               ResetLotto();
-           }
-
-           else {
-             for(var i=1; i<arrLottoSelectTime.length; i++) {
-              //console.log(arrLottoSelectTime[i]);
-
+             for(var i=0; i<arrLottoSelectTime.length; i++) {              //console.log(arrLottoSelectTime[i]);
               if((new Date()).getHMS() == arrLottoSelectTime[i])
               {
-                  GetLotto();
+                   SetLottoUserData();
               }
-             }
            }
-
 
           window.setTimeout(GetTime,1000); // 1초마다 반복
      }
+
      GetTime();
 
 
