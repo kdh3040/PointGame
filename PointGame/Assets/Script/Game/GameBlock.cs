@@ -34,10 +34,10 @@ public class GameBlock : MonoBehaviour
 
     private void Start()
     {
-        iTween.MoveTo(LeftSaw, iTween.Hash("position", new Vector3(1.7f, 1f, 4), "islocal", true, "movetopath", false, "looptype", iTween.LoopType.pingPong, "easetype", iTween.EaseType.easeInOutQuad));
+        iTween.MoveTo(LeftSaw, iTween.Hash("position", new Vector3(1.7f, 1.39f, 4), "islocal", true, "movetopath", false, "looptype", iTween.LoopType.pingPong, "easetype", iTween.EaseType.easeInOutQuad));
         iTween.RotateTo(LeftSawImg, iTween.Hash("z", -180f, "looptype", iTween.LoopType.loop, "easetype", iTween.EaseType.linear));
         
-        iTween.MoveTo(RightSaw, iTween.Hash("position", new Vector3(-1.7f, 1f, 4), "islocal", true, "movetopath", false, "looptype", iTween.LoopType.pingPong, "easetype", iTween.EaseType.easeInOutQuad));
+        iTween.MoveTo(RightSaw, iTween.Hash("position", new Vector3(-1.7f, 1.39f, 4), "islocal", true, "movetopath", false, "looptype", iTween.LoopType.pingPong, "easetype", iTween.EaseType.easeInOutQuad));
         iTween.RotateTo(RightSawImg, iTween.Hash("z", -180f, "looptype", iTween.LoopType.loop, "easetype", iTween.EaseType.linear));
     }
 
@@ -52,9 +52,9 @@ public class GameBlock : MonoBehaviour
         RightSaw.SetActive(false);
         SafeBlock.SetActive(false);
         LeftCoin.SetActive(false);
-        LeftCoin.gameObject.transform.localPosition = new Vector3(0, 0, 4);
+        LeftCoin.gameObject.transform.localPosition = new Vector3(0, 0.32f, 4);
         RightCoin.SetActive(false);
-        RightCoin.gameObject.transform.localPosition = new Vector3(0, 0, 4);
+        RightCoin.gameObject.transform.localPosition = new Vector3(0, 0.32f, 4);
 
         var coinEnable = Random.Range(1, 100) <= 20;
 
