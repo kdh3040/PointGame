@@ -90,7 +90,7 @@ public class GameUI : MonoBehaviour {
     public void UpdateGameInfo()
     {
         GameInfoStageCount.SetValue(string.Format("s{0}", GamePlayManager.Instance.StageCount), CountImgFont.IMG_RANGE.RIGHT, CountImgFont.IMG_TYPE.YELLOW);
-        GamePoint.SetValue(string.Format("{0:n0}", GamePlayManager.Instance.GamePoint), CountImgFont.IMG_RANGE.LEFT, CountImgFont.IMG_TYPE.YELLOW);
+        GamePoint.SetValue(string.Format("{0}", GamePlayManager.Instance.GamePoint), CountImgFont.IMG_RANGE.LEFT, CountImgFont.IMG_TYPE.YELLOW);
     }
 
     private void OnClickLeftJump()

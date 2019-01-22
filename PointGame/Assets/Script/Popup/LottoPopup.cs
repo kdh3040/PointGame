@@ -24,7 +24,7 @@ public class LottoPopup : Popup
 
     private void Update()
     {
-        AllPoint.SetValue(string.Format("{0:n0}", TKManager.Instance.MyData.Point), CountImgFont.IMG_RANGE.LEFT, CountImgFont.IMG_TYPE.YELLOW);
+        AllPoint.SetValue(string.Format("{0}", TKManager.Instance.MyData.Point), CountImgFont.IMG_RANGE.LEFT, CountImgFont.IMG_TYPE.YELLOW);
     }
 
     public override void SetData(PopupData data)
