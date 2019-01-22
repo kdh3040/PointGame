@@ -14,6 +14,9 @@ public class MainUI : MonoBehaviour {
 
     public Button GamePlayButton;
     public Button GiftBoxButton;
+    public GameObject GiftBoxNotiObj;
+    public Text GiftBoxCountText;
+    private int GiftconCount;
     public Button LottoButton;
     public Button FreeRoulette;
 
@@ -47,6 +50,8 @@ public class MainUI : MonoBehaviour {
         if (TKManager.Instance.GameOverRouletteStart)
             StartCoroutine(Co_GameOverRouletteStart());
 
+        GiftconCount = -1;
+
     }
 
     IEnumerator Co_GameOverRouletteStart()
@@ -72,13 +77,11 @@ public class MainUI : MonoBehaviour {
 
     public void OnClickGamePlay()
     {
-    
         SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
     }
 
     public void OnClickGiftBox()
     {
-       
         Popup.ShowPopup(new GiftconPopup.GiftconPopupData());
     }
 
@@ -97,6 +100,13 @@ public class MainUI : MonoBehaviour {
     private void Update()
     {
         AllPoint.SetValue(string.Format("{0}", TKManager.Instance.MyData.Point), CountImgFont.IMG_RANGE.LEFT, CountImgFont.IMG_TYPE.YELLOW);
+
+        if(GiftconCount != TKManager.Instance.MyData.GiftconURLList.Count)
+        {
+            GiftconCount = TKManager.Instance.MyData.GiftconURLList.Count;
+            GiftBoxNotiObj.SetActive(GiftconCount > 0);
+            GiftBoxCountText.text = string.Format("{0}", GiftconCount);
+        }
     }
 
 

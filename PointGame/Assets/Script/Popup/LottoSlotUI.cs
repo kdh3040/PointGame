@@ -162,7 +162,7 @@ public class LottoSlotUI : MonoBehaviour {
     public void OnClickNumberPick()
     {
 
-        ParentPopup.ShowPopup(new MsgPopup.MsgPopupData(string.Format("{0:n0}포인트로 번호을 뽑으시겠습니까?", CommonData.LottoNumberCost),
+        ParentPopup.ShowPopup(new LottoMsgPopup.LottoMsgPopupData(string.Format("{0:n0}포인트로 번호을 뽑으시겠습니까?", CommonData.LottoNumberCost),
             () =>
             {
                 if(TKManager.Instance.MyData.Point < CommonData.LottoNumberCost)
@@ -180,8 +180,7 @@ public class LottoSlotUI : MonoBehaviour {
                     FirebaseManager.Instance.SetLottoNumber();
                     
                 }
-            },
-            MsgPopup.MSGPOPUP_TYPE.TWO));
+            }));
         
     }
 

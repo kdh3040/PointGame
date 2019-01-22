@@ -59,7 +59,7 @@ public class FirebaseManager : MonoBehaviour
         GetUserData();
 
         GetLottoRefNumber();
-        GetLottoTodaySeries();
+        //GetLottoTodaySeries();
         GetLottoCurSeries();
         GetLottoLuckyNumber();
         GetLottoLuckGroup();
@@ -74,7 +74,7 @@ public class FirebaseManager : MonoBehaviour
         if (FirstLoadingComplete == false)
             LoadingCount++;
 
-        if (LoadingCount == 7)
+        if (LoadingCount == 6)
             FirstLoadingComplete = true;
     }
 
@@ -385,25 +385,25 @@ public class FirebaseManager : MonoBehaviour
      );
 
     }
-    public void GetLottoTodaySeries()
-    {
-        mDatabaseRef.Child("LottoTodaySeries").GetValueAsync().ContinueWith(task =>
-        {
-            if (task.IsFaulted)
-            {
-                // Handle the error...
-            }
-            else if (task.IsCompleted)
-            {
-                DataSnapshot snapshot = task.Result;
-                LottoTodaySeries = Convert.ToInt32(snapshot.Value);
-                TKManager.Instance.SetTodayLottoSeriesMinCount(LottoTodaySeries);
+    //public void GetLottoTodaySeries()
+    //{
+    //    mDatabaseRef.Child("LottoTodaySeries").GetValueAsync().ContinueWith(task =>
+    //    {
+    //        if (task.IsFaulted)
+    //        {
+    //            // Handle the error...
+    //        }
+    //        else if (task.IsCompleted)
+    //        {
+    //            DataSnapshot snapshot = task.Result;
+    //            LottoTodaySeries = Convert.ToInt32(snapshot.Value);
+    //            //TKManager.Instance.SetTodayLottoSeriesMinCount(LottoTodaySeries);
 
-                AddFirstLoadingComplete();
-            }
-        }
-     );
-    }
+    //            AddFirstLoadingComplete();
+    //        }
+    //    }
+    // );
+    //}
 
     public void GetLottoCurSeries()
     {
@@ -417,7 +417,7 @@ public class FirebaseManager : MonoBehaviour
             {
                 DataSnapshot snapshot = task.Result;
                 LottoCurSeries = Convert.ToInt32(snapshot.Value);
-                TKManager.Instance.CurrLottoSeriesCount = LottoCurSeries;
+                TKManager.Instance.SetCurrentLottoSeriesCount(LottoCurSeries);
                 AddFirstLoadingComplete();
             }
         }

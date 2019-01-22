@@ -31,7 +31,7 @@ public class GamePlayManager : MonoBehaviour {
 
     private bool IsGameReady = false;
     private bool IsGameStart = false;
-    private Vector3 BlockCharCenterPos = new Vector3(0, 1.2f, -9f);
+    private Vector3 BlockCharCenterPos = new Vector3(0, 1.39f, -9f);
     private int BlockCharIndex = 0;
     private bool LastJumpLeft = true;
     private bool IsJumping = false;
