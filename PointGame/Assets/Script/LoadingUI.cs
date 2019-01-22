@@ -69,6 +69,8 @@ public class LoadingUI : MonoBehaviour {
             }
 
             Firebase.Auth.FirebaseUser newUser = task.Result;
+            FirebaseManager.Instance.TokenRefresh(newUser);
+
 
 #if UNITY_IOS || UNITY_EDITOR
             TKManager.Instance.FirebaseUserId = newUser.UserId;

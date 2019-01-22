@@ -67,15 +67,12 @@
       <thead>
         <th>회차</th>
         <th>당첨자</th>
+        <th>계좌 정보</th>
         <th>지급 유무</th>
       </thead>
       <tbody id="my-tbody"></tbody>
     </table>
   </div>
-
-
-
-
 
 
   <!--Import jQuery before materialize.js-->
@@ -98,6 +95,7 @@
   <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase-database.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase-messaging.js"></script>
 
 
 
@@ -114,6 +112,18 @@
   };
   firebase.initializeApp(config);
 
+  const messaging = firebase.messaging();
+  messaging.usePublicVapidKey("BKuiXbk64s3EcAdhlHDB6Fk_wXjOROxtakt-LXxqTjdnNTA1YxTaToR3sVymbAKpAgJcbbnY-VnTUnqO_kzEKP0");
+/*
+  messaging.requestPermission().then(function() {
+    console.log('Notification permission granted.');
+    return messaging.getToken();
+    // TODO(developer): Retrieve an Instance ID token for use with FCM.
+    // ...
+  }).catch(function(err) {
+    console.log('Unable to get permission to notify.', err);
+  });
+*/
 
   var LottoRefNumber;
   var Lottocount;
@@ -132,7 +142,7 @@
       firebase.database().ref('/LottoCurSeries').once('value', function(snapshot) {
         var message = snapshot.val();
         LottoCurSeries = message;
-        LottoCurSeries = 7;
+      //  LottoCurSeries = 7;
         console.log('/Lotto/'+LottoCurSeries+'_L');
 
         var tempIdx = 0;
@@ -145,7 +155,7 @@
             tempIdx++;
             console.log(arrLottoUserKey);
             console.log(Lottocount + '___' + arrLottoUserKey.length);
-            if( Lottocount == arrLottoUserKey.length)
+            if( Lottocount == arrLottoUserKey.length +1)
             {
               var result = Math.floor(Math.random() * arrLottoUserKey.length);
               console.log(result);
@@ -162,7 +172,7 @@
               firebase.database().ref('/Lotto/'+LottoCurSeries+'_L').remove();
               LottoCurSeries += 1;
               firebase.database().ref('/LottoCurSeries').set(LottoCurSeries)
-              firebase.database().ref('/LottoCount').set(0)
+              firebase.database().ref('/LottoCount').set(1)
             }
 
             $("#LOTTO_GROUP").text(data.val());
@@ -175,6 +185,26 @@
 
   }
 
+  function addItem() {
+        var lo_table = document.getElementById("TblAttach");
+        var row_index = lo_table.rows.length;      // 테이블(TR) row 개수
+        newTr = lo_table.insertRow(row_index);
+        newTr.idName = "newTr" + row_index;
+
+        newTd=newTr.insertCell(0);
+        newTd.innerHTML= "첨부파일#"+row_index;
+
+        newTd=newTr.insertCell(1);
+        newTd.align = "center";
+        newTd.innerHTML= "<input type=text name=subject align=absmiddle >";
+  }
+  function delItem(){
+        var lo_table = document.getElementById("TblAttach");
+        var row_index = lo_table.rows.length-1;      // 테이블(TR) row 개수
+
+        if(row_index > 0) lo_table.deleteRow(row_index);
+  }
+
     function SetData(Index, data)
     {
     var my_tbody = document.getElementById('my-tbody');
@@ -183,9 +213,11 @@
     var cell1 = row.insertCell(0);
     var cell2 = row.insertCell(1);
     var cell3 = row.insertCell(2);
+    var cell4 = row.insertCell(3);
     cell1.innerHTML = Index;
     cell2.innerHTML = data.val();
     cell3.innerHTML = '지급';
+    cell4.innerHTML = '지급';
     }
 
 
@@ -237,26 +269,21 @@
                   });
 
                   var tempWinIndex = 0;
+                  var arrLottoWinUser = new Array();
+                  var arrLottoWinUserKey = new Array();
+
                     var dbTestRef = firebase.database().ref('/LottoWinUsers')
                     dbTestRef.on('child_added', function(data){
 
                       console.log(data.key);
                       console.log(data.val());
 
-    
-
-                      /*
-                      var my_tbody = document.getElementById('my-tbody');
-                      // var row = my_tbody.insertRow(0); // 상단에 추가
-                      var row = my_tbody.insertRow( my_tbody.rows.length ); // 하단에 추가
-                      var cell1 = row.insertCell(0);
-                      var cell2 = row.insertCell(1);
-                      var cell3 = row.insertCell(2);
-                      cell1.innerHTML = tempWinIndex;
-                      cell2.innerHTML =  data.val();
-                      cell3.innerHTML = data.val();
+                      arrLottoWinUserKey[tempWinIndex] = data.key;
+                      arrLottoWinUser[tempWinIndex] = data.val();
                       tempWinIndex++;
-                      */
+                      console.log(arrLottoWinUserKey);
+                      console.log(arrLottoWinUser);
+
                     });
 
 
@@ -277,7 +304,7 @@
     });
 
 
-    var arrLottoSelectTime = ['09:00:00', '12:00:00', '15:00:00', '18:00:00'];
+    var arrLottoSelectTime = ['09:00:00', '12:00:00', '15:00:00', '18:02:00'];
 
 
 

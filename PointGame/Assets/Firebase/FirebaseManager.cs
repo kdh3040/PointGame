@@ -52,6 +52,42 @@ public class FirebaseManager : MonoBehaviour
         FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://pointgame-2177a.firebaseio.com/");
         auth = Firebase.Auth.FirebaseAuth.DefaultInstance;
         mDatabaseRef = FirebaseDatabase.DefaultInstance.RootReference;
+
+        Firebase.Messaging.FirebaseMessaging.TokenReceived += OnTokenReceived;
+        Firebase.Messaging.FirebaseMessaging.MessageReceived += OnMessageReceived;
+    }
+
+    public void TokenRefresh(Firebase.Auth.FirebaseUser user)
+    {
+
+        user.TokenAsync(true).ContinueWith(task => {
+            if (task.IsCanceled)
+            {
+                Debug.Log("!!!!! TokenAsync was canceled.");
+                return;
+            }
+
+            if (task.IsFaulted)
+            {
+                Debug.Log("!!!!! TokenAsync encountered an error: " + task.Exception);
+                return;
+            }
+
+            string idToken = task.Result;
+
+            Debug.Log("!!!!! Token: " + idToken);
+        });
+
+    }
+
+    public void OnTokenReceived(object sender, Firebase.Messaging.TokenReceivedEventArgs token)
+    {
+        UnityEngine.Debug.Log("Received Registration Token: " + token.Token);
+    }
+
+    public void OnMessageReceived(object sender, Firebase.Messaging.MessageReceivedEventArgs e)
+    {
+        UnityEngine.Debug.Log("Received a new message from: " + e.Message.From);
     }
 
     public void GetData()
@@ -84,6 +120,7 @@ public class FirebaseManager : MonoBehaviour
         if (auth.CurrentUser != null)
         {
             user = auth.CurrentUser;
+            TokenRefresh(user);
             return true;
         }
 
