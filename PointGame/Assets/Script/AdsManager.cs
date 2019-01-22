@@ -28,6 +28,7 @@ public class AdsManager : MonoBehaviour {
 
     private const string rewarded_video_id = "rewardedVideo";
     private const string Skip_rewarded_video_id = "SkipAds";
+    private const string Lotto_rewarded_video_id = "LottoAds";
 
 
     public void Start()
@@ -146,6 +147,51 @@ public class AdsManager : MonoBehaviour {
                     Debug.Log("The ad was successfully shown.");
 
                     TKManager.Instance.MyData.AddPoint(CommonData.AdsPointReward);
+                    // to do ...
+                    // 광고 시청이 완료되었을 때 처리
+
+                    break;
+                }
+            case ShowResult.Skipped:
+                {
+                    Debug.Log("The ad was skipped before reaching the end.");
+
+                    // to do ...
+                    // 광고가 스킵되었을 때 처리
+
+                    break;
+                }
+            case ShowResult.Failed:
+                {
+                    Debug.LogError("The ad failed to be shown.");
+
+                    // to do ...
+                    // 광고 시청에 실패했을 때 처리
+
+                    break;
+                }
+        }
+    }
+
+
+    public void ShowLottoRewardedAd()
+    {
+        if (Advertisement.IsReady(Lotto_rewarded_video_id))
+        {
+            var options = new ShowOptions { resultCallback = HandleShowLottoRewardVideoResult };
+            Advertisement.Show(Lotto_rewarded_video_id, options);
+        }
+    }
+
+    private void HandleShowLottoRewardVideoResult(ShowResult result)
+    {
+        switch (result)
+        {
+            case ShowResult.Finished:
+                {
+                    Debug.Log("The ad was successfully shown.");
+
+                    //TKManager.Instance.MyData.AddPoint(CommonData.AdsPointReward);
                     // to do ...
                     // 광고 시청이 완료되었을 때 처리
 

@@ -217,7 +217,7 @@ public class LottoSlotUI : MonoBehaviour {
 
     public void OnClickLottoResult()
     {
-        AdsManager.Instance.ShowRewardedAd();
+        AdsManager.Instance.ShowLottoRewardedAd();
 
         TKManager.Instance.MyData.LottoResultShowSeriesList.Add(SeriesCount, true);
         TKManager.Instance.SaveFile();
