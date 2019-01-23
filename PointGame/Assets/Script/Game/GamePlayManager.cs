@@ -172,7 +172,7 @@ public class GamePlayManager : MonoBehaviour {
                 GameEnd();
         }
 
-        Debug.LogFormat("{0} {1} {2} {3}", BlockSpeed, BlockSpeedOffset, (BlockSpeedStageClearOffset * StageCount), (BlockSpeed + BlockSpeedOffset + (BlockSpeedStageClearOffset * StageCount)));
+        
     }
 
     public void CharJump(bool left)
