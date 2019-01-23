@@ -22,16 +22,27 @@ public class LoadingUI : MonoBehaviour {
         TKManager.Instance.LoadFile();
 #if (UNITY_ANDROID && !UNITY_EDITOR)
         SignUpPopupObj.gameObject.SetActive(false);
-        if (TKManager.Instance.MyData.Index != null && FirebaseManager.Instance.SingedInFirebase())
-        {
-            StartCoroutine(LoadingData());
-        }
-        else
+        if (TKManager.Instance.MyData.Index == null)
         {
             GetLoginProgress = true;
 
             StartCoroutine(Co_Login());
             SignUpAnonymously();
+        }
+        else
+        {
+
+            if (FirebaseManager.Instance.SingedInFirebase())
+            {
+                StartCoroutine(LoadingData());
+            }
+            else
+            {
+                GetLoginProgress = true;
+
+                StartCoroutine(Co_Login());
+                SignUpAnonymously();
+            }
         }
 #elif (UNITY_ANDROID && UNITY_EDITOR) || UNITY_IOS
         SignUpPopupObj.gameObject.SetActive(false);
