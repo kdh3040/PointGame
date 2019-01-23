@@ -31,10 +31,10 @@ public class SafeAreaScale : MonoBehaviour
 
     Rect GetSafeArea()
     {
-        Rect rtRect = new Rect(Screen.width * testRect.x, Screen.height * testRect.y, Screen.width * testRect.width, Screen.height * testRect.height);//Screen.safeArea; // new Rect(Screen.width * testRect.x, Screen.height * testRect.y, Screen.width * testRect.width, Screen.height * testRect.height);
+        //Rect rtRect = new Rect(Screen.width * testRect.x, Screen.height * testRect.y, Screen.width * testRect.width, Screen.height * testRect.height);//Screen.safeArea; // new Rect(Screen.width * testRect.x, Screen.height * testRect.y, Screen.width * testRect.width, Screen.height * testRect.height);
 
-        //return Screen.safeArea;
-        return rtRect;
+        return Screen.safeArea;
+        //return rtRect;
     }
 
     [SerializeField] bool ConformX = true;  // Conform to screen safe area on X-axis (default true, disable to ignore)
@@ -43,20 +43,19 @@ public class SafeAreaScale : MonoBehaviour
     void ApplySafeArea(Rect r)
     {
 
-        var safeArea = r;// Screen.safeArea;
+        //var safeArea = r;// Screen.safeArea;
 
-        var anchorMin = safeArea.position;
-        var anchorMax = safeArea.position + safeArea.size;
-        anchorMin.x /= Screen.width;
-        anchorMin.y /= Screen.height;
-        anchorMax.x /= Screen.width;
-        anchorMax.y /= Screen.height;
+        //var anchorMin = safeArea.position;
+        //var anchorMax = safeArea.position + safeArea.size;
+        //anchorMin.x /= Screen.width;
+        //anchorMin.y /= Screen.height;
+        //anchorMax.x /= Screen.width;
+        //anchorMax.y /= Screen.height;
 
-        Panel.anchorMin = anchorMin;
-        Panel.anchorMax = anchorMax;
+        //Panel.anchorMin = anchorMin;
+        //Panel.anchorMax = anchorMax;
 
-        /*
-         
+
         LastSafeArea = r;
 
         if (!ConformX)
@@ -81,6 +80,5 @@ public class SafeAreaScale : MonoBehaviour
         Panel.anchorMin = anchorMin;
         Panel.anchorMax = anchorMax;
 
-    */
     }
 }

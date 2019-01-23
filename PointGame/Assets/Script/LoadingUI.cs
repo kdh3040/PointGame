@@ -22,7 +22,7 @@ public class LoadingUI : MonoBehaviour {
         TKManager.Instance.LoadFile();
 #if (UNITY_ANDROID && !UNITY_EDITOR)
         SignUpPopupObj.gameObject.SetActive(false);
-        if (FirebaseManager.Instance.SingedInFirebase())
+        if (TKManager.Instance.MyData.Index != null && FirebaseManager.Instance.SingedInFirebase())
         {
             StartCoroutine(LoadingData());
         }
@@ -35,7 +35,7 @@ public class LoadingUI : MonoBehaviour {
         }
 #elif (UNITY_ANDROID && UNITY_EDITOR) || UNITY_IOS
         SignUpPopupObj.gameObject.SetActive(false);
-        if (TKManager.Instance.FirebaseUserId != string.Empty)
+        if (TKManager.Instance.MyData.Index != null && TKManager.Instance.FirebaseUserId != string.Empty)
         {
             StartCoroutine(LoadingData());
         }
