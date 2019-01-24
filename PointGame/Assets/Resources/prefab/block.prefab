@@ -474,9 +474,9 @@ MonoBehaviour:
   RightSawImg: {fileID: 1201923752943052}
   SafeBlock: {fileID: 1240195704202624}
   LeftCoin: {fileID: 1180271154425624}
-  LeftCoinImg: {fileID: 1194828379913050}
+  LeftCoinImg: {fileID: 212961952310680422}
   RightCoin: {fileID: 1451647824310594}
-  RightCoinImg: {fileID: 1164568960520264}
+  RightCoinImg: {fileID: 212199306812897148}
   BlockType: 0
 --- !u!212 &212199306812897148
 SpriteRenderer:

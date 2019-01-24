@@ -26,9 +26,9 @@ public class GameBlock : MonoBehaviour
     public GameObject SafeBlock;
 
     public GameObject LeftCoin;
-    public GameObject LeftCoinImg;
+    public SpriteRenderer LeftCoinImg;
     public GameObject RightCoin;
-    public GameObject RightCoinImg;
+    public SpriteRenderer RightCoinImg;
 
     public BLOCK_TYPE BlockType = BLOCK_TYPE.NONE;
 
@@ -55,6 +55,9 @@ public class GameBlock : MonoBehaviour
         LeftCoin.gameObject.transform.localPosition = new Vector3(0, 0.32f, 4);
         RightCoin.SetActive(false);
         RightCoin.gameObject.transform.localPosition = new Vector3(0, 0.32f, 4);
+
+        iTween.FadeTo(LeftCoinImg.gameObject, iTween.Hash("alpha", 1f, "time", 0.1f));
+        iTween.FadeTo(RightCoinImg.gameObject, iTween.Hash("alpha", 1f, "time", 0.1f));
 
         var coinEnable = Random.Range(1, 100) <= 20;
 
@@ -102,13 +105,13 @@ public class GameBlock : MonoBehaviour
         if (RightCoin.activeSelf && charLeft == false)
         {
             iTween.MoveTo(RightCoin, iTween.Hash("position", new Vector3(0f, 3f, 4), "time", 0.3f, "islocal", true, "movetopath", false, "easetype", iTween.EaseType.easeOutQuad));
-            iTween.FadeTo(RightCoinImg, iTween.Hash("alpha", 0f, "delay", 0.1f, "time", 0.1f, "easetype", iTween.EaseType.easeOutQuad));
+            iTween.FadeTo(RightCoinImg.gameObject, iTween.Hash("alpha", 0f, "delay", 0.1f, "time", 0.1f, "easetype", iTween.EaseType.easeOutQuad));
             return true;
         }
         else if (LeftCoin.activeSelf && charLeft)
         {
             iTween.MoveTo(LeftCoin, iTween.Hash("position", new Vector3(0f, 3f, 4), "time", 0.3f, "islocal", true, "movetopath", false, "easetype", iTween.EaseType.easeOutQuad));
-            iTween.FadeTo(LeftCoinImg, iTween.Hash("alpha", 0f, "delay", 0.1f, "time", 0.1f, "easetype", iTween.EaseType.easeOutQuad));
+            iTween.FadeTo(LeftCoinImg.gameObject, iTween.Hash("alpha", 0f, "delay", 0.1f, "time", 0.1f, "easetype", iTween.EaseType.easeOutQuad));
             return true;
         }
             
