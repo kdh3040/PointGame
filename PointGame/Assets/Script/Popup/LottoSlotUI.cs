@@ -12,6 +12,7 @@ public class LottoSlotUI : MonoBehaviour {
     public GameObject LottoReady_MyNumber;
     public Text LottoReady_MyNumberText;
     public Button LottoReady_Button;
+    public Text LottoReady_InfoText;
 
     public GameObject LottoResultObj;
     public GameObject LottoResult_MyNumber;
@@ -146,15 +147,15 @@ public class LottoSlotUI : MonoBehaviour {
 
             if (lottoMyNumber > 0)
             {
-                LottoReady_MyNumber.gameObject.transform.localPosition = new Vector3(0, 0, 0);
                 LottoReady_MyNumberText.text = string.Format("내번호 : {0:D6}", lottoMyNumber);
                 LottoReady_Button.gameObject.SetActive(false);
+                LottoReady_InfoText.gameObject.SetActive(true);
             }
             else
             {
-                LottoReady_MyNumber.gameObject.transform.localPosition = new Vector3(0, 40, 0);
                 LottoReady_MyNumberText.text = "번호를 뽑아주세요";
                 LottoReady_Button.gameObject.SetActive(true);
+                LottoReady_InfoText.gameObject.SetActive(false);
             }
         }
     }
@@ -162,7 +163,7 @@ public class LottoSlotUI : MonoBehaviour {
     public void OnClickNumberPick()
     {
 
-        ParentPopup.ShowPopup(new LottoMsgPopup.LottoMsgPopupData(string.Format("{0:n0}포인트로 번호을 뽑으시겠습니까?", CommonData.LottoNumberCost),
+        ParentPopup.ShowPopup(new LottoMsgPopup.LottoMsgPopupData(string.Format("{0:n0}포인트로 번호를 뽑으시겠습니까?", CommonData.LottoNumberCost),
             () =>
             {
                 if(TKManager.Instance.MyData.Point < CommonData.LottoNumberCost)
