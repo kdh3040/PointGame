@@ -415,6 +415,15 @@ public void CheckGameOver()
         if (posIndex < 0)
             posIndex = BackgrounList.Count - 1;
 
+        if(index == 0)
+        {
+            if(zeroPos)
+                BackgrounList[index].GetComponent<SpriteRenderer>().sprite = (Sprite)Resources.Load("background", typeof(Sprite));
+            else
+                BackgrounList[index].GetComponent<SpriteRenderer>().sprite = (Sprite)Resources.Load("backgroun_1", typeof(Sprite));
+        }
+        
+
         var nextPos = BackgrounList[posIndex].transform.localPosition;
         if (zeroPos == false)
             BackgrounList[index].gameObject.transform.localPosition = new Vector3(0, nextPos.y + 19.21f, 10f);
