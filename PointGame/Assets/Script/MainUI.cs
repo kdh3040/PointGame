@@ -41,7 +41,7 @@ public class MainUI : MonoBehaviour {
 
         for (int i = 0; i < winList.Count; i++)
         {
-            winUser.Append(string.Format("{0:n0}회 당첨자 : {1}", winList[i].Key + 1, winList[i].Value));
+            winUser.Append(string.Format("- {0:D2}회 당첨자 : {1}", winList[i].Key + 1, winList[i].Value));
             winUser.AppendLine();
         }
 
