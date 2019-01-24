@@ -118,6 +118,7 @@ public class GameUI : MonoBehaviour {
 
     private void OnClickGameRestart()
     {
+        AdsManager.Instance.ShowSkipRewardedAd();
         GamePlayManager.Instance.GameRestart();
     }
 
