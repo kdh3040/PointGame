@@ -123,7 +123,11 @@ public class GameUI : MonoBehaviour {
 
     private void OnClickGameClear()
     {
-        AdsManager.Instance.ShowSkipRewardedAd();
+        if(GamePlayManager.Instance.StageCount % 3 == 0)
+            AdsManager.Instance.ShowSkipRewardedAd();
+        else
+            AdsManager.Instance.ShowInterstitialAds();
+        
         GamePlayManager.Instance.GameReady();
     }
 }
