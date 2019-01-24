@@ -65,7 +65,7 @@ public class MainUI : MonoBehaviour {
 
     public void OnClickFreePoint()
     {
-        Popup.ShowPopup(new MsgPopup.MsgPopupData(string.Format("광고를 보시고 {0:n0}를 획득 하시겠습니까?", CommonData.AdsPointReward),
+        Popup.ShowPopup(new MsgPopup.MsgPopupData(string.Format("광고를 보시고 {0:n0}포인트를 획득 하시겠습니까?", CommonData.AdsPointReward),
             () =>
             {
                 // TODO 동영상 광고
