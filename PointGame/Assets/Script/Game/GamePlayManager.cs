@@ -26,6 +26,7 @@ public class GamePlayManager : MonoBehaviour {
     public int BlockCount = 0;
     public int BlockClearCount = 0;
     public List<GameBlock> BlockList = new List<GameBlock>();
+    public List<GameObject> BackgrounList = new List<GameObject>();
     public GameChar Char;
     public GameUI UI;
 
@@ -61,6 +62,7 @@ public class GamePlayManager : MonoBehaviour {
         BlockCount = 0;
         IsJumping = false;
         AllResetBlock();
+        AllResetBackground();
         ResetChar();
         UI.GameReady();
 
@@ -117,6 +119,16 @@ public class GamePlayManager : MonoBehaviour {
                     ResetBlock(index);
             }
 
+            for (int index = 0; index < BackgrounList.Count; ++index)
+            {
+                var pos = BackgrounList[index].gameObject.transform.localPosition;
+                pos.y = pos.y - 0.5f;
+                BackgrounList[index].gameObject.transform.localPosition = pos;
+
+                if (pos.y < -19.21f)
+                    ResetBackground(index);
+            }
+
             yield return null;
         }
         
@@ -171,6 +183,18 @@ public void CheckGameOver()
                 if (pos.y < -6.5f)
                     ResetBlock(index);
             }
+
+            for (int index = 0; index < BackgrounList.Count; ++index)
+            {
+                var pos = BackgrounList[index].gameObject.transform.localPosition;
+                pos.y = pos.y - (BlockSpeed + (BlockSpeedOffset * BlockClearCount) + (BlockSpeedStageClearOffset * StageCount));
+                BackgrounList[index].gameObject.transform.localPosition = pos;
+
+                if (pos.y < -19.21f)
+                    ResetBackground(index);
+            }
+
+            
 
             if (Char.gameObject.transform.TransformPoint(Vector3.zero).y < CharDeathPosY)
                 GameEnd();
@@ -341,6 +365,17 @@ public void CheckGameOver()
         }
     }
 
+    public void AllResetBackground()
+    {
+        for (int index = 0; index < BackgrounList.Count; ++index)
+        {
+            if (index == 0)
+                ResetBackground(index, true);
+            else
+                ResetBackground(index);
+        }
+    }
+
     private void ResetBlock(int index, bool zeroPos = false)
     {
         int posIndex = index - 1;
@@ -372,6 +407,19 @@ public void CheckGameOver()
         }
 
         BlockCount++;
+    }
+
+    private void ResetBackground(int index, bool zeroPos = false)
+    {
+        int posIndex = index - 1;
+        if (posIndex < 0)
+            posIndex = BackgrounList.Count - 1;
+
+        var nextPos = BackgrounList[posIndex].transform.localPosition;
+        if (zeroPos == false)
+            BackgrounList[index].gameObject.transform.localPosition = new Vector3(0, nextPos.y + 19.21f, 10f);
+        else
+            BackgrounList[index].gameObject.transform.localPosition = new Vector3(0, 0f, 10f);
     }
 
     private void ResetChar()
