@@ -40,7 +40,7 @@ public class GamePlayManager : MonoBehaviour {
 
     private float BlockSpeed = 0.05f;
     private float BlockSpeedOffset = 0.0001f;
-    private float BlockSpeedStageClearOffset = 0.005f;
+    private float BlockSpeedStageClearOffset = 0.01f;
 
 
     void Start()
@@ -75,8 +75,6 @@ public class GamePlayManager : MonoBehaviour {
 
     public void GameClear()
     {
-        AdsManager.Instance.ShowSkipRewardedAd();
-
         // 스테이지 클리어
         IsGameReady = true;
         IsGameStart = false;
@@ -125,18 +123,23 @@ public class GamePlayManager : MonoBehaviour {
 
     public void GameEnd()
     {
-        AdsManager.Instance.ShowSkipRewardedAd();
-
         // 스테이지 종료
         IsGameReady = false;
         IsGameStart = false;
         UI.GameEnd();
         Char.CharIdle();
 
-        iTween.MoveTo(Char.gameObject, iTween.Hash("x", Char.gameObject.transform.localPosition.x, "y",CharDeathPosY - 10f, "islocal", true, "movetopath", false, "time", 0.8f, "easetype", iTween.EaseType.easeInBack)); 
+        iTween.MoveTo(Char.gameObject, iTween.Hash("x", Char.gameObject.transform.localPosition.x, "y",CharDeathPosY - 10f, "islocal", true, "movetopath", false, "time", 0.8f, "easetype", iTween.EaseType.easeInBack));
+        StartCoroutine(Co_GameEndAd());
     }
 
-    public void CheckGameOver()
+    IEnumerator Co_GameEndAd()
+    {
+        yield return new WaitForSeconds(0.8f);
+        AdsManager.Instance.ShowSkipRewardedAd();
+    }
+
+public void CheckGameOver()
     {
         if(Char.BlockLeftDir && BlockList[BlockCharIndex].BlockType == GameBlock.BLOCK_TYPE.LEFT_SAW ||
             Char.BlockLeftDir == false && BlockList[BlockCharIndex].BlockType == GameBlock.BLOCK_TYPE.RIGHT_SAW )
