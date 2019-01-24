@@ -1644,6 +1644,7 @@ MonoBehaviour:
   GameStartObj: {fileID: 1426930497}
   GameStartButton: {fileID: 186167514}
   GameStageCount: {fileID: 0}
+  GameStartInfo: {fileID: 1120685412}
   GameInfoObj: {fileID: 1149373932}
   GameAllPoint: {fileID: 720657227}
   GamePoint: {fileID: 162953250}
@@ -2542,7 +2543,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1426930498
 RectTransform:
   m_ObjectHideFlags: 0

@@ -9,6 +9,7 @@ public class GameUI : MonoBehaviour {
     public GameObject GameStartObj;
     public Button GameStartButton;
     public Text GameStageCount;
+    public GameObject GameStartInfo;
 
     public GameObject GameInfoObj;
     public CountImgFont GameAllPoint;
@@ -51,6 +52,7 @@ public class GameUI : MonoBehaviour {
     {
         ResetUI();
         GameStartObj.SetActive(true);
+        GameStartInfo.SetActive(GamePlayManager.Instance.StageCount <= 1);
         //GameStageCount.text = string.Format("Stage {0}", GamePlayManager.Instance.StageCount);
     }
 
