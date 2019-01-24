@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 0da8fa9c6d2e19b4697d3818eb02dea1
+guid: eb766453723569746ad1b55d11109502
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -8,9 +8,9 @@ TrueTypeFontImporter:
   characterSpacing: 0
   characterPadding: 1
   includeFontData: 1
-  fontName: Godo B
+  fontName: BM JUA_TTF
   fontNames:
-  - Godo B
+  - BM JUA_TTF
   fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0
