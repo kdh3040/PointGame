@@ -4328,7 +4328,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\uD504\uB9AC\uB8F0\uB81B"
+  m_Text: "\uD504\uB9AC \uB8F0\uB81B"
 --- !u!222 &423156130
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -6850,7 +6850,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: PLAY
+  m_Text: "\uAC8C\uC784\uC2DC\uC791"
 --- !u!222 &695393319
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -10222,7 +10222,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: HAPPY BOX
+  m_Text: "\uD574\uD53C \uBC15\uC2A4"
 --- !u!222 &1105648663
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -17345,7 +17345,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: HAPPY BOX
+  m_Text: "\uD574\uD53C \uBC15\uC2A4"
 --- !u!222 &1776886603
 CanvasRenderer:
   m_ObjectHideFlags: 0
