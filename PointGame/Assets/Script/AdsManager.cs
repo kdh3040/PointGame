@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Advertisements;
 using GoogleMobileAds.Api;
-
+using System;
 
 public class AdsManager : MonoBehaviour {
 
@@ -29,6 +29,8 @@ public class AdsManager : MonoBehaviour {
     private const string rewarded_video_id = "rewardedVideo";
     private const string Skip_rewarded_video_id = "SkipAds";
     private const string Lotto_rewarded_video_id = "LottoAds";
+
+    public bool AdView = false;
 
 
     public void Start()
@@ -174,17 +176,26 @@ public class AdsManager : MonoBehaviour {
     }
 
 
-    public void ShowLottoRewardedAd()
+    public void ShowLottoRewardedAd(Action endAction)
     {
+        AdView = false;
+
         if (Advertisement.IsReady(Lotto_rewarded_video_id))
         {
+            AdView = true;
             var options = new ShowOptions { resultCallback = HandleShowLottoRewardVideoResult };
             Advertisement.Show(Lotto_rewarded_video_id, options);
+        }
+
+        if(AdView && endAction != null)
+        {
+            StartCoroutine(Co_AdEnd(endAction));
         }
     }
 
     private void HandleShowLottoRewardVideoResult(ShowResult result)
     {
+        AdView = false;
         switch (result)
         {
             case ShowResult.Finished:
@@ -260,6 +271,19 @@ public class AdsManager : MonoBehaviour {
                     break;
                 }
         }
+    }
+
+    private IEnumerator Co_AdEnd(Action endAction)
+    {
+        while(true)
+        {
+            if (AdView == false)
+                break;
+
+            yield return null;
+        }
+
+        endAction();
     }
 
 
