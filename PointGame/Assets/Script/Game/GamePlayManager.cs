@@ -349,7 +349,7 @@ public void CheckGameOver()
 
         var nextPos = BlockList[posIndex].transform.localPosition;
         if(zeroPos == false)
-            BlockList[index].gameObject.transform.localPosition = new Vector3(0, nextPos.y + 3.5f);
+            BlockList[index].gameObject.transform.localPosition = new Vector3(0, nextPos.y + 2.8f);
         else
             BlockList[index].gameObject.transform.localPosition = new Vector3(0, 1f);
 
