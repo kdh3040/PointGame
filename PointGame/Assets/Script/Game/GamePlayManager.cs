@@ -25,7 +25,12 @@ public class GamePlayManager : MonoBehaviour {
     public int BlockLimitCount = 20;
     public int BlockCount = 0;
     public int BlockClearCount = 0;
-    public List<GameBlock> BlockList = new List<GameBlock>();
+    public List<RGameBlockGroup> BlockGroupList = new List<RGameBlockGroup>();
+
+
+
+
+    //public List<GameBlock> BlockList = new List<GameBlock>();
     public List<GameObject> BackgrounList = new List<GameObject>();
     public GameChar Char;
     public GameUI UI;
@@ -103,14 +108,14 @@ public class GamePlayManager : MonoBehaviour {
         while(true)
         {
             float speed = 0.5f;
-            for (int index = 0; index < BlockList.Count; ++index)
+            for (int index = 0; index < BlockGroupList.Count; ++index)
             {
-                var pos = BlockList[index].gameObject.transform.localPosition;
+                var pos = BlockGroupList[index].gameObject.transform.localPosition;
                 pos.y = pos.y - speed;
-                BlockList[index].gameObject.transform.localPosition = pos;
+                BlockGroupList[index].gameObject.transform.localPosition = pos;
 
-                if(BlockList[index].BlockType == GameBlock.BLOCK_TYPE.CLEAR &&
-                    BlockList[index].gameObject.transform.localPosition.y < 5.2f)
+                if(BlockGroupList[index].Type == RGameBlockGroup.R_BLOCK_GROUP_TYPE.CLEAR&&
+                    BlockGroupList[index].gameObject.transform.localPosition.y < 5.2f)
                 {
                     UI.GameClear();
                     yield break;
@@ -153,21 +158,26 @@ public class GamePlayManager : MonoBehaviour {
         AdsManager.Instance.ShowSkipRewardedAd();
     }
 
-public void CheckGameOver()
+    public void CheckGameOver()
     {
-        if(Char.BlockLeftDir && BlockList[BlockCharIndex].BlockType == GameBlock.BLOCK_TYPE.LEFT_SAW ||
-            Char.BlockLeftDir == false && BlockList[BlockCharIndex].BlockType == GameBlock.BLOCK_TYPE.RIGHT_SAW )
+        for (int index = 0; index < BlockGroupList.Count; ++index)
         {
-            GameEnd();
+            if (BlockGroupList[index].IsGameOverCheck())
+            {
+                GameEnd();
+            }
         }
     }
 
     public void CheckGameCoinGet()
     {
-       if( BlockList[BlockCharIndex].isGetCoin(Char.BlockLeftDir))
+        for (int index = 0; index < BlockGroupList.Count; ++index)
         {
-            GamePoint += GameCoinGetPoint;
-            UI.UpdateGameInfo();
+            if (BlockGroupList[index].IsGameCoinGetCheck())
+            {
+                GamePoint += GameCoinGetPoint;
+                UI.UpdateGameInfo();
+            }
         }
     }
 
@@ -176,11 +186,11 @@ public void CheckGameOver()
         if (IsGameStart)
         {
             float speed = (BlockSpeed + (BlockSpeedOffset * BlockClearCount) + (BlockSpeedStageClearOffset * StageCount));
-            for (int index = 0; index < BlockList.Count; ++index)
+            for (int index = 0; index < BlockGroupList.Count; ++index)
             {
-                var pos = BlockList[index].gameObject.transform.localPosition;
+                var pos = BlockGroupList[index].gameObject.transform.localPosition;
                 pos.y = pos.y - speed;
-                BlockList[index].gameObject.transform.localPosition = pos;
+                BlockGroupList[index].gameObject.transform.localPosition = pos;
 
                 if (pos.y < -6.5f)
                     ResetBlock(index);
@@ -205,26 +215,26 @@ public void CheckGameOver()
         
     }
 
-    public void CharJump(bool left)
+    public void CharJump(int index)
     {
         // 좌우 터치가 들어 왔을떄 점프 처리
         // 점프액션이 두번 들어오지 않게 막아야함
         // 화면 밖으로 나가지 못하게 해야함
         if(IsJumping == false)
-            StartCoroutine(Co_CharJump(left));
+            StartCoroutine(Co_CharJump(index));
     }
 
-    IEnumerator Co_CharJump(bool left)
+    IEnumerator Co_CharJump(int index)
     {
         IsJumping = true;
         float time = 1.0f;
 
         var tempIndex = BlockCharIndex;
         BlockCharIndex = BlockCharIndex + 1;
-        if (BlockCharIndex > BlockList.Count - 1)
+        if (BlockCharIndex > BlockGroupList.Count - 1)
             BlockCharIndex = 0;
 
-        if (BlockList[BlockCharIndex].gameObject.transform.localPosition.y > 17f)
+        if (BlockGroupList[BlockCharIndex].gameObject.transform.localPosition.y > 17f)
         {
             BlockCharIndex = tempIndex;
             IsJumping = false;
@@ -235,35 +245,31 @@ public void CheckGameOver()
         var startPos = Vector3.zero;
         var centerPos = Vector3.zero;
         var endPos = Vector3.zero;
-        Char.BlockLeftDir = left;
 
-        Char.CharJump(left);
+        Char.CharJump(false);
 
-        if (left)
+
+        int prevCharAttachIndex = -1;
+        for (int i = 0; i < BlockGroupList.Count; ++i)
         {
-            Char.transform.parent = BlockList[BlockCharIndex].LeftBlockObject.transform;
-            startPos = Char.transform.localPosition;
-            if(LastJumpLeft)
-                centerPos = new Vector3(0, Char.transform.localPosition.y + 5, 0);
-            else
-                centerPos = new Vector3(3, Char.transform.localPosition.y + 5, 0);
-            endPos = BlockCharCenterPos;
-            LastJumpLeft = true;
-        }
-        else
-        {
-            Char.transform.parent = BlockList[BlockCharIndex].RightBlockObject.transform;
-            startPos = Char.transform.localPosition;
-            if (LastJumpLeft == false)
-                centerPos = new Vector3(0, Char.transform.localPosition.y + 5, 0);
-            else
-                centerPos = new Vector3(-3, Char.transform.localPosition.y + 5, 0);
-            endPos = BlockCharCenterPos;
+            if (prevCharAttachIndex < 0)
+                prevCharAttachIndex = BlockGroupList[i].GetCharAttachBlockindex();
 
-            LastJumpLeft = false;
+            BlockGroupList[i].ResetCharAttach();
         }
 
-        while(time > 0f)
+        Char.transform.parent = BlockGroupList[BlockCharIndex].SetCharAttach(index, true);
+
+        startPos = Char.transform.localPosition;
+        centerPos = new Vector3(0, Char.transform.localPosition.y + 5, 0);
+
+        //if (index < prevCharAttachIndex)
+            
+        //else
+        //    centerPos = new Vector3(3, Char.transform.localPosition.y + 5, 0);
+        endPos = BlockCharCenterPos;
+
+        while (time > 0f)
         {
             time -= 0.1f;
             Char.transform.localPosition = BezierCurve(1.0f - time, startPos, centerPos, endPos);
@@ -271,19 +277,20 @@ public void CheckGameOver()
         }
 
         bool charDown = false;
-        if (left && BlockList[BlockCharIndex].BlockType == GameBlock.BLOCK_TYPE.RIGHT ||
-            left == false && BlockList[BlockCharIndex].BlockType == GameBlock.BLOCK_TYPE.LEFT)
+        bool gameClear = false;
+        if (BlockGroupList[BlockCharIndex].Type == RGameBlockGroup.R_BLOCK_GROUP_TYPE.CLEAR)
         {
-            charDown = true;
-            yield return Co_CharDown(left);
-        }
-            
-
-        if(BlockList[BlockCharIndex].BlockType == GameBlock.BLOCK_TYPE.CLEAR)
-        {
+            gameClear = true;
             Char.transform.localPosition = endPos;
+            Char.transform.parent = BlockGroupList[BlockCharIndex].gameObject.transform;
             GameClear();
             yield break;
+        }
+
+        if (gameClear == false && BlockGroupList[BlockCharIndex].GetBlockType(index) == RGameBlock.R_BLOCK_TYPE.NONE)
+        {
+            charDown = true;
+            yield return Co_CharDown();
         }
 
         Char.CharIdle();
@@ -291,7 +298,7 @@ public void CheckGameOver()
         CheckGameOver();
         CheckGameCoinGet();
         IsJumping = false;
-        if(charDown == false && IsGameReady == true)
+        if (charDown == false && IsGameReady == true)
         {
             IsGameReady = false;
             IsGameStart = true;
@@ -301,27 +308,27 @@ public void CheckGameOver()
             BlockClearCount++;
     }
 
-    IEnumerator Co_CharDown(bool left)
+    IEnumerator Co_CharDown()
     {
         BlockCharIndex -= 1;
         if (BlockCharIndex < 0)
-            BlockCharIndex = BlockList.Count - 1;
+            BlockCharIndex = BlockGroupList.Count - 1;
 
         var startPos = Vector3.zero;
         var endPos = Vector3.zero;
 
-        if (left)
+        int prevCharAttachIndex = -1;
+        for (int i = 0; i < BlockGroupList.Count; ++i)
         {
-            Char.transform.parent = BlockList[BlockCharIndex].LeftBlockObject.transform;
-            startPos = Char.transform.localPosition;
-            endPos = BlockCharCenterPos;
+            if (prevCharAttachIndex < 0)
+                prevCharAttachIndex = BlockGroupList[i].GetCharAttachBlockindex();
+
+            BlockGroupList[i].ResetCharAttach();
         }
-        else
-        {
-            Char.transform.parent = BlockList[BlockCharIndex].RightBlockObject.transform;
-            startPos = Char.transform.localPosition;
-            endPos = BlockCharCenterPos;
-        }
+
+        Char.transform.parent = BlockGroupList[BlockCharIndex].SetCharAttach(prevCharAttachIndex, true);
+        startPos = Char.transform.localPosition;
+        endPos = BlockCharCenterPos;
 
         float time = 1.0f;
         while (time > 0f)
@@ -333,9 +340,8 @@ public void CheckGameOver()
             yield return null;
         }
 
-        if (left && BlockList[BlockCharIndex].BlockType == GameBlock.BLOCK_TYPE.RIGHT ||
-            left == false && BlockList[BlockCharIndex].BlockType == GameBlock.BLOCK_TYPE.LEFT)
-            yield return Co_CharDown(left);
+        if (BlockGroupList[BlockCharIndex].GetBlockType(prevCharAttachIndex) == RGameBlock.R_BLOCK_TYPE.NONE)
+            yield return Co_CharDown();
 
 
         Char.transform.localPosition = endPos;
@@ -358,7 +364,7 @@ public void CheckGameOver()
 
     public void AllResetBlock()
     {
-        for(int index = 0; index < BlockList.Count; ++index)
+        for(int index = 0; index < BlockGroupList.Count; ++index)
         {
             if (index == 0)
                 ResetBlock(index, true);
@@ -382,30 +388,29 @@ public void CheckGameOver()
     {
         int posIndex = index - 1;
         if (posIndex < 0)
-            posIndex = BlockList.Count - 1;
+            posIndex = BlockGroupList.Count - 1;
 
-        var nextPos = BlockList[posIndex].transform.localPosition;
+        var nextPos = BlockGroupList[posIndex].transform.localPosition;
         if(zeroPos == false)
-            BlockList[index].gameObject.transform.localPosition = new Vector3(0, nextPos.y + 2.8f);
+            BlockGroupList[index].gameObject.transform.localPosition = new Vector3(0, nextPos.y + 2.8f);
         else
-            BlockList[index].gameObject.transform.localPosition = new Vector3(0, 1f);
+            BlockGroupList[index].gameObject.transform.localPosition = new Vector3(0, 1f);
 
         if (BlockCount == 0)
         {
-            BlockList[index].Initialize(GameBlock.BLOCK_TYPE.SAFE);
+            BlockGroupList[index].init(RGameBlockGroup.R_BLOCK_GROUP_TYPE.START);
         }
         else if(BlockCount == BlockLimitCount)
         {
-            BlockList[index].Initialize(GameBlock.BLOCK_TYPE.CLEAR);
+            BlockGroupList[index].init(RGameBlockGroup.R_BLOCK_GROUP_TYPE.CLEAR);
         }
         else if (BlockCount < BlockLimitCount)
         {
-            GameBlock.BLOCK_TYPE type = (GameBlock.BLOCK_TYPE)Random.Range((int)GameBlock.BLOCK_TYPE.LEFT_SAW, (int)GameBlock.BLOCK_TYPE.RIGHT + 1);
-            BlockList[index].Initialize(type);
+            BlockGroupList[index].init(RGameBlockGroup.R_BLOCK_GROUP_TYPE.BLOCKS);
         }
         else
         {
-            BlockList[index].Initialize(GameBlock.BLOCK_TYPE.NONE);
+            BlockGroupList[index].init(RGameBlockGroup.R_BLOCK_GROUP_TYPE.NONE);
         }
 
         BlockCount++;
@@ -435,7 +440,7 @@ public void CheckGameOver()
 
     private void ResetChar()
     {
-        Char.transform.parent = BlockList[0].LeftBlockObject.transform;
+        Char.transform.parent = BlockGroupList[0].transform;
         Char.transform.localPosition = BlockCharCenterPos;
         LastJumpLeft = true;
     }

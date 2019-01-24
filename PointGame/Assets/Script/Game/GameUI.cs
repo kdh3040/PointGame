@@ -28,11 +28,19 @@ public class GameUI : MonoBehaviour {
     public GameObject InGameObj;
     public Button InGameLeftButton;
     public Button InGameRightButton;
+    public Button InGameLeftButton3;
+    public Button InGameCenterButton3;
+    public Button InGameRightButton3;
 
     public void Awake()
     {
         InGameLeftButton.onClick.AddListener(OnClickLeftJump);
         InGameRightButton.onClick.AddListener(OnClickRightJump);
+
+        InGameLeftButton3.onClick.AddListener(OnClickLeftJump3);
+        InGameCenterButton3.onClick.AddListener(OnClickCenterJump3);
+        InGameRightButton3.onClick.AddListener(OnClickRightJump3);
+
         GameStartButton.onClick.AddListener(OnClickGameStart);
         GameClearButton.onClick.AddListener(OnClickGameClear);
         GameOverRouletteButton.onClick.AddListener(OnClickRoulette);
@@ -98,12 +106,26 @@ public class GameUI : MonoBehaviour {
 
     private void OnClickLeftJump()
     {
-        GamePlayManager.Instance.CharJump(true);
+        GamePlayManager.Instance.CharJump(0);
     }
 
     private void OnClickRightJump()
     {
-        GamePlayManager.Instance.CharJump(false);
+        GamePlayManager.Instance.CharJump(1);
+    }
+
+    private void OnClickLeftJump3()
+    {
+        GamePlayManager.Instance.CharJump(0);
+    }
+    private void OnClickCenterJump3()
+    {
+        GamePlayManager.Instance.CharJump(1);
+    }
+
+    private void OnClickRightJump3()
+    {
+        GamePlayManager.Instance.CharJump(2);
     }
 
     private void OnClickGameStart()
