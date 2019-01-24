@@ -14,11 +14,16 @@ public class SignUpPopup : MonoBehaviour
     public InputField NickName;
     public Button OkButton;
 
+    public GameObject MsgPopup;
+    public Text MsgText;
+    public Button MsgOkButton;
+
     private Action<string> EndAction;
 
     private void Awake()
     {
         OkButton.onClick.AddListener(OnClickOkButton);
+        MsgOkButton.onClick.AddListener(OnClickMsgOkButton);
         KakaoLogin.onClick.AddListener(OnClickKakaoLogin);
         NaverLogin.onClick.AddListener(OnClickNaverLogin);
     }
@@ -27,14 +32,37 @@ public class SignUpPopup : MonoBehaviour
     {
         EndAction = endAction;
 
+        MsgPopup.gameObject.SetActive(false);
         Login.gameObject.SetActive(false);
         InfoInput.gameObject.SetActive(true);
     }
 
     public void OnClickOkButton()
     {
-        EndAction(NickName.text);
+        bool emptyString = true;
+        for (int i = 0; i < NickName.text.Length; i++)
+        {
+            if (NickName.text[i] != ' ')
+                emptyString = false;
+        }
+
+
+        if (emptyString)
+        {
+            MsgPopup.gameObject.SetActive(true);
+            MsgText.text = "닉네임을 입력해주세요";
+        }
+        else
+        {
+            EndAction(NickName.text);
+        }
+            
         //CloseAction();
+    }
+
+    public void OnClickMsgOkButton()
+    {
+        MsgPopup.gameObject.SetActive(false);
     }
 
     public void OnClickKakaoLogin()

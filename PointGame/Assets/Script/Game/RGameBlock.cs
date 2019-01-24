@@ -20,7 +20,7 @@ public class RGameBlock : MonoBehaviour {
     public R_BLOCK_TYPE Type;
     public bool CharAttach;
 
-    //public Vector3 SawMovePos = new Vector3(1.7f, 1.39f, 4);
+    //public Vector3 SawMovePos = new Vector3(-1.7f, 1.39f, 4);
     private Vector3 SawMovePos = new Vector3(-1.27f, 1.39f, 4);
     private Vector3 CoinDefaultPos = new Vector3(0, 1.39f, 4);
     private Vector3 CoinMovePos = new Vector3(0f, 3f, 4);
