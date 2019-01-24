@@ -50,6 +50,8 @@ public class CountImgFont : MonoBehaviour {
             if (oneStr == ',')
                 continue;
             //imgfileName = string.Format(formString, 'p');
+            else if (oneStr == 'p')
+                imgfileName = string.Format(formString, "point");
             else if (oneStr == 's')
                 imgfileName = "str_stage";
             else
