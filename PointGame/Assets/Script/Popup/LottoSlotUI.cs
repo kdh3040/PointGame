@@ -94,7 +94,7 @@ public class LottoSlotUI : MonoBehaviour {
                 else
                 {
                     LottoResult_MyNumber.gameObject.SetActive(true);
-                    LottoResult_MyNumberText.text = string.Format("내번호 : {0}", lottoMyNumber);
+                    LottoResult_MyNumberText.text = string.Format("내번호 : {0:D6}", lottoMyNumber);
                     LottoResult_WinNumber.gameObject.SetActive(true);
                     LottoResult_WinNumberText.text = "당첨번호를 확인하세요";
                     LottoResult_WinButton.gameObject.SetActive(true);
@@ -108,14 +108,14 @@ public class LottoSlotUI : MonoBehaviour {
                 {
                     LottoResult_WinNumber.gameObject.SetActive(true);
                     LottoResult_WinNumber.gameObject.transform.localPosition = new Vector3(0, 40, 0);
-                    LottoResult_WinNumberText.text = string.Format("당첨번호 : {0}", lottoWinNumber);
+                    LottoResult_WinNumberText.text = string.Format("당첨번호 : {0:D6}", lottoWinNumber);
                 }
                 else
                 {
                     LottoResult_MyNumber.gameObject.SetActive(true);
-                    LottoResult_MyNumberText.text = string.Format("내번호 : {0}", lottoMyNumber);
+                    LottoResult_MyNumberText.text = string.Format("내번호 : {0:D6}", lottoMyNumber);
                     LottoResult_WinNumber.gameObject.SetActive(true);
-                    LottoResult_WinNumberText.text = string.Format("당첨번호 : {0}", lottoWinNumber);
+                    LottoResult_WinNumberText.text = string.Format("당첨번호 : {0:D6}", lottoWinNumber);
                 }
 
                 if(lottoWinNumber != 0 && lottoMyNumber == lottoWinNumber)
@@ -147,7 +147,7 @@ public class LottoSlotUI : MonoBehaviour {
             if (lottoMyNumber > 0)
             {
                 LottoReady_MyNumber.gameObject.transform.localPosition = new Vector3(0, 0, 0);
-                LottoReady_MyNumberText.text = string.Format("내번호 : {0}", lottoMyNumber);
+                LottoReady_MyNumberText.text = string.Format("내번호 : {0:D6}", lottoMyNumber);
                 LottoReady_Button.gameObject.SetActive(false);
             }
             else
