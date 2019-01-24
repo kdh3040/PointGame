@@ -102,10 +102,11 @@ public class GamePlayManager : MonoBehaviour {
     {
         while(true)
         {
+            float speed = 0.5f;
             for (int index = 0; index < BlockList.Count; ++index)
             {
                 var pos = BlockList[index].gameObject.transform.localPosition;
-                pos.y = pos.y - 0.5f;
+                pos.y = pos.y - speed;
                 BlockList[index].gameObject.transform.localPosition = pos;
 
                 if(BlockList[index].BlockType == GameBlock.BLOCK_TYPE.CLEAR &&
@@ -122,7 +123,7 @@ public class GamePlayManager : MonoBehaviour {
             for (int index = 0; index < BackgrounList.Count; ++index)
             {
                 var pos = BackgrounList[index].gameObject.transform.localPosition;
-                pos.y = pos.y - 0.5f;
+                pos.y = pos.y - speed / 3;
                 BackgrounList[index].gameObject.transform.localPosition = pos;
 
                 if (pos.y < -19.21f)
@@ -174,10 +175,11 @@ public void CheckGameOver()
     {
         if (IsGameStart)
         {
+            float speed = (BlockSpeed + (BlockSpeedOffset * BlockClearCount) + (BlockSpeedStageClearOffset * StageCount));
             for (int index = 0; index < BlockList.Count; ++index)
             {
                 var pos = BlockList[index].gameObject.transform.localPosition;
-                pos.y = pos.y - (BlockSpeed + (BlockSpeedOffset * BlockClearCount)+ (BlockSpeedStageClearOffset * StageCount));
+                pos.y = pos.y - speed;
                 BlockList[index].gameObject.transform.localPosition = pos;
 
                 if (pos.y < -6.5f)
@@ -187,7 +189,7 @@ public void CheckGameOver()
             for (int index = 0; index < BackgrounList.Count; ++index)
             {
                 var pos = BackgrounList[index].gameObject.transform.localPosition;
-                pos.y = pos.y - (BlockSpeed + (BlockSpeedOffset * BlockClearCount) + (BlockSpeedStageClearOffset * StageCount));
+                pos.y = pos.y - speed / 3;
                 BackgrounList[index].gameObject.transform.localPosition = pos;
 
                 if (pos.y < -19.21f)
