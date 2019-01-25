@@ -21,6 +21,12 @@ public class RGameBlockGroup : MonoBehaviour {
         Type = type;
         SafeBlock.gameObject.SetActive(false);
 
+        List<KeyValuePair<RGameBlock.R_BLOCK_TYPE, int>> blockTypePercent = new List<KeyValuePair<RGameBlock.R_BLOCK_TYPE, int>> ();
+        blockTypePercent.Add(new KeyValuePair<RGameBlock.R_BLOCK_TYPE, int>(RGameBlock.R_BLOCK_TYPE.SAW, 40));
+        blockTypePercent.Add(new KeyValuePair<RGameBlock.R_BLOCK_TYPE, int>(RGameBlock.R_BLOCK_TYPE.COIN, 60));
+        blockTypePercent.Add(new KeyValuePair<RGameBlock.R_BLOCK_TYPE, int>(RGameBlock.R_BLOCK_TYPE.SAFE, 80));
+        blockTypePercent.Add(new KeyValuePair<RGameBlock.R_BLOCK_TYPE, int>(RGameBlock.R_BLOCK_TYPE.NONE, 100));
+
         for (int index = 0; index < BlockList.Count; ++index)
         {
             BlockList[index].SetData(RGameBlock.R_BLOCK_TYPE.NONE);
@@ -38,20 +44,87 @@ public class RGameBlockGroup : MonoBehaviour {
                 int blockCount = Random.Range(1, BlockList.Count);
                 int enableBlockCount = 0;
 
-                for (int index = 0; index < BlockList.Count; ++index)
+                int blockCheckReverse = Random.Range(0, 2);
+
+                if (blockCheckReverse == 0)
                 {
-                    var blockType = (RGameBlock.R_BLOCK_TYPE)Random.Range((int)RGameBlock.R_BLOCK_TYPE.SAW, (int)RGameBlock.R_BLOCK_TYPE.NONE + 1);
+                    for (int index = 0; index < BlockList.Count; ++index)
+                    {
+                        var blockTypePercentValue = Random.Range(0, 101);
+                        var blockType = RGameBlock.R_BLOCK_TYPE.NONE;
 
-                    if (blockType == RGameBlock.R_BLOCK_TYPE.COIN || blockType == RGameBlock.R_BLOCK_TYPE.SAFE)
-                        selfBlockEnable = true;
+                        for (int i = 0; i < blockTypePercent.Count; ++i)
+                        {
+                            if (i == 0)
+                            {
+                                if (blockTypePercent[i].Value >= blockTypePercentValue)
+                                {
+                                    blockType = blockTypePercent[i].Key;
+                                    break;
+                                }
 
-                    if (blockType != RGameBlock.R_BLOCK_TYPE.NONE)
-                        enableBlockCount++;
+                            }
+                            else if (blockTypePercent[i - 1].Value < blockTypePercentValue &&
+                                blockTypePercent[i].Value >= blockTypePercentValue)
+                            {
+                                blockType = blockTypePercent[i].Key;
+                                break;
+                            }
+                        }
 
-                    BlockList[index].SetData(blockType);
 
-                    if (selfBlockEnable && enableBlockCount >= blockCount)
-                        break;
+
+
+                        if (blockType == RGameBlock.R_BLOCK_TYPE.COIN || blockType == RGameBlock.R_BLOCK_TYPE.SAFE)
+                            selfBlockEnable = true;
+
+                        if (blockType != RGameBlock.R_BLOCK_TYPE.NONE)
+                            enableBlockCount++;
+
+                        BlockList[index].SetData(blockType);
+
+                        if (selfBlockEnable && enableBlockCount >= blockCount)
+                            break;
+                    }
+                }
+                else
+                {
+                    for (int index = BlockList.Count - 1; index >= 0; --index)
+                    {
+                        var blockTypePercentValue = Random.Range(0, 101);
+                        var blockType = RGameBlock.R_BLOCK_TYPE.NONE;
+
+                        for (int i = 0; i < blockTypePercent.Count; ++i)
+                        {
+                            if (i == 0)
+                            {
+                                if (blockTypePercent[i].Value >= blockTypePercentValue)
+                                {
+                                    blockType = blockTypePercent[i].Key;
+                                    break;
+                                }
+
+                            }
+                            else if (blockTypePercent[i - 1].Value < blockTypePercentValue &&
+                                blockTypePercent[i].Value >= blockTypePercentValue)
+                            {
+                                blockType = blockTypePercent[i].Key;
+                                break;
+                            }
+                        }
+
+
+                        if (blockType == RGameBlock.R_BLOCK_TYPE.COIN || blockType == RGameBlock.R_BLOCK_TYPE.SAFE)
+                            selfBlockEnable = true;
+
+                        if (blockType != RGameBlock.R_BLOCK_TYPE.NONE)
+                            enableBlockCount++;
+
+                        BlockList[index].SetData(blockType);
+
+                        if (selfBlockEnable && enableBlockCount >= blockCount)
+                            break;
+                    }
                 }
             }
         }

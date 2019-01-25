@@ -433,7 +433,7 @@ public class GamePlayManager : MonoBehaviour {
 
         var nextPos = BackgrounList[posIndex].transform.localPosition;
         if (zeroPos == false)
-            BackgrounList[index].gameObject.transform.localPosition = new Vector3(0, nextPos.y + 19.21f, 10f);
+            BackgrounList[index].gameObject.transform.localPosition = new Vector3(0, nextPos.y + 19f, 10f);
         else
             BackgrounList[index].gameObject.transform.localPosition = new Vector3(0, 0f, 10f);
     }
