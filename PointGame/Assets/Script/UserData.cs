@@ -7,6 +7,9 @@ public class UserData
     public string Index { get; private set; }
     public string NickName = "";
     public int Point { get; private set; }
+    public int TodayAccumulatePoint { get; private set; }
+    public int AllAccumulatePoint { get; private set; }
+    public int PointToCashChangeCount = 0;
     public int Cash { get; private set; }
     public int BestStage = 0;
 
@@ -72,9 +75,11 @@ public class UserData
         }
     }
     
-    public void AddPoint(int point)
+    public void AddPoint(int point, bool first = false)
     {
         Point += point;
+
+        AddTodayAccumulate(point);
 
         FirebaseManager.Instance.SetPoint(Point);
     }
@@ -96,5 +101,42 @@ public class UserData
         Cash -= cash;
         if (Cash < 0)
             Cash = 0;
+    }
+
+    public void SetTodayAccumulatePoint(int point)
+    {
+        TodayAccumulatePoint = point;
+    }
+
+    public void SetAllAccumulatePoint(int point)
+    {
+        AllAccumulatePoint = point;
+
+        PointToCashChangeCount = AllAccumulatePoint % CommonData.PointToCashChange;
+    }
+
+    public void AddTodayAccumulate(int point)
+    {
+        if (TodayAccumulatePoint == CommonData.TodayAccumulatePointLimit)
+            return;
+
+        TodayAccumulatePoint += point;
+        if (TodayAccumulatePoint >= CommonData.TodayAccumulatePointLimit)
+        {
+            var overPoint = TodayAccumulatePoint - CommonData.TodayAccumulatePointLimit;
+            TodayAccumulatePoint = CommonData.TodayAccumulatePointLimit;
+            AllAccumulatePoint += overPoint;
+        }
+        else
+        {
+            AllAccumulatePoint += point;
+        }
+
+        int changeCount = AllAccumulatePoint % CommonData.PointToCashChange;
+        if(changeCount > PointToCashChangeCount)
+        {
+            PointToCashChangeCount = changeCount;
+            AddCash(CommonData.PointToCashChangeValue);
+        }
     }
 }
