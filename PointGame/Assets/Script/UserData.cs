@@ -91,7 +91,12 @@ public class UserData
 
         FirebaseManager.Instance.SetPoint(Point);
     }
+    public void SetCash(int cash)
+    {
+        Cash = cash;
 
+        FirebaseManager.Instance.SetCash(Cash);
+    }
     public void AddCash(int cash)
     {
         Cash += cash;
