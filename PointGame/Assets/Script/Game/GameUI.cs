@@ -15,6 +15,7 @@ public class GameUI : MonoBehaviour {
     public CountImgFont GameAllPoint;
     public CountImgFont GamePoint;
     public CountImgFont GameInfoStageCount;
+    public CountImgFont GameInfoBestStageCount;
 
     public GameObject GameOverObj;
     public GameObject GameOverPopupObj;
@@ -26,6 +27,8 @@ public class GameUI : MonoBehaviour {
     public Button GameClearButton;
 
     public GameObject InGameObj;
+    public GameObject InGameStep_2;
+    public GameObject InGameStep_3;
     public Button InGameLeftButton;
     public Button InGameRightButton;
     public Button InGameLeftButton3;
@@ -60,6 +63,8 @@ public class GameUI : MonoBehaviour {
     {
         ResetUI();
         GameStartObj.SetActive(true);
+        InGameStep_2.gameObject.SetActive(GamePlayManager.Instance.StageCount < CommonData.InGameStepChangeStage);
+        InGameStep_3.gameObject.SetActive(GamePlayManager.Instance.StageCount >= CommonData.InGameStepChangeStage);
         GameStartInfo.SetActive(GamePlayManager.Instance.StageCount <= 1);
         //GameStageCount.text = string.Format("Stage {0}", GamePlayManager.Instance.StageCount);
     }
@@ -100,6 +105,7 @@ public class GameUI : MonoBehaviour {
     public void UpdateGameInfo()
     {
         GameInfoStageCount.SetValue(string.Format("s{0}", GamePlayManager.Instance.StageCount), CountImgFont.IMG_RANGE.RIGHT, CountImgFont.IMG_TYPE.YELLOW);
+        GameInfoBestStageCount.SetValue(string.Format("s{0}", TKManager.Instance.MyData.BestStage), CountImgFont.IMG_RANGE.RIGHT, CountImgFont.IMG_TYPE.YELLOW);
         GamePoint.SetValue(string.Format("{0}p", GamePlayManager.Instance.GamePoint), CountImgFont.IMG_RANGE.LEFT, CountImgFont.IMG_TYPE.YELLOW);
         GameAllPoint.SetValue(string.Format("{0}p", TKManager.Instance.MyData.Point), CountImgFont.IMG_RANGE.LEFT, CountImgFont.IMG_TYPE.YELLOW);
     }

@@ -63,15 +63,33 @@
       </div>
     </div>
 
+    <br>
+    <br>
+
     <table>
+      <h5 class="indigo-text">:+: 당첨자 현황 :+:</h5>
       <thead>
         <th>회차</th>
         <th>당첨자</th>
-        <th>계좌 정보</th>
-        <th>지급 유무</th>
       </thead>
       <tbody id="my-tbody"></tbody>
     </table>
+
+
+    <br>
+    <br>
+
+    <table>
+      <h5 class="indigo-text">:+: 당첨금 신청 내역  :+:</h5>
+      <thead>
+        <th>회차</th>
+        <th>계좌정보</th>
+        <th>지급 확인</th>
+
+      </thead>
+      <tbody id="LottoAccountInfo"></tbody>
+    </table>
+
   </div>
 
 
@@ -124,7 +142,7 @@
     console.log('Unable to get permission to notify.', err);
   });
 */
-
+  var LottoSeriesRef = 1000000;
   var LottoRefNumber;
   var Lottocount;
   var arrLottoUser = {}//new Array();
@@ -142,6 +160,7 @@
       firebase.database().ref('/LottoCurSeries').once('value', function(snapshot) {
         var message = snapshot.val();
         LottoCurSeries = message;
+        LottoCurSeries += LottoSeriesRef;
       //  LottoCurSeries = 7;
         console.log('/Lotto/'+LottoCurSeries+'_L');
 
@@ -205,19 +224,60 @@
         if(row_index > 0) lo_table.deleteRow(row_index);
   }
 
-    function SetData(Index, data)
+  var tempWinIndex = 0;
+
+  var arrLottoWinUserName = new Array();
+  var arrLottoWinUserBank = new Array();
+  var arrLottoWinUserAccount = new Array();
+
+
+  var arrLottoWinLuckyGroupSeries = new Array();
+  arrLottoWinLuckyGroupSeries = [];
+  var arrLottoWinLuckyGroup = new Array();
+  arrLottoWinLuckyGroup = [];
+
+  console.log(arrLottoWinLuckyGroup);
+
+    function SetData()
     {
-    var my_tbody = document.getElementById('my-tbody');
-    // var row = my_tbody.insertRow(0); // 상단에 추가
-    var row = my_tbody.insertRow( my_tbody.rows.length ); // 하단에 추가
-    var cell1 = row.insertCell(0);
-    var cell2 = row.insertCell(1);
-    var cell3 = row.insertCell(2);
-    var cell4 = row.insertCell(3);
-    cell1.innerHTML = Index;
-    cell2.innerHTML = data.val();
-    cell3.innerHTML = '지급';
-    cell4.innerHTML = '지급';
+      for(var i = 0; i < arrLottoWinLuckyGroup.length; i++)
+      {
+
+        console.log(arrLottoWinLuckyGroup);
+
+        var my_tbody = document.getElementById('my-tbody');
+        // var row = my_tbody.insertRow(0); // 상단에 추가
+        var row = my_tbody.insertRow( my_tbody.rows.length ); // 하단에 추가
+        var cell1 = row.insertCell(0);
+        var cell2 = row.insertCell(1);
+
+        cell1.innerHTML = arrLottoWinLuckyGroupSeries[i] + 1;
+        cell2.innerHTML = arrLottoWinLuckyGroup[i];
+
+      }
+
+    }
+
+
+    function SetLottoAccountData(Index, Name, Bank, Account)
+    {
+
+      console.log(arrLottoWinUserName);
+
+      var my_tbody = document.getElementById('LottoAccountInfo');
+      // var row = my_tbody.insertRow(0); // 상단에 추가
+      var row = my_tbody.insertRow( my_tbody.rows.length ); // 하단에 추가
+      var cell1 = row.insertCell(0);
+      var cell2 = row.insertCell(1);
+      var cell3 = row.insertCell(2);
+
+      cell1.innerHTML = Index;
+      cell2.innerHTML = Bank + '   ' + Account + '   (' + Name + ')';
+
+      var element3 = document.createElement("input");
+      element3.type = "button";
+      element3.text = "지급완료";
+      cell3.appendChild(element3);
     }
 
 
@@ -239,9 +299,6 @@
       });
   }
 
-
-
-
       firebase.database().ref('/Lotto/2_L').once('value', function(snapshot) {
         var message = snapshot.val();
         console.log(snapshot);
@@ -259,33 +316,54 @@
       //SetLottoUserData();
 
 
+      var dbTestRef = firebase.database().ref('/LottoWinUsers')
+      dbTestRef.on('child_added', function(data){
+        //console.log(data.key);
+        var index = data.key.toString().split('_');
+        //console.log(index[0]);
+        var Series = Number(index[0]) - LottoSeriesRef;
+        Series +=1;
 
-                var tempIdx = 0;
-                  var dbTestRef = firebase.database().ref('/LottoLuckyGroup')
+
+        var Name = data.val().Name;
+        console.log(Name);
+        arrLottoWinUserName[Series] = data.val().Name;
+        arrLottoWinUserAccount[Series] = data.val().Account;
+        arrLottoWinUserBank[Series] = data.val().Bank;
+
+        SetLottoAccountData(Series, data.val().Name, data.val().Bank, data.val().Account);
+
+
+      });
+
+
+                  var tempCount = 0;
+                  var dbTestRef = firebase.database().ref('/LottoLuckyGroup').orderByKey().limitToLast(3)
                   dbTestRef.on('child_added', function(data){
 
-                    SetData(tempIdx, data);
-                    tempIdx ++;
+                    var index = data.key.toString().split('_');
+                    var Series = Number(index[0]) - LottoSeriesRef;
+                    arrLottoWinLuckyGroup[Series] = data.val();
+                    arrLottoWinLuckyGroupSeries[tempCount] = Series;
+                    //SetData(tempIdx, arrLottoWinLuckyGroup[tempIdx], arrLottoWinUser[tempIdx]);
+                    //Refresh();
+
+                    console.log(arrLottoWinLuckyGroup);
+
+                    if( arrLottoWinLuckyGroup.length == 3)
+                    {
+                      Refresh();
+                    }
+
+                    tempCount ++;
+
                   });
 
-                  var tempWinIndex = 0;
-                  var arrLottoWinUser = new Array();
-                  var arrLottoWinUserKey = new Array();
 
-                    var dbTestRef = firebase.database().ref('/LottoWinUsers')
-                    dbTestRef.on('child_added', function(data){
-
-                      console.log(data.key);
-                      console.log(data.val());
-
-                      arrLottoWinUserKey[tempWinIndex] = data.key;
-                      arrLottoWinUser[tempWinIndex] = data.val();
-                      tempWinIndex++;
-                      console.log(arrLottoWinUserKey);
-                      console.log(arrLottoWinUser);
-
-                    });
-
+    function Refresh()
+    {
+      SetData();
+    }
 
     $("#BTN_SELECT_LUCKY").click(function() {
        SetLottoUserData();

@@ -110,9 +110,7 @@ public class LoadingUI : MonoBehaviour {
             {
                 TKManager.Instance.MyData.SetData(tempCount.ToString(), NickName, CommonData.UserDefaultPoint);
 
-                FirebaseManager.Instance.mDatabaseRef.Child("Users").Child(tempCount.ToString()).Child("Index").SetValueAsync(tempCount);
-                FirebaseManager.Instance.mDatabaseRef.Child("Users").Child(tempCount.ToString()).Child("NickName").SetValueAsync(NickName);
-                FirebaseManager.Instance.mDatabaseRef.Child("Users").Child(tempCount.ToString()).Child("Point").SetValueAsync(CommonData.UserDefaultPoint);
+                FirebaseManager.Instance.SetUserData();
 
                 mutableData.Value = tempCount + 1;
                 FirebaseManager.Instance.mDatabaseRef.Child("UsersCount").SetValueAsync(mutableData.Value);

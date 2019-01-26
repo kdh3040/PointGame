@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width" />
+
+  <title>캐시백 관리자 페이지</title>
+  <!-- materialize.css 포함 -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+  <!-- SyntaxHighlighter 포함 -->
+  <link href="css/shCore.css" rel="stylesheet" type="text/css" />
+  <!-- <link href="css/shThemeDefault.css" rel="stylesheet" type="text/css" /> -->
+  <link href="css/shThemeMidnight.css" rel="stylesheet" type="text/css" />
+  <style>
+    #Summary {font-size: 1.2em; }
+    #Summary ul{ margin-left: 32px; }
+    #Summary ul li{ list-style: disc; }
+    .hint{ border-left: 0.3em #ddd solid; padding-left: 1em; color: #777;}
+    .code_block{ background-color: #eee; padding: 5px; }
+    table, th, td {
+           border: 1px solid #bcbcbc;
+         }
+         table {
+   width: 1000dp;
+ }
+  </style>
+
+</head>
+
+<body>
+  <!-- 상단 네비게이션 -->
+  <nav class="indigo">
+    <div class="nav-wrapper">
+      <div class="container">
+        <a href="/" class="breadcrumb">메인 관리자</a>
+        <a href="/lottoManager.html" class="breadcrumb">캐시백 관리자</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container center"><br><br>
+
+  </div>
+
+  <!-- 내용영역 -->
+  <div class="container" id="CONTENTS">
+    <!-- 핵심 -->
+    <h3 class="indigo-text center">:+: 캐시백 신청자 내역 :+:</h3>
+
+
+    <table>
+      <h5 class="indigo-text">:+: 당첨금 신청 내역  :+:</h5>
+      <thead>
+        <th>신청자 아이디</th>
+        <th>신청자 정보</th>
+        <th>신청 금액</th>
+        <th>지급 확인</th>
+
+      </thead>
+      <tbody id="CashAccountInfo"></tbody>
+    </table>
+
+
+  </div>
+
+
+  <!--Import jQuery before materialize.js-->
+  <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js">
+  </script>
+  <script type="text/javascript" src="./js/materialize.min.js"></script>
+  <script type="text/javascript" src="./js/shCore.js"></script>
+  <script type="text/javascript" src="./js/shAutoloader.js"></script>
+  <script type="text/javascript">
+  // SyntaxHighlighter 설정 (http://alexgorbatchev.com/SyntaxHighlighter)
+    SyntaxHighlighter.autoloader(
+      'bash shell             ./js/shBrushBash.js',
+      'js jscript javascript  ./js/shBrushJScript.js'
+    );
+    SyntaxHighlighter.defaults['toolbar'] = false;
+    SyntaxHighlighter.all()
+  </script>
+
+  <script src="https://www.gstatic.com/firebasejs/5.7.2/firebase.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase-database.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase-messaging.js"></script>
+
+
+
+  <script type="text/javascript">
+
+
+  var config = {
+    apiKey: "AIzaSyAjp9nSk0Ah1SrZXIcNfNpKJF-RIxkt3zM",
+    authDomain: "pointgame-2177a.firebaseapp.com",
+    databaseURL: "https://pointgame-2177a.firebaseio.com",
+    projectId: "pointgame-2177a",
+    storageBucket: "pointgame-2177a.appspot.com",
+    messagingSenderId: "996170955465"
+  };
+  firebase.initializeApp(config);
+
+  const messaging = firebase.messaging();
+  messaging.usePublicVapidKey("BKuiXbk64s3EcAdhlHDB6Fk_wXjOROxtakt-LXxqTjdnNTA1YxTaToR3sVymbAKpAgJcbbnY-VnTUnqO_kzEKP0");
+/*
+  messaging.requestPermission().then(function() {
+    console.log('Notification permission granted.');
+    return messaging.getToken();
+    // TODO(developer): Retrieve an Instance ID token for use with FCM.
+    // ...
+  }).catch(function(err) {
+    console.log('Unable to get permission to notify.', err);
+  });
+*/
+  var LottoSeriesRef = 1000000;
+  var LottoRefNumber;
+  var Lottocount;
+  var arrLottoUser = {}//new Array();
+  var arrLottoUserKey = new Array();
+  var LottoCurSeries;
+  var LottoTodaySeries;
+
+
+  var tempWinIndex = 0;
+
+  var arrLottoWinUserName = new Array();
+  var arrLottoWinUserBank = new Array();
+  var arrLottoWinUserAccount = new Array();
+
+
+  var arrLottoWinLuckyGroupSeries = new Array();
+  arrLottoWinLuckyGroupSeries = [];
+  var arrLottoWinLuckyGroup = new Array();
+  arrLottoWinLuckyGroup = [];
+
+  console.log(arrLottoWinLuckyGroup);
+
+
+/*
+<th>신청자 아이디</th>
+<th>신청자 정보</th>
+<th>신청 금액</th>
+<th>지급 확인</th>
+*/
+
+
+    function SetLottoAccountData(Index, Name, Bank, Account, Cash)
+    {
+
+      console.log(arrLottoWinUserName);
+
+      var my_tbody = document.getElementById('CashAccountInfo');
+      // var row = my_tbody.insertRow(0); // 상단에 추가
+      var row = my_tbody.insertRow( my_tbody.rows.length ); // 하단에 추가
+      var cell1 = row.insertCell(0);
+      var cell2 = row.insertCell(1);
+      var cell3 = row.insertCell(2);
+      var cell4 = row.insertCell(3);
+
+      cell1.innerHTML = Index;
+      cell2.innerHTML = Bank + '   ' + Account + '   (' + Name + ')';
+      cell3.innerHTML = Cash;
+
+      var element3 = document.createElement("input");
+      element3.type = "button";
+      element3.text = "지급완료";
+      cell4.appendChild(element3);
+    }
+
+      var dbTestRef = firebase.database().ref('/CashBack')
+      dbTestRef.on('child_added', function(data){
+        //console.log(data.key);
+        var index = data.key.toString();
+
+        console.log(data.val().CachBack);
+        SetLottoAccountData(index, data.val().BankName, data.val().Name, data.val().Account, data.val().CachBack);
+
+
+      });
+
+
+</script>
+
+</body>
+
+</html>

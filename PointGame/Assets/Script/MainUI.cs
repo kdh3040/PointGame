@@ -10,8 +10,10 @@ public class MainUI : MonoBehaviour {
     public Text LottoWin;
 
     public CountImgFont AllPoint;
+    public Button PointSwap;
     public Button FreePoint;
 
+    public Button LogoButton;
     public Button GamePlayButton;
     public Button GiftBoxButton;
     public GameObject GiftBoxNotiObj;
@@ -25,11 +27,13 @@ public class MainUI : MonoBehaviour {
     private void Awake()
     {
         FreePoint.onClick.AddListener(OnClickFreePoint);
+        LogoButton.onClick.AddListener(OnClickGamePlay);
         GamePlayButton.onClick.AddListener(OnClickGamePlay);
         GiftBoxButton.onClick.AddListener(OnClickGiftBox);
         FreePoint.onClick.AddListener(OnClickFreePoint);
         LottoButton.onClick.AddListener(OnClickLotto);
         FreeRoulette.onClick.AddListener(OnClickFreeRoulette);
+        PointSwap.onClick.AddListener(OnClickPointSwap);
     }
 
     void Start()
@@ -97,9 +101,14 @@ public class MainUI : MonoBehaviour {
         Popup.ShowPopup(new RoulettePopup.RoulettePopupData());
     }
 
+    public void OnClickPointSwap()
+    {
+        Popup.ShowPopup(new PointCashSwapPopup.PointCashSwapPopupData());
+    }
+
     private void Update()
     {
-        AllPoint.SetValue(string.Format("{0}p", TKManager.Instance.MyData.Point), CountImgFont.IMG_RANGE.LEFT, CountImgFont.IMG_TYPE.YELLOW);
+        AllPoint.SetValue(string.Format("{0}p / {1}c", TKManager.Instance.MyData.Point, TKManager.Instance.MyData.Cash), CountImgFont.IMG_RANGE.LEFT, CountImgFont.IMG_TYPE.YELLOW);
 
         if(GiftconCount != TKManager.Instance.MyData.GiftconURLList.Count)
         {

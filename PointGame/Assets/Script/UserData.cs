@@ -7,6 +7,11 @@ public class UserData
     public string Index { get; private set; }
     public string NickName = "";
     public int Point { get; private set; }
+    public int TodayAccumulatePoint { get; private set; }
+    public int AllAccumulatePoint { get; private set; }
+    public int PointToCashChangeCount = 0;
+    public int Cash { get; private set; }
+    public int BestStage = 0;
 
     public List<KeyValuePair<int, string>> GiftconURLList = new List<KeyValuePair<int, string>>();
     
@@ -70,9 +75,11 @@ public class UserData
         }
     }
     
-    public void AddPoint(int point)
+    public void AddPoint(int point, bool first = false)
     {
         Point += point;
+
+        AddTodayAccumulate(point);
 
         FirebaseManager.Instance.SetPoint(Point);
     }
@@ -83,5 +90,73 @@ public class UserData
             Point = 0;
 
         FirebaseManager.Instance.SetPoint(Point);
+    }
+    public void SetCash(int cash)
+    {
+        Cash = cash;
+
+        FirebaseManager.Instance.SetCash(Cash);
+    }
+    public void AddCash(int cash)
+    {
+        Cash += cash;
+
+        FirebaseManager.Instance.SetCash(Cash);
+    }
+    public void RemoveCash(int cash)
+    {
+        Cash -= cash;
+        if (Cash < 0)
+            Cash = 0;
+
+        FirebaseManager.Instance.SetCash(Cash);
+    }
+
+    public void SetTodayAccumulatePoint(int point)
+    {
+        TodayAccumulatePoint = point;
+    }
+
+    public void SetAllAccumulatePoint(int point)
+    {
+        AllAccumulatePoint = point;
+
+        PointToCashChangeCount = AllAccumulatePoint / CommonData.PointToCashChange;
+
+        if (Cash > PointToCashChangeCount * CommonData.PointToCashChangeValue)
+        {
+            Cash = PointToCashChangeCount * CommonData.PointToCashChangeValue;
+            FirebaseManager.Instance.SetCash(Cash);
+        }
+            
+    }
+
+    public void AddTodayAccumulate(int point)
+    {
+        if (TodayAccumulatePoint >= CommonData.TodayAccumulatePointLimit)
+            return;
+
+        int tempValue = TodayAccumulatePoint + point;
+        if (tempValue >= CommonData.TodayAccumulatePointLimit)
+        {
+            int tempValue_2 = CommonData.TodayAccumulatePointLimit - TodayAccumulatePoint;
+            TodayAccumulatePoint += tempValue_2;
+            AllAccumulatePoint += tempValue_2;
+        }
+        else
+        {
+            TodayAccumulatePoint += point;
+            AllAccumulatePoint += point;
+        }
+
+        int changeCount = AllAccumulatePoint / CommonData.PointToCashChange;
+        if(changeCount > PointToCashChangeCount)
+        {
+            AddCash(CommonData.PointToCashChangeValue * (changeCount - PointToCashChangeCount));
+            PointToCashChangeCount = changeCount;
+        }
+
+        FirebaseManager.Instance.SetTodayAccumPoint(TodayAccumulatePoint);
+        FirebaseManager.Instance.SetTotalAccumPoint(AllAccumulatePoint);
     }
 }
