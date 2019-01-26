@@ -116,7 +116,7 @@ public class UserData
     {
         AllAccumulatePoint = point;
 
-        PointToCashChangeCount = AllAccumulatePoint % CommonData.PointToCashChange;
+        PointToCashChangeCount = AllAccumulatePoint / CommonData.PointToCashChange;
 
         if (Cash > PointToCashChangeCount * CommonData.PointToCashChangeValue)
         {
@@ -143,7 +143,7 @@ public class UserData
             AllAccumulatePoint += point;
         }
 
-        int changeCount = AllAccumulatePoint % CommonData.PointToCashChange;
+        int changeCount = AllAccumulatePoint / CommonData.PointToCashChange;
         if(changeCount > PointToCashChangeCount)
         {
             PointToCashChangeCount = changeCount;
