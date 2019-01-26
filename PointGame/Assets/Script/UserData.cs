@@ -113,6 +113,12 @@ public class UserData
         AllAccumulatePoint = point;
 
         PointToCashChangeCount = AllAccumulatePoint % CommonData.PointToCashChange;
+
+        if (Cash > PointToCashChangeCount * CommonData.PointToCashChangeValue)
+        {
+            Cash = PointToCashChangeCount * CommonData.PointToCashChangeValue;
+        }
+            
     }
 
     public void AddTodayAccumulate(int point)
