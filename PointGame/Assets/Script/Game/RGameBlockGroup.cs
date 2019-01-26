@@ -39,7 +39,7 @@ public class RGameBlockGroup : MonoBehaviour {
         }
 
         BlockList.Clear();
-        if (GamePlayManager.Instance.StageCount <= 5)
+        if (GamePlayManager.Instance.StageCount < CommonData.InGameStepChangeStage)
         {
             StepType = R_BLOCK_STEP.TWO;
             BlockList.AddRange(BlockList_2_Step);

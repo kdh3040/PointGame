@@ -27,6 +27,8 @@ public class GameUI : MonoBehaviour {
     public Button GameClearButton;
 
     public GameObject InGameObj;
+    public GameObject InGameStep_2;
+    public GameObject InGameStep_3;
     public Button InGameLeftButton;
     public Button InGameRightButton;
     public Button InGameLeftButton3;
@@ -61,6 +63,8 @@ public class GameUI : MonoBehaviour {
     {
         ResetUI();
         GameStartObj.SetActive(true);
+        InGameStep_2.gameObject.SetActive(GamePlayManager.Instance.StageCount < CommonData.InGameStepChangeStage);
+        InGameStep_3.gameObject.SetActive(GamePlayManager.Instance.StageCount >= CommonData.InGameStepChangeStage);
         GameStartInfo.SetActive(GamePlayManager.Instance.StageCount <= 1);
         //GameStageCount.text = string.Format("Stage {0}", GamePlayManager.Instance.StageCount);
     }
