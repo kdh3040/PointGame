@@ -637,6 +637,7 @@ public class FirebaseManager : MonoBehaviour
 
     public void SetLottoWinUserData(int Series, String Name, String Bank, String Account)
     {
+        Series += CommonData.LottoRefSeries;
         String LottoWinSeries = Series.ToString() + "_L";
 
         mDatabaseRef.Child("LottoWinUsers").Child(LottoWinSeries).Child("Name").SetValueAsync(Name);
