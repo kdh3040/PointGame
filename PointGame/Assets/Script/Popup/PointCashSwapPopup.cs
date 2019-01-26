@@ -54,6 +54,7 @@ public class PointCashSwapPopup : Popup
 
     public void OnClickCashRefundOK()
     {
+        FirebaseManager.Instance.SetCashInfo(Name.text.ToString(), Bank.text.ToString(), AccountNumber.text.ToString());
         TKManager.Instance.MyData.SetAllAccumulatePoint(0);
         FirebaseManager.Instance.SetTotalAccumPoint(0);
         CashRefundInfoObj.gameObject.SetActive(true);
