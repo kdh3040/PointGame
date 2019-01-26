@@ -133,26 +133,27 @@ public class UserData
 
     public void AddTodayAccumulate(int point)
     {
-        if (TodayAccumulatePoint == CommonData.TodayAccumulatePointLimit)
+        if (TodayAccumulatePoint >= CommonData.TodayAccumulatePointLimit)
             return;
 
-        TodayAccumulatePoint += point;
-        if (TodayAccumulatePoint >= CommonData.TodayAccumulatePointLimit)
+        int tempValue = TodayAccumulatePoint + point;
+        if (tempValue >= CommonData.TodayAccumulatePointLimit)
         {
-            var overPoint = TodayAccumulatePoint - CommonData.TodayAccumulatePointLimit;
-            TodayAccumulatePoint = CommonData.TodayAccumulatePointLimit;
-            AllAccumulatePoint += overPoint;
+            int tempValue_2 = CommonData.TodayAccumulatePointLimit - TodayAccumulatePoint;
+            TodayAccumulatePoint += tempValue_2;
+            AllAccumulatePoint += tempValue_2;
         }
         else
         {
+            TodayAccumulatePoint += point;
             AllAccumulatePoint += point;
         }
 
         int changeCount = AllAccumulatePoint / CommonData.PointToCashChange;
         if(changeCount > PointToCashChangeCount)
         {
+            AddCash(CommonData.PointToCashChangeValue * (changeCount - PointToCashChangeCount));
             PointToCashChangeCount = changeCount;
-            AddCash(CommonData.PointToCashChangeValue);
         }
 
         FirebaseManager.Instance.SetTodayAccumPoint(TodayAccumulatePoint);
