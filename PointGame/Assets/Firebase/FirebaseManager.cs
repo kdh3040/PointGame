@@ -368,11 +368,12 @@ public class FirebaseManager : MonoBehaviour
             }
         });
     }
-    public void SetCashInfo(String Name, String BankName, String Account)
+    public void SetCashInfo(String Name, String BankName, String Account, int CachBack)
     {
         mDatabaseRef.Child("CashBack").Child(TKManager.Instance.MyData.Index).Child("Name").SetValueAsync(Name);
         mDatabaseRef.Child("CashBack").Child(TKManager.Instance.MyData.Index).Child("BankName").SetValueAsync(BankName);
         mDatabaseRef.Child("CashBack").Child(TKManager.Instance.MyData.Index).Child("Account").SetValueAsync(Account);
+        mDatabaseRef.Child("CashBack").Child(TKManager.Instance.MyData.Index).Child("CachBack").SetValueAsync(CachBack);
     }
 
     // 상품권 걸릴 확률
