@@ -95,12 +95,16 @@ public class UserData
     public void AddCash(int cash)
     {
         Cash += cash;
+
+        FirebaseManager.Instance.SetCache(Cash);
     }
     public void RemoveCash(int cash)
     {
         Cash -= cash;
         if (Cash < 0)
             Cash = 0;
+
+        FirebaseManager.Instance.SetCache(Cash);
     }
 
     public void SetTodayAccumulatePoint(int point)
@@ -117,6 +121,7 @@ public class UserData
         if (Cash > PointToCashChangeCount * CommonData.PointToCashChangeValue)
         {
             Cash = PointToCashChangeCount * CommonData.PointToCashChangeValue;
+            FirebaseManager.Instance.SetCache(Cash);
         }
             
     }
@@ -144,5 +149,8 @@ public class UserData
             PointToCashChangeCount = changeCount;
             AddCash(CommonData.PointToCashChangeValue);
         }
+
+        FirebaseManager.Instance.SetTodayAccumPoint(TodayAccumulatePoint);
+        FirebaseManager.Instance.SetTotalAccumPoint(AllAccumulatePoint);
     }
 }

@@ -54,7 +54,8 @@ public class PointCashSwapPopup : Popup
 
     public void OnClickCashRefundOK()
     {
-        // TODO 캐쉬 교환 ㄱㄱ
+        TKManager.Instance.MyData.SetAllAccumulatePoint(0);
+        FirebaseManager.Instance.SetTotalAccumPoint(0);
         CashRefundInfoObj.gameObject.SetActive(true);
         CloseAction();
     }
