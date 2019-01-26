@@ -5,7 +5,9 @@ using UnityEngine.UI;
 
 public class PointCashSwapPopup : Popup
 {
-    public Button PointSwapButton;
+    public Text TodayAccumulatePoint;
+    public Text AllAccumulatePoint;
+    public Text Cash;
 
     public Button CashRefundButton;
     public GameObject CashRefundInfoObj;
@@ -26,7 +28,6 @@ public class PointCashSwapPopup : Popup
 
     public void Awake()
     {
-        PointSwapButton.onClick.AddListener(OnClickPointSwap);
         CashRefundButton.onClick.AddListener(OnClickCashRefund);
         CashRefundInfoOKButton.onClick.AddListener(OnClickCashRefundOK);
         OkButton.onClick.AddListener(OnClickOK);
@@ -35,26 +36,17 @@ public class PointCashSwapPopup : Popup
     public override void SetData(PopupData data)
     {
         CashRefundInfoObj.gameObject.SetActive(false);
-    }
 
-    public void OnClickPointSwap()
-    {
-        if (TKManager.Instance.MyData.Point < 5000)
-        {
-            ParentPopup.ShowPopup(new MsgPopup.MsgPopupData("5000포인트 부터 교환이 가능합니다."));
-        }
-        else
-        {
-            // TODO 포인트 교환
-        }
-
+        TodayAccumulatePoint.text = string.Format(": {0}", TKManager.Instance.MyData.TodayAccumulatePoint);
+        AllAccumulatePoint.text = string.Format(": {0}", TKManager.Instance.MyData.AllAccumulatePoint);
+        Cash.text = string.Format(": {0}", TKManager.Instance.MyData.Cash);
     }
 
     public void OnClickCashRefund()
     {
-        if(TKManager.Instance.MyData.Cash < 5000)
+        if(TKManager.Instance.MyData.Cash < CommonData.PointToCashChange)
         {
-            ParentPopup.ShowPopup(new MsgPopup.MsgPopupData("5000캐쉬 부터 환급 가능합니다."));
+            ParentPopup.ShowPopup(new MsgPopup.MsgPopupData(string.Format("{0} 캐시 부터 교환 가능합니다.", CommonData.PointToCashChange)));
         }
         else
             CashRefundInfoObj.gameObject.SetActive(true);
