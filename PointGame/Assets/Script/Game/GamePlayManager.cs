@@ -62,6 +62,7 @@ public class GamePlayManager : MonoBehaviour {
     {
         // 게임 화면 들어와서 준비
         // 블럭 생성
+        
         StageCount++;
         BlockCharIndex = 0;
         BlockCount = 0;
@@ -72,6 +73,11 @@ public class GamePlayManager : MonoBehaviour {
         UI.GameReady();
 
         Char.CharIdle();
+
+        if (TKManager.Instance.MyData.BestStage < StageCount)
+        {
+            TKManager.Instance.MyData.BestStage = StageCount;
+        } 
     }
 
     public void GameStart()
@@ -93,6 +99,8 @@ public class GamePlayManager : MonoBehaviour {
         StartCoroutine(Co_StageClearMove());
 
         Char.CharIdle();
+
+        TKManager.Instance.SaveFile();
     }
 
     public void GameRestart()

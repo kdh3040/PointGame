@@ -14,6 +14,7 @@ public class RGameBlockGroup : MonoBehaviour {
 
     public enum R_BLOCK_STEP
     {
+        NONE,
         TWO,
         THREE,
     }

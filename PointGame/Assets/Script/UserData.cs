@@ -7,6 +7,7 @@ public class UserData
     public string Index { get; private set; }
     public string NickName = "";
     public int Point { get; private set; }
+    public int BestStage = 0;
 
     public List<KeyValuePair<int, string>> GiftconURLList = new List<KeyValuePair<int, string>>();
     

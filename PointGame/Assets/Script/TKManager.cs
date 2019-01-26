@@ -131,12 +131,14 @@ public class TKManager : MonoBehaviour
         public string UserIndex = "";
         public Dictionary<int, bool> LottoResultShowSeriesList = new Dictionary<int, bool>();
         public string FirebaseUserId = "";
+        public int BestStage = 0;
 
         public void Save()
         {
             LottoResultShowSeriesList = TKManager.Instance.MyData.LottoResultShowSeriesList;
             UserIndex = TKManager.Instance.MyData.Index;
             FirebaseUserId = TKManager.Instance.FirebaseUserId;
+            BestStage = TKManager.Instance.MyData.BestStage;
         }
 
         public void Load()
@@ -149,6 +151,8 @@ public class TKManager : MonoBehaviour
 
             if(FirebaseUserId != null)
                 TKManager.Instance.FirebaseUserId = FirebaseUserId;
+
+            TKManager.Instance.MyData.BestStage = BestStage;
         }
     }
 
