@@ -1,27 +1,27 @@
 {
   "project_info": {
-    "project_number": "996170955465",
-    "firebase_url": "https://pointgame-2177a.firebaseio.com",
-    "project_id": "pointgame-2177a",
-    "storage_bucket": "pointgame-2177a.appspot.com"
+    "project_number": "641308195675",
+    "firebase_url": "https://treasureone-4472e.firebaseio.com",
+    "project_id": "treasureone-4472e",
+    "storage_bucket": "treasureone-4472e.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:996170955465:android:d01f0c1825aba409",
+        "mobilesdk_app_id": "1:641308195675:android:a627abd4659a1aa3",
         "android_client_info": {
-          "package_name": "com.freemoa.pointgame"
+          "package_name": "com.justtreasure.treasureone"
         }
       },
       "oauth_client": [
         {
-          "client_id": "996170955465-2r3c0583armjn66fesvrp28k0ttcerun.apps.googleusercontent.com",
+          "client_id": "641308195675-3g35srtqa11phlk9i8fjceo0nkd0tj19.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAdUDph-8VdGnqNZALLyruhbclk12FtTJk"
+          "current_key": "AIzaSyBXL6uIHZHSmerdHOvjzcbfSCLHomyXWr0"
         }
       ],
       "services": {

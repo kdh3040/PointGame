@@ -49,7 +49,7 @@ public class FirebaseManager : MonoBehaviour
 
     public void Init()
     {
-        FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://pointgame-2177a.firebaseio.com/");
+        FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://treasureone-4472e.firebaseio.com/");
         auth = Firebase.Auth.FirebaseAuth.DefaultInstance;
         mDatabaseRef = FirebaseDatabase.DefaultInstance.RootReference;
 

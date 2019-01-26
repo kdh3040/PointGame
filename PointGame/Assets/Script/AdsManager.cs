@@ -23,8 +23,8 @@ public class AdsManager : MonoBehaviour {
     
     private BannerView bannerView;
 
-    private const string android_game_id = "3010777";
-    private const string ios_game_id = "3010776";
+    private const string android_game_id = "3019112";
+    private const string ios_game_id = "3019113";
 
     private const string rewarded_video_id = "rewardedVideo";
     private const string Skip_rewarded_video_id = "SkipAds";
@@ -39,9 +39,11 @@ public class AdsManager : MonoBehaviour {
 
 #if UNITY_ANDROID
         string appId = "ca-app-pub-3940256099942544~3347511713";
+        //string appId = " ca-app-pub-7615036525367000~1421003475";
         Advertisement.Initialize(android_game_id);
 #elif UNITY_IPHONE
             string appId = "ca-app-pub-3940256099942544~1458002511";
+        //string appId = "ca-app-pub-7615036525367000~9065234368"; 
          Advertisement.Initialize(ios_game_id);
 #else
             string appId = "unexpected_platform";
@@ -49,13 +51,13 @@ public class AdsManager : MonoBehaviour {
 
         // Initialize the Google Mobile Ads SDK.
         MobileAds.Initialize(appId);
-        Debug.Log("!@@@@@ Initialize");
+        //Debug.Log("!@@@@@ Initialize");
 
         this.RequestBanner();
-        Debug.Log("!@@@@@ RequestBanner");
+        //Debug.Log("!@@@@@ RequestBanner");
 
         this.RequestInterstitial();
-        Debug.Log("!@@@@@ RequestInterstitial");
+        //Debug.Log("!@@@@@ RequestInterstitial");
     }
 
     AdRequest request;
@@ -63,14 +65,19 @@ public class AdsManager : MonoBehaviour {
     {
 #if UNITY_ANDROID
         string adUnitId = "ca-app-pub-3940256099942544/6300978111";
+        //string adUnitId = "ca-app-pub-7615036525367000/7411696753";
+
+
 #elif UNITY_IPHONE
-            string adUnitId = "ca-app-pub-3940256099942544/2934735716";
+          string adUnitId = "ca-app-pub-3940256099942544/2934735716";
+        //string adUnitId = "ca-app-pub-7615036525367000/9535049797";
+        
 #else
             string adUnitId = "unexpected_platform";
 #endif
 
         // Create a 320x50 banner at the top of the screen.
-        
+
         bannerView = new BannerView(adUnitId, AdSize.Banner, AdPosition.Bottom );
         
         
@@ -100,8 +107,11 @@ public class AdsManager : MonoBehaviour {
     {
 #if UNITY_ANDROID
         string adUnitId = "ca-app-pub-3940256099942544/1033173712";
+        //string adUnitId = "ca-app-pub-7615036525367000/3352784828";
 #elif UNITY_IPHONE
         string adUnitId = "ca-app-pub-3940256099942544/4411468910";
+        //string adUnitId = "ca-app-pub-7615036525367000/5432153254";
+        
 #else
         string adUnitId = "unexpected_platform";
 #endif

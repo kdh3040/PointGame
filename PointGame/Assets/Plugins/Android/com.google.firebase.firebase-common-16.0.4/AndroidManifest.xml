@@ -2,6 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.google.firebase">
   <uses-sdk android:minSdkVersion="14" android:targetSdkVersion="26" />
   <application>
-    <provider android:name="com.google.firebase.provider.FirebaseInitProvider" android:authorities="com.freemoa.pointgame.firebaseinitprovider" android:exported="false" android:initOrder="100" />
+    <provider android:name="com.google.firebase.provider.FirebaseInitProvider" android:authorities="com.justtreasure.treasureone.firebaseinitprovider" android:exported="false" android:initOrder="100" />
   </application>
 </manifest>
