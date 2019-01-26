@@ -12,12 +12,43 @@ public class RGameBlockGroup : MonoBehaviour {
         CLEAR,
     }
 
-    public List<RGameBlock> BlockList = new List<RGameBlock>();
+    public enum R_BLOCK_STEP
+    {
+        TWO,
+        THREE,
+    }
+
+    private List<RGameBlock> BlockList = new List<RGameBlock>();
+    public List<RGameBlock> BlockList_2_Step = new List<RGameBlock>();
+    public List<RGameBlock> BlockList_3_Step = new List<RGameBlock>();
     public GameObject SafeBlock;
     public R_BLOCK_GROUP_TYPE Type;
+    public R_BLOCK_STEP StepType = R_BLOCK_STEP.TWO;
 
     public void init(R_BLOCK_GROUP_TYPE type)
     {
+        for (int i = 0; i < BlockList_2_Step.Count; i++)
+        {
+            BlockList_2_Step[i].gameObject.SetActive(false);
+        }
+
+        for (int i = 0; i < BlockList_3_Step.Count; i++)
+        {
+            BlockList_3_Step[i].gameObject.SetActive(false);
+        }
+
+        BlockList.Clear();
+        if (GamePlayManager.Instance.StageCount <= 5)
+        {
+            StepType = R_BLOCK_STEP.TWO;
+            BlockList.AddRange(BlockList_2_Step);
+        }
+        else
+        {
+            StepType = R_BLOCK_STEP.THREE;
+            BlockList.AddRange(BlockList_3_Step);
+        }
+
         Type = type;
         SafeBlock.gameObject.SetActive(false);
 
@@ -29,7 +60,8 @@ public class RGameBlockGroup : MonoBehaviour {
 
         for (int index = 0; index < BlockList.Count; ++index)
         {
-            BlockList[index].SetData(RGameBlock.R_BLOCK_TYPE.NONE);
+            BlockList[index].gameObject.SetActive(true);
+            BlockList[index].SetData(RGameBlock.R_BLOCK_TYPE.NONE, StepType);
         }
 
         if (type == R_BLOCK_GROUP_TYPE.BLOCKS)
@@ -81,7 +113,7 @@ public class RGameBlockGroup : MonoBehaviour {
                         if (blockType != RGameBlock.R_BLOCK_TYPE.NONE)
                             enableBlockCount++;
 
-                        BlockList[index].SetData(blockType);
+                        BlockList[index].SetData(blockType, StepType);
 
                         if (selfBlockEnable && enableBlockCount >= blockCount)
                             break;
@@ -120,7 +152,7 @@ public class RGameBlockGroup : MonoBehaviour {
                         if (blockType != RGameBlock.R_BLOCK_TYPE.NONE)
                             enableBlockCount++;
 
-                        BlockList[index].SetData(blockType);
+                        BlockList[index].SetData(blockType, StepType);
 
                         if (selfBlockEnable && enableBlockCount >= blockCount)
                             break;
