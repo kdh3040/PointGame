@@ -14,4 +14,6 @@ public class CommonData : MonoBehaviour
     public static int PointToCashChangeValue = 60;
     public static int MinCashChange = 5000;
 
+    public static int LottoRefSeries = 1000000;
+
 }
