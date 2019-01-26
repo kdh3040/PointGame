@@ -7,6 +7,7 @@ public class UserData
     public string Index { get; private set; }
     public string NickName = "";
     public int Point { get; private set; }
+    public int Cash { get; private set; }
     public int BestStage = 0;
 
     public List<KeyValuePair<int, string>> GiftconURLList = new List<KeyValuePair<int, string>>();
@@ -84,5 +85,16 @@ public class UserData
             Point = 0;
 
         FirebaseManager.Instance.SetPoint(Point);
+    }
+
+    public void AddCash(int cash)
+    {
+        Cash += cash;
+    }
+    public void RemoveCash(int cash)
+    {
+        Cash -= cash;
+        if (Cash < 0)
+            Cash = 0;
     }
 }
