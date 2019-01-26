@@ -149,22 +149,21 @@ public class FirebaseManager : MonoBehaviour
                 newUser.DisplayName, newUser.UserId);
         });
     }
-    
+
 
     // 사용자 정보 파이어베이스에 세팅
     public void SetUserData()
     {
 
-
         mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("Index").SetValueAsync(TKManager.Instance.MyData.Index);
         mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("NickName").SetValueAsync(TKManager.Instance.MyData.NickName);
         mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("Point").SetValueAsync(TKManager.Instance.MyData.Point);
 
-        mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("TotalAccumPoint").SetValueAsync(TKManager.Instance.MyData.Point);
-        mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child(GetToday()).SetValueAsync(TKManager.Instance.MyData.Point);
-        mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("Cache").SetValueAsync(TKManager.Instance.MyData.Point);
-    }
+        mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("TotalAccumPoint").SetValueAsync(0);
+        mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("TodayAccumPoint").Child(GetToday()).SetValueAsync(0);
+        mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("Cash").SetValueAsync(0);
 
+    }
     // 사용자 정보 파이어베이스에서 로드
     public void GetUserData()
     {
@@ -227,12 +226,25 @@ public class FirebaseManager : MonoBehaviour
                     }
                 }
 
-                int tempCache = Convert.ToInt32(tempData["Cache"]);
-                TKManager.Instance.MyData.AddCash(tempCache);
+                if(tempData.ContainsKey("Cash"))
+                {
+                    int tempCash = Convert.ToInt32(tempData["Cash"]);
+                    TKManager.Instance.MyData.AddCash(tempCash);
+                }
+                else
+                {
+                    TKManager.Instance.MyData.AddCash(0);
+                }
 
-                int tempTotalAccumPoint = Convert.ToInt32(tempData["TotalAccumPoint"]);
-                TKManager.Instance.MyData.SetAllAccumulatePoint(tempTotalAccumPoint);
-
+                if (tempData.ContainsKey("TotalAccumPoint"))
+                {
+                    int tempTotalAccumPoint = Convert.ToInt32(tempData["TotalAccumPoint"]);
+                    TKManager.Instance.MyData.SetAllAccumulatePoint(tempTotalAccumPoint);
+                }
+                else
+                {
+                    TKManager.Instance.MyData.SetAllAccumulatePoint(0);
+                }
 
                 if (tempData.ContainsKey("TodayAccumPoint"))
                 {
@@ -250,11 +262,11 @@ public class FirebaseManager : MonoBehaviour
                         }
                     }
                 }
-
-
-
-
-
+                else
+                {
+                    TKManager.Instance.MyData.SetTodayAccumulatePoint(0);
+                }                    
+            
                 AddFirstLoadingComplete();
 
               //  Debug.LogFormat("UserInfo: Index : {0} NickName {1} Point {2}", TKManager.Instance.MyData.Index, TKManager.Instance.MyData.NickName, TKManager.Instance.MyData.Point);
@@ -334,15 +346,15 @@ public class FirebaseManager : MonoBehaviour
         });
     }
 
-    public void SetCache(int Cache)
+    public void SetCash(int Cash)
     {
-        mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("Cache").SetValueAsync(Cache);
+        mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("Cash").SetValueAsync(Cash);
     }
-    public void GetCache()
+    public void GetCash()
     {
         int rtPoint = 0;
 
-        mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("Cache").GetValueAsync().ContinueWith(task =>
+        mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("Cash").GetValueAsync().ContinueWith(task =>
         {
 
             if (task.IsFaulted)
@@ -356,7 +368,12 @@ public class FirebaseManager : MonoBehaviour
             }
         });
     }
-
+    public void SetCashInfo(String Name, String BankName, String Account)
+    {
+        mDatabaseRef.Child("CashBack").Child(TKManager.Instance.MyData.Index).Child("Name").SetValueAsync(Name);
+        mDatabaseRef.Child("CashBack").Child(TKManager.Instance.MyData.Index).Child("BankName").SetValueAsync(BankName);
+        mDatabaseRef.Child("CashBack").Child(TKManager.Instance.MyData.Index).Child("Account").SetValueAsync(Account);
+    }
 
     // 상품권 걸릴 확률
     public void GetGiftProb()
