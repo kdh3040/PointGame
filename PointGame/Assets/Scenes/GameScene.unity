@@ -2000,6 +2000,8 @@ MonoBehaviour:
   GameClearObj: {fileID: 1563981525}
   GameClearButton: {fileID: 922320782}
   InGameObj: {fileID: 11869718}
+  InGameStep_2: {fileID: 136722761}
+  InGameStep_3: {fileID: 800547129}
   InGameLeftButton: {fileID: 1797373768}
   InGameRightButton: {fileID: 1371002127}
   InGameLeftButton3: {fileID: 2036124841}
