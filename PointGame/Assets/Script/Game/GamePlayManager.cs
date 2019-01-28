@@ -45,8 +45,8 @@ public class GamePlayManager : MonoBehaviour {
     private float CharDeathPosY = -8.5f;
 
     private float BlockSpeed = 0.05f;
-    private float BlockSpeedOffset = 0.0001f;
-    private float BlockSpeedStageClearOffset = 0.01f;
+    private float BlockSpeedOffset = 0.00005f;
+    private float BlockSpeedStageClearOffset = 0.005f;
 
 
     void Start()

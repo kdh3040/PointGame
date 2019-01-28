@@ -55,7 +55,7 @@ public class RGameBlockGroup : MonoBehaviour {
 
         List<KeyValuePair<RGameBlock.R_BLOCK_TYPE, int>> blockTypePercent = new List<KeyValuePair<RGameBlock.R_BLOCK_TYPE, int>> ();
         blockTypePercent.Add(new KeyValuePair<RGameBlock.R_BLOCK_TYPE, int>(RGameBlock.R_BLOCK_TYPE.SAW, 40));
-        blockTypePercent.Add(new KeyValuePair<RGameBlock.R_BLOCK_TYPE, int>(RGameBlock.R_BLOCK_TYPE.COIN, 60));
+        blockTypePercent.Add(new KeyValuePair<RGameBlock.R_BLOCK_TYPE, int>(RGameBlock.R_BLOCK_TYPE.COIN, 45));
         blockTypePercent.Add(new KeyValuePair<RGameBlock.R_BLOCK_TYPE, int>(RGameBlock.R_BLOCK_TYPE.SAFE, 80));
         blockTypePercent.Add(new KeyValuePair<RGameBlock.R_BLOCK_TYPE, int>(RGameBlock.R_BLOCK_TYPE.NONE, 100));
 
