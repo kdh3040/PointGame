@@ -16,6 +16,7 @@ public class CommonData : MonoBehaviour
 
     public static int LottoRefSeries = 1000000;
 
+    public static int InGameStepChangeStage_Speed = 4;
     public static int InGameStepChangeStage = 9;
 
 }

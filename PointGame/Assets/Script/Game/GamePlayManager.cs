@@ -21,6 +21,7 @@ public class GamePlayManager : MonoBehaviour {
     public static int GameCoinGetPoint = 1;
 
     public int StageCount = 1;
+    public int StageSpeedOffsetCount = 1;
     public int GamePoint = 0;
     public int BlockLimitCount = 20;
     public int BlockCount = 0;
@@ -55,6 +56,7 @@ public class GamePlayManager : MonoBehaviour {
         // 게임에 들어 올때마다 생성
         BlockClearCount = 0;
         StageCount = 0;
+        StageSpeedOffsetCount = 0;
         GameReady();
     }
 
@@ -64,9 +66,18 @@ public class GamePlayManager : MonoBehaviour {
         // 블럭 생성
         
         StageCount++;
+        StageSpeedOffsetCount++;
         BlockCharIndex = 0;
         BlockCount = 0;
         IsJumping = false;
+
+        if(StageCount == CommonData.InGameStepChangeStage)
+        {
+            BlockClearCount = BlockLimitCount * CommonData.InGameStepChangeStage_Speed;
+            StageSpeedOffsetCount = CommonData.InGameStepChangeStage_Speed;
+        }
+
+
         AllResetBlock();
         AllResetBackground();
         ResetChar();
@@ -108,6 +119,7 @@ public class GamePlayManager : MonoBehaviour {
         GamePoint = 0;
         BlockClearCount = 0;
         StageCount = 0;
+        StageSpeedOffsetCount = 0;
         GameReady();
     }
 
@@ -193,7 +205,7 @@ public class GamePlayManager : MonoBehaviour {
     {
         if (IsGameStart)
         {
-            float speed = (BlockSpeed + (BlockSpeedOffset * BlockClearCount) + (BlockSpeedStageClearOffset * StageCount));
+            float speed = (BlockSpeed + (BlockSpeedOffset * BlockClearCount) + (BlockSpeedStageClearOffset * StageSpeedOffsetCount));
             for (int index = 0; index < BlockGroupList.Count; ++index)
             {
                 var pos = BlockGroupList[index].gameObject.transform.localPosition;
