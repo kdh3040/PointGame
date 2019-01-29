@@ -180,96 +180,99 @@ public class FirebaseManager : MonoBehaviour
             {
                 DataSnapshot snapshot = task.Result;
 
-                var tempData = snapshot.Value as Dictionary<string, object>;
-                int tempPoint = Convert.ToInt32(tempData["Point"]);
-                TKManager.Instance.MyData.SetData(tempData["Index"].ToString(), tempData["NickName"].ToString(), tempPoint);
-
-                if(tempData.ContainsKey("Lotto"))
+                if(snapshot.Exists)
                 {
-                    var LottoInfo = tempData["Lotto"] as Dictionary<string, object>;
-                    foreach (var pair in LottoInfo)
+                    var tempData = snapshot.Value as Dictionary<string, object>;
+                    int tempPoint = Convert.ToInt32(tempData["Point"]);
+                    TKManager.Instance.MyData.SetData(tempData["Index"].ToString(), tempData["NickName"].ToString(), tempPoint);
+
+                    if (tempData.ContainsKey("Lotto"))
                     {
-                        string tempLottoSeries = pair.Key.Substring(0, pair.Key.IndexOf("_"));
-                        int tempLottoSeriesToInt = Convert.ToInt32(tempLottoSeries);
-                        tempLottoSeriesToInt -= CommonData.LottoRefSeries;
-
-                        int tempLottoNumber = Convert.ToInt32(pair.Value);
-
-                        TKManager.Instance.MyData.SetLottoData(tempLottoSeriesToInt, tempLottoNumber);
-                        Debug.LogFormat("UserInfo: Index : {0} NickName {1} Point {2}", TKManager.Instance.MyData.Index, TKManager.Instance.MyData.NickName, TKManager.Instance.MyData.Point);
-                    }
-                }
-
-
-                if (tempData.ContainsKey("LottoWin"))
-                {
-                    var LottoWinInfo = tempData["LottoWin"] as Dictionary<string, object>;
-                    foreach (var pair in LottoWinInfo)
-                    {
-                        string tempLottoSeries = pair.Key.Substring(0, pair.Key.IndexOf("_"));
-                        int tempLottoSeriesToInt = Convert.ToInt32(tempLottoSeries);
-                        tempLottoSeriesToInt -= CommonData.LottoRefSeries;
-
-                        TKManager.Instance.MyData.SetLottoWinSeriesData(tempLottoSeriesToInt);
-                        Debug.LogFormat("UserInfo: Index : {0} NickName {1} Point {2}", TKManager.Instance.MyData.Index, TKManager.Instance.MyData.NickName, TKManager.Instance.MyData.Point);
-                    }
-                }                                
-
-                if (tempData.ContainsKey("Gift"))
-                {
-                    var GiftInfo = tempData["Gift"] as Dictionary<string, object>;
-                    foreach (var pair in GiftInfo)
-                    {
-                        string tempIndex = pair.Key.Substring(0, pair.Key.IndexOf("_"));
-                        TKManager.Instance.MyData.SetGiftconData(Convert.ToInt32(tempIndex), pair.Value.ToString());
-                        //  Debug.LogFormat("UserInfo: Index : {0} NickName {1} Point {2}", TKManager.Instance.MyData.Index, TKManager.Instance.MyData.NickName, TKManager.Instance.MyData.Point);
-                    }
-                }
-
-                if(tempData.ContainsKey("Cash"))
-                {
-                    int tempCash = Convert.ToInt32(tempData["Cash"]);
-                    TKManager.Instance.MyData.AddCash(tempCash);
-                }
-                else
-                {
-                    TKManager.Instance.MyData.AddCash(0);
-                }
-
-                if (tempData.ContainsKey("TotalAccumPoint"))
-                {
-                    int tempTotalAccumPoint = Convert.ToInt32(tempData["TotalAccumPoint"]);
-                    TKManager.Instance.MyData.SetAllAccumulatePoint(tempTotalAccumPoint);
-                }
-                else
-                {
-                    TKManager.Instance.MyData.SetAllAccumulatePoint(0);
-                }
-
-                if (tempData.ContainsKey("TodayAccumPoint"))
-                {
-                    var tempTodayAccumPointInfo = tempData["TodayAccumPoint"] as Dictionary<string, object>;
-                    foreach (var pair in tempTodayAccumPointInfo)
-                    {
-                        string tempDate = pair.Key.ToString();
-                        if(tempDate.Equals(GetToday()))
+                        var LottoInfo = tempData["Lotto"] as Dictionary<string, object>;
+                        foreach (var pair in LottoInfo)
                         {
-                            TKManager.Instance.MyData.SetTodayAccumulatePoint(Convert.ToInt32(pair.Value));
-                        }
-                        else
-                        {
-                            mDatabaseRef.Child("Users").Child(userIdx).Child("TodayAccumPoint").RemoveValueAsync();
+                            string tempLottoSeries = pair.Key.Substring(0, pair.Key.IndexOf("_"));
+                            int tempLottoSeriesToInt = Convert.ToInt32(tempLottoSeries);
+                            tempLottoSeriesToInt -= CommonData.LottoRefSeries;
+
+                            int tempLottoNumber = Convert.ToInt32(pair.Value);
+
+                            TKManager.Instance.MyData.SetLottoData(tempLottoSeriesToInt, tempLottoNumber);
+                            Debug.LogFormat("UserInfo: Index : {0} NickName {1} Point {2}", TKManager.Instance.MyData.Index, TKManager.Instance.MyData.NickName, TKManager.Instance.MyData.Point);
                         }
                     }
+
+
+                    if (tempData.ContainsKey("LottoWin"))
+                    {
+                        var LottoWinInfo = tempData["LottoWin"] as Dictionary<string, object>;
+                        foreach (var pair in LottoWinInfo)
+                        {
+                            string tempLottoSeries = pair.Key.Substring(0, pair.Key.IndexOf("_"));
+                            int tempLottoSeriesToInt = Convert.ToInt32(tempLottoSeries);
+                            tempLottoSeriesToInt -= CommonData.LottoRefSeries;
+
+                            TKManager.Instance.MyData.SetLottoWinSeriesData(tempLottoSeriesToInt);
+                            Debug.LogFormat("UserInfo: Index : {0} NickName {1} Point {2}", TKManager.Instance.MyData.Index, TKManager.Instance.MyData.NickName, TKManager.Instance.MyData.Point);
+                        }
+                    }
+
+                    if (tempData.ContainsKey("Gift"))
+                    {
+                        var GiftInfo = tempData["Gift"] as Dictionary<string, object>;
+                        foreach (var pair in GiftInfo)
+                        {
+                            string tempIndex = pair.Key.Substring(0, pair.Key.IndexOf("_"));
+                            TKManager.Instance.MyData.SetGiftconData(Convert.ToInt32(tempIndex), pair.Value.ToString());
+                            //  Debug.LogFormat("UserInfo: Index : {0} NickName {1} Point {2}", TKManager.Instance.MyData.Index, TKManager.Instance.MyData.NickName, TKManager.Instance.MyData.Point);
+                        }
+                    }
+
+                    if (tempData.ContainsKey("Cash"))
+                    {
+                        int tempCash = Convert.ToInt32(tempData["Cash"]);
+                        TKManager.Instance.MyData.AddCash(tempCash);
+                    }
+                    else
+                    {
+                        TKManager.Instance.MyData.AddCash(0);
+                    }
+
+                    if (tempData.ContainsKey("TotalAccumPoint"))
+                    {
+                        int tempTotalAccumPoint = Convert.ToInt32(tempData["TotalAccumPoint"]);
+                        TKManager.Instance.MyData.SetAllAccumulatePoint(tempTotalAccumPoint);
+                    }
+                    else
+                    {
+                        TKManager.Instance.MyData.SetAllAccumulatePoint(0);
+                    }
+
+                    if (tempData.ContainsKey("TodayAccumPoint"))
+                    {
+                        var tempTodayAccumPointInfo = tempData["TodayAccumPoint"] as Dictionary<string, object>;
+                        foreach (var pair in tempTodayAccumPointInfo)
+                        {
+                            string tempDate = pair.Key.ToString();
+                            if (tempDate.Equals(GetToday()))
+                            {
+                                TKManager.Instance.MyData.SetTodayAccumulatePoint(Convert.ToInt32(pair.Value));
+                            }
+                            else
+                            {
+                                mDatabaseRef.Child("Users").Child(userIdx).Child("TodayAccumPoint").RemoveValueAsync();
+                            }
+                        }
+                    }
+                    else
+                    {
+                        TKManager.Instance.MyData.SetTodayAccumulatePoint(0);
+                    }
                 }
-                else
-                {
-                    TKManager.Instance.MyData.SetTodayAccumulatePoint(0);
-                }                    
-            
+
                 AddFirstLoadingComplete();
 
-              //  Debug.LogFormat("UserInfo: Index : {0} NickName {1} Point {2}", TKManager.Instance.MyData.Index, TKManager.Instance.MyData.NickName, TKManager.Instance.MyData.Point);
+                //  Debug.LogFormat("UserInfo: Index : {0} NickName {1} Point {2}", TKManager.Instance.MyData.Index, TKManager.Instance.MyData.NickName, TKManager.Instance.MyData.Point);
             }
         });
     }
@@ -295,7 +298,11 @@ public class FirebaseManager : MonoBehaviour
             else if (task.IsCompleted)
             {
                 DataSnapshot snapshot = task.Result;
-                rtPoint = Convert.ToInt32(snapshot.Value);
+                if (snapshot != null && snapshot.Exists)
+                    rtPoint = Convert.ToInt32(snapshot.Value);
+                else
+                    rtPoint = 0;
+
             }
         });
     }
@@ -318,7 +325,10 @@ public class FirebaseManager : MonoBehaviour
             else if (task.IsCompleted)
             {
                 DataSnapshot snapshot = task.Result;
-                rtPoint = Convert.ToInt32(snapshot.Value);
+                if (snapshot != null && snapshot.Exists)
+                    rtPoint = Convert.ToInt32(snapshot.Value);
+                else
+                    rtPoint = 0;
             }
         });
     }
@@ -341,7 +351,10 @@ public class FirebaseManager : MonoBehaviour
             else if (task.IsCompleted)
             {
                 DataSnapshot snapshot = task.Result;
-                rtPoint = Convert.ToInt32(snapshot.Value);
+                if (snapshot != null && snapshot.Exists)
+                    rtPoint = Convert.ToInt32(snapshot.Value);
+                else
+                    rtPoint = 0;
             }
         });
     }
@@ -364,7 +377,10 @@ public class FirebaseManager : MonoBehaviour
             else if (task.IsCompleted)
             {
                 DataSnapshot snapshot = task.Result;
-                rtPoint = Convert.ToInt32(snapshot.Value);
+                if (snapshot != null && snapshot.Exists)
+                    rtPoint = Convert.ToInt32(snapshot.Value);
+                else
+                    rtPoint = 0;
             }
         });
     }
@@ -391,26 +407,30 @@ public class FirebaseManager : MonoBehaviour
             {
                 DataSnapshot snapshot = task.Result;
 
-                foreach (var tempChild in snapshot.Children)
+                if (snapshot != null && snapshot.Exists)
                 {
-                    var tempData = tempChild.Value as Dictionary<string, object>;
-                    String tempProb = tempData["Prob"].ToString();
-                    String tempName = tempData["Name"].ToString();
-
-                    if(TKManager.Instance.RoulettePercent.Count <= 0)
-                        TKManager.Instance.RoulettePercent.Add(new KeyValuePair<int, int>(Convert.ToInt32(tempName), Convert.ToInt32(tempProb)));
-                    else
+                    foreach (var tempChild in snapshot.Children)
                     {
-                        var tempValue = TKManager.Instance.RoulettePercent[TKManager.Instance.RoulettePercent.Count - 1].Value;
-                        TKManager.Instance.RoulettePercent.Add(new KeyValuePair<int, int>(Convert.ToInt32(tempName), tempValue + Convert.ToInt32(tempProb)));
+                        var tempData = tempChild.Value as Dictionary<string, object>;
+                        String tempProb = tempData["Prob"].ToString();
+                        String tempName = tempData["Name"].ToString();
+
+                        if (TKManager.Instance.RoulettePercent.Count <= 0)
+                            TKManager.Instance.RoulettePercent.Add(new KeyValuePair<int, int>(Convert.ToInt32(tempName), Convert.ToInt32(tempProb)));
+                        else
+                        {
+                            var tempValue = TKManager.Instance.RoulettePercent[TKManager.Instance.RoulettePercent.Count - 1].Value;
+                            TKManager.Instance.RoulettePercent.Add(new KeyValuePair<int, int>(Convert.ToInt32(tempName), tempValue + Convert.ToInt32(tempProb)));
+                        }
+
+
+                        //  Debug.LogFormat("UserInfo: Index : {0} NickName {1} Point {2}", TKManager.Instance.MyData.Index, TKManager.Instance.MyData.NickName, TKManager.Instance.MyData.Point);
+
                     }
-
-
-                    //  Debug.LogFormat("UserInfo: Index : {0} NickName {1} Point {2}", TKManager.Instance.MyData.Index, TKManager.Instance.MyData.NickName, TKManager.Instance.MyData.Point);
-
                 }
 
                 AddFirstLoadingComplete();
+
             }
         });
     }
@@ -437,26 +457,27 @@ public class FirebaseManager : MonoBehaviour
            else if (task.IsCompleted)
            {
                DataSnapshot snapshot = task.Result;
-               var giftUrlList = new List<string>();
-               String tempIndex = "";
-               String tempSrc = "";
-               foreach (var tempChild in snapshot.Children)
+               if (snapshot != null && snapshot.Exists)
                {
-                   tempIndex = tempChild.Key;
-                   tempSrc = tempChild.Value.ToString();
-                   giftUrlList.Add(tempSrc);
+                   var giftUrlList = new List<string>();
+                   String tempIndex = "";
+                   String tempSrc = "";
+                   foreach (var tempChild in snapshot.Children)
+                   {
+                       tempIndex = tempChild.Key;
+                       tempSrc = tempChild.Value.ToString();
+                       giftUrlList.Add(tempSrc);
 
-                   mDatabaseRef.Child("Gift").Child(tempIndex).RemoveValueAsync();
+                       mDatabaseRef.Child("Gift").Child(tempIndex).RemoveValueAsync();
 
-                   mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("Gift").Child(tempIndex).SetValueAsync(tempSrc);
-                   tempIndex = tempIndex.Substring(0, tempIndex.IndexOf("_"));
-                   TKManager.Instance.MyData.SetGiftconData(Convert.ToInt32(tempIndex), tempSrc);
+                       mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("Gift").Child(tempIndex).SetValueAsync(tempSrc);
+                       tempIndex = tempIndex.Substring(0, tempIndex.IndexOf("_"));
+                       TKManager.Instance.MyData.SetGiftconData(Convert.ToInt32(tempIndex), tempSrc);
+                   }
 
-                 
-
+                   StartCoroutine(GetGiftconTexture(giftUrlList, Convert.ToInt32(tempIndex), endAction));
                }
-
-               StartCoroutine(GetGiftconTexture(giftUrlList, Convert.ToInt32(tempIndex), endAction));
+                   
            }
        });
 
@@ -518,21 +539,25 @@ public class FirebaseManager : MonoBehaviour
            else if (task.IsCompleted)
            {
                DataSnapshot snapshot = task.Result;
-
-               foreach (var tempChild in snapshot.Children)
+               if (snapshot != null && snapshot.Exists)
                {
-                   String tempIndex = tempChild.Key;
-                   String tempSrc = tempChild.Value.ToString();                  
-                   
-                   tempIndex = tempIndex.Substring(0, tempIndex.IndexOf("_"));
-                   int tempIndexToInt = Convert.ToInt32(tempIndex);
-                   tempIndexToInt -= CommonData.LottoRefSeries;
+                   foreach (var tempChild in snapshot.Children)
+                   {
+                       String tempIndex = tempChild.Key;
+                       String tempSrc = tempChild.Value.ToString();
 
-                   TKManager.Instance.SetLottoWinUserData(tempIndexToInt, tempSrc);
+                       tempIndex = tempIndex.Substring(0, tempIndex.IndexOf("_"));
+                       int tempIndexToInt = Convert.ToInt32(tempIndex);
+                       tempIndexToInt -= CommonData.LottoRefSeries;
 
+                       TKManager.Instance.SetLottoWinUserData(tempIndexToInt, tempSrc);
+
+                   }
                }
+                   
 
                AddFirstLoadingComplete();
+
            }
        });
         
@@ -568,9 +593,14 @@ public class FirebaseManager : MonoBehaviour
             else if (task.IsCompleted)
             {
                 DataSnapshot snapshot = task.Result;
-                LottoCurSeries = Convert.ToInt32(snapshot.Value);
-                TKManager.Instance.SetCurrentLottoSeriesCount(LottoCurSeries);
+                if (snapshot != null && snapshot.Exists)
+                {
+                    LottoCurSeries = Convert.ToInt32(snapshot.Value);
+                    TKManager.Instance.SetCurrentLottoSeriesCount(LottoCurSeries);
+                }
+                    
                 AddFirstLoadingComplete();
+
             }
         }
     );
@@ -588,9 +618,15 @@ public class FirebaseManager : MonoBehaviour
             else if (task.IsCompleted)
             {
                 DataSnapshot snapshot = task.Result;
-                LottoRefNnumber = Convert.ToInt32(snapshot.Value);
+                if (snapshot != null && snapshot.Exists)
+                {
+                    LottoRefNnumber = Convert.ToInt32(snapshot.Value);
+                }
+                else
+                    LottoRefNnumber = 0;
 
                 AddFirstLoadingComplete();
+
             }
         }
       );
@@ -599,37 +635,38 @@ public class FirebaseManager : MonoBehaviour
     // 로또 당첨 번호 파이어베이스에서 로드
     public void GetLottoLuckyNumber()
     {
-        Debug.LogFormat("GetLottoLuckyNumber_1");
         mDatabaseRef.Child("LottoLuckyNumber").OrderByKey().LimitToLast(3)
        .GetValueAsync().ContinueWith(task => 
        
         {
-
+   
             if (task.IsFaulted)
             {
                 // Handle the error...
             }
             else if (task.IsCompleted)
             {
+
                 DataSnapshot snapshot = task.Result;
 
-                Debug.LogFormat("GetLottoLuckyNumber_2");
-                foreach (var tempChild in snapshot.Children)
+                if (snapshot != null && snapshot.Exists)
                 {
-                    
-                    String tempSeries = tempChild.Key;
-                    int tempNumber = Convert.ToInt32(tempChild.Value.ToString());
+                    foreach (var tempChild in snapshot.Children)
+                    {
 
-                    tempSeries = tempSeries.Substring(0, tempSeries.IndexOf("_"));
-                    int tempSeriesToInt = Convert.ToInt32(tempSeries);
-                    tempSeriesToInt -= CommonData.LottoRefSeries;
+                        String tempSeries = tempChild.Key;
+                        int tempNumber = Convert.ToInt32(tempChild.Value.ToString());
 
-                    TKManager.Instance.SetLottoLuckyNumber(tempSeriesToInt, tempNumber);
+                        tempSeries = tempSeries.Substring(0, tempSeries.IndexOf("_"));
+                        int tempSeriesToInt = Convert.ToInt32(tempSeries);
+                        tempSeriesToInt -= CommonData.LottoRefSeries;
 
-                    Debug.LogFormat("GetLottoLuckyNumber_3 {0} {1}", Convert.ToInt32(tempSeries), tempNumber);
+                        TKManager.Instance.SetLottoLuckyNumber(tempSeriesToInt, tempNumber);
+                    }
                 }
-                Debug.LogFormat("GetLottoLuckyNumber_4");
+                    
                 AddFirstLoadingComplete();
+    
 
             }
         }
