@@ -111,29 +111,6 @@
     console.log('Unable to get permission to notify.', err);
   });
 */
-  var LottoSeriesRef = 1000000;
-  var LottoRefNumber;
-  var Lottocount;
-  var arrLottoUser = {}//new Array();
-  var arrLottoUserKey = new Array();
-  var LottoCurSeries;
-  var LottoTodaySeries;
-
-
-  var tempWinIndex = 0;
-
-  var arrLottoWinUserName = new Array();
-  var arrLottoWinUserBank = new Array();
-  var arrLottoWinUserAccount = new Array();
-
-
-  var arrLottoWinLuckyGroupSeries = new Array();
-  arrLottoWinLuckyGroupSeries = [];
-  var arrLottoWinLuckyGroup = new Array();
-  arrLottoWinLuckyGroup = [];
-
-  console.log(arrLottoWinLuckyGroup);
-
 
 /*
 <th>신청자 아이디</th>
@@ -146,7 +123,6 @@
     function SetLottoAccountData(Index, Name, Bank, Account, Cash)
     {
 
-      console.log(arrLottoWinUserName);
 
       var my_tbody = document.getElementById('CashAccountInfo');
       // var row = my_tbody.insertRow(0); // 상단에 추가
@@ -162,9 +138,26 @@
 
       var element3 = document.createElement("input");
       element3.type = "button";
-      element3.text = "지급완료";
+      element3.value = "지급완료";
+      element3.addEventListener('click', function(event) {
+      deleteLine(this);
+      })
+
       cell4.appendChild(element3);
     }
+
+    function deleteLine(obj) {
+        var tr = $(obj).parent().parent();
+       var td = tr.children();
+       var no = td.eq(0).text();
+
+       firebase.database().ref('CashBack/' + no).remove();
+
+       console.log("클릭한 Row의 모든 데이터 : "+no);
+        tr.remove();
+    }
+
+
 
       var dbTestRef = firebase.database().ref('/CashBack')
       dbTestRef.on('child_added', function(data){
