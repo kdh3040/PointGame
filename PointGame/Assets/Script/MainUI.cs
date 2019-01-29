@@ -12,6 +12,7 @@ public class MainUI : MonoBehaviour {
     public CountImgFont AllPoint;
     public Button PointSwap;
     public Button FreePoint;
+    public Button SwapPoint;
 
     public Button LogoButton;
     public Button GamePlayButton;
@@ -34,6 +35,7 @@ public class MainUI : MonoBehaviour {
         LottoButton.onClick.AddListener(OnClickLotto);
         FreeRoulette.onClick.AddListener(OnClickFreeRoulette);
         PointSwap.onClick.AddListener(OnClickPointSwap);
+        SwapPoint.onClick.AddListener(OnClickPointSwap);
     }
 
     void Start()
