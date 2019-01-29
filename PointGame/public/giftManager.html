@@ -49,6 +49,8 @@
     <!-- 핵심 -->
     <h3 class="indigo-text center">:+: 상품권 현황 :+:</h3>
 
+    <h5 class="indigo-text center" id = "GIFT_COUNT">상품권 남은 수량</h5>
+
     <div class="col l12 m12 s12 input-field">
       <div class="file-field input-field">
         <div class="btn">
@@ -69,6 +71,8 @@
       <thead>
         <th>종류</th>
         <th>확률</th>
+        <th>확률 수정</th>
+        <th>확인</th>
       </thead>
       <tbody id="GiftProb"></tbody>
     </table>
@@ -76,7 +80,7 @@
      <br>
      <br>
      <br>
-     
+
     <table>
       <thead>
         <th>번호</th>
@@ -162,6 +166,8 @@
   firebase.database().ref('/GiftCount').once('value', function(snapshot) {
     var message = snapshot.val();
     GiftCount = message;
+    $("#GIFT_COUNT").text('상품권 남은 수량 : ' + GiftCount);
+
     console.log(GiftCount);
   });
 
@@ -200,6 +206,10 @@
 
     var cell1 = row.insertCell(0);
     var cell2 = row.insertCell(1);
+    var cell3 = row.insertCell(2);
+    var cell4 = row.insertCell(3);
+
+
     if(data.val().Name == '0')
     {
       cell1.innerHTML = '기프티콘';
@@ -211,9 +221,31 @@
 
       cell2.innerHTML = data.val().Prob + '%';
 
+      var element3 = document.createElement("input");
+      element3.type = "input";
+      element3.value = data.val().Prob;
+      cell3.appendChild(element3);
+
+      var element4 = document.createElement("input");
+      element4.type = "button";
+      element4.value = "확률 변경";
+      element4.addEventListener('click', function(event) {
+      CheckProb( data.key, element3.value);
+      })
+      cell4.appendChild(element4);
+
         $("#PROGRESS").hide();
     })
 
+
+    function CheckProb(Name, value) {
+
+      console.log("클릭한 Row의 모든 데이터 : "+Name);
+      console.log("클릭한 Row의 모든 데이터 : "+value);
+
+      firebase.database().ref('/GiftProb/'+ Name + '/Prob').set(value);
+
+    }
 
   /* 2. 메모하기 눌렀을 떄 DB에 기록 */
   $("#BTN_UPLOAD_GIFT").click(function(){
@@ -247,6 +279,7 @@
            firebase.database().ref('/Gift/' + GiftCount+'_G').set(downloadURL)
            GiftCount++;
            firebase.database().ref('/GiftCount').set(GiftCount)
+           $("#GIFT_COUNT").text('상품권 남은 수량 : ' + GiftCount);
 
          });
 

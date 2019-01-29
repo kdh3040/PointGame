@@ -272,10 +272,31 @@
 
       var element3 = document.createElement("input");
       element3.type = "button";
-      element3.text = "지급완료";
+      element3.value = "지급완료";
+      element3.addEventListener('click', function(event) {
+      deleteLine(this);
+      })
+
       cell3.appendChild(element3);
     }
 
+    function deleteLine(obj) {
+        var tr = $(obj).parent().parent();
+       var td = tr.children();
+       var no = td.eq(0).text();
+
+       //firebase.database().ref('CashBack/' + no).remove();
+
+      no -= 1;
+      console.log("클릭한 Row의 모든 데이터 : "+no);
+
+      no = LottoSeriesRef + no;
+      no = no + '_L';
+       console.log("클릭한 Row의 모든 데이터 : "+no);
+       firebase.database().ref('LottoWinUsers/' + no).remove();
+
+        tr.remove();
+    }
 
   function SetLottoRefData()
   {
