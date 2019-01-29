@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+    <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width" />
+
+  <title>트레져원 관리자 페이지</title>
+  <!-- materialize.css 포함 -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link type="text/css" rel="stylesheet" href="materialize.min.css"  media="screen,projection"/>
+  <style media="screen">
+    body{ background: #eee; }
+    #MY_NAME{ font-size: 1.5em; font-weight: bold; }
+    #CONTENTS{ min-height: 700px; margin-top: 20px; }
+    .input-field input[type=text]:focus {
+       border-bottom: 1px solid #3f51b5 !important;
+       box-shadow: 0 1px 0 0 #3f51b5 !important;
+    }
+
+  </style>
+</head>
+
+
+<body>
+  <!-- 상단 네비게이션 -->
+  <nav class="indigo">
+    <div class="nav-wrapper">
+      <div class="container">
+        <a href="/" class="breadcrumb">메인 페이지</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container center"><br><br>
+
+  </div>
+
+  <!-- 내용영역 -->
+  <div class="container" id="CONTENTS">
+    <!-- 핵심 -->
+    <h3 class="indigo-text center">:+: 로그인에 실패하였습니다 :+:</h3>
+
+    <div class="row center">
+      <button id="BTN_SELECT_LOGIN" type="button" class="btn white indigo-text">다시 로그인 하기</button>
+
+    </div>
+
+
+
+  <!--Import jQuery before materialize.js-->
+  <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js">
+  </script>
+  <script type="text/javascript" src="./js/materialize.min.js"></script>
+  <script type="text/javascript" src="./js/shCore.js"></script>
+  <script type="text/javascript" src="./js/shAutoloader.js"></script>
+  <script type="text/javascript">
+  // SyntaxHighlighter 설정 (http://alexgorbatchev.com/SyntaxHighlighter)
+    SyntaxHighlighter.autoloader(
+      'bash shell             ./js/shBrushBash.js',
+      'js jscript javascript  ./js/shBrushJScript.js'
+    );
+    SyntaxHighlighter.defaults['toolbar'] = false;
+    SyntaxHighlighter.all()
+  </script>
+
+  <script type="text/javascript">
+
+    $("#BTN_SELECT_LOGIN").click(function() {
+        location.href="/index.html";
+    });
+
+
+</script>
+
+</body>
+</html>

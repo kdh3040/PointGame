@@ -82,18 +82,87 @@
     </ul>
   </div>
 
-  <!--Import jQuery before materialize.js-->
-  <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-  <script type="text/javascript" src="js/materialize.min.js"></script>
-  <script type="text/javascript">
-    $('.button-collapse').sideNav();
-    $(".dropdown-button").dropdown();
+    <!--Import jQuery before materialize.js-->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js">
+    </script>
+    <script type="text/javascript" src="./js/materialize.min.js"></script>
+    <script type="text/javascript" src="./js/shCore.js"></script>
+    <script type="text/javascript" src="./js/shAutoloader.js"></script>
+    <script type="text/javascript">
+    // SyntaxHighlighter 설정 (http://alexgorbatchev.com/SyntaxHighlighter)
+      SyntaxHighlighter.autoloader(
+        'bash shell             ./js/shBrushBash.js',
+        'js jscript javascript  ./js/shBrushJScript.js'
+      );
+      SyntaxHighlighter.defaults['toolbar'] = false;
+      SyntaxHighlighter.all()
+    </script>
+
+    <script src="https://www.gstatic.com/firebasejs/5.7.2/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase-messaging.js"></script>
+    <script type="text/javascript">
+
+    var config = {
+      apiKey: "AIzaSyA_imM5VWH04xiG7Z4A5e6pI5vzTIbbSqw",
+      authDomain: "treasureone-4472e.firebaseapp.com",
+      databaseURL: "https://treasureone-4472e.firebaseio.com/",
+      projectId: "treasureone-4472e",
+      storageBucket: "treasureone-4472e.appspot.com",
+      messagingSenderId: "641308195675",
+    };
+    firebase.initializeApp(config);
+
+var provider = new firebase.auth.GoogleAuthProvider();
+
+SignStatus();
+function SignStatus()
+{
+  firebase.auth().onAuthStateChanged(function(user) {
+    console.log(user);
+  if (user) {
+    console.log(user);
+    // User is signed in.
+  } else {
+
+    firebase.auth().signInWithPopup(provider).then(function(result) {
+      // This gives you a Google Access Token. You can use it to access the Google API.
+      var token = result.credential.accessToken;
+      console.log(token);
+      // The signed-in user info.
+      var user = result.user;
+      console.log(user);
+      var email = user.email;
+      console.log(email);
+
+      if(email != "jt.famm@gmail.com"){
+          console.log(user);
+        location.href="/notAuth.html";
+
+      }
+
+      // ...
+    }).catch(function(error) {
+      // Handle Errors here.
+      var errorCode = error.code;
+          console.log(errorCode);
+      var errorMessage = error.message;
+        console.log(errorMessage);
+      // The email of the user's account used.
+      var email = error.email;
+      // The firebase.auth.AuthCredential type that was used.
+      var credential = error.credential;
+      // ...
+    });
+  }
+});
+
+}
 
 
 
-
-
-  </script>
+</script>
 </body>
-
 </html>
