@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
     <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width" />
 
-  <title>트레져원 현황</title>
+  <title>트레저원 현황</title>
   <!-- materialize.css 포함 -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link type="text/css" rel="stylesheet" href="materialize.min.css"  media="screen,projection"/>
@@ -24,7 +24,7 @@
   <!-- 네비게이션 영역 -->
   <nav class="indigo">
     <div class="nav-wrapper container">
-      <a href="/" class="brand-logo">트레져원 관리자</a>
+      <a href="/" class="brand-logo">트레저원 관리자</a>
       <!-- 데스크톱 모드에서 보이는 메인메뉴 -->
     </div>
   </nav>
@@ -34,7 +34,7 @@
     <ul class="collection white z-depth-1">
       <li class="collection-item avatar">
         <i class="material-icons circle indigo">whatshot</i>
-        <span class="title"><b>트레져원 관리자 </b></span>
+        <span class="title"><b>트레저원 관리자 </b></span>
         <p>
           복권 및 상품권 관리 페이지 입니다.
         </p>
@@ -57,6 +57,18 @@
 
       <li>
         <div class="collapsible-header active">
+          <i class="material-icons">supervisor_account</i><b>캐시백 관리</b>
+        </div>
+        <div class="collapsible-body">
+          <p>
+            <a href="cashBack.html" class="right btn indigo"><i class="material-icons">send</i></a>
+            캐시백 신청 현황 관리
+          </p>
+        </div>
+      </li>
+
+      <li>
+        <div class="collapsible-header active">
           <i class="material-icons">supervisor_account</i><b>상품권 관리</b>
         </div>
         <div class="collapsible-body">
@@ -67,17 +79,7 @@
         </div>
       </li>
 
-      <li>
-        <div class="collapsible-header active">
-          <i class="material-icons">supervisor_account</i><b>캐시백 관리</b>
-        </div>
-        <div class="collapsible-body">
-          <p>
-            <a href="cashBack.html" class="right btn indigo"><i class="material-icons">send</i></a>
-            캐시백 신청 현황 관리
-          </p>
-        </div>
-      </li>
+
 
     </ul>
   </div>
@@ -103,17 +105,8 @@
     <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase-messaging.js"></script>
+    <script src="./fireinit.js"></script>
     <script type="text/javascript">
-
-    var config = {
-      apiKey: "AIzaSyA_imM5VWH04xiG7Z4A5e6pI5vzTIbbSqw",
-      authDomain: "treasureone-4472e.firebaseapp.com",
-      databaseURL: "https://treasureone-4472e.firebaseio.com/",
-      projectId: "treasureone-4472e",
-      storageBucket: "treasureone-4472e.appspot.com",
-      messagingSenderId: "641308195675",
-    };
-    firebase.initializeApp(config);
 
 var provider = new firebase.auth.GoogleAuthProvider();
 
@@ -121,25 +114,23 @@ SignStatus();
 function SignStatus()
 {
   firebase.auth().onAuthStateChanged(function(user) {
-    console.log(user);
   if (user) {
-    console.log(user);
+    var email = user.email;
+    if(email != "jt.famm@gmail.com"){
+      location.href="./notAuth.html";
+    }
     // User is signed in.
   } else {
 
     firebase.auth().signInWithPopup(provider).then(function(result) {
       // This gives you a Google Access Token. You can use it to access the Google API.
       var token = result.credential.accessToken;
-      console.log(token);
       // The signed-in user info.
       var user = result.user;
-      console.log(user);
       var email = user.email;
-      console.log(email);
 
       if(email != "jt.famm@gmail.com"){
-          console.log(user);
-        location.href="/notAuth.html";
+        location.href="./notAuth.html";
 
       }
 
@@ -147,9 +138,7 @@ function SignStatus()
     }).catch(function(error) {
       // Handle Errors here.
       var errorCode = error.code;
-          console.log(errorCode);
       var errorMessage = error.message;
-        console.log(errorMessage);
       // The email of the user's account used.
       var email = error.email;
       // The firebase.auth.AuthCredential type that was used.
