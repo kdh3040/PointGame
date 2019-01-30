@@ -898,6 +898,7 @@ MonoBehaviour:
   mFxSound:
   - {fileID: 8300000, guid: a38dfb986627d7040bcd3c403caee788, type: 3}
   - {fileID: 8300000, guid: 341e516346175944b8916258368ef5cc, type: 3}
+  - {fileID: 8300000, guid: 729e802b28d96cb49a247c3c962a59f4, type: 3}
 --- !u!4 &716511452
 Transform:
   m_ObjectHideFlags: 0
