@@ -120,14 +120,16 @@ public class UserData
     public void SetAllAccumulatePoint(int point)
     {
         AllAccumulatePoint = point;
+        if (AllAccumulatePoint < 0)
+            AllAccumulatePoint = 0;
 
         PointToCashChangeCount = AllAccumulatePoint / CommonData.PointToCashChange;
 
-        if (Cash > PointToCashChangeCount * CommonData.PointToCashChangeValue)
-        {
-            Cash = PointToCashChangeCount * CommonData.PointToCashChangeValue;
-            FirebaseManager.Instance.SetCash(Cash);
-        }
+        //if (Cash > PointToCashChangeCount * CommonData.PointToCashChangeValue)
+        //{
+        //    Cash = PointToCashChangeCount * CommonData.PointToCashChangeValue;
+        //    FirebaseManager.Instance.SetCash(Cash);
+        //}
             
     }
 
