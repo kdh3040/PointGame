@@ -65,6 +65,7 @@ public class GiftconListPopup : Popup
 
     public void OnClickOk()
     {
+        SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
         CloseAction();
     }
 }

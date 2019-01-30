@@ -44,6 +44,7 @@ public class LottoWinPopup : Popup
 
     public void OnClickOk()
     {
+        SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
         FirebaseManager.Instance.SetLottoWinUserData(LottoSeriesCount, Name.text.ToString(), Bank.text.ToString(), AccountNumber.text.ToString());
 
         // TODO 김도형 파베로 데이터 넘기기

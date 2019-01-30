@@ -39,6 +39,7 @@ public class SignUpPopup : MonoBehaviour
 
     public void OnClickOkButton()
     {
+        SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
         bool emptyString = true;
         for (int i = 0; i < NickName.text.Length; i++)
         {
@@ -62,17 +63,20 @@ public class SignUpPopup : MonoBehaviour
 
     public void OnClickMsgOkButton()
     {
+        SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
         MsgPopup.gameObject.SetActive(false);
     }
 
     public void OnClickKakaoLogin()
     {
+        SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
         Login.gameObject.SetActive(false);
         InfoInput.gameObject.SetActive(true);
     }
 
     public void OnClickNaverLogin()
     {
+        SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
         Login.gameObject.SetActive(false);
         InfoInput.gameObject.SetActive(true);
     }

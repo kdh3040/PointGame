@@ -25,6 +25,9 @@ public class MainUI : MonoBehaviour {
 
     public PopupUI Popup;
 
+    public AudioSource mBGM;
+    public AudioClip mClip;
+
     private void Awake()
     {
         FreePoint.onClick.AddListener(OnClickFreePoint);
@@ -40,7 +43,7 @@ public class MainUI : MonoBehaviour {
 
     void Start()
     {
-    
+        mBGM.Play();
 
         var winList = TKManager.Instance.LottoWinUserList;
         StringBuilder winUser = new StringBuilder();
@@ -71,6 +74,7 @@ public class MainUI : MonoBehaviour {
 
     public void OnClickFreePoint()
     {
+        SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
         Popup.ShowPopup(new MsgPopup.MsgPopupData(string.Format("광고를 보시고 {0:n0}포인트를 획득 하시겠습니까?", CommonData.AdsPointReward),
             () =>
             {
@@ -83,21 +87,25 @@ public class MainUI : MonoBehaviour {
 
     public void OnClickGamePlay()
     {
+        SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
         SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
     }
 
     public void OnClickGiftBox()
     {
+        SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
         Popup.ShowPopup(new GiftconPopup.GiftconPopupData());
     }
 
     public void OnClickLotto()
     {
+        SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
         Popup.ShowPopup(new LottoPopup.LottoPopupData());
     }
 
     public void OnClickFreeRoulette()
     {
+        SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
         // TODO 전면광고
         AdsManager.Instance.ShowSkipRewardedAd();
         Popup.ShowPopup(new RoulettePopup.RoulettePopupData());
@@ -105,6 +113,7 @@ public class MainUI : MonoBehaviour {
 
     public void OnClickPointSwap()
     {
+        SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
         Popup.ShowPopup(new PointCashSwapPopup.PointCashSwapPopupData());
     }
 

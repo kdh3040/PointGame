@@ -35,6 +35,9 @@ public class GameUI : MonoBehaviour {
     public Button InGameCenterButton3;
     public Button InGameRightButton3;
 
+    public AudioSource mAudio;
+    public AudioClip[] mClip = new AudioClip[1];
+
     public void Awake()
     {
         InGameLeftButton.onClick.AddListener(OnClickLeftJump);
@@ -48,6 +51,12 @@ public class GameUI : MonoBehaviour {
         GameClearButton.onClick.AddListener(OnClickGameClear);
         GameOverRouletteButton.onClick.AddListener(OnClickRoulette);
         GameOverRestartButton.onClick.AddListener(OnClickGameRestart);
+    }
+
+    void Start()
+    {
+        mAudio.clip = mClip[0];
+        mAudio.Play();
     }
 
     public void ResetUI()
@@ -112,36 +121,43 @@ public class GameUI : MonoBehaviour {
 
     private void OnClickLeftJump()
     {
+        SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.JUMP);
         GamePlayManager.Instance.CharJump(0);
     }
 
     private void OnClickRightJump()
     {
+        SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.JUMP);
         GamePlayManager.Instance.CharJump(1);
     }
 
     private void OnClickLeftJump3()
     {
+        SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.JUMP);
         GamePlayManager.Instance.CharJump(0);
     }
     private void OnClickCenterJump3()
     {
+        SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.JUMP);
         GamePlayManager.Instance.CharJump(1);
     }
 
     private void OnClickRightJump3()
     {
+        SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.JUMP);
         GamePlayManager.Instance.CharJump(2);
     }
 
     private void OnClickGameStart()
     {
+        SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
         GameStart();
         GamePlayManager.Instance.GameStart();
     }
 
     private void OnClickRoulette()
     {
+        SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
         TKManager.Instance.MyData.AddPoint(GamePlayManager.Instance.GamePoint);
         TKManager.Instance.GameOverRouletteStart = true;
         SceneManager.LoadScene("MainScene", LoadSceneMode.Single);
@@ -149,13 +165,15 @@ public class GameUI : MonoBehaviour {
 
     private void OnClickGameRestart()
     {
+        SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
         AdsManager.Instance.ShowSkipRewardedAd();
         GamePlayManager.Instance.GameRestart();
     }
 
     private void OnClickGameClear()
     {
-        if(GamePlayManager.Instance.StageCount % 3 == 0)
+        SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
+        if (GamePlayManager.Instance.StageCount % 3 == 0)
             AdsManager.Instance.ShowSkipRewardedAd();
         else
             AdsManager.Instance.ShowInterstitialAds();

@@ -49,8 +49,11 @@ public class RoulettePopup : Popup
             RoulettePointText[i].gameObject.SetActive(false);
             RouletteGiftconImg[i].gameObject.SetActive(false);
 
-            if (RoulettePercent[i].Key == 0)
-                RouletteGiftconImg[i].gameObject.SetActive(true);
+            if (i == 0)
+            {
+                RoulettePointText[i].gameObject.SetActive(true);
+                RoulettePointText[i].text = string.Format("{0:n0}C", RoulettePercent[i].Key);
+            }
             else
             {
                 RoulettePointText[i].gameObject.SetActive(true);
@@ -61,13 +64,14 @@ public class RoulettePopup : Popup
 
     public void OnClickOk()
     {
+        SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
         CloseAction();
     }
     public void OnClickStart()
     {
         if (RoulettePlay)
             return;
-
+        SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
         StartCoroutine(Co_Roulette());
     }
 
@@ -84,7 +88,7 @@ public class RoulettePopup : Popup
         int maxValue = roulettePercent[roulettePercent.Count - 1].Value;
 
         var percentValue = Random.Range(0, maxValue + 1); // 100으로 하면 99까지만 나옴
-
+        int roulettePercentIndex = 0;
         for (int index = 0; index < roulettePercent.Count; ++index)
         {
             if (roulettePercent[index].Value <= 0)
@@ -93,6 +97,7 @@ public class RoulettePopup : Popup
             if ((index == 0 && roulettePercent[index].Value >= percentValue) ||
                 (index > 0 && roulettePercent[index - 1].Value < percentValue && roulettePercent[index].Value >= percentValue))
             {
+                roulettePercentIndex = index;
                 keyValue = roulettePercent[index];
 
                 iTween.RotateAdd(RoulettePanObj, iTween.Hash("z", 360 * 2 + RouletteAngle[index], "time", 2f, "easetype", iTween.EaseType.easeInOutQuart));
@@ -102,16 +107,14 @@ public class RoulettePopup : Popup
             }
         }
 
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(0.3f); 
 
         CloseAction();
 
-        if (keyValue.Key == 0)
-        {
-            FirebaseManager.Instance.GetGiftImage(RouletteGiftconResult);
-        }
+        if(roulettePercentIndex == 0)
+            ParentPopup.ShowPopup(new RoulettePointResultPopup.RoulettePointResultPopupData(keyValue.Key, RoulettePointResultPopup.POINT_TYPE.CASH));
         else
-            ParentPopup.ShowPopup(new RoulettePointResultPopup.RoulettePointResultPopupData(keyValue.Key));
+            ParentPopup.ShowPopup(new RoulettePointResultPopup.RoulettePointResultPopupData(keyValue.Key, RoulettePointResultPopup.POINT_TYPE.POINT));
     }
 
     public void RouletteGiftconResult(int giftconIndex)
