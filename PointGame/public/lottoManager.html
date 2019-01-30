@@ -50,15 +50,15 @@
 
     <div class="row center">
       <button id="BTN_SELECT_LUCKY" type="button" class="btn white indigo-text">당첨 번호 추첨</button>
-      <button id="BTN_TEST_CREATE" type="button" class="btn white indigo-text">번호 생성</button>
+      <button id="BTN_TEST_CREATE" type="button" class="btn white indigo-text">수동 당첨 모드</button>
     </div>
 
     <div class="row z-depth-1">
       <div class="col l12 m12 s12">
         <p>
-        최근 당첨 번호 :
+        이번 회차 복권 구매 인원 :
           <!-- TODO 4. 상태 보기용 span 확인-->
-           <span id="LOTTO_GROUP" class="blue-text">추첨 버튼을 눌러주세요</span>
+           <span id="LOTTO_GROUP" class="blue-text">로또 구매 인원</span>
          </p>
       </div>
     </div>
@@ -67,7 +67,7 @@
     <br>
 
     <table>
-      <h5 class="indigo-text">:+: 당첨자 현황 :+:</h5>
+      <h5 class="indigo-text">:+: 최근 당첨자 현황 :+:</h5>
       <thead>
         <th>회차</th>
         <th>당첨자</th>
@@ -126,6 +126,24 @@
   };
   firebase.initializeApp(config);
 
+  var provider = new firebase.auth.GoogleAuthProvider();
+
+  SignStatus();
+  function SignStatus()
+  {
+    firebase.auth().onAuthStateChanged(function(user) {
+    if (user) {
+      var email = user.email;
+      if(email != "jt.famm@gmail.com"){
+        location.href="./notAuth.html";
+      }
+      // User is signed in.
+    } else {
+        location.href="./notAuth.html";
+  }
+  });
+}
+
   const messaging = firebase.messaging();
   messaging.usePublicVapidKey("BKuiXbk64s3EcAdhlHDB6Fk_wXjOROxtakt-LXxqTjdnNTA1YxTaToR3sVymbAKpAgJcbbnY-VnTUnqO_kzEKP0");
 /*
@@ -146,12 +164,25 @@
   var LottoCurSeries;
   var LottoTodaySeries;
 
+ SetLottoCount();
+
+  function SetLottoCount()
+  {
+    firebase.database().ref('/LottoCount').once('value', function(snapshot) {
+      var message = snapshot.val();
+      Lottocount = message;
+      $("#LOTTO_GROUP").text(Lottocount - 1 + '명');
+  });
+  }
+
+
   function SetLottoUserData()
   {
 
     firebase.database().ref('/LottoCount').once('value', function(snapshot) {
       var message = snapshot.val();
       Lottocount = message;
+      $("#LOTTO_GROUP").text(Lottocount);
 
       firebase.database().ref('/LottoCurSeries').once('value', function(snapshot) {
         var message = snapshot.val();
@@ -191,7 +222,7 @@
               firebase.database().ref('/LottoCount').set(1)
             }
 
-            $("#LOTTO_GROUP").text(data.val());
+
           })
 
 
@@ -237,10 +268,9 @@
 
     function SetData()
     {
-      for(var i = 0; i < arrLottoWinLuckyGroup.length; i++)
+    //  for(var i = 0; i < arrLottoWinLuckyGroup.length; i++)
       {
 
-        //console.log(arrLottoWinLuckyGroup);
 
         var my_tbody = document.getElementById('my-tbody');
         // var row = my_tbody.insertRow(0); // 상단에 추가
@@ -248,8 +278,8 @@
         var cell1 = row.insertCell(0);
         var cell2 = row.insertCell(1);
 
-        cell1.innerHTML = arrLottoWinLuckyGroupSeries[i] + 1;
-        cell2.innerHTML = arrLottoWinLuckyGroup[i];
+        cell1.innerHTML = arrLottoWinLuckyGroupSeries[0] + 1;
+        cell2.innerHTML = arrLottoWinLuckyGroup[arrLottoWinLuckyGroupSeries[0]];
 
       }
 
@@ -356,7 +386,7 @@
 
 
                   var tempCount = 0;
-                  var dbTestRef = firebase.database().ref('/LottoLuckyGroup').orderByKey().limitToLast(3)
+                  var dbTestRef = firebase.database().ref('/LottoLuckyGroup').orderByKey().limitToLast(1)
                   dbTestRef.on('child_added', function(data){
 
                     var index = data.key.toString().split('_');
@@ -366,13 +396,9 @@
                     //SetData(tempIdx, arrLottoWinLuckyGroup[tempIdx], arrLottoWinUser[tempIdx]);
                     //Refresh();
 
-                    //console.log(arrLottoWinLuckyGroup);
+                    console.log(arrLottoWinLuckyGroup);
 
-                    if( arrLottoWinLuckyGroup.length == 3)
-                    {
-                      Refresh();
-                    }
-
+                    Refresh();
                     tempCount ++;
 
                   });
@@ -389,14 +415,55 @@
 
 
 
+    var LottoSelectMode;
+    SetLottoRefData();
+
+    function SetLottoRefData()
+    {
+      firebase.database().ref('/AutoLottoSelect').once('value', function(snapshot) {
+          var message = snapshot.val();
+          LottoSelectMode = message;
+
+          if(LottoSelectMode == 0)
+          {
+            $("#BTN_TEST_CREATE").text('수동 당첨 모드');
+          }
+          else
+          {
+            $("#BTN_TEST_CREATE").text('자동 당첨 모드');
+          }
+          //console.log(LottoRefNumber);
+        });
+    }
+
 
     $("#BTN_TEST_CREATE").click(function() {
+
+      if(LottoSelectMode == 0)
+      {
+        LottoSelectMode = 1;
+        firebase.database().ref('/AutoLottoSelect').set(LottoSelectMode);
+        $("#BTN_TEST_CREATE").text('자동 당첨 모드');
+      }
+      else
+      {
+        LottoSelectMode = 0;
+        firebase.database().ref('/AutoLottoSelect').set(LottoSelectMode);
+        $("#BTN_TEST_CREATE").text('수동 당첨 모드');
+      }
+
+/*
       var result = LottoRefNumber * Lottocount;
     //  document.write(result);
 
     firebase.database().ref('/Lotto/' + Lottocount).set({"User": Lottocount, "Number": result})
     Lottocount++;
     firebase.database().ref('/LottoCount').set(Lottocount)
+
+    */
+
+
+    BTN_TEST_CREATE
     });
 
 
@@ -421,17 +488,24 @@
      //        var 자정='00:00:00';
            var time ='16:01:00';
 
-             for(var i=0; i<arrLottoSelectTime.length; i++) {              //console.log(arrLottoSelectTime[i]);
-              if((new Date()).getHMS() == arrLottoSelectTime[i])
-              {
-                   SetLottoUserData();
-              }
+           if(LottoSelectMode == 1)
+           {
+               for(var i=0; i<arrLottoSelectTime.length; i++) {              //console.log(arrLottoSelectTime[i]);
+                if((new Date()).getHMS() == arrLottoSelectTime[i])
+                {
+                     SetLottoUserData();
+                }
+             }
            }
+           else {
+
+           }
+
 
           window.setTimeout(GetTime,1000); // 1초마다 반복
      }
-
-    // GetTime();
+  GetTime();
+    //
 
 
 </script>

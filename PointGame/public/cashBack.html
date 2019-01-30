@@ -50,7 +50,7 @@
 
 
     <table>
-      <h5 class="indigo-text">:+: 당첨금 신청 내역  :+:</h5>
+      <h5 class="indigo-text">:+:  캐시백 신청 내역  :+:</h5>
       <thead>
         <th>신청자 아이디</th>
         <th>신청자 정보</th>
@@ -98,6 +98,25 @@
     messagingSenderId: "641308195675",
   };
   firebase.initializeApp(config);
+
+  var provider = new firebase.auth.GoogleAuthProvider();
+
+  SignStatus();
+  function SignStatus()
+  {
+    firebase.auth().onAuthStateChanged(function(user) {
+    if (user) {
+      var email = user.email;
+      if(email != "jt.famm@gmail.com"){
+        location.href="./notAuth.html";
+      }
+      // User is signed in.
+    } else {
+        location.href="./notAuth.html";
+  }
+  });
+}
+
 
   const messaging = firebase.messaging();
   messaging.usePublicVapidKey("BKuiXbk64s3EcAdhlHDB6Fk_wXjOROxtakt-LXxqTjdnNTA1YxTaToR3sVymbAKpAgJcbbnY-VnTUnqO_kzEKP0");

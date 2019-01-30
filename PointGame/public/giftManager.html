@@ -49,7 +49,9 @@
     <!-- 핵심 -->
     <h3 class="indigo-text center">:+: 상품권 현황 :+:</h3>
 
+    <!--
     <h5 class="indigo-text center" id = "GIFT_COUNT">상품권 남은 수량</h5>
+    -->
 
     <div class="col l12 m12 s12 input-field">
       <div class="file-field input-field">
@@ -143,12 +145,31 @@
 
 
 
+
+    SignStatus();
+    function SignStatus()
+    {
+      firebase.auth().onAuthStateChanged(function(user) {
+      if (user) {
+        var email = user.email;
+        if(email != "jt.famm@gmail.com"){
+          location.href="./notAuth.html";
+        }
+        // User is signed in.
+      } else {
+          location.href="./notAuth.html";
+    }
+    });
+  }
+
   $("#PROGRESS").show();
 
   //var _file = null;
 
   var _file = new Array();
 
+
+/*
   document.getElementById("INPUT_FILE").addEventListener("change", handleFiles, false);
   function handleFiles() {
 
@@ -161,12 +182,12 @@
     }
 
   }
-
+*/
   var GiftCount;
   firebase.database().ref('/GiftCount').once('value', function(snapshot) {
     var message = snapshot.val();
     GiftCount = message;
-    $("#GIFT_COUNT").text('상품권 남은 수량 : ' + GiftCount);
+    //$("#GIFT_COUNT").text('상품권 남은 수량 : ' + GiftCount);
 
     console.log(GiftCount);
   });
@@ -210,13 +231,13 @@
     var cell4 = row.insertCell(3);
 
 
-    if(data.val().Name == '0')
+    if(data.val().Name == '12')
     {
-      cell1.innerHTML = '기프티콘';
+      cell1.innerHTML = data.val().Name + ' 캐시';
     }
     else
     {
-      cell1.innerHTML = data.val().Name + '포인트';
+      cell1.innerHTML = data.val().Name + ' 포인트';
     }
 
       cell2.innerHTML = data.val().Prob + '%';
@@ -249,6 +270,9 @@
 
   /* 2. 메모하기 눌렀을 떄 DB에 기록 */
   $("#BTN_UPLOAD_GIFT").click(function(){
+
+    return;
+
     // 5. 파일 선택이 안됬을 경우 등록 방지
     if( _file == null ){
       alert("업로드할 파일을 선택해 주세요");
