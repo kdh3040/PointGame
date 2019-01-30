@@ -162,7 +162,7 @@ public class LottoSlotUI : MonoBehaviour {
 
     public void OnClickNumberPick()
     {
-
+        SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
         ParentPopup.ShowPopup(new LottoMsgPopup.LottoMsgPopupData(string.Format("{0:n0}포인트로 번호를 뽑으시겠습니까?", CommonData.LottoNumberCost),
             () =>
             {
@@ -218,6 +218,7 @@ public class LottoSlotUI : MonoBehaviour {
 
     public void OnClickLottoResult()
     {
+        SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
         AdsManager.Instance.ShowLottoRewardedAd(LottoResultView);
     }
     public void LottoResultView()
@@ -228,6 +229,7 @@ public class LottoSlotUI : MonoBehaviour {
     }
     public void OnClickLottoWin()
     {
+        SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
         ParentPopup.ShowPopup(new LottoWinPopup.LottoWinPopupData(SeriesCount, () =>
         {
             TKManager.Instance.MyData.LottoWinSeriesList.Add(SeriesCount, true);

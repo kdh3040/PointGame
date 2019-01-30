@@ -64,13 +64,14 @@ public class RoulettePopup : Popup
 
     public void OnClickOk()
     {
+        SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
         CloseAction();
     }
     public void OnClickStart()
     {
         if (RoulettePlay)
             return;
-
+        SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
         StartCoroutine(Co_Roulette());
     }
 

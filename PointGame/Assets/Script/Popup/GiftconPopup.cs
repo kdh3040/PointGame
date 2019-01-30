@@ -113,10 +113,12 @@ public class GiftconPopup : Popup
 
     public void OnClickOk()
     {
+        SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
         CloseAction();
     }
     public void OnClickDelete()
     {
+        SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
         ParentPopup.ShowPopup(new MsgPopup.MsgPopupData("기프티콘을 삭제 하시겠습니까?",
             () =>
             {
@@ -133,6 +135,7 @@ public class GiftconPopup : Popup
 
     public void OnClickNext()
     {
+        SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
         if (CurrViewUrlListIndex >= UrlList.Count)
             return;
 
@@ -142,6 +145,7 @@ public class GiftconPopup : Popup
 
     public void OnClickPrev()
     {
+        SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
         if (CurrViewUrlListIndex <= 0)
             return;
 

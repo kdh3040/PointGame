@@ -74,6 +74,7 @@ public class MsgPopup : Popup
 
     public void OnClickOk()
     {
+        SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
         CloseAction();
         if (OkEndAction != null)
             OkEndAction();
@@ -81,6 +82,7 @@ public class MsgPopup : Popup
 
     public void OnClickCancel()
     {
+        SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
         CloseAction();
     }
 

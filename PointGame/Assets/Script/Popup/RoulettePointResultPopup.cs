@@ -36,6 +36,7 @@ public class RoulettePointResultPopup : Popup
 
     public void OnClickOk()
     {
+        SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
         CloseAction();
     }
 }

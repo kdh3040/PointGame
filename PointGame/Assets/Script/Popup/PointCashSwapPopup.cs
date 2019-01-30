@@ -44,7 +44,8 @@ public class PointCashSwapPopup : Popup
 
     public void OnClickCashRefund()
     {
-        if(TKManager.Instance.MyData.Cash < CommonData.PointToCashChange)
+        SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
+        if (TKManager.Instance.MyData.Cash < CommonData.PointToCashChange)
         {
             ParentPopup.ShowPopup(new MsgPopup.MsgPopupData(string.Format("{0} 캐시 부터 교환 가능합니다.", CommonData.PointToCashChange)));
         }
@@ -54,6 +55,7 @@ public class PointCashSwapPopup : Popup
 
     public void OnClickCashRefundOK()
     {
+        SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
         FirebaseManager.Instance.SetCashInfo(Name.text.ToString(), Bank.text.ToString(), AccountNumber.text.ToString(), TKManager.Instance.MyData.Cash);
 
 
@@ -70,6 +72,7 @@ public class PointCashSwapPopup : Popup
 
     public void OnClickOK()
     {
+        SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
         CloseAction();
     }
 }
