@@ -49,8 +49,11 @@ public class RoulettePopup : Popup
             RoulettePointText[i].gameObject.SetActive(false);
             RouletteGiftconImg[i].gameObject.SetActive(false);
 
-            if (RoulettePercent[i].Key == 0)
-                RouletteGiftconImg[i].gameObject.SetActive(true);
+            if (i == 0)
+            {
+                RoulettePointText[i].gameObject.SetActive(true);
+                RoulettePointText[i].text = string.Format("{0:n0}C", RoulettePercent[i].Key);
+            }
             else
             {
                 RoulettePointText[i].gameObject.SetActive(true);
@@ -106,12 +109,7 @@ public class RoulettePopup : Popup
 
         CloseAction();
 
-        if (keyValue.Key == 0)
-        {
-            FirebaseManager.Instance.GetGiftImage(RouletteGiftconResult);
-        }
-        else
-            ParentPopup.ShowPopup(new RoulettePointResultPopup.RoulettePointResultPopupData(keyValue.Key));
+        ParentPopup.ShowPopup(new RoulettePointResultPopup.RoulettePointResultPopupData(keyValue.Key));
     }
 
     public void RouletteGiftconResult(int giftconIndex)

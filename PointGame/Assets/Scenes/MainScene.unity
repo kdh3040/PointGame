@@ -1372,7 +1372,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\uAE30\uD504\uD2F0\uCF58\uC774 \uC5C6\uC2B5\uB2C8\uB2E4."
+  m_Text: "\uC54C\uB9BC\uC774 \uC5C6\uC2B5\uB2C8\uB2E4."
 --- !u!222 &107111463
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -14666,7 +14666,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 156, y: -522}
+  m_AnchoredPosition: {x: 924.01, y: -240}
   m_SizeDelta: {x: 277.8, y: 120}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1264967573
@@ -14688,7 +14688,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: eaf3e1809bef9574dbe9ba9920523fce, type: 3}
+  m_Sprite: {fileID: 21300000, guid: b26245134bac0a04a81d4ae07941effc, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -19348,7 +19348,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1706300711
 RectTransform:
   m_ObjectHideFlags: 0

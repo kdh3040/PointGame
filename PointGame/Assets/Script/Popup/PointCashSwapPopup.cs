@@ -37,9 +37,9 @@ public class PointCashSwapPopup : Popup
     {
         CashRefundInfoObj.gameObject.SetActive(false);
 
-        TodayAccumulatePoint.text = string.Format(": {0}", TKManager.Instance.MyData.TodayAccumulatePoint);
-        AllAccumulatePoint.text = string.Format(": {0}", TKManager.Instance.MyData.AllAccumulatePoint);
-        Cash.text = string.Format(": {0}", TKManager.Instance.MyData.Cash);
+        TodayAccumulatePoint.text = string.Format(": {0}P", TKManager.Instance.MyData.TodayAccumulatePoint);
+        AllAccumulatePoint.text = string.Format(": {0}P", TKManager.Instance.MyData.AllAccumulatePoint);
+        Cash.text = string.Format(": {0}C", TKManager.Instance.MyData.Cash);
     }
 
     public void OnClickCashRefund()
