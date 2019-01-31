@@ -94,6 +94,7 @@ public class FirebaseManager : MonoBehaviour
     {
         GetUserData();
 
+        GetAdsMode();
         GetLottoRefNumber();
         //GetLottoTodaySeries();
         GetLottoCurSeries();
@@ -104,13 +105,12 @@ public class FirebaseManager : MonoBehaviour
     }
 
 
-
     private void AddFirstLoadingComplete()
     {
         if (FirstLoadingComplete == false)
             LoadingCount++;
 
-        if (LoadingCount == 6)
+        if (LoadingCount == 7)
             FirstLoadingComplete = true;
     }
 
@@ -605,6 +605,36 @@ public class FirebaseManager : MonoBehaviour
         }
     );
     }
+
+    // 로또 레퍼런스 번호 파이어베이스에서 로드
+    public void GetAdsMode()
+    {
+        int tempAdsMode = 0;
+
+        mDatabaseRef.Child("AdsMode").GetValueAsync().ContinueWith(task =>
+        {
+
+            if (task.IsFaulted)
+            {
+                // Handle the error...
+            }
+            else if (task.IsCompleted)
+            {
+                DataSnapshot snapshot = task.Result;
+                if (snapshot != null && snapshot.Exists)
+                {
+                    tempAdsMode = Convert.ToInt32(snapshot.Value);
+                }
+                else
+                    tempAdsMode = 0;
+
+                AddFirstLoadingComplete();
+
+            }
+        }
+      );
+    }
+
     // 로또 레퍼런스 번호 파이어베이스에서 로드
     public void GetLottoRefNumber()
     {
