@@ -37,6 +37,8 @@ public class FirebaseManager : MonoBehaviour
     public bool FirstLoadingComplete = false;
     public int LoadingCount = 0;
 
+    public int AdsMode = 0;
+
     // Use this for initialization
     void Start()
     {
@@ -609,8 +611,6 @@ public class FirebaseManager : MonoBehaviour
     // 로또 레퍼런스 번호 파이어베이스에서 로드
     public void GetAdsMode()
     {
-        int tempAdsMode = 0;
-
         mDatabaseRef.Child("AdsMode").GetValueAsync().ContinueWith(task =>
         {
 
@@ -623,10 +623,10 @@ public class FirebaseManager : MonoBehaviour
                 DataSnapshot snapshot = task.Result;
                 if (snapshot != null && snapshot.Exists)
                 {
-                    tempAdsMode = Convert.ToInt32(snapshot.Value);
+                    AdsMode = Convert.ToInt32(snapshot.Value);
                 }
                 else
-                    tempAdsMode = 0;
+                    AdsMode = 0;
 
                 AddFirstLoadingComplete();
 

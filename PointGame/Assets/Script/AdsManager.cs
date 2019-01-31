@@ -130,24 +130,30 @@ public class AdsManager : MonoBehaviour {
 
     public void ShowInterstitialAds()
     {
-        if (this.interstitial.IsLoaded())
+        if(FirebaseManager.Instance.AdsMode > 0)
         {
-            this.interstitial.Show();
-        }
-        else
-        {
-            this.RequestInterstitial();
-            this.interstitial.Show();
-        }
+            if (this.interstitial.IsLoaded())
+            {
+                this.interstitial.Show();
+            }
+            else
+            {
+                this.RequestInterstitial();
+                this.interstitial.Show();
+            }
+        }        
     }
 
 
     public void ShowRewardedAd()
     {
-        if (Advertisement.IsReady(rewarded_video_id))
+        if(FirebaseManager.Instance.AdsMode > 0)
         {
-            var options = new ShowOptions { resultCallback = HandleShowRewardVideoResult };
-            Advertisement.Show(rewarded_video_id, options);
+            if (Advertisement.IsReady(rewarded_video_id))
+            {
+                var options = new ShowOptions { resultCallback = HandleShowRewardVideoResult };
+                Advertisement.Show(rewarded_video_id, options);
+            }
         }
     }
 
@@ -244,11 +250,14 @@ public class AdsManager : MonoBehaviour {
 
     public void ShowSkipRewardedAd()
     {
-        if (Advertisement.IsReady(Skip_rewarded_video_id))
+        if (FirebaseManager.Instance.AdsMode > 0)
         {
-            var options = new ShowOptions { resultCallback = HandleShowSkipRewardVideoResult };
-            Advertisement.Show(Skip_rewarded_video_id, options);
-        }
+            if (Advertisement.IsReady(Skip_rewarded_video_id))
+            {
+                var options = new ShowOptions { resultCallback = HandleShowSkipRewardVideoResult };
+                Advertisement.Show(Skip_rewarded_video_id, options);
+            }
+        } 
     }
     
     private void HandleShowSkipRewardVideoResult(ShowResult result)
