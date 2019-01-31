@@ -160,6 +160,8 @@ public class MiniGamePopup : Popup
                 yield return null;
             }
 
+            yield return new WaitForSeconds(0.2f);
+
             ShowInfoPopup(true);
             AdsManager.Instance.ShowRewardedAd();
         }
