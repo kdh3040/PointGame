@@ -166,7 +166,8 @@ public class GameUI : MonoBehaviour {
     private void OnClickGameRestart()
     {
         SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
-        AdsManager.Instance.ShowSkipRewardedAd();
+        if (FirebaseManager.Instance.AdsMode > 0)
+            AdsManager.Instance.ShowSkipRewardedAd();
         GamePlayManager.Instance.GameRestart();
     }
 
@@ -174,7 +175,10 @@ public class GameUI : MonoBehaviour {
     {
         SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
         if (GamePlayManager.Instance.StageCount % 3 == 0)
-            AdsManager.Instance.ShowSkipRewardedAd();
+        {
+            if (FirebaseManager.Instance.AdsMode > 0)
+                AdsManager.Instance.ShowSkipRewardedAd();
+        }
         else
             AdsManager.Instance.ShowInterstitialAds();
         

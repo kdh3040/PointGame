@@ -100,7 +100,8 @@ public class MainUI : MonoBehaviour {
     {
         SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
         // TODO 전면광고
-        AdsManager.Instance.ShowSkipRewardedAd();
+        if (FirebaseManager.Instance.AdsMode > 0)
+            AdsManager.Instance.ShowSkipRewardedAd();
         Popup.ShowPopup(new RoulettePopup.RoulettePopupData());
     }
 

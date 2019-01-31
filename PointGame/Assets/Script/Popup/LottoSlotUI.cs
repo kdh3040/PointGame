@@ -172,7 +172,8 @@ public class LottoSlotUI : MonoBehaviour {
                 }
                 else
                 {
-                    AdsManager.Instance.ShowSkipRewardedAd();
+                    if (FirebaseManager.Instance.AdsMode > 0)
+                        AdsManager.Instance.ShowSkipRewardedAd();
 
                     // TODO 번호 뽑기
                     TKManager.Instance.MyData.RemovePoint(CommonData.LottoNumberCost);

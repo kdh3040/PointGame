@@ -250,14 +250,11 @@ public class AdsManager : MonoBehaviour {
 
     public void ShowSkipRewardedAd()
     {
-        if (FirebaseManager.Instance.AdsMode > 0)
+        if (Advertisement.IsReady(Skip_rewarded_video_id))
         {
-            if (Advertisement.IsReady(Skip_rewarded_video_id))
-            {
-                var options = new ShowOptions { resultCallback = HandleShowSkipRewardVideoResult };
-                Advertisement.Show(Skip_rewarded_video_id, options);
-            }
-        } 
+            var options = new ShowOptions { resultCallback = HandleShowSkipRewardVideoResult };
+            Advertisement.Show(Skip_rewarded_video_id, options);
+        }
     }
     
     private void HandleShowSkipRewardVideoResult(ShowResult result)
