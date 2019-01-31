@@ -17,7 +17,7 @@ public class GamePlayManager : MonoBehaviour {
         }
     }
 
-    public static int GameGetPoint = 20;
+    public static int GameGetPoint = 25;
     public static int GameCoinGetPoint = 1;
 
     public int StageCount = 1;

@@ -15,6 +15,7 @@ public enum POPUP_TYPE
     LOTTO_WIN_INFO,
     POINT_CASH_SWAP,
     ADS,
+    MINI_GAME,
 }
 
 public class PopupUI : MonoBehaviour {
@@ -31,6 +32,7 @@ public class PopupUI : MonoBehaviour {
     public LottoWinPopup LottoWinPopupObj;
     public LottoMsgPopup LottoMsgPopupObj;
     public PointCashSwapPopup PointCashSwapPopupObj;
+    public MiniGamePopup MiniGamePopupObj;
 
     public void Start()
     {
@@ -52,7 +54,8 @@ public class PopupUI : MonoBehaviour {
         LottoMsgPopupObj.Initialize(this, ClosePopup);
         PointCashSwapPopupObj.gameObject.SetActive(false);
         PointCashSwapPopupObj.Initialize(this, ClosePopup);
-        
+        MiniGamePopupObj.gameObject.SetActive(false);
+        MiniGamePopupObj.Initialize(this, ClosePopup);
     }
 
     public void ShowPopup(Popup.PopupData data)
@@ -103,6 +106,10 @@ public class PopupUI : MonoBehaviour {
                 PointCashSwapPopupObj.gameObject.SetActive(true);
                 PointCashSwapPopupObj.SetData(data);
                 break;
+            case POPUP_TYPE.MINI_GAME:
+                MiniGamePopupObj.gameObject.SetActive(true);
+                MiniGamePopupObj.SetData(data);
+                break;
             default:
                 break;
         }
@@ -143,6 +150,9 @@ public class PopupUI : MonoBehaviour {
                 break;
             case POPUP_TYPE.POINT_CASH_SWAP:
                 PointCashSwapPopupObj.gameObject.SetActive(false);
+                break;
+            case POPUP_TYPE.MINI_GAME:
+                MiniGamePopupObj.gameObject.SetActive(false);
                 break;
             default:
                 break;

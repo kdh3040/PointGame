@@ -214,7 +214,7 @@ public class AdsManager : MonoBehaviour {
                 {
                     Debug.Log("The ad was successfully shown.");
 
-                    //TKManager.Instance.MyData.AddPoint(CommonData.AdsPointReward);
+                    
                     // to do ...
                     // 광고 시청이 완료되었을 때 처리
 
