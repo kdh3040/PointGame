@@ -628,6 +628,9 @@ public class FirebaseManager : MonoBehaviour
                 else
                     AdsMode = 0;
 
+                if (AdsMode > 0)
+                    AdsManager.Instance.ShowBanner();
+
                 AddFirstLoadingComplete();
 
             }

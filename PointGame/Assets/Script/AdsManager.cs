@@ -87,7 +87,7 @@ public class AdsManager : MonoBehaviour {
 
         // Load the banner with the request.
 
-        this.bannerView.LoadAd(request);
+        //this.bannerView.LoadAd(request);
 
     }
 
@@ -196,19 +196,24 @@ public class AdsManager : MonoBehaviour {
 
     public void ShowLottoRewardedAd(Action endAction)
     {
-        AdView = false;
-
-        if (Advertisement.IsReady(Lotto_rewarded_video_id))
+        if (FirebaseManager.Instance.AdsMode > 0)
         {
-            AdView = true;
-            var options = new ShowOptions { resultCallback = HandleShowLottoRewardVideoResult };
-            Advertisement.Show(Lotto_rewarded_video_id, options);
-        }
+            AdView = false;
 
-        if(AdView && endAction != null)
-        {
-            StartCoroutine(Co_AdEnd(endAction));
+            if (Advertisement.IsReady(Lotto_rewarded_video_id))
+            {
+                AdView = true;
+                var options = new ShowOptions { resultCallback = HandleShowLottoRewardVideoResult };
+                Advertisement.Show(Lotto_rewarded_video_id, options);
+            }
+
+            if (AdView && endAction != null)
+            {
+                StartCoroutine(Co_AdEnd(endAction));
+            }
         }
+        else
+            endAction();
     }
     
     private void HandleShowLottoRewardVideoResult(ShowResult result)
@@ -250,11 +255,14 @@ public class AdsManager : MonoBehaviour {
 
     public void ShowSkipRewardedAd()
     {
-        if (Advertisement.IsReady(Skip_rewarded_video_id))
+        if (FirebaseManager.Instance.AdsMode > 0)
         {
-            var options = new ShowOptions { resultCallback = HandleShowSkipRewardVideoResult };
-            Advertisement.Show(Skip_rewarded_video_id, options);
-        }
+            if (Advertisement.IsReady(Skip_rewarded_video_id))
+            {
+                var options = new ShowOptions { resultCallback = HandleShowSkipRewardVideoResult };
+                Advertisement.Show(Skip_rewarded_video_id, options);
+            }
+        }   
     }
     
     private void HandleShowSkipRewardVideoResult(ShowResult result)
