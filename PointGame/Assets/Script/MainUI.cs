@@ -115,7 +115,13 @@ public class MainUI : MonoBehaviour {
 
     private void Update()
     {
-        if(FirebaseManager.Instance.AdsMode > 0)
+#if UNITY_EDITOR
+        if (Input.GetKeyDown("space"))
+        {
+            UnityEngine.ScreenCapture.CaptureScreenshot("shot.png");
+        }
+#endif
+        if (FirebaseManager.Instance.AdsMode > 0)
             AllPoint.SetValue(string.Format("{0}p / {1}c", TKManager.Instance.MyData.Point, TKManager.Instance.MyData.Cash), CountImgFont.IMG_RANGE.LEFT, CountImgFont.IMG_TYPE.YELLOW);
         else
             AllPoint.SetValue(string.Format("{0}p", TKManager.Instance.MyData.Point), CountImgFont.IMG_RANGE.LEFT, CountImgFont.IMG_TYPE.YELLOW);

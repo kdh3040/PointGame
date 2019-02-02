@@ -204,6 +204,13 @@ public class GamePlayManager : MonoBehaviour {
 
     private void Update()
     {
+#if UNITY_EDITOR
+        if (Input.GetKeyDown("space"))
+        {
+            UnityEngine.ScreenCapture.CaptureScreenshot("shot.png");
+        }
+#endif
+
         if (IsGameStart)
         {
             float speed = (BlockSpeed + (BlockSpeedOffset * BlockClearCount) + (BlockSpeedStageClearOffset * StageSpeedOffsetCount));
