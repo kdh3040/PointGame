@@ -231,10 +231,23 @@ public class LottoSlotUI : MonoBehaviour {
     public void OnClickLottoWin()
     {
         SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
-        ParentPopup.ShowPopup(new LottoWinPopup.LottoWinPopupData(SeriesCount, () =>
+        if(FirebaseManager.Instance.AdsMode > 0)
         {
-            TKManager.Instance.MyData.LottoWinSeriesList.Add(SeriesCount, true);
-            RefreshUI();
-        }));
+            ParentPopup.ShowPopup(new LottoWinPopup.LottoWinPopupData(SeriesCount, () =>
+            {
+                TKManager.Instance.MyData.LottoWinSeriesList.Add(SeriesCount, true);
+                RefreshUI();
+            }));
+        }
+        else
+        {
+            ParentPopup.ShowPopup(new MsgPopup.MsgPopupData("당첨을 축하드립니다!\n2000포인트 획득!", () =>
+            {
+                TKManager.Instance.MyData.AddPoint(2000);
+                TKManager.Instance.MyData.LottoWinSeriesList.Add(SeriesCount, true);
+                RefreshUI();
+            }));
+        }
+        
     }
 }

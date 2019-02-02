@@ -49,7 +49,7 @@ public class RoulettePopup : Popup
             RoulettePointText[i].gameObject.SetActive(false);
             RouletteGiftconImg[i].gameObject.SetActive(false);
 
-            if (i == 0)
+            if (FirebaseManager.Instance.AdsMode > 0 && i == 0)
             {
                 RoulettePointText[i].gameObject.SetActive(true);
                 RoulettePointText[i].text = string.Format("{0:n0}C", RoulettePercent[i].Key);
@@ -58,6 +58,7 @@ public class RoulettePopup : Popup
             {
                 RoulettePointText[i].gameObject.SetActive(true);
                 RoulettePointText[i].text = string.Format("{0:n0}P", RoulettePercent[i].Key);
+                RoulettePointText[i].color = new Color(0, 0, 0, 1);
             }
         }
     }
@@ -111,7 +112,7 @@ public class RoulettePopup : Popup
 
         CloseAction();
 
-        if(roulettePercentIndex == 0)
+        if(FirebaseManager.Instance.AdsMode > 0 && roulettePercentIndex == 0)
             ParentPopup.ShowPopup(new RoulettePointResultPopup.RoulettePointResultPopupData(keyValue.Key, RoulettePointResultPopup.POINT_TYPE.CASH));
         else
             ParentPopup.ShowPopup(new RoulettePointResultPopup.RoulettePointResultPopupData(keyValue.Key, RoulettePointResultPopup.POINT_TYPE.POINT));

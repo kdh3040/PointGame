@@ -61,6 +61,8 @@ public class MainUI : MonoBehaviour {
 
         GiftconCount = -1;
 
+        SwapPoint.gameObject.SetActive(FirebaseManager.Instance.AdsMode > 0);
+        FreePoint.gameObject.SetActive(FirebaseManager.Instance.AdsMode > 0);
     }
 
     IEnumerator Co_GameOverRouletteStart()
@@ -113,9 +115,12 @@ public class MainUI : MonoBehaviour {
 
     private void Update()
     {
-        AllPoint.SetValue(string.Format("{0}p / {1}c", TKManager.Instance.MyData.Point, TKManager.Instance.MyData.Cash), CountImgFont.IMG_RANGE.LEFT, CountImgFont.IMG_TYPE.YELLOW);
+        if(FirebaseManager.Instance.AdsMode > 0)
+            AllPoint.SetValue(string.Format("{0}p / {1}c", TKManager.Instance.MyData.Point, TKManager.Instance.MyData.Cash), CountImgFont.IMG_RANGE.LEFT, CountImgFont.IMG_TYPE.YELLOW);
+        else
+            AllPoint.SetValue(string.Format("{0}p", TKManager.Instance.MyData.Point), CountImgFont.IMG_RANGE.LEFT, CountImgFont.IMG_TYPE.YELLOW);
 
-        if(GiftconCount != TKManager.Instance.MyData.GiftconURLList.Count)
+        if (GiftconCount != TKManager.Instance.MyData.GiftconURLList.Count)
         {
             GiftconCount = TKManager.Instance.MyData.GiftconURLList.Count;
             GiftBoxNotiObj.SetActive(GiftconCount > 0);
