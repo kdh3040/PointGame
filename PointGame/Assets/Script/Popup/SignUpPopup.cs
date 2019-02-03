@@ -40,24 +40,38 @@ public class SignUpPopup : MonoBehaviour
     public void OnClickOkButton()
     {
         SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
+        //bool emptyString = true;
+        //for (int i = 0; i < NickName.text.Length; i++)
+        //{
+        //    if (NickName.text[i] != ' ')
+        //        emptyString = false;
+        //}
+
+
+        //if (emptyString)
+        //{
+        //    MsgPopup.gameObject.SetActive(true);
+        //    MsgText.text = "닉네임을 입력해주세요";
+        //}
+        //else
+        //{
+        //    EndAction(NickName.text);
+        //}
+
+        string nickName = NickName.text;
+
         bool emptyString = true;
-        for (int i = 0; i < NickName.text.Length; i++)
+        for (int i = 0; i < nickName.Length; i++)
         {
-            if (NickName.text[i] != ' ')
+            if (nickName[i] != ' ')
                 emptyString = false;
         }
 
-
         if (emptyString)
-        {
-            MsgPopup.gameObject.SetActive(true);
-            MsgText.text = "닉네임을 입력해주세요";
-        }
-        else
-        {
-            EndAction(NickName.text);
-        }
-            
+            nickName = string.Format("guest_{0:D4}", UnityEngine.Random.Range(1, 9999));
+
+        EndAction(nickName);
+
         //CloseAction();
     }
 

@@ -9,6 +9,7 @@ public class RoulettePopup : Popup
     public GameObject RoulettePanObj;
     public List<Text> RoulettePointText;
     public List<Image> RouletteGiftconImg;
+    public Text Info;
 
     private List<KeyValuePair<int, int>> RoulettePercent = new List<KeyValuePair<int, int>>();
     private List<int> RouletteAngle = new List<int>();
@@ -61,6 +62,13 @@ public class RoulettePopup : Popup
                 RoulettePointText[i].color = new Color(0, 0, 0, 1);
             }
         }
+
+        if (FirebaseManager.Instance.AdsMode > 0)
+        {
+            Info.text = "시작버튼을 눌러 포인트를 획득하세요~";
+        }
+        else
+            Info.text = "시작버튼을 눌러 포인트를 획득하세요~\n* 프리룰렛은 애플과의 관계가 일절 없습니다 *";
     }
 
     public void OnClickOk()
