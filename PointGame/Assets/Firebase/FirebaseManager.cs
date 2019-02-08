@@ -37,7 +37,8 @@ public class FirebaseManager : MonoBehaviour
     public bool FirstLoadingComplete = false;
     public int LoadingCount = 0;
 
-    public int AdsMode = 0;
+    private int ReviewVersion = 1;
+    public bool ReviewMode = true;
 
     // Use this for initialization
     void Start()
@@ -96,7 +97,7 @@ public class FirebaseManager : MonoBehaviour
     {
         GetUserData();
 
-        GetAdsMode();
+        GetReviewVersion();
         GetLottoRefNumber();
         //GetLottoTodaySeries();
         GetLottoCurSeries();
@@ -608,10 +609,9 @@ public class FirebaseManager : MonoBehaviour
     );
     }
 
-    // 로또 레퍼런스 번호 파이어베이스에서 로드
-    public void GetAdsMode()
+    public void GetReviewVersion()
     {
-        mDatabaseRef.Child("AdsMode").GetValueAsync().ContinueWith(task =>
+        mDatabaseRef.Child("ReviewVersion").GetValueAsync().ContinueWith(task =>
         {
 
             if (task.IsFaulted)
@@ -621,14 +621,15 @@ public class FirebaseManager : MonoBehaviour
             else if (task.IsCompleted)
             {
                 DataSnapshot snapshot = task.Result;
+                int version = 0;
                 if (snapshot != null && snapshot.Exists)
                 {
-                    AdsMode = Convert.ToInt32(snapshot.Value);
+                    version = Convert.ToInt32(snapshot.Value);
                 }
-                else
-                    AdsMode = 0;
 
-                if (AdsMode > 0)
+                ReviewMode = version < ReviewVersion;
+
+                if (ReviewMode == false)
                     AdsManager.Instance.ShowBanner();
 
                 AddFirstLoadingComplete();

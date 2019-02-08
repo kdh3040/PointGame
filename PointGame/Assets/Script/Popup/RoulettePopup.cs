@@ -50,25 +50,32 @@ public class RoulettePopup : Popup
             RoulettePointText[i].gameObject.SetActive(false);
             RouletteGiftconImg[i].gameObject.SetActive(false);
 
-            if (FirebaseManager.Instance.AdsMode > 0 && i == 0)
-            {
-                RoulettePointText[i].gameObject.SetActive(true);
-                RoulettePointText[i].text = string.Format("{0:n0}C", RoulettePercent[i].Key);
-            }
-            else
+            if(FirebaseManager.Instance.ReviewMode)
             {
                 RoulettePointText[i].gameObject.SetActive(true);
                 RoulettePointText[i].text = string.Format("{0:n0}P", RoulettePercent[i].Key);
                 RoulettePointText[i].color = new Color(0, 0, 0, 1);
             }
+            else
+            {
+                if (i == 0)
+                {
+                    RoulettePointText[i].gameObject.SetActive(true);
+                    RoulettePointText[i].text = string.Format("{0:n0}C", RoulettePercent[i].Key);
+                }
+                else
+                {
+                    RoulettePointText[i].gameObject.SetActive(true);
+                    RoulettePointText[i].text = string.Format("{0:n0}P", RoulettePercent[i].Key);
+                    RoulettePointText[i].color = new Color(0, 0, 0, 1);
+                }
+            }
         }
 
-        if (FirebaseManager.Instance.AdsMode > 0)
-        {
-            Info.text = "시작버튼을 눌러 포인트를 획득하세요~";
-        }
-        else
+        if (FirebaseManager.Instance.ReviewMode)
             Info.text = "시작버튼을 눌러 포인트를 획득하세요~\n* 프리룰렛은 애플과의 관계가 일절 없습니다 *";
+        else
+            Info.text = "시작버튼을 눌러 포인트를 획득하세요~";
     }
 
     public void OnClickOk()
@@ -120,10 +127,15 @@ public class RoulettePopup : Popup
 
         CloseAction();
 
-        if(FirebaseManager.Instance.AdsMode > 0 && roulettePercentIndex == 0)
-            ParentPopup.ShowPopup(new RoulettePointResultPopup.RoulettePointResultPopupData(keyValue.Key, RoulettePointResultPopup.POINT_TYPE.CASH));
-        else
+        if(FirebaseManager.Instance.ReviewMode)
             ParentPopup.ShowPopup(new RoulettePointResultPopup.RoulettePointResultPopupData(keyValue.Key, RoulettePointResultPopup.POINT_TYPE.POINT));
+        else
+        {
+            if (roulettePercentIndex == 0)
+                ParentPopup.ShowPopup(new RoulettePointResultPopup.RoulettePointResultPopupData(keyValue.Key, RoulettePointResultPopup.POINT_TYPE.CASH));
+            else
+                ParentPopup.ShowPopup(new RoulettePointResultPopup.RoulettePointResultPopupData(keyValue.Key, RoulettePointResultPopup.POINT_TYPE.POINT));
+        }
     }
 
     public void RouletteGiftconResult(int giftconIndex)

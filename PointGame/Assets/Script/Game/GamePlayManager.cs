@@ -57,6 +57,7 @@ public class GamePlayManager : MonoBehaviour {
         BlockClearCount = 0;
         StageCount = 0;
         StageSpeedOffsetCount = 0;
+        GamePoint = 0;
         GameReady();
     }
 
@@ -116,7 +117,7 @@ public class GamePlayManager : MonoBehaviour {
 
     public void GameRestart()
     {
-        GamePoint = 0;
+        
         BlockClearCount = 0;
         StageCount = 0;
         StageSpeedOffsetCount = 0;

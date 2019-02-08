@@ -165,5 +165,10 @@ public class PopupUI : MonoBehaviour {
         else
             CurrPopupType = QueuePopupType[QueuePopupType.Count - 1];
     }
+
+    public bool IsShowPopup(POPUP_TYPE type)
+    {
+        return CurrPopupType == type;
+    }
     
 }

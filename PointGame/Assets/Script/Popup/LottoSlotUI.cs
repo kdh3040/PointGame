@@ -172,8 +172,7 @@ public class LottoSlotUI : MonoBehaviour {
                 }
                 else
                 {
-                    if (FirebaseManager.Instance.AdsMode > 0)
-                        AdsManager.Instance.ShowSkipRewardedAd();
+                    AdsManager.Instance.ShowSkipRewardedAd();
 
                     // TODO 번호 뽑기
                     TKManager.Instance.MyData.RemovePoint(CommonData.LottoNumberCost);
@@ -231,19 +230,19 @@ public class LottoSlotUI : MonoBehaviour {
     public void OnClickLottoWin()
     {
         SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
-        if(FirebaseManager.Instance.AdsMode > 0)
+        if(FirebaseManager.Instance.ReviewMode)
         {
-            ParentPopup.ShowPopup(new LottoWinPopup.LottoWinPopupData(SeriesCount, () =>
+            ParentPopup.ShowPopup(new MsgPopup.MsgPopupData("당첨을 축하드립니다!\n2000포인트 획득!", () =>
             {
+                TKManager.Instance.MyData.AddPoint(2000);
                 TKManager.Instance.MyData.LottoWinSeriesList.Add(SeriesCount, true);
                 RefreshUI();
             }));
         }
         else
         {
-            ParentPopup.ShowPopup(new MsgPopup.MsgPopupData("당첨을 축하드립니다!\n2000포인트 획득!", () =>
+            ParentPopup.ShowPopup(new LottoWinPopup.LottoWinPopupData(SeriesCount, () =>
             {
-                TKManager.Instance.MyData.AddPoint(2000);
                 TKManager.Instance.MyData.LottoWinSeriesList.Add(SeriesCount, true);
                 RefreshUI();
             }));

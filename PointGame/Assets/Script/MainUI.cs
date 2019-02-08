@@ -61,8 +61,16 @@ public class MainUI : MonoBehaviour {
 
         GiftconCount = -1;
 
-        SwapPoint.gameObject.SetActive(FirebaseManager.Instance.AdsMode > 0);
-        FreePoint.gameObject.SetActive(FirebaseManager.Instance.AdsMode > 0);
+        if(FirebaseManager.Instance.ReviewMode)
+        {
+            SwapPoint.gameObject.SetActive(false);
+            FreePoint.gameObject.SetActive(false);
+        }
+        else
+        {
+            SwapPoint.gameObject.SetActive(true);
+            FreePoint.gameObject.SetActive(true);
+        }
     }
 
     IEnumerator Co_GameOverRouletteStart()
@@ -101,9 +109,7 @@ public class MainUI : MonoBehaviour {
     public void OnClickFreeRoulette()
     {
         SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
-        // TODO 전면광고
-        if (FirebaseManager.Instance.AdsMode > 0)
-            AdsManager.Instance.ShowSkipRewardedAd();
+        AdsManager.Instance.ShowSkipRewardedAd();
         Popup.ShowPopup(new RoulettePopup.RoulettePopupData());
     }
 
@@ -121,10 +127,11 @@ public class MainUI : MonoBehaviour {
             UnityEngine.ScreenCapture.CaptureScreenshot("shot.png");
         }
 #endif
-        if (FirebaseManager.Instance.AdsMode > 0)
-            AllPoint.SetValue(string.Format("{0}p / {1}c", TKManager.Instance.MyData.Point, TKManager.Instance.MyData.Cash), CountImgFont.IMG_RANGE.LEFT, CountImgFont.IMG_TYPE.YELLOW);
-        else
+        if (FirebaseManager.Instance.ReviewMode)
             AllPoint.SetValue(string.Format("{0}p", TKManager.Instance.MyData.Point), CountImgFont.IMG_RANGE.LEFT, CountImgFont.IMG_TYPE.YELLOW);
+        else
+            AllPoint.SetValue(string.Format("{0}p / {1}c", TKManager.Instance.MyData.Point, TKManager.Instance.MyData.Cash), CountImgFont.IMG_RANGE.LEFT, CountImgFont.IMG_TYPE.YELLOW);
+
 
         if (GiftconCount != TKManager.Instance.MyData.GiftconURLList.Count)
         {
@@ -132,6 +139,16 @@ public class MainUI : MonoBehaviour {
             GiftBoxNotiObj.SetActive(GiftconCount > 0);
             GiftBoxCountText.text = string.Format("{0}", GiftconCount);
         }
+
+#if UNITY_EDITOR || UNITY_ANDROID
+        if (Popup.IsShowPopup(POPUP_TYPE.MSG) == false && Input.GetKeyUp(KeyCode.Escape))
+        {
+            Popup.ShowPopup(new MsgPopup.MsgPopupData("게임을 종료 하시겠습니까?", () =>
+            {
+                Application.Quit();
+            }, MsgPopup.MSGPOPUP_TYPE.TWO));
+        }
+#endif
     }
 
 

@@ -130,7 +130,11 @@ public class AdsManager : MonoBehaviour {
 
     public void ShowInterstitialAds()
     {
-        if(FirebaseManager.Instance.AdsMode > 0)
+        if(FirebaseManager.Instance.ReviewMode)
+        {
+
+        }
+        else
         {
             if (this.interstitial.IsLoaded())
             {
@@ -145,9 +149,13 @@ public class AdsManager : MonoBehaviour {
     }
 
 
-    public void ShowRewardedAd()
+    public void ShowMiniGameRewardAd()
     {
-        if(FirebaseManager.Instance.AdsMode > 0)
+        if(FirebaseManager.Instance.ReviewMode)
+        {
+
+        }
+        else
         {
             if (Advertisement.IsReady(rewarded_video_id))
             {
@@ -196,7 +204,11 @@ public class AdsManager : MonoBehaviour {
 
     public void ShowLottoRewardedAd(Action endAction)
     {
-        if (FirebaseManager.Instance.AdsMode > 0)
+        if (FirebaseManager.Instance.ReviewMode)
+        {
+            endAction();
+        }
+        else
         {
             AdView = false;
 
@@ -212,8 +224,6 @@ public class AdsManager : MonoBehaviour {
                 StartCoroutine(Co_AdEnd(endAction));
             }
         }
-        else
-            endAction();
     }
     
     private void HandleShowLottoRewardVideoResult(ShowResult result)
@@ -255,7 +265,11 @@ public class AdsManager : MonoBehaviour {
 
     public void ShowSkipRewardedAd()
     {
-        if (FirebaseManager.Instance.AdsMode > 0)
+        if (FirebaseManager.Instance.ReviewMode)
+        {
+
+        }
+        else
         {
             if (Advertisement.IsReady(Skip_rewarded_video_id))
             {

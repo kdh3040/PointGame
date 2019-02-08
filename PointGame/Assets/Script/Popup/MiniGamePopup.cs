@@ -163,9 +163,9 @@ public class MiniGamePopup : Popup
             yield return new WaitForSeconds(0.2f);
 
             ShowInfoPopup(true);
-            AdsManager.Instance.ShowRewardedAd();
+            AdsManager.Instance.ShowMiniGameRewardAd();
 
-            if(FirebaseManager.Instance.AdsMode <= 0)
+            if(FirebaseManager.Instance.ReviewMode)
                 TKManager.Instance.MyData.AddPoint(CommonData.AdsPointReward);
         }
 
