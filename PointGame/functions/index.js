@@ -44,7 +44,7 @@ var LottoTodaySeries;
 
 
 var AutoLottoSelectMode = 0;
-SetLottoCount();
+//SetLottoCount();
 
  function SetLottoCount()
  {
@@ -102,7 +102,7 @@ SetLottoCount();
               firebase.database().ref('/LottoLuckyNumber/'+LottoCurSeries+'_L').set(arrLottoUser[result])
               firebase.database().ref('/LottoLuckyGroup/'+LottoCurSeries+'_L').set(result)
 
-              var LottoRandNumber = Math.floor(Math.random() * 100) + 1;
+              var LottoRandNumber = Math.floor(Math.random() * 20) + 1;
               firebase.database().ref('/LottoRefNumber').set(LottoRandNumber)
 
               firebase.database().ref('/Lotto/'+LottoCurSeries+'_L').remove();
@@ -126,7 +126,8 @@ SetLottoCount();
 
 var timer;
 
-var arrLottoSelectTime = ['09:00:00', '12:00:00', '15:00:00', '18:00:00'];
+//var arrLottoSelectTime = ['09:00:00', '12:00:00', '15:00:00', '18:00:00'];
+var arrLottoSelectTime = ['00:00:00', '03:00:00', '06:00:00', '09:00:00'];
 
 Number.prototype.to2 = function(){return this<10?'0'+this:this;};
  Date.prototype.getHMS = function(){
@@ -138,7 +139,7 @@ Number.prototype.to2 = function(){return this<10?'0'+this:this;};
 function showClock(){
         //console.log((new Date()).getHMS());
 
-        for(var i=0; i<arrLottoSelectTime.length; i++) {              //console.log(arrLottoSelectTime[i]);
+        for(var i=0; i<4; i++) {              //console.log(arrLottoSelectTime[i]);
          if((new Date()).getHMS() === arrLottoSelectTime[i])
          {
               SetLottoUserData();
@@ -147,6 +148,8 @@ function showClock(){
 
         timer = setTimeout(showClock,1000);
     }
+
+   //showClock();
 
     exports.dbWrite = functions.database.ref('/AutoLottoSelect').onWrite((change, context) => {
      const beforeData = change.before.val(); // data before the write
