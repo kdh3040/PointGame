@@ -40,12 +40,10 @@ public class LottoPopup : Popup
             LottoSlotList[i].ParentPopup = ParentPopup;
         }
 
-        if (FirebaseManager.Instance.AdsMode > 0)
-        {
-            Info.text = "- 1000포인트를 사용하여 행운번호를 뽑아보세요.\n- 하루 최대 4명의 행운의 당첨자가 뽑힙니다.";
-        }
-        else
+        if (FirebaseManager.Instance.ReviewMode)
             Info.text = "- 1000포인트를 사용하여 행운번호를 뽑아보세요.\n- 하루 최대 4명의 행운의 당첨자가 뽑힙니다.\n- 2000포인트의 주인공이 되어보세요~\n** 해피박스는 애플과의 관계가 일절 없습니다";
+        else
+            Info.text = "- 1000포인트를 사용하여 행운번호를 뽑아보세요.\n- 하루 최대 4명의 행운의 당첨자가 뽑힙니다.";
     }
 
     public void OnClickOk()
