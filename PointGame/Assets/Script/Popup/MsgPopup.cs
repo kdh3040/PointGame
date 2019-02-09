@@ -23,13 +23,15 @@ public class MsgPopup : Popup
         public string Msg;
         public Action OkEndAction;
         public MSGPOPUP_TYPE MsgPopupType = MSGPOPUP_TYPE.ONE;
+        public TextAnchor TextAnchor = TextAnchor.MiddleCenter;
 
-        public MsgPopupData(string msg, Action okEndAction = null, MSGPOPUP_TYPE type = MSGPOPUP_TYPE.ONE)
+        public MsgPopupData(string msg, Action okEndAction = null, MSGPOPUP_TYPE type = MSGPOPUP_TYPE.ONE, TextAnchor textAnchor = TextAnchor.MiddleCenter)
         {
             PopupType = POPUP_TYPE.MSG;
             Msg = msg;
             OkEndAction = okEndAction;
             MsgPopupType = type;
+            TextAnchor = textAnchor;
         }
     }
 
@@ -49,6 +51,8 @@ public class MsgPopup : Popup
 
         OkButton.gameObject.SetActive(false);
         CancelButton.gameObject.SetActive(false);
+
+        Msg.alignment = popupData.TextAnchor;
 
         switch (MsgPopupType)
         {

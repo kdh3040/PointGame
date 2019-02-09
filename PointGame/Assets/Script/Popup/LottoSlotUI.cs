@@ -234,7 +234,7 @@ public class LottoSlotUI : MonoBehaviour {
     public void OnClickLottoWin()
     {
         SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
-        if(FirebaseManager.Instance.ReviewMode)
+        if (FirebaseManager.Instance.ReviewMode)
         {
             ParentPopup.ShowPopup(new MsgPopup.MsgPopupData("당첨을 축하드립니다!\n2000포인트 획득!", () =>
             {
@@ -247,7 +247,6 @@ public class LottoSlotUI : MonoBehaviour {
         {
             ParentPopup.ShowPopup(new LottoWinPopup.LottoWinPopupData(SeriesCount, () =>
             {
-                TKManager.Instance.MyData.LottoWinSeriesList.Add(SeriesCount, true);
                 RefreshUI();
             }));
         }
