@@ -36,6 +36,9 @@ public class TKManager : MonoBehaviour
 
     public bool GetLottoNumberProgress = false;
 
+    public int PushLastIndex = 0;
+    public bool PushNotiEnable = false;
+
     public string FirebaseUserId = "";
 
     void Start()
@@ -135,6 +138,7 @@ public class TKManager : MonoBehaviour
         public Dictionary<int, bool> LottoResultShowSeriesList = new Dictionary<int, bool>();
         public string FirebaseUserId = "";
         public int BestStage = 0;
+        public int PushLastIndex = 0;
 
         public void Save()
         {
@@ -142,6 +146,7 @@ public class TKManager : MonoBehaviour
             UserIndex = TKManager.Instance.MyData.Index;
             FirebaseUserId = TKManager.Instance.FirebaseUserId;
             BestStage = TKManager.Instance.MyData.BestStage;
+            PushLastIndex = TKManager.Instance.PushLastIndex;
         }
 
         public void Load()
@@ -156,6 +161,7 @@ public class TKManager : MonoBehaviour
                 TKManager.Instance.FirebaseUserId = FirebaseUserId;
 
             TKManager.Instance.MyData.BestStage = BestStage;
+            TKManager.Instance.PushLastIndex = PushLastIndex;
         }
     }
 

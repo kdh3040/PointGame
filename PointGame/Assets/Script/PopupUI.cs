@@ -10,13 +10,14 @@ public enum POPUP_TYPE
     ROULETTE,
     ROULETTE_POINT_RESULT,
     GIFT_CON_LIST,
-    GIFT_CON,
+    PUSH_BOX,
     LOTTO,
     LOTTO_WIN_INFO,
     POINT_CASH_SWAP,
     ADS,
     MINI_GAME,
-    HELP
+    HELP,
+    PUSH_MSG,
 }
 
 public class PopupUI : MonoBehaviour {
@@ -27,7 +28,7 @@ public class PopupUI : MonoBehaviour {
     public RoulettePopup RoulettePopupObj;
     public RoulettePointResultPopup RoulettePointResultPopupObj;
     public GiftconListPopup GiftconListPopupObj;
-    public GiftconPopup GiftconPopupObj;
+    public PushBoxPopup PushBoxPopupObj;
     public MsgPopup MsgPopupObj;
     public LottoPopup LottoPopupObj;
     public LottoWinPopup LottoWinPopupObj;
@@ -35,6 +36,7 @@ public class PopupUI : MonoBehaviour {
     public PointCashSwapPopup PointCashSwapPopupObj;
     public MiniGamePopup MiniGamePopupObj;
     public HelpPopup HelpPopupObj;
+    public PushMsgPopup PushMsgPopupObj;
 
     public void Start()
     {
@@ -44,8 +46,8 @@ public class PopupUI : MonoBehaviour {
         RoulettePointResultPopupObj.Initialize(this, ClosePopup);
         //GiftconListPopupObj.gameObject.SetActive(false);
         //GiftconListPopupObj.Initialize(this, ClosePopup);
-        GiftconPopupObj.gameObject.SetActive(false);
-        GiftconPopupObj.Initialize(this, ClosePopup);
+        PushBoxPopupObj.gameObject.SetActive(false);
+        PushBoxPopupObj.Initialize(this, ClosePopup);
         MsgPopupObj.gameObject.SetActive(false);
         MsgPopupObj.Initialize(this, ClosePopup);
         LottoPopupObj.gameObject.SetActive(false);
@@ -60,6 +62,8 @@ public class PopupUI : MonoBehaviour {
         MiniGamePopupObj.Initialize(this, ClosePopup);
         HelpPopupObj.gameObject.SetActive(false);
         HelpPopupObj.Initialize(this, ClosePopup);
+        PushMsgPopupObj.gameObject.SetActive(false);
+        PushMsgPopupObj.Initialize(this, ClosePopup);
     }
 
     public void ShowPopup(Popup.PopupData data)
@@ -90,9 +94,9 @@ public class PopupUI : MonoBehaviour {
                 GiftconListPopupObj.gameObject.SetActive(true);
                 GiftconListPopupObj.SetData(data);
                 break;
-            case POPUP_TYPE.GIFT_CON:
-                GiftconPopupObj.gameObject.SetActive(true);
-                GiftconPopupObj.SetData(data);
+            case POPUP_TYPE.PUSH_BOX:
+                PushBoxPopupObj.gameObject.SetActive(true);
+                PushBoxPopupObj.SetData(data);
                 break;
             case POPUP_TYPE.LOTTO:
                 LottoPopupObj.gameObject.SetActive(true);
@@ -117,6 +121,10 @@ public class PopupUI : MonoBehaviour {
             case POPUP_TYPE.HELP:
                 HelpPopupObj.gameObject.SetActive(true);
                 HelpPopupObj.SetData(data);
+                break;
+            case POPUP_TYPE.PUSH_MSG:
+                PushMsgPopupObj.gameObject.SetActive(true);
+                PushMsgPopupObj.SetData(data);
                 break;
             default:
                 break;
@@ -144,8 +152,8 @@ public class PopupUI : MonoBehaviour {
             case POPUP_TYPE.GIFT_CON_LIST:
                 GiftconListPopupObj.gameObject.SetActive(false);
                 break;
-            case POPUP_TYPE.GIFT_CON:
-                GiftconPopupObj.gameObject.SetActive(false);
+            case POPUP_TYPE.PUSH_BOX:
+                PushBoxPopupObj.gameObject.SetActive(false);
                 break;
             case POPUP_TYPE.LOTTO:
                 LottoPopupObj.gameObject.SetActive(false);
@@ -164,6 +172,9 @@ public class PopupUI : MonoBehaviour {
                 break;
             case POPUP_TYPE.HELP:
                 HelpPopupObj.gameObject.SetActive(false);
+                break;
+            case POPUP_TYPE.PUSH_MSG:
+                PushMsgPopupObj.gameObject.SetActive(false);
                 break;
             default:
                 break;

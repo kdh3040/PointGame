@@ -26,6 +26,6 @@ public class GiftconListSlot : MonoBehaviour {
     public void OnClickGiftcon()
     {
         SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
-        ParentPopup.ShowPopup(new GiftconPopup.GiftconPopupData(GiftConIndex, GiftConUrl));
+        //ParentPopup.ShowPopup(new GiftconPopup.GiftconPopupData(GiftConIndex, GiftConUrl));
     }
 }
