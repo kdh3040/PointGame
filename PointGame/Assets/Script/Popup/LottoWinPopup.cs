@@ -47,6 +47,10 @@ public class LottoWinPopup : Popup
 
         EndAction = popupData.EndAction;
         LottoSeriesCount = popupData.LottoSeriesCount;
+
+        Name.text = "";
+        Bank.text = "";
+        AccountNumber.text = "";
     }
 
     public void OnClickOk()
@@ -64,13 +68,15 @@ public class LottoWinPopup : Popup
         {
             FirebaseManager.Instance.SetLottoWinUserData(LottoSeriesCount, Name.text.ToString(), Bank.text.ToString(), AccountNumber.text.ToString());
 
+            TKManager.Instance.MyData.LottoWinSeriesList.Add(LottoSeriesCount, true);
+
             // TODO 김도형 파베로 데이터 넘기기
             if (EndAction != null)
                 EndAction();
 
             CloseAction();
 
-            TKManager.Instance.MyData.LottoWinSeriesList.Add(LottoSeriesCount, true);
+            
         }, MsgPopup.MSGPOPUP_TYPE.TWO, TextAnchor.MiddleLeft));
     }
 }
