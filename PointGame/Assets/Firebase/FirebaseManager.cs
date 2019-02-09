@@ -738,28 +738,32 @@ public class FirebaseManager : MonoBehaviour
            else if (task.IsCompleted)
            {
                DataSnapshot snapshot = task.Result;
-
-               foreach (var tempChild in snapshot.Children)
+               if (snapshot != null && snapshot.Exists)
                {
-                   int tempIndex = Convert.ToInt32(tempChild.Key);
-                   if (tempIndex > PushLastIndex)
-                       PushLastIndex = tempIndex;
-                   var tempData = tempChild.Value as Dictionary<string, object>;
-                   var tempAlarmTitle = tempData["Title"].ToString();
-                   var tempAlarmContent = tempData["Content"].ToString();
+                   foreach (var tempChild in snapshot.Children)
+                   {
+                       int tempIndex = Convert.ToInt32(tempChild.Key);
+                       if (tempIndex > PushLastIndex)
+                           PushLastIndex = tempIndex;
+                       var tempData = tempChild.Value as Dictionary<string, object>;
+                       var tempAlarmTitle = tempData["Title"].ToString();
+                       var tempAlarmContent = tempData["Content"].ToString();
 
-                   PushList.Add(new KeyValuePair<string, string>(tempAlarmTitle, tempAlarmContent));
+                       PushList.Add(new KeyValuePair<string, string>(tempAlarmTitle, tempAlarmContent));
+                   }
+                   PushList.Reverse();
+
+                   if (TKManager.Instance.PushLastIndex < PushLastIndex)
+                       TKManager.Instance.PushNotiEnable = true;
+                   else
+                       TKManager.Instance.PushNotiEnable = false;
                }
-               PushList.Reverse();
-
-               if (TKManager.Instance.PushLastIndex < PushLastIndex)
-                   TKManager.Instance.PushNotiEnable = true;
                else
+               {
                    TKManager.Instance.PushNotiEnable = false;
+               }
 
                AddFirstLoadingComplete();
-
-
            }
        }
       );
