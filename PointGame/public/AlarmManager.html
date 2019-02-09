@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width" />
+
+  <title>푸시알림 관리자 페이지</title>
+  <!-- materialize.css 포함 -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link type="text/css" rel="stylesheet" href="materialize.min.css"  media="screen,projection"/>
+  <!-- SyntaxHighlighter 포함 -->
+  <link href="shCore.css" rel="stylesheet" type="text/css" />
+  <!-- <link href="css/shThemeDefault.css" rel="stylesheet" type="text/css" /> -->
+  <link href="shThemeMidnight.css" rel="stylesheet" type="text/css" />
+  <style>
+    #Summary {font-size: 1.2em; }
+    #Summary ul{ margin-left: 32px; }
+    #Summary ul li{ list-style: disc; }
+    .hint{ border-left: 0.3em #ddd solid; padding-left: 1em; color: #777;}
+    .code_block{ background-color: #eee; padding: 5px; }
+    table, th, td {
+           border: 1px solid #bcbcbc;
+         }
+         table {
+   width: 1000dp;
+ }
+  </style>
+
+</head>
+
+<body>
+  <!-- 상단 네비게이션 -->
+  <nav class="indigo">
+    <div class="nav-wrapper">
+      <div class="container">
+        <a href="/" class="breadcrumb">메인 페이지</a>
+        <a href="/lottoManager.html" class="breadcrumb">푸시알림 관리자</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container center"><br><br>
+
+  </div>
+
+  <!-- 내용영역 -->
+  <div class="container" id="CONTENTS">
+    <!-- 핵심 -->
+    <h3 class="indigo-text center">:+: 푸시알림 내역 :+:</h3>
+
+    <div class="row center">
+
+    </div>
+
+    <div class="row z-depth-1">
+      <div class="col l12 m12 s12">
+        <p>
+        등록된 푸쉬알림 갯수 :
+          <!-- TODO 4. 상태 보기용 span 확인-->
+           <span id="Alarm_Count" class="blue-text">알림 갯수 </span>
+         </p>
+      </div>
+    </div>
+
+    <br>
+    <br>
+
+
+        <h5 class="indigo-text">:+: 푸시알림 작성 칸 :+:</h5>
+        <div class="row z-depth-1">
+          <div class="col l12 m12 s12">
+            <p>
+               <span  type="input" class="indigo-text">제목</span><br>
+                <input id="Alarm_Title" name="abc" type="text" /><br>
+               <span  type="input" class="indigo-text">내용</span><br>
+               <input id="Alarm_Content" name="abc" type="text"  /><br>
+               <button id="BTN_ALARM" type="button" class="btn white indigo-text">푸쉬 알림 등록</button>
+             </p>
+          </div>
+        </div>
+
+        <br>
+        <br>
+
+
+
+  </div>
+
+
+  <!--Import jQuery before materialize.js-->
+  <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js">
+  </script>
+  <script type="text/javascript" src="./js/materialize.min.js"></script>
+  <script type="text/javascript" src="./js/shCore.js"></script>
+  <script type="text/javascript" src="./js/shAutoloader.js"></script>
+  <script type="text/javascript">
+  // SyntaxHighlighter 설정 (http://alexgorbatchev.com/SyntaxHighlighter)
+    SyntaxHighlighter.autoloader(
+      'bash shell             ./js/shBrushBash.js',
+      'js jscript javascript  ./js/shBrushJScript.js'
+    );
+    SyntaxHighlighter.defaults['toolbar'] = false;
+    SyntaxHighlighter.all()
+  </script>
+
+  <script src="https://www.gstatic.com/firebasejs/5.7.2/firebase.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase-database.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase-messaging.js"></script>
+  <script src="./fireinit.js"></script>
+  <script type="text/javascript">
+
+
+  var provider = new firebase.auth.GoogleAuthProvider();
+
+  SignStatus();
+  function SignStatus()
+  {
+    firebase.auth().onAuthStateChanged(function(user) {
+    if (user) {
+      var email = user.email;
+      if(email != "jt.famm@gmail.com"){
+        location.href="./notAuth.html";
+      }
+      // User is signed in.
+    } else {
+        location.href="./notAuth.html";
+  }
+  });
+}
+
+  const messaging = firebase.messaging();
+  messaging.usePublicVapidKey("BKuiXbk64s3EcAdhlHDB6Fk_wXjOROxtakt-LXxqTjdnNTA1YxTaToR3sVymbAKpAgJcbbnY-VnTUnqO_kzEKP0");
+
+  var AlarmCount;
+  firebase.database().ref('/PushAlarmCount').once('value', function(snapshot) {
+    var message = snapshot.val();
+    AlarmCount = message;
+    //$("#GIFT_COUNT").text('상품권 남은 수량 : ' + GiftCount);
+
+      $("#Alarm_Count").text(AlarmCount + '개');
+    console.log(AlarmCount);
+  });
+
+
+
+  //console.log(arrLottoWinLuckyGroup);
+
+
+
+
+      function SetPushAlarmByFireBase(Title, Content)
+      {
+        firebase.database().ref('/PushAlarm/'+AlarmCount+'/' + 'Title').set(Title);
+        firebase.database().ref('/PushAlarm/'+AlarmCount+'/' + 'Content').set(Content);
+        AlarmCount += 1;
+        firebase.database().ref('/PushAlarmCount').set(AlarmCount);
+      }
+
+
+    $("#BTN_ALARM").click(function() {
+      var Title = document.getElementById("Alarm_Title").value;
+      var Content = document.getElementById("Alarm_Content").value;
+      SetPushAlarmByFireBase(Title, Content)
+
+    });
+
+
+
+
+
+</script>
+
+</body>
+
+</html>
