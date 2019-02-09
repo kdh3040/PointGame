@@ -33,37 +33,46 @@ public class PushBoxPopup : Popup
 
     public override void SetData(PopupData data)
     {
-        List<KeyValuePair<string, string>> pushList = FirebaseManager.Instance.PushList;
-
-        TKManager.Instance.PushNotiEnable = false;
-        TKManager.Instance.PushLastIndex = FirebaseManager.Instance.PushLastIndex;
-        TKManager.Instance.SaveFile();
-
-        EmptyText.gameObject.SetActive(false);
-        PushGridList.gameObject.SetActive(false);
-
-        if (pushList.Count <= 0)
+        if(FirebaseManager.Instance.ReviewMode)
         {
             EmptyText.gameObject.SetActive(true);
+            PushGridList.gameObject.SetActive(false);
         }
         else
         {
-            PushGridList.gameObject.SetActive(true);
+            List<KeyValuePair<string, string>> pushList = FirebaseManager.Instance.PushList;
 
-            for (int i = 0; i < PushListButtonList.Count; i++)
+            TKManager.Instance.PushNotiEnable = false;
+            TKManager.Instance.PushLastIndex = FirebaseManager.Instance.PushLastIndex;
+            TKManager.Instance.SaveFile();
+
+            EmptyText.gameObject.SetActive(false);
+            PushGridList.gameObject.SetActive(false);
+
+            if (pushList.Count <= 0)
             {
-                PushListButtonList[i].gameObject.SetActive(false);
+                EmptyText.gameObject.SetActive(true);
             }
-
-            for (int i = 0; i < pushList.Count; i++)
+            else
             {
-                if (PushListButtonList.Count <= i)
-                    break;
+                PushGridList.gameObject.SetActive(true);
 
-                PushListButtonList[i].gameObject.SetActive(true);
-                PushListTextList[i].text = string.Format("{0}. {1}", i+1, pushList[i].Key);
+                for (int i = 0; i < PushListButtonList.Count; i++)
+                {
+                    PushListButtonList[i].gameObject.SetActive(false);
+                }
+
+                for (int i = 0; i < pushList.Count; i++)
+                {
+                    if (PushListButtonList.Count <= i)
+                        break;
+
+                    PushListButtonList[i].gameObject.SetActive(true);
+                    PushListTextList[i].text = string.Format("{0}. {1}", i + 1, pushList[i].Key);
+                }
             }
         }
+        
     }
 
     public void RefreshUI()
