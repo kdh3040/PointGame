@@ -22,6 +22,7 @@ public class MainUI : MonoBehaviour {
     private int GiftconCount;
     public Button LottoButton;
     public Button FreeRoulette;
+    public Button HelpButton;
 
     public PopupUI Popup;
 
@@ -39,6 +40,7 @@ public class MainUI : MonoBehaviour {
         FreeRoulette.onClick.AddListener(OnClickFreeRoulette);
         PointSwap.onClick.AddListener(OnClickPointSwap);
         SwapPoint.onClick.AddListener(OnClickPointSwap);
+        HelpButton.onClick.AddListener(OnClickHelp);
     }
 
     void Start()
@@ -65,11 +67,13 @@ public class MainUI : MonoBehaviour {
         {
             SwapPoint.gameObject.SetActive(false);
             FreePoint.gameObject.SetActive(false);
+            HelpButton.gameObject.SetActive(false);
         }
         else
         {
             SwapPoint.gameObject.SetActive(true);
             FreePoint.gameObject.SetActive(true);
+            HelpButton.gameObject.SetActive(true);
         }
     }
 
@@ -118,6 +122,12 @@ public class MainUI : MonoBehaviour {
         SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
         Popup.ShowPopup(new PointCashSwapPopup.PointCashSwapPopupData());
     }
+    public void OnClickHelp()
+    {
+        SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
+        Popup.ShowPopup(new HelpPopup.HelpPopupData());
+    }
+    
 
     private void Update()
     {

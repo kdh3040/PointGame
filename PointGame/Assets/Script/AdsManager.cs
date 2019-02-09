@@ -153,7 +153,7 @@ public class AdsManager : MonoBehaviour {
     {
         if(FirebaseManager.Instance.ReviewMode)
         {
-
+            TKManager.Instance.MyData.AddPoint(CommonData.AdsPointReward);
         }
         else
         {
