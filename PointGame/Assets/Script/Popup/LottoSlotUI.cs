@@ -75,9 +75,9 @@ public class LottoSlotUI : MonoBehaviour {
             LottoResultObj.gameObject.SetActive(true);
 
             LottoResult_MyNumber.gameObject.SetActive(false);
-            LottoResult_MyNumber.gameObject.transform.localPosition = new Vector3(0, 80f, 0);
+            //LottoResult_MyNumber.gameObject.transform.localPosition = new Vector3(0, 80f, 0);
             LottoResult_WinNumber.gameObject.SetActive(false);
-            LottoResult_WinNumber.gameObject.transform.localPosition = new Vector3(0, 0, 0);
+            //LottoResult_WinNumber.gameObject.transform.localPosition = new Vector3(0, 0, 0);
             LottoResult_WinButton.gameObject.SetActive(false);
             LottoResult_WinButton.onClick.RemoveAllListeners();
             LottoResult_WinButtonText.text = "결과 확인";
@@ -87,8 +87,10 @@ public class LottoSlotUI : MonoBehaviour {
             {
                 if (lottoMyNumber == 0)
                 {
+                    LottoResult_MyNumber.gameObject.SetActive(true);
+                    LottoResult_MyNumberText.text = "내번호 : -";
                     LottoResult_WinNumber.gameObject.SetActive(true);
-                    LottoResult_WinNumber.gameObject.transform.localPosition = new Vector3(0, 40, 0);
+                    //LottoResult_WinNumber.gameObject.transform.localPosition = new Vector3(0, 40, 0);
                     LottoResult_WinNumberText.text = "당첨번호를 확인하세요";
                     LottoResult_WinButton.gameObject.SetActive(true);
                 }
@@ -107,8 +109,10 @@ public class LottoSlotUI : MonoBehaviour {
             {
                 if (lottoMyNumber == 0)
                 {
+                    LottoResult_MyNumber.gameObject.SetActive(true);
+                    LottoResult_MyNumberText.text = "내번호 : -";
                     LottoResult_WinNumber.gameObject.SetActive(true);
-                    LottoResult_WinNumber.gameObject.transform.localPosition = new Vector3(0, 40, 0);
+                    //LottoResult_WinNumber.gameObject.transform.localPosition = new Vector3(0, 40, 0);
                     LottoResult_WinNumberText.text = string.Format("당첨번호 : {0:D6}", lottoWinNumber);
                 }
                 else

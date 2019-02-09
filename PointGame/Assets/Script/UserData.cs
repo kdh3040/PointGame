@@ -77,8 +77,6 @@ public class UserData
     
     public void AddPoint(int point, bool first = false)
     {
-        Point += point;
-
         AddTodayAccumulate(point);
 
         FirebaseManager.Instance.SetPoint(Point);
@@ -144,11 +142,13 @@ public class UserData
             int tempValue_2 = CommonData.TodayAccumulatePointLimit - TodayAccumulatePoint;
             TodayAccumulatePoint += tempValue_2;
             AllAccumulatePoint += tempValue_2;
+            Point += tempValue_2;
         }
         else
         {
             TodayAccumulatePoint += point;
             AllAccumulatePoint += point;
+            Point += point;
         }
 
         int changeCount = AllAccumulatePoint / CommonData.PointToCashChange;
