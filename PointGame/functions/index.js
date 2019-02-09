@@ -142,6 +142,7 @@ function showClock(){
         for(var i=0; i<4; i++) {              //console.log(arrLottoSelectTime[i]);
          if((new Date()).getHMS() === arrLottoSelectTime[i])
          {
+              console.log(arrLottoSelectTime[i]);
               SetLottoUserData();
          }
       }
@@ -156,6 +157,7 @@ function showClock(){
      const afterData = change.after.val(); // data after the write
     AutoLottoSelectMode = afterData;
 
+    console.log("AutoLottoSelectMode" + AutoLottoSelectMode);
     if(AutoLottoSelectMode)
     {
       showClock();

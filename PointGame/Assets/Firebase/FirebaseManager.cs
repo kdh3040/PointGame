@@ -103,7 +103,7 @@ public class FirebaseManager : MonoBehaviour
         GetLottoCurSeries();
         GetLottoLuckyNumber();
         GetLottoLuckGroup();
-
+        GetPushAlarm();
         GetGiftProb();
     }
 
@@ -113,7 +113,7 @@ public class FirebaseManager : MonoBehaviour
         if (FirstLoadingComplete == false)
             LoadingCount++;
 
-        if (LoadingCount == 7)
+        if (LoadingCount == 8)
             FirstLoadingComplete = true;
     }
 
@@ -704,6 +704,43 @@ public class FirebaseManager : MonoBehaviour
 
             }
         }
+      );
+    }
+
+    // 공지사항 파이어베이스에서 받아오기
+    public void GetPushAlarm()
+    {
+
+        string tempAlarmIndex;
+
+        mDatabaseRef.Child("PushAlarm").OrderByKey().LimitToLast(4)
+       .GetValueAsync().ContinueWith(task =>
+
+       {
+
+           if (task.IsFaulted)
+           {
+               // Handle the error...
+           }
+           else if (task.IsCompleted)
+           {
+               DataSnapshot snapshot = task.Result;
+
+               foreach (var tempChild in snapshot.Children)
+               {
+
+                   tempAlarmIndex = tempChild.Key;
+                   var tempData = tempChild.Value as Dictionary<string, object>;
+                   var tempAlarmTitle = tempData["Title"].ToString();
+                   var tempAlarmContent = tempData["Content"].ToString();
+               }
+
+
+               AddFirstLoadingComplete();
+
+
+           }
+       }
       );
     }
 

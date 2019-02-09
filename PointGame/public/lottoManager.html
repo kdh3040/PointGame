@@ -418,11 +418,11 @@
 
           if(LottoSelectMode == 0)
           {
-            $("#BTN_TEST_CREATE").text('수동 당첨 모드');
+            $("#BTN_TEST_CREATE").text('현재 모드 : 수동 당첨');
           }
           else
           {
-            $("#BTN_TEST_CREATE").text('자동 당첨 모드');
+            $("#BTN_TEST_CREATE").text('현재 모드 : 자동 당첨');
           }
           //console.log(LottoRefNumber);
         });
@@ -435,69 +435,16 @@
       {
         LottoSelectMode = 1;
         firebase.database().ref('/AutoLottoSelect').set(LottoSelectMode);
-        $("#BTN_TEST_CREATE").text('자동 당첨 모드');
+        $("#BTN_TEST_CREATE").text('현재 모드 : 자동 당첨');
       }
       else
       {
         LottoSelectMode = 0;
         firebase.database().ref('/AutoLottoSelect').set(LottoSelectMode);
-        $("#BTN_TEST_CREATE").text('수동 당첨 모드');
+        $("#BTN_TEST_CREATE").text('현재 모드 : 수동 당첨');
       }
-
-/*
-      var result = LottoRefNumber * Lottocount;
-    //  document.write(result);
-
-    firebase.database().ref('/Lotto/' + Lottocount).set({"User": Lottocount, "Number": result})
-    Lottocount++;
-    firebase.database().ref('/LottoCount').set(Lottocount)
-
-    */
-
-
-    BTN_TEST_CREATE
     });
 
-
-    var arrLottoSelectTime = ['09:00:00', '12:00:00', '15:00:00', '18:02:00'];
-
-
-
-    Number.prototype.to2 = function(){return this<10?'0'+this:this;};
-     Date.prototype.getHMS = function(){
-           return this.getHours().to2() + ':' + this.getMinutes().to2() + ':'
-                + this.getSeconds().to2();
-     }
-
-     function GetLotto(){
-             //console.log('지금 시각 : ' + (new Date()).getHMS() );
-            //arrLottoUserKey = object.keys(arrLottoUser);
-
-
-     }
-
-     function GetTime(){
-     //        var 자정='00:00:00';
-           var time ='16:01:00';
-
-           if(LottoSelectMode == 1)
-           {
-               for(var i=0; i<arrLottoSelectTime.length; i++) {              //console.log(arrLottoSelectTime[i]);
-                if((new Date()).getHMS() == arrLottoSelectTime[i])
-                {
-                     SetLottoUserData();
-                }
-             }
-           }
-           else {
-
-           }
-
-
-          window.setTimeout(GetTime,1000); // 1초마다 반복
-     }
-  GetTime();
-    //
 
 
 </script>
