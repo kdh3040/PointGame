@@ -88,21 +88,25 @@ public class PushBoxPopup : Popup
 
     public void OnClickPush_1()
     {
+        SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
         var data = FirebaseManager.Instance.PushList[0];
         ParentPopup.ShowPopup(new PushMsgPopup.PushMsgPopupData(data.Key, data.Value));
     }
     public void OnClickPush_2()
     {
+        SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
         var data = FirebaseManager.Instance.PushList[1];
         ParentPopup.ShowPopup(new PushMsgPopup.PushMsgPopupData(data.Key, data.Value));
     }
     public void OnClickPush_3()
     {
+        SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
         var data = FirebaseManager.Instance.PushList[2];
         ParentPopup.ShowPopup(new PushMsgPopup.PushMsgPopupData(data.Key, data.Value));
     }
     public void OnClickPush_4()
     {
+        SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
         var data = FirebaseManager.Instance.PushList[3];
         ParentPopup.ShowPopup(new PushMsgPopup.PushMsgPopupData(data.Key, data.Value));
     }
