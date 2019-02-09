@@ -40,7 +40,7 @@ public class FirebaseManager : MonoBehaviour
     public bool FirstLoadingComplete = false;
     public int LoadingCount = 0;
 
-    private int ReviewVersion = 1;
+    private int ReviewVersion = 2;
     public bool ReviewMode = true;
 
 
@@ -616,7 +616,14 @@ public class FirebaseManager : MonoBehaviour
 
     public void GetReviewVersion()
     {
-        mDatabaseRef.Child("ReviewVersion").GetValueAsync().ContinueWith(task =>
+#if UNITY_IOS
+        string dataKey = "ios_ReviewVersion";
+#elif (UNITY_ANDROID && !UNITY_EDITOR)
+        string dataKey = "aos_ReviewVersion";
+#elif (UNITY_ANDROID && UNITY_EDITOR)
+        string dataKey = "editor_ReviewVersion";
+#endif
+        mDatabaseRef.Child(dataKey).GetValueAsync().ContinueWith(task =>
         {
 
             if (task.IsFaulted)
@@ -642,6 +649,7 @@ public class FirebaseManager : MonoBehaviour
             }
         }
       );
+
     }
 
     // 로또 레퍼런스 번호 파이어베이스에서 로드
