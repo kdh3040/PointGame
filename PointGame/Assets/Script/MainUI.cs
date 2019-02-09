@@ -16,10 +16,8 @@ public class MainUI : MonoBehaviour {
 
     public Button LogoButton;
     public Button GamePlayButton;
-    public Button GiftBoxButton;
-    public GameObject GiftBoxNotiObj;
-    public Text GiftBoxCountText;
-    private int GiftconCount;
+    public Button PushButton;
+    public GameObject PushBoxNotiObj;
     public Button LottoButton;
     public Button FreeRoulette;
     public Button HelpButton;
@@ -34,7 +32,7 @@ public class MainUI : MonoBehaviour {
         FreePoint.onClick.AddListener(OnClickFreePoint);
         LogoButton.onClick.AddListener(OnClickGamePlay);
         GamePlayButton.onClick.AddListener(OnClickGamePlay);
-        GiftBoxButton.onClick.AddListener(OnClickGiftBox);
+        PushButton.onClick.AddListener(OnClickPushBox);
         FreePoint.onClick.AddListener(OnClickFreePoint);
         LottoButton.onClick.AddListener(OnClickLotto);
         FreeRoulette.onClick.AddListener(OnClickFreeRoulette);
@@ -60,8 +58,6 @@ public class MainUI : MonoBehaviour {
 
         if (TKManager.Instance.GameOverRouletteStart)
             StartCoroutine(Co_GameOverRouletteStart());
-
-        GiftconCount = -1;
 
         if(FirebaseManager.Instance.ReviewMode)
         {
@@ -98,10 +94,10 @@ public class MainUI : MonoBehaviour {
         SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
     }
 
-    public void OnClickGiftBox()
+    public void OnClickPushBox()
     {
         SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
-        Popup.ShowPopup(new GiftconPopup.GiftconPopupData());
+        Popup.ShowPopup(new PushBoxPopup.PushBoxPopupData());
     }
 
     public void OnClickLotto()
@@ -142,13 +138,7 @@ public class MainUI : MonoBehaviour {
         else
             AllPoint.SetValue(string.Format("{0}p / {1}c", TKManager.Instance.MyData.Point, TKManager.Instance.MyData.Cash), CountImgFont.IMG_RANGE.LEFT, CountImgFont.IMG_TYPE.YELLOW);
 
-
-        if (GiftconCount != TKManager.Instance.MyData.GiftconURLList.Count)
-        {
-            GiftconCount = TKManager.Instance.MyData.GiftconURLList.Count;
-            GiftBoxNotiObj.SetActive(GiftconCount > 0);
-            GiftBoxCountText.text = string.Format("{0}", GiftconCount);
-        }
+        PushBoxNotiObj.SetActive(TKManager.Instance.PushNotiEnable);
 
 #if UNITY_EDITOR || UNITY_ANDROID
         if (Popup.IsShowPopup(POPUP_TYPE.MSG) == false && Input.GetKeyUp(KeyCode.Escape))

@@ -34,11 +34,16 @@ public class FirebaseManager : MonoBehaviour
     int LottoCurSeries = 0;
     int LottoTodaySeries = 0;
 
+    public List<KeyValuePair<string, string>> PushList = new List<KeyValuePair<string, string>>();
+    public int PushLastIndex = 0;
+
     public bool FirstLoadingComplete = false;
     public int LoadingCount = 0;
 
     private int ReviewVersion = 1;
     public bool ReviewMode = true;
+
+
 
     // Use this for initialization
     void Start()
@@ -711,7 +716,7 @@ public class FirebaseManager : MonoBehaviour
     public void GetPushAlarm()
     {
 
-        string tempAlarmIndex;
+        string tempAlarmIndex = "0";
 
         mDatabaseRef.Child("PushAlarm").OrderByKey().LimitToLast(4)
        .GetValueAsync().ContinueWith(task =>
@@ -728,13 +733,21 @@ public class FirebaseManager : MonoBehaviour
 
                foreach (var tempChild in snapshot.Children)
                {
-
-                   tempAlarmIndex = tempChild.Key;
+                   int tempIndex = Convert.ToInt32(tempChild.Key);
+                   if (tempIndex > PushLastIndex)
+                       PushLastIndex = tempIndex;
                    var tempData = tempChild.Value as Dictionary<string, object>;
                    var tempAlarmTitle = tempData["Title"].ToString();
                    var tempAlarmContent = tempData["Content"].ToString();
-               }
 
+                   PushList.Add(new KeyValuePair<string, string>(tempAlarmTitle, tempAlarmContent));
+               }
+               PushList.Reverse();
+
+               if (TKManager.Instance.PushLastIndex < PushLastIndex)
+                   TKManager.Instance.PushNotiEnable = true;
+               else
+                   TKManager.Instance.PushNotiEnable = false;
 
                AddFirstLoadingComplete();
 

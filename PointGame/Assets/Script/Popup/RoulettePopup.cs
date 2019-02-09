@@ -141,7 +141,7 @@ public class RoulettePopup : Popup
     public void RouletteGiftconResult(int giftconIndex)
     {
         KeyValuePair<int, string>  data = TKManager.Instance.MyData.GetGiftconData(giftconIndex);
-        ParentPopup.ShowPopup(new GiftconPopup.GiftconPopupData(data.Key, data.Value, false));
+        //ParentPopup.ShowPopup(new GiftconPopup.GiftconPopupData(data.Key, data.Value, false));
     }
 
     public void ShuffleList<T>(List<T> list)
