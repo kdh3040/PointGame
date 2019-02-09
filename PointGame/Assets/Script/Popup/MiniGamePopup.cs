@@ -56,7 +56,7 @@ public class MiniGamePopup : Popup
 
     public override void SetData(PopupData data)
     {
-        InfoText.text = string.Format("미니게임\n{0}포인트\n동전을 골라보세요~", CommonData.AdsPointReward);
+        InfoText.text = string.Format("미니게임\n{0}포인트\n동전을 찾아보세요~", CommonData.AdsPointReward);
 
         GameReady();
     }
