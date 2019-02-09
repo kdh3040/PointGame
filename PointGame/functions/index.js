@@ -72,7 +72,6 @@ var AutoLottoSelectMode = 0;
     firebase.database().ref('/LottoCount').once('value', function(snapshot) {
       var message = snapshot.val();
       Lottocount = message;
-      $("#LOTTO_GROUP").text(Lottocount);
 
       firebase.database().ref('/LottoCurSeries').once('value', function(snapshot) {
         var message = snapshot.val();
@@ -137,7 +136,7 @@ Number.prototype.to2 = function(){return this<10?'0'+this:this;};
 
 
 function showClock(){
-        //console.log((new Date()).getHMS());
+        console.log((new Date()).getHMS());
 
         for(var i=0; i<4; i++) {              //console.log(arrLottoSelectTime[i]);
          if((new Date()).getHMS() === arrLottoSelectTime[i])

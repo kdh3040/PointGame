@@ -31,8 +31,17 @@ public class AdsManager : MonoBehaviour {
     private const string Skip_rewarded_video_id = "SkipAds";
     private const string Lotto_rewarded_video_id = "LottoAds";
 
+    private RewardBasedVideoAd rewardAdmobVideo;
+
     public bool AdView = false;
 
+    private string Vungle_android_AppID = "5c5e8f366eceb929941bc24d";
+    private string Vungle_iOS_AppID = "5c5e8f72330d082982b75ebe";
+
+    private string Vungle_android_AdsID = "951922304521";
+    private string Vungle_iOS_AdsID = "905782153733";
+
+    private string Vungle_adsID;
 
     public void Start()
     {
@@ -59,7 +68,133 @@ public class AdsManager : MonoBehaviour {
 
         this.RequestInterstitial();
         //Debug.Log("!@@@@@ RequestInterstitial");
+
+        this.rewardAdmobVideo = RewardBasedVideoAd.Instance;
+        rewardAdmobVideo.OnAdLoaded += HandleRewardBasedVideoLoaded;
+        rewardAdmobVideo.OnAdFailedToLoad += HandleRewardBasedVideoFailedToLoad;
+        rewardAdmobVideo.OnAdRewarded += HandleRewardBasedVideoRewarded;
+        rewardAdmobVideo.OnAdClosed += HandleRewardBasedVideoClosed;
+
+        this.RequestAdmobVideo();
+
+
+#if UNITY_IPHONE
+		Vungle_adsID = Vungle_iOS_AdsID;
+#elif UNITY_ANDROID
+        Vungle_adsID = Vungle_android_AdsID;
+#elif UNITY_WSA_10_0 || UNITY_WINRT_8_1 || UNITY_METRO
+		Vungle_adsID = null;
+#endif
+
+        this.RequestVungleAds();
+
+            
     }
+
+    private void RequestVungleAds()
+    {
+        string appID;
+
+#if UNITY_IPHONE
+		appID = Vungle_iOS_AppID;
+#elif UNITY_ANDROID
+        appID = Vungle_android_AppID;
+#elif UNITY_WSA_10_0 || UNITY_WINRT_8_1 || UNITY_METRO
+		appID = null;
+#endif
+
+        /*
+
+        Vungle.init(appID);
+        Vungle.loadAd(Vungle_adsID);
+
+        Vungle.onAdStartedEvent += (placementID) => {
+            Debug.Log("Ad " + placementID + " is starting!  Pause your game  animation or sound here.");
+        };
+
+        Vungle.onAdFinishedEvent += (placementID, args) => {
+            Debug.Log("Ad finished - placementID " + placementID + ", was call to action clicked:" + args.WasCallToActionClicked + ", is completed view:"
+                + args.IsCompletedView);
+        };
+
+        Vungle.adPlayableEvent += (placementID, adPlayable) => {
+            Debug.Log("Ad's playable state has been changed! placementID " + placementID + ". Now: " + adPlayable);
+        };
+
+        Vungle.onInitializeEvent += () => {
+            Debug.Log("SDK initialized");
+        };
+        */
+
+    }
+
+
+    void ShowVungleAds()
+    {
+      //  Vungle.playAd(Vungle_adsID);
+    }
+
+
+    private void RequestAdmobVideo()
+    {
+#if UNITY_ANDROID
+        string adUnitId = "ca-app-pub-7615036525367000/9414508134";
+#elif UNITY_IPHONE
+            string adUnitId = "ca-app-pub-7615036525367000/6977591648";
+#else
+            string adUnitId = "unexpected_platform";
+#endif
+
+              // Create an empty ad request.
+        AdRequest request = new AdRequest.Builder().Build();
+        // Load the rewarded video ad with the request.
+        this.rewardAdmobVideo.LoadAd(request, adUnitId);
+    }
+
+
+    public void HandleRewardBasedVideoLoaded(object sender, EventArgs args)
+    {
+        MonoBehaviour.print("HandleRewardBasedVideoLoaded event received");
+    }
+
+    public void HandleRewardBasedVideoFailedToLoad(object sender, AdFailedToLoadEventArgs args)
+    {
+        this.RequestAdmobVideo();
+    }
+    public void HandleRewardBasedVideoClosed(object sender, EventArgs args)
+    {
+        this.RequestAdmobVideo();
+    }
+
+    public void HandleRewardBasedVideoRewarded(object sender, Reward args)
+    {
+        string type = args.Type;
+        double amount = args.Amount;
+        MonoBehaviour.print(
+            "HandleRewardBasedVideoRewarded event received for "
+                        + amount.ToString() + " " + type);
+    }
+
+    private void ShowAdmobVideo()
+    {
+        if (rewardAdmobVideo.IsLoaded())
+        {
+            rewardAdmobVideo.Show();
+        }
+        /*
+        else if(Vungle.isAdvertAvailable(Vungle_adsID))
+        {
+            // , 벙글
+            this.ShowVungleAds();
+        }
+        */
+        else
+        {
+            // 애드콜로니
+        }
+    }
+
+
 
     AdRequest request;
     public void RequestBanner()
@@ -151,7 +286,10 @@ public class AdsManager : MonoBehaviour {
 
     public void ShowMiniGameRewardAd()
     {
-        if(FirebaseManager.Instance.ReviewMode)
+
+        ShowVungleAds();
+        /*
+        if (FirebaseManager.Instance.ReviewMode)
         {
             TKManager.Instance.MyData.AddPoint(CommonData.AdsPointReward);
         }
@@ -162,7 +300,13 @@ public class AdsManager : MonoBehaviour {
                 var options = new ShowOptions { resultCallback = HandleShowRewardVideoResult };
                 Advertisement.Show(rewarded_video_id, options);
             }
+            else
+            {
+                //this.ShowAdmobVideo();
+                // 애드콜로니 벙글
+            }
         }
+        */
     }
 
     
@@ -217,6 +361,10 @@ public class AdsManager : MonoBehaviour {
                 AdView = true;
                 var options = new ShowOptions { resultCallback = HandleShowLottoRewardVideoResult };
                 Advertisement.Show(Lotto_rewarded_video_id, options);
+            }
+            else
+            {
+                this.ShowAdmobVideo();
             }
 
             if (AdView && endAction != null)
@@ -275,6 +423,10 @@ public class AdsManager : MonoBehaviour {
             {
                 var options = new ShowOptions { resultCallback = HandleShowSkipRewardVideoResult };
                 Advertisement.Show(Skip_rewarded_video_id, options);
+            }
+            else
+            {
+                this.ShowAdmobVideo();
             }
         }   
     }
