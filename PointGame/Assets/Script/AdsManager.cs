@@ -66,7 +66,7 @@ public class AdsManager : MonoBehaviour {
     private string appId = string.Empty;
     private string zoneId = string.Empty;
 
-    //private AdColony.InterstitialAd adColony = null;
+    private AdColony.InterstitialAd adColony = null;
 
     /// ////////////////////////////////////////////////
 
@@ -118,7 +118,7 @@ public class AdsManager : MonoBehaviour {
 
         ////////////////////////////////////////////////////
         //// 애드콜로니 광고 초기화
-        /*
+        
         AdColony.Ads.OnConfigurationCompleted += (List<AdColony.Zone> zones_) =>
         {
             Debug.Log("AdColony.Ads.OnConfigurationCompleted called");
@@ -184,7 +184,7 @@ public class AdsManager : MonoBehaviour {
         appOptions.AdOrientation = AdColony.AdOrientationType.AdColonyOrientationAll;
 
         AdColony.Ads.Configure(this.appId, appOptions, this.zoneId);
-        */
+        
         //
 
     }
@@ -281,14 +281,14 @@ public class AdsManager : MonoBehaviour {
 
     private void ShowColony()
     {
-        /*
+        
         Debug.Log("**** Show Ad ****");
 
         if (this.adColony != null)
         {
             AdColony.Ads.ShowAd(this.adColony);
         }
-        */
+        
     }
 
 
@@ -402,7 +402,7 @@ public class AdsManager : MonoBehaviour {
     // 애드콜로니 리워드 비디오 (스킵 불가)
     public void ShowAdColonyAds()
     {
-        /*
+        
         Debug.Log("**** Request Ad ****");
 
         AdColony.AdOptions adOptions = new AdColony.AdOptions();
@@ -410,7 +410,7 @@ public class AdsManager : MonoBehaviour {
         adOptions.ShowPostPopup = false;
 
         AdColony.Ads.RequestInterstitialAd(this.zoneId, adOptions);
-        */
+        
     }
 
 
@@ -418,6 +418,9 @@ public class AdsManager : MonoBehaviour {
     // 유니티애즈 미니게임 리워드 비디오 스킵 불가
     public void ShowMiniGameRewardAd()
     {
+        ShowAdColonyAds();
+        return;
+
         if (FirebaseManager.Instance.ReviewMode)
         {
             TKManager.Instance.MyData.AddPoint(CommonData.AdsPointReward);
