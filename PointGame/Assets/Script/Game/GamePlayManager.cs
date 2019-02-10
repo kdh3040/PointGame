@@ -169,6 +169,8 @@ public class GamePlayManager : MonoBehaviour {
         UI.GameEnd();
         Char.CharIdle();
 
+        TKManager.Instance.ShowHUD();
+
         SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.GAME_END);
         iTween.MoveTo(Char.gameObject, iTween.Hash("x", Char.gameObject.transform.localPosition.x, "y",CharDeathPosY - 10f, "islocal", true, "movetopath", false, "time", 0.8f, "easetype", iTween.EaseType.easeInBack));
         StartCoroutine(Co_GameEndAd());
@@ -177,6 +179,8 @@ public class GamePlayManager : MonoBehaviour {
     IEnumerator Co_GameEndAd()
     {
         yield return new WaitForSeconds(0.8f);
+        TKManager.Instance.HideHUD();
+
         AdsManager.Instance.ShowSkipRewardedAd();
     }
 

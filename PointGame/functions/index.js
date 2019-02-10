@@ -33,7 +33,6 @@ var firebase = require("firebase");
 
 var defaultDatabase = firebase.database();
 
-
 var LottoSeriesRef = 1000000;
 var LottoRefNumber;
 var Lottocount;
@@ -45,6 +44,10 @@ var LottoTodaySeries;
 
 var AutoLottoSelectMode = 0;
 //SetLottoCount();
+
+var timer;
+var arrLottoSelectTime = ['00:00:00', '03:00:00', '06:00:00', '09:00:00'];
+
 
  function SetLottoCount()
  {
@@ -123,11 +126,6 @@ var AutoLottoSelectMode = 0;
 
 
 
-var timer;
-
-//var arrLottoSelectTime = ['09:00:00', '12:00:00', '15:00:00', '18:00:00'];
-var arrLottoSelectTime = ['00:00:00', '03:00:00', '06:00:00', '09:00:00'];
-
 Number.prototype.to2 = function(){return this<10?'0'+this:this;};
  Date.prototype.getHMS = function(){
        return this.getHours().to2() + ':' + this.getMinutes().to2() + ':'
@@ -170,3 +168,5 @@ function showClock(){
     return AutoLottoSelectMode;
 
   });
+
+SetLottoCount();

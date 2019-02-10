@@ -173,14 +173,29 @@ public class MiniGamePopup : Popup
 
     public void ShowInfoPopup()
     {
-        PopupObj.gameObject.SetActive(true);
-        if (GameOver == false)
+        if (AdsManager.Instance.IsPlayableAds())
         {
-            PopupText.text = string.Format("{0}포인트를 획득했습니다.\n재시작 하시겠습니까?", CommonData.AdsPointReward);
-            TKManager.Instance.MyData.AddPoint(CommonData.AdsPointReward);
+            PopupObj.gameObject.SetActive(true);
+            if (GameOver == false)
+            {
+                PopupText.text = string.Format("{0}포인트를 획득했습니다.\n재시작 하시겠습니까?", CommonData.AdsPointReward);
+                TKManager.Instance.MyData.AddPoint(CommonData.AdsPointReward);
+            }
+            else
+                PopupText.text = "재시작 하시겠습니까?";
         }
         else
-            PopupText.text = "재시작 하시겠습니까?";
+        {
+            if (GameOver == false)
+            {
+                TKManager.Instance.MyData.AddPoint(CommonData.AdsPointReward);
+            }
+            ParentPopup.ShowPopup(new MsgPopup.MsgPopupData("일일 시청 제한으로 인해 미니게임이 불가합니다", () =>
+            {
+                ParentPopup.ClosePopup();
+            }));
+        }
+        
     }
 
     public void OnClickOk()

@@ -85,7 +85,15 @@ public class MainUI : MonoBehaviour {
     public void OnClickFreePoint()
     {
         SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
-        Popup.ShowPopup(new MiniGamePopup.MiniGamePopupData());
+
+        if(AdsManager.Instance.IsPlayableAds())
+        {
+            Popup.ShowPopup(new MiniGamePopup.MiniGamePopupData());
+        }
+        else
+        {
+            Popup.ShowPopup(new MsgPopup.MsgPopupData("일일 시청 제한으로 인해 미니게임이 불가합니다"));
+        }        
     }
 
     public void OnClickGamePlay()
