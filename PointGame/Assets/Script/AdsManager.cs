@@ -69,7 +69,11 @@ public class AdsManager : MonoBehaviour {
     private AdColony.InterstitialAd adColony = null;
 
     /// ////////////////////////////////////////////////
+    /// 애드몹
     /// 
+    AdRequest request;
+
+
 
     // 광고 종료후 콜백 함수
     private Action AdEndCallFunc = null;
@@ -100,17 +104,18 @@ public class AdsManager : MonoBehaviour {
         //// 구글 애드몹  광고 초기화
         // Initialize the Google Mobile Ads SDK.
         MobileAds.Initialize(appId);
-#if !UNITY_EDITOR
-        this.RequestBanner();
-        this.RequestInterstitial();
-        this.RequestAdmobVideo();
-#endif
 
         this.rewardAdmobVideo = RewardBasedVideoAd.Instance;
         rewardAdmobVideo.OnAdLoaded += HandleRewardBasedVideoLoaded;
         rewardAdmobVideo.OnAdFailedToLoad += HandleRewardBasedVideoFailedToLoad;
         rewardAdmobVideo.OnAdRewarded += HandleRewardBasedVideoRewarded;
         rewardAdmobVideo.OnAdClosed += HandleRewardBasedVideoClosed;
+
+#if !UNITY_EDITOR
+        this.RequestBanner();
+        this.RequestInterstitial();
+        this.RequestAdmobVideo();
+#endif
 
 
         ////////////////////////////////////////////////////
@@ -253,10 +258,7 @@ public class AdsManager : MonoBehaviour {
 #else
             string adUnitId = "unexpected_platform";
 #endif
-#if UNITY_EDITOR
-        return;
-#endif
-        AdRequest request = new AdRequest.Builder().Build();
+        request = new AdRequest.Builder().Build();
         this.rewardAdmobVideo.LoadAd(request, adUnitId);
         
     }
@@ -311,7 +313,7 @@ public class AdsManager : MonoBehaviour {
 
     }
 
-    AdRequest request;
+    
     public void RequestBanner()
     {
 #if UNITY_ANDROID
@@ -371,7 +373,7 @@ public class AdsManager : MonoBehaviour {
 
         this.interstitial = new InterstitialAd(adUnitId);
 
-        AdRequest request = new AdRequest.Builder().Build();
+        request = new AdRequest.Builder().Build();
         this.interstitial.LoadAd(request);
  
 
