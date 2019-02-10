@@ -69,6 +69,10 @@ public class AdsManager : MonoBehaviour {
     private AdColony.InterstitialAd adColony = null;
 
     /// ////////////////////////////////////////////////
+    /// 
+
+    // 광고 종료후 콜백 함수
+    private Action AdEndCallFunc = null;
 
     public void Start()
     {
@@ -96,18 +100,17 @@ public class AdsManager : MonoBehaviour {
         //// 구글 애드몹  광고 초기화
         // Initialize the Google Mobile Ads SDK.
         MobileAds.Initialize(appId);
-
-       // this.RequestBanner();
-
-      //  this.RequestInterstitial();
+#if !UNITY_EDITOR
+        this.RequestBanner();
+        this.RequestInterstitial();
+        this.RequestAdmobVideo();
+#endif
 
         this.rewardAdmobVideo = RewardBasedVideoAd.Instance;
         rewardAdmobVideo.OnAdLoaded += HandleRewardBasedVideoLoaded;
         rewardAdmobVideo.OnAdFailedToLoad += HandleRewardBasedVideoFailedToLoad;
         rewardAdmobVideo.OnAdRewarded += HandleRewardBasedVideoRewarded;
         rewardAdmobVideo.OnAdClosed += HandleRewardBasedVideoClosed;
-
-        //  this.RequestAdmobVideo();
 
 
         ////////////////////////////////////////////////////
@@ -145,6 +148,7 @@ public class AdsManager : MonoBehaviour {
         AdColony.Ads.OnRequestInterstitialFailed += () =>
         {
             Debug.Log("AdColony.Ads.OnRequestInterstitialFailed called");
+            AdView = false;
 
             // to do ...
             // 광고 요청에 실패했을 때 처리
@@ -159,6 +163,7 @@ public class AdsManager : MonoBehaviour {
         AdColony.Ads.OnClosed += (AdColony.InterstitialAd ad_) =>
         {
             Debug.Log("AdColony.Ads.OnClosed called, expired: " + ad_.Expired);
+            AdView = false;
         };
 
         AdColony.Ads.OnExpiring += (AdColony.InterstitialAd ad_) =>
@@ -177,6 +182,7 @@ public class AdsManager : MonoBehaviour {
                 // to do ...
                 // 광고 시청이 완료되었을 때 처리
                 // 광고 시청에 대한 보상 지급 등 ...
+                AdView = false;
             }
         };
 
@@ -213,6 +219,7 @@ public class AdsManager : MonoBehaviour {
         Vungle.onAdFinishedEvent += (placementID, args) => {
             Debug.Log("!!!!!@ Ad finished - placementID " + placementID + ", was call to action clicked:" + args.WasCallToActionClicked + ", is completed view:"
                 + args.IsCompletedView);
+            AdView = false;
         };
 
         Vungle.adPlayableEvent += (placementID, adPlayable) => {
@@ -238,7 +245,9 @@ public class AdsManager : MonoBehaviour {
 #else
             string adUnitId = "unexpected_platform";
 #endif
-        
+#if UNITY_EDITOR
+        return;
+#endif
         AdRequest request = new AdRequest.Builder().Build();
         this.rewardAdmobVideo.LoadAd(request, adUnitId);
         
@@ -260,6 +269,7 @@ public class AdsManager : MonoBehaviour {
     {
         Debug.Log("!!!!!@ Ad " + "HandleRewardBasedVideoClosed");
         this.RequestAdmobVideo();
+        AdView = false;
     }
 
     public void HandleRewardBasedVideoRewarded(object sender, Reward args)
@@ -273,6 +283,8 @@ public class AdsManager : MonoBehaviour {
         MonoBehaviour.print(
             "HandleRewardBasedVideoRewarded event received for "
                         + amount.ToString() + " " + type);
+
+        AdView = false;
     }
     
 
@@ -322,7 +334,11 @@ public class AdsManager : MonoBehaviour {
 
     public void ShowBanner()
     {
+#if UNITY_EDITOR
         return;
+#endif
+        if (this.bannerView == null)
+            return;
 
         this.bannerView.LoadAd(request);
         this.bannerView.Show();
@@ -357,13 +373,18 @@ public class AdsManager : MonoBehaviour {
     // 스테이지  구글 애드몹 전면 광고
     public void ShowInterstitialAds()
     {
-        if(FirebaseManager.Instance.ReviewMode)
+#if UNITY_EDITOR
+        return;
+#endif
+        if (FirebaseManager.Instance.ReviewMode)
         {
 
         }
         else
         {
-            
+            if (this.interstitial == null)
+                return;
+
             if (this.interstitial.IsLoaded())
             {
                 this.interstitial.Show();
@@ -380,7 +401,10 @@ public class AdsManager : MonoBehaviour {
     // 구글 애드몹 리워드 비디오 (스킵 가능하나 콜백 따로 들어옴)
     private void ShowAdmobVideo()
     {
-            
+#if UNITY_EDITOR
+        AdView = false;
+        return;
+#endif
         if (rewardAdmobVideo.IsLoaded())
         {
             rewardAdmobVideo.Show();
@@ -416,26 +440,35 @@ public class AdsManager : MonoBehaviour {
 
 
     // 유니티애즈 미니게임 리워드 비디오 스킵 불가
-    public void ShowMiniGameRewardAd()
+    public void ShowMiniGameRewardAd(Action endAction)
     {
-        ShowAdColonyAds();
-        return;
+        //ShowAdColonyAds();
+        //return;
 
         if (FirebaseManager.Instance.ReviewMode)
         {
-            TKManager.Instance.MyData.AddPoint(CommonData.AdsPointReward);
+            SetAdEndCallFunc(endAction);
+            AdView = false;
         }
         else
         {
-            if (Advertisement.IsReady(rewarded_video_id))
+            SetAdEndCallFunc(endAction);
+            if (rewardAdmobVideo.IsLoaded())
+            {
+                this.ShowAdmobVideo();
+            }
+            else if (Advertisement.IsReady(rewarded_video_id))
             {
                 var options = new ShowOptions { resultCallback = HandleShowRewardVideoResult };
                 Advertisement.Show(rewarded_video_id, options);
             }
+            else if (Vungle.isAdvertAvailable(Vungle_adsID))
+            {
+                ShowVungleAds();
+            }
             else
             {
-                //this.ShowAdmobVideo();
-                // 애드콜로니 벙글
+                ShowAdColonyAds();
             }
         }
     }
@@ -448,8 +481,7 @@ public class AdsManager : MonoBehaviour {
             case ShowResult.Finished:
                 {
                     Debug.Log("The ad was successfully shown.");
-
-                    TKManager.Instance.MyData.AddPoint(CommonData.AdsPointReward);
+                    AdView = false;
                     // to do ...
                     // 광고 시청이 완료되었을 때 처리
 
@@ -481,40 +513,42 @@ public class AdsManager : MonoBehaviour {
     {
         if (FirebaseManager.Instance.ReviewMode)
         {
-            endAction();
+            SetAdEndCallFunc(endAction);
+            AdView = false;
         }
         else
         {
-            AdView = false;
-
-            if (Advertisement.IsReady(Lotto_rewarded_video_id))
-            {
-                AdView = true;
-                var options = new ShowOptions { resultCallback = HandleShowLottoRewardVideoResult };
-                Advertisement.Show(Lotto_rewarded_video_id, options);
-            }
-            else
+            SetAdEndCallFunc(endAction);
+            if (rewardAdmobVideo.IsLoaded())
             {
                 this.ShowAdmobVideo();
             }
-
-            if (AdView && endAction != null)
+            else if (Advertisement.IsReady(Lotto_rewarded_video_id))
             {
-                StartCoroutine(Co_AdEnd(endAction));
+                var options = new ShowOptions { resultCallback = HandleShowLottoRewardVideoResult };
+                Advertisement.Show(Lotto_rewarded_video_id, options);
+            }
+            else if(Vungle.isAdvertAvailable(Vungle_adsID))
+            {
+                ShowVungleAds();
+            }
+            else
+            {
+                ShowAdColonyAds();
             }
         }
     }
     
     private void HandleShowLottoRewardVideoResult(ShowResult result)
     {
-        AdView = false;
         switch (result)
         {
             case ShowResult.Finished:
                 {
                     Debug.Log("The ad was successfully shown.");
+                    AdView = false;
 
-                    
+
                     // to do ...
                     // 광고 시청이 완료되었을 때 처리
 
@@ -550,16 +584,25 @@ public class AdsManager : MonoBehaviour {
         }
         else
         {
-            if (Advertisement.IsReady(Skip_rewarded_video_id))
+            SetAdEndCallFunc(null);
+            if (rewardAdmobVideo.IsLoaded())
+            {
+                this.ShowAdmobVideo();
+            }
+            else if (Advertisement.IsReady(Skip_rewarded_video_id))
             {
                 var options = new ShowOptions { resultCallback = HandleShowSkipRewardVideoResult };
                 Advertisement.Show(Skip_rewarded_video_id, options);
             }
+            else if (Vungle.isAdvertAvailable(Vungle_adsID))
+            {
+                ShowVungleAds();
+            }
             else
             {
-                this.ShowAdmobVideo();
+                ShowAdColonyAds();
             }
-        }   
+        }
     }
     
     private void HandleShowSkipRewardVideoResult(ShowResult result)
@@ -569,7 +612,7 @@ public class AdsManager : MonoBehaviour {
             case ShowResult.Finished:
                 {
                     Debug.Log("The ad was successfully shown.");
-
+                    AdView = false;
                     //TKManager.Instance.MyData.AddPoint(CommonData.AdsPointReward);
                     // to do ...
                     // 광고 시청이 완료되었을 때 처리
@@ -579,7 +622,7 @@ public class AdsManager : MonoBehaviour {
             case ShowResult.Skipped:
                 {
                     Debug.Log("The ad was skipped before reaching the end.");
-
+                    AdView = false;
                     // to do ...
                     // 광고가 스킵되었을 때 처리
 
@@ -596,10 +639,24 @@ public class AdsManager : MonoBehaviour {
                 }
         }
     }
-    
-    private IEnumerator Co_AdEnd(Action endAction)
+
+    public void SetAdEndCallFunc(Action func)
     {
-        while(true)
+        AdView = true;
+        AdEndCallFunc = func;
+        StartCoroutine(Co_AdEndCall());
+    }
+
+    public void CallAdEndCallFunc()
+    {
+        if (AdEndCallFunc != null)
+            AdEndCallFunc();
+    }
+
+    private IEnumerator Co_AdEndCall()
+    {
+        TKManager.Instance.ShowHUD();
+        while (true)
         {
             if (AdView == false)
                 break;
@@ -607,7 +664,8 @@ public class AdsManager : MonoBehaviour {
             yield return null;
         }
 
-        endAction();
+        CallAdEndCallFunc();
+        TKManager.Instance.HideHUD();
     }
 
 

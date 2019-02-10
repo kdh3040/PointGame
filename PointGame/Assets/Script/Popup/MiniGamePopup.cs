@@ -24,6 +24,7 @@ public class MiniGamePopup : Popup
     public Button PopupCancel;
 
     private bool JumpEnable = true;
+    private bool GameOver = false;
 
     public void Awake()
     {
@@ -64,6 +65,7 @@ public class MiniGamePopup : Popup
     public void GameReady()
     {
         PopupObj.gameObject.SetActive(false);
+        GameOver = false;
         JumpEnable = true;
         Char.transform.parent = SafeBlock.transform;
         Char.transform.localPosition = new Vector3(0, 125, 0);
@@ -139,8 +141,8 @@ public class MiniGamePopup : Popup
         {
             iTween.MoveTo(Char.gameObject, iTween.Hash("x", Char.gameObject.transform.localPosition.x, "y", -1000f, "islocal", true, "movetopath", false, "time", 0.8f, "easetype", iTween.EaseType.easeInBack));
             yield return new WaitForSeconds(0.8f);
-
-            ShowInfoPopup(false);
+            GameOver = true;
+            ShowInfoPopup();
         }
         else
         {
@@ -162,18 +164,21 @@ public class MiniGamePopup : Popup
 
             yield return new WaitForSeconds(0.2f);
 
-            ShowInfoPopup(true);
-            AdsManager.Instance.ShowMiniGameRewardAd();
+            GameOver = false;
+            AdsManager.Instance.ShowMiniGameRewardAd(ShowInfoPopup);
         }
 
         yield return null;
     }
 
-    public void ShowInfoPopup(bool success)
+    public void ShowInfoPopup()
     {
         PopupObj.gameObject.SetActive(true);
-        if (success)
+        if (GameOver == false)
+        {
             PopupText.text = string.Format("{0}포인트를 획득했습니다.\n재시작 하시겠습니까?", CommonData.AdsPointReward);
+            TKManager.Instance.MyData.AddPoint(CommonData.AdsPointReward);
+        }
         else
             PopupText.text = "재시작 하시겠습니까?";
     }
