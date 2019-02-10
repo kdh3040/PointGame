@@ -482,7 +482,7 @@ public class AdsManager : MonoBehaviour {
             else
             {
                 AdColony.Zone adcolonyZone = AdColony.Ads.GetZone(this.zoneId);
-                if (adcolonyZone.Enabled)
+                if (adcolonyZone != null ||  adcolonyZone.Enabled)
                 {
                     ShowColonyAds();
                 }
@@ -550,7 +550,7 @@ public class AdsManager : MonoBehaviour {
             else
             {
                 AdColony.Zone adcolonyZone = AdColony.Ads.GetZone(this.zoneId);
-                if (adcolonyZone.Enabled)
+                if (adcolonyZone != null || adcolonyZone.Enabled)
                 {
                     ShowColonyAds();
                 }
@@ -718,7 +718,10 @@ public class AdsManager : MonoBehaviour {
         else
         {
             AdColony.Zone adcolonyZone =  AdColony.Ads.GetZone(this.zoneId);
-            return adcolonyZone.Enabled;
+            if (adcolonyZone != null)
+                return adcolonyZone.Enabled;
+            else
+                return false;
         }
 
         return rtValue;
