@@ -23,7 +23,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>Temp\bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE;UNITY_5_3_OR_NEWER;UNITY_5_4_OR_NEWER;UNITY_5_5_OR_NEWER;UNITY_5_6_OR_NEWER;UNITY_2017_1_OR_NEWER;UNITY_2017_2_OR_NEWER;UNITY_2017_3_OR_NEWER;UNITY_2017_4_OR_NEWER;UNITY_2018_1_OR_NEWER;UNITY_2018_2_OR_NEWER;UNITY_2018_3_OR_NEWER;UNITY_2018_3_2;UNITY_2018_3;UNITY_2018;UNITY_INCLUDE_TESTS;UNITY_ADS;UNITY_ANALYTICS;ENABLE_AUDIO;ENABLE_CACHING;ENABLE_CLOTH;ENABLE_MICROPHONE;ENABLE_MULTIPLE_DISPLAYS;ENABLE_PHYSICS;ENABLE_SPRITES;ENABLE_GRID;ENABLE_TILEMAP;ENABLE_TERRAIN;ENABLE_TEXTURE_STREAMING;ENABLE_DIRECTOR;ENABLE_UNET;ENABLE_LZMA;ENABLE_UNITYEVENTS;ENABLE_WEBCAM;ENABLE_WWW;ENABLE_CLOUD_SERVICES_COLLAB;ENABLE_CLOUD_SERVICES_COLLAB_SOFTLOCKS;ENABLE_CLOUD_SERVICES_ADS;ENABLE_CLOUD_HUB;ENABLE_CLOUD_PROJECT_ID;ENABLE_CLOUD_SERVICES_USE_WEBREQUEST;ENABLE_CLOUD_SERVICES_UNET;ENABLE_CLOUD_SERVICES_BUILD;ENABLE_CLOUD_LICENSE;ENABLE_EDITOR_HUB;ENABLE_EDITOR_HUB_LICENSE;ENABLE_WEBSOCKET_CLIENT;ENABLE_DIRECTOR_AUDIO;ENABLE_DIRECTOR_TEXTURE;ENABLE_TIMELINE;ENABLE_EDITOR_METRICS;ENABLE_EDITOR_METRICS_CACHING;ENABLE_MANAGED_JOBS;ENABLE_MANAGED_TRANSFORM_JOBS;ENABLE_MANAGED_ANIMATION_JOBS;INCLUDE_DYNAMIC_GI;INCLUDE_GI;ENABLE_MONO_BDWGC;PLATFORM_SUPPORTS_MONO;INCLUDE_PUBNUB;ENABLE_VIDEO;ENABLE_CUSTOM_RENDER_TEXTURE;ENABLE_LOCALIZATION;PLATFORM_ANDROID;UNITY_ANDROID;UNITY_ANDROID_API;ENABLE_SUBSTANCE;ENABLE_EGL;ENABLE_NETWORK;ENABLE_RUNTIME_GI;ENABLE_CRUNCH_TEXTURE_COMPRESSION;ENABLE_UNITYWEBREQUEST;ENABLE_CLOUD_SERVICES;ENABLE_CLOUD_SERVICES_ANALYTICS;ENABLE_EVENT_QUEUE;ENABLE_CLOUD_SERVICES_PURCHASING;ENABLE_CLOUD_SERVICES_CRASH_REPORTING;ENABLE_CLOUD_SERVICES_NATIVE_CRASH_REPORTING;PLATFORM_SUPPORTS_ADS_ID;UNITY_CAN_SHOW_SPLASH_SCREEN;ENABLE_VR;ENABLE_AR;UNITY_HAS_GOOGLEVR;UNITY_HAS_TANGO;ENABLE_SPATIALTRACKING;ENABLE_RUNTIME_PERMISSIONS;UNITY_ASTC_ONLY_DECOMPRESS;ENABLE_UNITYADS_RUNTIME;UNITY_UNITYADS_API;ENABLE_MONO;NET_2_0;NET_LEGACY;ENABLE_PROFILER;UNITY_ASSERTIONS;UNITY_EDITOR;UNITY_EDITOR_64;UNITY_EDITOR_WIN;ENABLE_UNITY_COLLECTIONS_CHECKS;ENABLE_BURST_AOT;UNITY_TEAM_LICENSE;ENABLE_VSTU</DefineConstants>
+    <DefineConstants>DEBUG;TRACE;UNITY_5_3_OR_NEWER;UNITY_5_4_OR_NEWER;UNITY_5_5_OR_NEWER;UNITY_5_6_OR_NEWER;UNITY_2017_1_OR_NEWER;UNITY_2017_2_OR_NEWER;UNITY_2017_3_OR_NEWER;UNITY_2017_4_OR_NEWER;UNITY_2018_1_OR_NEWER;UNITY_2018_2_OR_NEWER;UNITY_2018_3_OR_NEWER;UNITY_2018_3_5;UNITY_2018_3;UNITY_2018;UNITY_INCLUDE_TESTS;UNITY_ANALYTICS;UNITY_ADS;ENABLE_AUDIO;ENABLE_CACHING;ENABLE_CLOTH;ENABLE_MICROPHONE;ENABLE_MULTIPLE_DISPLAYS;ENABLE_PHYSICS;ENABLE_SPRITES;ENABLE_GRID;ENABLE_TILEMAP;ENABLE_TERRAIN;ENABLE_TEXTURE_STREAMING;ENABLE_DIRECTOR;ENABLE_UNET;ENABLE_LZMA;ENABLE_UNITYEVENTS;ENABLE_WEBCAM;ENABLE_WWW;ENABLE_CLOUD_SERVICES_COLLAB;ENABLE_CLOUD_SERVICES_COLLAB_SOFTLOCKS;ENABLE_CLOUD_SERVICES_ADS;ENABLE_CLOUD_HUB;ENABLE_CLOUD_PROJECT_ID;ENABLE_CLOUD_SERVICES_USE_WEBREQUEST;ENABLE_CLOUD_SERVICES_UNET;ENABLE_CLOUD_SERVICES_BUILD;ENABLE_CLOUD_LICENSE;ENABLE_EDITOR_HUB;ENABLE_EDITOR_HUB_LICENSE;ENABLE_WEBSOCKET_CLIENT;ENABLE_DIRECTOR_AUDIO;ENABLE_DIRECTOR_TEXTURE;ENABLE_TIMELINE;ENABLE_EDITOR_METRICS;ENABLE_EDITOR_METRICS_CACHING;ENABLE_MANAGED_JOBS;ENABLE_MANAGED_TRANSFORM_JOBS;ENABLE_MANAGED_ANIMATION_JOBS;INCLUDE_DYNAMIC_GI;INCLUDE_GI;ENABLE_MONO_BDWGC;PLATFORM_SUPPORTS_MONO;INCLUDE_PUBNUB;ENABLE_VIDEO;ENABLE_CUSTOM_RENDER_TEXTURE;ENABLE_LOCALIZATION;PLATFORM_ANDROID;UNITY_ANDROID;UNITY_ANDROID_API;ENABLE_SUBSTANCE;ENABLE_EGL;ENABLE_NETWORK;ENABLE_RUNTIME_GI;ENABLE_CRUNCH_TEXTURE_COMPRESSION;ENABLE_UNITYWEBREQUEST;ENABLE_CLOUD_SERVICES;ENABLE_CLOUD_SERVICES_ANALYTICS;ENABLE_EVENT_QUEUE;ENABLE_CLOUD_SERVICES_PURCHASING;ENABLE_CLOUD_SERVICES_CRASH_REPORTING;ENABLE_CLOUD_SERVICES_NATIVE_CRASH_REPORTING;PLATFORM_SUPPORTS_ADS_ID;UNITY_CAN_SHOW_SPLASH_SCREEN;ENABLE_VR;ENABLE_AR;UNITY_HAS_GOOGLEVR;UNITY_HAS_TANGO;ENABLE_SPATIALTRACKING;ENABLE_RUNTIME_PERMISSIONS;UNITY_ASTC_ONLY_DECOMPRESS;ENABLE_UNITYADS_RUNTIME;UNITY_UNITYADS_API;ENABLE_MONO;NET_2_0;NET_LEGACY;ENABLE_PROFILER;UNITY_ASSERTIONS;UNITY_EDITOR;UNITY_EDITOR_64;UNITY_EDITOR_WIN;ENABLE_UNITY_COLLECTIONS_CHECKS;ENABLE_BURST_AOT;UNITY_TEAM_LICENSE;ENABLE_VSTU;UNITY_PRO_LICENSE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <NoWarn>0169</NoWarn>
@@ -50,7 +50,7 @@
     <UnityProjectGenerator>Unity/VSTU</UnityProjectGenerator>
     <UnityProjectType>Game:1</UnityProjectType>
     <UnityBuildTarget>Android:13</UnityBuildTarget>
-    <UnityVersion>2018.3.2f1</UnityVersion>
+    <UnityVersion>2018.3.5f1</UnityVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
@@ -61,8 +61,20 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\AdColony\Scripts\AdColony.cs" />
+    <Compile Include="Assets\AdColony\Scripts\Android\AdColonyAndroid.cs" />
+    <Compile Include="Assets\AdColony\Scripts\Android\AdColonyAndroidEventTracker.cs" />
+    <Compile Include="Assets\AdColony\Scripts\Common\AdColonyConstants.cs" />
+    <Compile Include="Assets\AdColony\Scripts\Common\AdColonyEventTracker.cs" />
+    <Compile Include="Assets\AdColony\Scripts\Common\AdColonyInterstitialAd.cs" />
+    <Compile Include="Assets\AdColony\Scripts\Common\AdColonyOptions.cs" />
+    <Compile Include="Assets\AdColony\Scripts\Common\AdColonyTypes.cs" />
+    <Compile Include="Assets\AdColony\Scripts\Common\AdColonyUserMetadata.cs" />
+    <Compile Include="Assets\AdColony\Scripts\Common\AdColonyUtils.cs" />
+    <Compile Include="Assets\AdColony\Scripts\Common\AdColonyZone.cs" />
+    <Compile Include="Assets\AdColony\Scripts\iOS\AdColonyIOS.cs" />
+    <Compile Include="Assets\AdColony\Scripts\iOS\AdColonyIOSEventTracker.cs" />
     <Compile Include="Assets\AdsPopup.cs" />
-    <Compile Include="Assets\Firebase\FirebaseManager.cs" />
     <Compile Include="Assets\GoogleMobileAds\Api\AdFailedToLoadEventArgs.cs" />
     <Compile Include="Assets\GoogleMobileAds\Api\AdLoader.cs" />
     <Compile Include="Assets\GoogleMobileAds\Api\AdPosition.cs" />
@@ -86,7 +98,6 @@
     <Compile Include="Assets\GoogleMobileAds\Common\IMobileAdsClient.cs" />
     <Compile Include="Assets\GoogleMobileAds\Common\INativeExpressAdClient.cs" />
     <Compile Include="Assets\GoogleMobileAds\Common\IRewardBasedVideoAdClient.cs" />
-    <Compile Include="Assets\GoogleMobileAds\Common\MobileAdsEventExecutor.cs" />
     <Compile Include="Assets\GoogleMobileAds\Common\Utils.cs" />
     <Compile Include="Assets\GoogleMobileAds\Platforms\Android\AdLoaderClient.cs" />
     <Compile Include="Assets\GoogleMobileAds\Platforms\Android\BannerClient.cs" />
@@ -107,33 +118,42 @@
     <Compile Include="Assets\GoogleMobileAds\Platforms\iOS\NativeExpressAdClient.cs" />
     <Compile Include="Assets\GoogleMobileAds\Platforms\iOS\RewardBasedVideoAdClient.cs" />
     <Compile Include="Assets\GoogleMobileAds\Platforms\iOS\Utils.cs" />
+    <Compile Include="Assets\safeAreahelper.cs" />
     <Compile Include="Assets\SafeAreaScale.cs" />
     <Compile Include="Assets\Script\AdsManager.cs" />
     <Compile Include="Assets\Script\CommonData.cs" />
     <Compile Include="Assets\Script\CountImgFont.cs" />
+    <Compile Include="Assets\Script\FirebaseManager.cs" />
     <Compile Include="Assets\Script\Game\GameBlock.cs" />
     <Compile Include="Assets\Script\Game\GameChar.cs" />
     <Compile Include="Assets\Script\Game\GamePlayManager.cs" />
     <Compile Include="Assets\Script\Game\GameUI.cs" />
+    <Compile Include="Assets\Script\Game\RGameBlock.cs" />
+    <Compile Include="Assets\Script\Game\RGameBlockGroup.cs" />
     <Compile Include="Assets\Script\ImageCache.cs" />
     <Compile Include="Assets\Script\LoadingHUD.cs" />
     <Compile Include="Assets\Script\LoadingUI.cs" />
     <Compile Include="Assets\Script\MainUI.cs" />
     <Compile Include="Assets\Script\Popup\GiftconListPopup.cs" />
     <Compile Include="Assets\Script\Popup\GiftconListSlot.cs" />
-    <Compile Include="Assets\Script\Popup\GiftconPopup.cs" />
+    <Compile Include="Assets\Script\Popup\HelpPopup.cs" />
     <Compile Include="Assets\Script\Popup\LottoMsgPopup.cs" />
     <Compile Include="Assets\Script\Popup\LottoPopup.cs" />
     <Compile Include="Assets\Script\Popup\LottoSlotUI.cs" />
     <Compile Include="Assets\Script\Popup\LottoWinPopup.cs" />
+    <Compile Include="Assets\Script\Popup\MiniGamePopup.cs" />
     <Compile Include="Assets\Script\Popup\MsgPopup.cs" />
+    <Compile Include="Assets\Script\Popup\PointCashSwapPopup.cs" />
     <Compile Include="Assets\Script\Popup\Popup.cs" />
+    <Compile Include="Assets\Script\Popup\PushBoxPopup.cs" />
+    <Compile Include="Assets\Script\Popup\PushMsgPopup.cs" />
     <Compile Include="Assets\Script\Popup\RoulettePointResultPopup.cs" />
     <Compile Include="Assets\Script\Popup\RoulettePopup.cs" />
     <Compile Include="Assets\Script\Popup\SignUpPopup.cs" />
     <Compile Include="Assets\Script\PopupUI.cs" />
     <Compile Include="Assets\Script\TKManager.cs" />
     <Compile Include="Assets\Script\UserData.cs" />
+    <Compile Include="Assets\SoundManager.cs" />
     <None Include="Assets\Firebase\m2repository\com\google\firebase\firebase-app-unity\maven-metadata.xml" />
     <None Include="Assets\Firebase\m2repository\com\google\firebase\firebase-database-unity\maven-metadata.xml" />
     <None Include="Assets\Firebase\m2repository\com\google\firebase\firebase-analytics-unity\maven-metadata.xml" />
@@ -354,9 +374,6 @@
     <Reference Include="UnityEngine.SpatialTracking">
       <HintPath>D:/DoHoSoft/Unity/Editor/Data/UnityExtensions/Unity/UnitySpatialTracking/RuntimeEditor/UnityEngine.SpatialTracking.dll</HintPath>
     </Reference>
-    <Reference Include="Firebase.Analytics">
-      <HintPath>D:/ddukddak/PointGame/PointGame/Assets/Firebase/Plugins/Firebase.Analytics.dll</HintPath>
-    </Reference>
     <Reference Include="Firebase.App">
       <HintPath>D:/ddukddak/PointGame/PointGame/Assets/Firebase/Plugins/Firebase.App.dll</HintPath>
     </Reference>
@@ -384,6 +401,9 @@
     <Reference Include="Unity.Tasks">
       <HintPath>D:/ddukddak/PointGame/PointGame/Assets/Parse/Plugins/Unity.Tasks.dll</HintPath>
     </Reference>
+    <Reference Include="VungleSDKProxy">
+      <HintPath>D:/ddukddak/PointGame/PointGame/Assets/Plugins/VungleSDKProxy.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.Advertisements">
       <HintPath>D:/ddukddak/PointGame/PointGame/Library/PackageCache/com.unity.ads@2.0.8/UnityEngine.Advertisements.dll</HintPath>
     </Reference>
@@ -395,6 +415,9 @@
     </Reference>
     <Reference Include="Unity.Analytics.Tracker">
       <HintPath>D:/ddukddak/PointGame/PointGame/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.Tracker.dll</HintPath>
+    </Reference>
+    <Reference Include="Firebase.Analytics">
+      <HintPath>D:/ddukddak/PointGame/PointGame/Assets/Firebase/Plugins/Firebase.Analytics.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib">
       <HintPath>D:/DoHoSoft/Unity/Editor/Data/MonoBleedingEdge/lib/mono/2.0-api/mscorlib.dll</HintPath>
