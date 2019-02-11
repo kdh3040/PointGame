@@ -1957,9 +1957,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 487b4acb3f1f85e40a3a77a2d8a5c6b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PushLastIndex: 0
   FirstLoadingComplete: 0
   LoadingCount: 0
-  AdsMode: 0
+  ReviewMode: 1
 --- !u!4 &1556224094
 Transform:
   m_ObjectHideFlags: 0
@@ -2111,7 +2112,8 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: "- \uB2C9\uB124\uC784\uC774 \uBE48\uCE78\uC77C \uACBD\uC6B0 \uB79C\uB364\uC73C\uB85C
-    \uC0DD\uC131\uB429\uB2C8\uB2E4."
+    \uC0DD\uC131\uB429\uB2C8\uB2E4.\n- \uB2C9\uB124\uC784\uC740 \uC601\uC5B4\uC640
+    \uC22B\uC790\uB9CC \uAC00\uB2A5\uD569\uB2C8\uB2E4."
 --- !u!222 &1665793763
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2706,6 +2708,8 @@ MonoBehaviour:
   LottoSeriesCountMin: 0
   HUD: {fileID: 1015879527}
   GetLottoNumberProgress: 0
+  PushLastIndex: 0
+  PushNotiEnable: 0
   FirebaseUserId: 
 --- !u!4 &2065145996
 Transform:

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -65,6 +66,18 @@ public class SignUpPopup : MonoBehaviour
         {
             if (nickName[i] != ' ')
                 emptyString = false;
+        }
+
+        if (emptyString == false)
+        {
+            Regex engRegex = new Regex(@"[a-zA-Z][0-9]");
+            bool ismatch = engRegex.IsMatch(nickName);
+            if (ismatch == false)
+            {
+                MsgPopup.gameObject.SetActive(true);
+                MsgText.text = "닉네임은 영어와 숫자만 가능합니다.";
+                return;
+            }
         }
 
         if (emptyString)
