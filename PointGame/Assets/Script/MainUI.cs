@@ -142,11 +142,18 @@ public class MainUI : MonoBehaviour {
         }
 #endif
         if (FirebaseManager.Instance.ReviewMode)
+        {
+            PushBoxNotiObj.SetActive(false);
             AllPoint.SetValue(string.Format("{0}p", TKManager.Instance.MyData.Point), CountImgFont.IMG_RANGE.LEFT, CountImgFont.IMG_TYPE.YELLOW);
+        }
         else
+        {
+            PushBoxNotiObj.SetActive(TKManager.Instance.PushNotiEnable);
             AllPoint.SetValue(string.Format("{0}p / {1}c", TKManager.Instance.MyData.Point, TKManager.Instance.MyData.Cash), CountImgFont.IMG_RANGE.LEFT, CountImgFont.IMG_TYPE.YELLOW);
+        }
+            
 
-        PushBoxNotiObj.SetActive(TKManager.Instance.PushNotiEnable);
+        
 
 #if UNITY_EDITOR || UNITY_ANDROID
         if (Popup.IsShowPopup(POPUP_TYPE.MSG) == false && Input.GetKeyUp(KeyCode.Escape))
