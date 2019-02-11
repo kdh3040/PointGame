@@ -558,7 +558,7 @@ public class FirebaseManager : MonoBehaviour
     public void GetLottoLuckGroup()
     {
         
-        FirebaseDatabase.DefaultInstance.GetReference("LottoLuckyGroup").OrderByKey().LimitToLast(4)
+        FirebaseDatabase.DefaultInstance.GetReference("LottoLuckyGroup").OrderByKey().LimitToLast(5)
        .GetValueAsync().ContinueWith(task =>
        {
            if (task.IsFaulted)

@@ -48,7 +48,7 @@ public class MainUI : MonoBehaviour {
         var winList = TKManager.Instance.LottoWinUserList;
         StringBuilder winUser = new StringBuilder();
 
-        for (int i = 0; i < winList.Count; i++)
+        for (int i = 0; i < winList.Count - 1; i++)
         {
             winUser.Append(string.Format("- {0:D2}회 당첨자 : {1}", winList[i].Key + 1, winList[i].Value));
             winUser.AppendLine();

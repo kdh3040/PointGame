@@ -70,7 +70,7 @@ public class SignUpPopup : MonoBehaviour
 
         if (emptyString == false)
         {
-            Regex engRegex = new Regex(@"[a-zA-Z][0-9]");
+            Regex engRegex = new Regex(@"[a-zA-Z0-9]");
             bool ismatch = engRegex.IsMatch(nickName);
             if (ismatch == false)
             {
