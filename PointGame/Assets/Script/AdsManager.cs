@@ -337,7 +337,7 @@ public class AdsManager : MonoBehaviour {
 
         // Load the banner with the request.
 
-        this.bannerView.LoadAd(request);
+       // this.bannerView.LoadAd(request);
 
     }
 
