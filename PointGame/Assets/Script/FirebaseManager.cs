@@ -532,21 +532,58 @@ public class FirebaseManager : MonoBehaviour
             }
             else
             {
-                //int tempSeries = GetCurrSeries();
-                int tempSeries = LottoCurSeries;
-                tempSeries += CommonData.LottoRefSeries;
+                mDatabaseRef.Child("LottoRefNumber").GetValueAsync().ContinueWith(task =>
+                {
+                    if (task.IsFaulted)
+                    {
+                        // Handle the error...
+                    }
+                    else if (task.IsCompleted)
+                    {
+                        DataSnapshot snapshot = task.Result;
+                        if (snapshot != null && snapshot.Exists)
+                        {
+                            LottoRefNnumber = Convert.ToInt32(snapshot.Value);
 
-               mDatabaseRef.Child("Lotto").Child(tempSeries + "_L").Child(TKManager.Instance.MyData.NickName).SetValueAsync(LottoRefNnumber * tempCount);
-               mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("Lotto").Child(tempSeries + "_L").SetValueAsync(LottoRefNnumber * tempCount);
+                            mDatabaseRef.Child("LottoCurSeries").GetValueAsync().ContinueWith(CurSeriestask =>
+                            {
+                                if (CurSeriestask.IsFaulted)
+                                {
+                                    // Handle the error...
+                                }
+                                else if (CurSeriestask.IsCompleted)
+                                {
+                                    snapshot = CurSeriestask.Result;
+                                    if (snapshot != null && snapshot.Exists)
+                                    {
+                                        LottoCurSeries = Convert.ToInt32(snapshot.Value);
+                                        TKManager.Instance.SetCurrentLottoSeriesCount(LottoCurSeries);
 
-                tempSeries -= CommonData.LottoRefSeries;
+                                        //int tempSeries = GetCurrSeries();
+                                        int tempSeries = LottoCurSeries;
+                                        tempSeries += CommonData.LottoRefSeries;
 
-                TKManager.Instance.MyData.SetLottoData(tempSeries, LottoRefNnumber * tempCount);
+                                        mDatabaseRef.Child("Lotto").Child(tempSeries + "_L").Child(TKManager.Instance.MyData.NickName).SetValueAsync(LottoRefNnumber * tempCount);
+                                        mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("Lotto").Child(tempSeries + "_L").SetValueAsync(LottoRefNnumber * tempCount);
 
-               mutableData.Value = tempCount + 1;
-               mDatabaseRef.Child("LottoCount").SetValueAsync(mutableData.Value);
+                                        tempSeries -= CommonData.LottoRefSeries;
 
-                TKManager.Instance.GetLottoNumberProgress = false;
+                                        TKManager.Instance.MyData.SetLottoData(tempSeries, LottoRefNnumber * tempCount);
+
+                                        mutableData.Value = tempCount + 1;
+                                        mDatabaseRef.Child("LottoCount").SetValueAsync(mutableData.Value);
+
+                                        TKManager.Instance.GetLottoNumberProgress = false;
+                                    }
+                                }
+                            });
+                        }
+                        else
+                            LottoRefNnumber = 0;
+                    }
+                });
+
+          
             }
 
           

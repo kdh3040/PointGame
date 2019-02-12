@@ -120,7 +120,7 @@
 
   var provider = new firebase.auth.GoogleAuthProvider();
 
-  SignStatus();
+  //SignStatus();
   function SignStatus()
   {
     firebase.auth().onAuthStateChanged(function(user) {
@@ -156,7 +156,18 @@
   var LottoCurSeries;
   var LottoTodaySeries;
 
- SetLottoCount();
+  var tempWinIndex = 0;
+
+  var arrLottoWinUserName = new Array();
+  var arrLottoWinUserBank = new Array();
+  var arrLottoWinUserAccount = new Array();
+
+
+  var arrLottoWinLuckyGroupSeries = new Array();
+  arrLottoWinLuckyGroupSeries = [];
+  var arrLottoWinLuckyGroup = new Array();
+  arrLottoWinLuckyGroup = [];
+  var LottoSelectMode;
 
   function SetLottoCount()
   {
@@ -244,17 +255,7 @@
         if(row_index > 0) lo_table.deleteRow(row_index);
   }
 
-  var tempWinIndex = 0;
 
-  var arrLottoWinUserName = new Array();
-  var arrLottoWinUserBank = new Array();
-  var arrLottoWinUserAccount = new Array();
-
-
-  var arrLottoWinLuckyGroupSeries = new Array();
-  arrLottoWinLuckyGroupSeries = [];
-  var arrLottoWinLuckyGroup = new Array();
-  arrLottoWinLuckyGroup = [];
 
   //console.log(arrLottoWinLuckyGroup);
 
@@ -407,8 +408,8 @@
 
 
 
-    var LottoSelectMode;
-    SetLottoRefData();
+
+
 
     function SetLottoRefData()
     {
@@ -445,7 +446,8 @@
       }
     });
 
-
+    SetLottoCount();
+    SetLottoRefData();
 
 </script>
 
