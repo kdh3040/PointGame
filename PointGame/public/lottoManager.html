@@ -113,7 +113,6 @@
   <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase-database.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase-messaging.js"></script>
   <script src="./fireinit.js"></script>
   <script type="text/javascript">
 
@@ -136,8 +135,7 @@
   });
 }
 
-  const messaging = firebase.messaging();
-  messaging.usePublicVapidKey("BKuiXbk64s3EcAdhlHDB6Fk_wXjOROxtakt-LXxqTjdnNTA1YxTaToR3sVymbAKpAgJcbbnY-VnTUnqO_kzEKP0");
+  
 /*
   messaging.requestPermission().then(function() {
     console.log('Notification permission granted.');
@@ -278,6 +276,24 @@
 
     }
 
+    function deleteLine(obj) {
+        var tr = $(obj).parent().parent();
+       var td = tr.children();
+       var no = td.eq(0).text();
+
+       //firebase.database().ref('CashBack/' + no).remove();
+
+      no -= 1;
+      //console.log("클릭한 Row의 모든 데이터 : "+no);
+
+      no = LottoSeriesRef + no;
+      no = no + '_L';
+       //console.log("클릭한 Row의 모든 데이터 : "+no);
+       firebase.database().ref('LottoWinUsers/' + no).remove();
+
+        tr.remove();
+    }
+
 
     function SetLottoAccountData(Index, Name, Bank, Account)
     {
@@ -304,23 +320,6 @@
       cell3.appendChild(element3);
     }
 
-    function deleteLine(obj) {
-        var tr = $(obj).parent().parent();
-       var td = tr.children();
-       var no = td.eq(0).text();
-
-       //firebase.database().ref('CashBack/' + no).remove();
-
-      no -= 1;
-      //console.log("클릭한 Row의 모든 데이터 : "+no);
-
-      no = LottoSeriesRef + no;
-      no = no + '_L';
-       //console.log("클릭한 Row의 모든 데이터 : "+no);
-       firebase.database().ref('LottoWinUsers/' + no).remove();
-
-        tr.remove();
-    }
 
   function SetLottoRefData()
   {

@@ -34,7 +34,7 @@
     <div class="nav-wrapper">
       <div class="container">
         <a href="/" class="breadcrumb">메인 페이지</a>
-        <a href="/lottoManager.html" class="breadcrumb">푸시알림 관리자</a>
+        <a href="/AlarmManager.html" class="breadcrumb">푸시알림 관리자</a>
       </div>
     </div>
   </nav>
@@ -55,7 +55,7 @@
     <div class="row z-depth-1">
       <div class="col l12 m12 s12">
         <p>
-        등록된 푸쉬알림 갯수 :
+        등록된 푸시알림 갯수 :
           <!-- TODO 4. 상태 보기용 span 확인-->
            <span id="Alarm_Count" class="blue-text">알림 갯수 </span>
          </p>
@@ -74,10 +74,23 @@
                 <input id="Alarm_Title" name="abc" type="text" /><br>
                <span  type="input" class="indigo-text">내용</span><br>
                <input id="Alarm_Content" name="abc" type="text"  /><br>
-               <button id="BTN_ALARM" type="button" class="btn white indigo-text">푸쉬 알림 등록</button>
+               <button id="BTN_ALARM" type="button" class="btn white indigo-text">푸시 알림 등록</button>
              </p>
           </div>
         </div>
+
+        <br>
+        <br>
+
+        <table>
+          <h5 class="indigo-text">:+: 푸시알림 내역  :+:</h5>
+          <thead>
+            <th>순서</th>
+            <th>제목</th>
+            <th></th>
+          </thead>
+          <tbody id="AlarmHistory"></tbody>
+        </table>
 
         <br>
         <br>
@@ -107,14 +120,14 @@
   <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase-database.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase-messaging.js"></script>
   <script src="./fireinit.js"></script>
   <script type="text/javascript">
 
 
   var provider = new firebase.auth.GoogleAuthProvider();
 
-  SignStatus();
+
+  //SignStatus();
   function SignStatus()
   {
     firebase.auth().onAuthStateChanged(function(user) {
@@ -125,13 +138,34 @@
       }
       // User is signed in.
     } else {
-        location.href="./notAuth.html";
-  }
-  });
-}
 
-  const messaging = firebase.messaging();
-  messaging.usePublicVapidKey("BKuiXbk64s3EcAdhlHDB6Fk_wXjOROxtakt-LXxqTjdnNTA1YxTaToR3sVymbAKpAgJcbbnY-VnTUnqO_kzEKP0");
+      firebase.auth().signInWithPopup(provider).then(function(result) {
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        var token = result.credential.accessToken;
+        // The signed-in user info.
+        var user = result.user;
+        var email = user.email;
+
+        if(email != "jt.famm@gmail.com"){
+          location.href="./notAuth.html";
+
+        }
+
+        // ...
+      }).catch(function(error) {
+        // Handle Errors here.
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        // The email of the user's account used.
+        var email = error.email;
+        // The firebase.auth.AuthCredential type that was used.
+        var credential = error.credential;
+        // ...
+      });
+    }
+  });
+
+  }
 
   var AlarmCount;
   firebase.database().ref('/PushAlarmCount').once('value', function(snapshot) {
@@ -139,7 +173,7 @@
     AlarmCount = message;
     //$("#GIFT_COUNT").text('상품권 남은 수량 : ' + GiftCount);
 
-      $("#Alarm_Count").text(AlarmCount + '개');
+    $("#Alarm_Count").text(AlarmCount + '개');
     console.log(AlarmCount);
   });
 
@@ -147,7 +181,72 @@
 
   //console.log(arrLottoWinLuckyGroup);
 
+  function deleteLine(obj) {
+      var tr = $(obj).parent().parent();
+     var td = tr.children();
+     var no = td.eq(0).text();
 
+     //firebase.database().ref('CashBack/' + no).remove();
+
+    no -= 1;
+    //console.log("클릭한 Row의 모든 데이터 : "+no);
+     //console.log("클릭한 Row의 모든 데이터 : "+no);
+     firebase.database().ref('PushAlarm/' + no).remove();
+
+    AlarmCount -= 1;
+    firebase.database().ref('PushAlarmCount').set(AlarmCount);
+      $("#Alarm_Count").text(AlarmCount + '개');
+      tr.remove();
+
+      alert( '푸시알림이 삭제되었습니다' );
+  }
+
+
+  function SetAlarmHistory(Index, Title, Content)
+  {
+    //console.log(arrLottoWinUserName);
+    var my_tbody = document.getElementById('AlarmHistory');
+    // var row = my_tbody.insertRow(0); // 상단에 추가
+    var row = my_tbody.insertRow( my_tbody.rows.length ); // 하단에 추가
+    var cell1 = row.insertCell(0);
+    var cell2 = row.insertCell(1);
+    var cell3 = row.insertCell(2);
+
+    cell1.innerHTML = Index;
+    cell2.innerHTML = Title;
+    var element2 = document.createElement("input");
+    cell2.addEventListener('click', function(event) {
+          var con_test = alert(Content);
+        })
+
+    var element3 = document.createElement("input");
+    element3.type = "button";
+    element3.value = "삭제";
+    element3.addEventListener('click', function(event) {
+          var con_test = confirm("푸시알림을 삭제하시겠습니까?");
+          if(con_test == true){
+              deleteLine(this);
+          }
+          else if(con_test == false){
+             alert( '푸시알림 삭제가 취소되었습니다' );
+          }
+    })
+
+    cell3.appendChild(element3);
+  }
+
+
+  var dbTestRef = firebase.database().ref('/PushAlarm')
+  dbTestRef.on('child_added', function(data){
+    //console.log(data.key);
+    var index = data.key.toString();
+    //console.log(index[0]);
+    var Series = Number(index[0]);
+    Series +=1;
+
+    SetAlarmHistory(Series, data.val().Title, data.val().Content);
+
+  });
 
 
       function SetPushAlarmByFireBase(Title, Content)
@@ -156,13 +255,33 @@
         firebase.database().ref('/PushAlarm/'+AlarmCount+'/' + 'Content').set(Content);
         AlarmCount += 1;
         firebase.database().ref('/PushAlarmCount').set(AlarmCount);
+
+
+        $("#Alarm_Count").text(AlarmCount + '개');
+        alert( '푸시알림이 등록되었습니다' );
       }
 
 
     $("#BTN_ALARM").click(function() {
       var Title = document.getElementById("Alarm_Title").value;
       var Content = document.getElementById("Alarm_Content").value;
-      SetPushAlarmByFireBase(Title, Content)
+
+      if(Title == '' || Title == null || Title == undefined || Title == 0 || Title == NaN){
+         alert( '푸시알림 내용을 입력해주세요' );
+       }
+       else{
+         var con_test = confirm("푸시알림을 등록하시겠습니까?");
+         if(con_test == true){
+           SetPushAlarmByFireBase(Title, Content);
+
+           document.getElementById("Alarm_Title").value = '';
+           document.getElementById("Alarm_Content").value = '';
+         }
+         else if(con_test == false){
+            alert( '푸시알림이 등록이 취소되었습니다' );
+         }
+       }
+
 
     });
 

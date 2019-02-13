@@ -85,12 +85,12 @@
   <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase-database.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase-messaging.js"></script>
   <script src="./fireinit.js"></script>
   <script type="text/javascript">
 
 
   var provider = new firebase.auth.GoogleAuthProvider();
+
 
   SignStatus();
   function SignStatus()
@@ -103,14 +103,36 @@
       }
       // User is signed in.
     } else {
-        location.href="./notAuth.html";
-  }
+
+      firebase.auth().signInWithPopup(provider).then(function(result) {
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        var token = result.credential.accessToken;
+        // The signed-in user info.
+        var user = result.user;
+        var email = user.email;
+
+        if(email != "jt.famm@gmail.com"){
+          location.href="./notAuth.html";
+
+        }
+
+        // ...
+      }).catch(function(error) {
+        // Handle Errors here.
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        // The email of the user's account used.
+        var email = error.email;
+        // The firebase.auth.AuthCredential type that was used.
+        var credential = error.credential;
+        // ...
+      });
+    }
   });
-}
+
+  }
 
 
-  const messaging = firebase.messaging();
-  messaging.usePublicVapidKey("BKuiXbk64s3EcAdhlHDB6Fk_wXjOROxtakt-LXxqTjdnNTA1YxTaToR3sVymbAKpAgJcbbnY-VnTUnqO_kzEKP0");
 /*
   messaging.requestPermission().then(function() {
     console.log('Notification permission granted.');
