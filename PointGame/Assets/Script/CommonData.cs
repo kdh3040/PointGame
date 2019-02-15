@@ -19,4 +19,6 @@ public class CommonData : MonoBehaviour
     public static int InGameStepChangeStage_Speed = 4;
     public static int InGameStepChangeStage = 9;
 
+    public static int[] LottoWinTime = { 9, 12, 15, 18 };
+
 }

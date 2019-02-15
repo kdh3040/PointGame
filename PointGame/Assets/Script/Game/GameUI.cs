@@ -166,7 +166,7 @@ public class GameUI : MonoBehaviour {
     private void OnClickGameRestart()
     {
         SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
-        AdsManager.Instance.ShowSkipRewardedAd();
+        //AdsManager.Instance.ShowSkipRewardedAd();
         GamePlayManager.Instance.GameRestart();
     }
 
