@@ -57,6 +57,14 @@ public class GameUI : MonoBehaviour {
     {
         mAudio.clip = mClip[0];
         mAudio.Play();
+
+        if (FirebaseManager.Instance.ReviewMode)
+        {
+            GameOverRouletteButton.gameObject.SetActive(false);
+            var pos = GameOverRestartButton.gameObject.transform.localPosition;
+            pos.x = 0f;
+            GameOverRestartButton.gameObject.transform.localPosition = pos;
+        }
     }
 
     public void ResetUI()
