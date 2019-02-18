@@ -49,6 +49,8 @@ public class GamePlayManager : MonoBehaviour {
     private float BlockSpeedOffset = 0.00005f;
     private float BlockSpeedStageClearOffset = 0.01f;
 
+    private bool BackgroundImgLoad = false;
+
 
     void Start()
     {
@@ -58,6 +60,7 @@ public class GamePlayManager : MonoBehaviour {
         StageCount = 0;
         StageSpeedOffsetCount = 0;
         GamePoint = 0;
+        BackgroundImgLoad = false;
         GameReady();
     }
 
@@ -71,8 +74,9 @@ public class GamePlayManager : MonoBehaviour {
         BlockCharIndex = 0;
         BlockCount = 0;
         IsJumping = false;
+        BackgroundImgLoad = false;
 
-        if(StageCount == CommonData.InGameStepChangeStage)
+        if (StageCount == CommonData.InGameStepChangeStage)
         {
             BlockClearCount = BlockLimitCount * CommonData.InGameStepChangeStage_Speed;
             StageSpeedOffsetCount = CommonData.InGameStepChangeStage_Speed;
@@ -458,9 +462,19 @@ public class GamePlayManager : MonoBehaviour {
         if(index == 0)
         {
             if(zeroPos)
+            {
                 BackgrounList[index].GetComponent<SpriteRenderer>().sprite = (Sprite)Resources.Load("background", typeof(Sprite));
+                BackgroundImgLoad = false;
+            }
+                
             else
-                BackgrounList[index].GetComponent<SpriteRenderer>().sprite = (Sprite)Resources.Load("backgroun_1", typeof(Sprite));
+            {
+                if (BackgroundImgLoad == false)
+                {
+                    BackgrounList[index].GetComponent<SpriteRenderer>().sprite = (Sprite)Resources.Load("backgroun_1", typeof(Sprite));
+                    BackgroundImgLoad = true;
+                }
+            }
         }
         
 

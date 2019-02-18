@@ -13,19 +13,40 @@ public class RGameBlock : MonoBehaviour {
     }
 
     public GameObject Block;
-    public GameObject SawObj;
-    public GameObject SawImg;
+    private GameObject SawObj;
+    private GameObject SawImg;
     public GameObject Coin;
     public GameObject CoinImg;
     public R_BLOCK_TYPE Type;
     public RGameBlockGroup.R_BLOCK_STEP StepType = RGameBlockGroup.R_BLOCK_STEP.NONE;
     public bool CharAttach;
 
+    public GameObject SawObj_2;
+    public GameObject SawImg_2;
+    public GameObject SawObj_3;
+    public GameObject SawImg_3;
+
     private Vector3 CoinDefaultPos = new Vector3(0, 1.39f, 4);
     private Vector3 CoinMovePos = new Vector3(0f, 3f, 4);
 
     private void Start()
     {
+        if (SawObj_2 != null)
+        {
+            SawObj = SawObj_2;
+            iTween.MoveTo(SawObj, iTween.Hash("position", new Vector3(-1.7f, 1.39f, 4), "islocal", true, "movetopath", false, "looptype", iTween.LoopType.pingPong, "easetype", iTween.EaseType.easeInOutQuad));
+        }
+        else
+        {
+            SawObj = SawObj_3;
+            iTween.MoveTo(SawObj, iTween.Hash("position", new Vector3(-1.27f, 1.39f, 4), "islocal", true, "movetopath", false, "looptype", iTween.LoopType.pingPong, "easetype", iTween.EaseType.easeInOutQuad));
+        }
+
+        if (SawImg_2 != null)
+            SawImg = SawImg_2;
+        else
+            SawImg = SawImg_3;
+
         iTween.RotateTo(SawImg, iTween.Hash("z", -180f, "looptype", iTween.LoopType.loop, "easetype", iTween.EaseType.linear));
     }
 
@@ -41,20 +62,20 @@ public class RGameBlock : MonoBehaviour {
 
         iTween.FadeTo(CoinImg.gameObject, iTween.Hash("alpha", 1f, "time", 0.1f));
         
-        if(StepType != stepType)
-        {
-            StepType = stepType;
-            if (stepType == RGameBlockGroup.R_BLOCK_STEP.TWO)
-            {
-                SawObj.gameObject.transform.localPosition = new Vector3(1.7f, 1.39f, 4);
-                iTween.MoveTo(SawObj, iTween.Hash("position", new Vector3(-1.7f, 1.39f, 4), "islocal", true, "movetopath", false, "looptype", iTween.LoopType.pingPong, "easetype", iTween.EaseType.easeInOutQuad));
-            }
-            else
-            {
-                SawObj.gameObject.transform.localPosition = new Vector3(1.27f, 1.39f, 4);
-                iTween.MoveTo(SawObj, iTween.Hash("position", new Vector3(-1.27f, 1.39f, 4), "islocal", true, "movetopath", false, "looptype", iTween.LoopType.pingPong, "easetype", iTween.EaseType.easeInOutQuad));
-            }
-        }
+        //if(StepType != stepType)
+        //{
+        //    StepType = stepType;
+        //    if (stepType == RGameBlockGroup.R_BLOCK_STEP.TWO)
+        //    {
+        //        SawObj.gameObject.transform.localPosition = new Vector3(1.7f, 1.39f, 4);
+        //        iTween.MoveTo(SawObj, iTween.Hash("position", new Vector3(-1.7f, 1.39f, 4), "islocal", true, "movetopath", false, "looptype", iTween.LoopType.pingPong, "easetype", iTween.EaseType.easeInOutQuad));
+        //    }
+        //    else
+        //    {
+        //        SawObj.gameObject.transform.localPosition = new Vector3(1.27f, 1.39f, 4);
+        //        iTween.MoveTo(SawObj, iTween.Hash("position", new Vector3(-1.27f, 1.39f, 4), "islocal", true, "movetopath", false, "looptype", iTween.LoopType.pingPong, "easetype", iTween.EaseType.easeInOutQuad));
+        //    }
+        //}
         
 
         switch (type)
