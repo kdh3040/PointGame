@@ -158,7 +158,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Block: {fileID: 1690199719823718}
   Coin: {fileID: 1780234760743576}
-  CoinImg: {fileID: 1504471401381932}
+  CoinImg: {fileID: 212005511586248890}
   Type: 0
   StepType: 0
   CharAttach: 0
@@ -686,7 +686,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Block: {fileID: 1612729296487856}
   Coin: {fileID: 1909978804779208}
-  CoinImg: {fileID: 1878020828687044}
+  CoinImg: {fileID: 212634185347952982}
   Type: 0
   StepType: 0
   CharAttach: 0
@@ -1388,7 +1388,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Block: {fileID: 1412120099736208}
   Coin: {fileID: 1251974874010942}
-  CoinImg: {fileID: 1432157185194734}
+  CoinImg: {fileID: 212786321229835190}
   Type: 0
   StepType: 0
   CharAttach: 0
@@ -1911,7 +1911,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Block: {fileID: 1119689913763604}
   Coin: {fileID: 1008201071374670}
-  CoinImg: {fileID: 1898686077619402}
+  CoinImg: {fileID: 212903256500154312}
   Type: 0
   StepType: 0
   CharAttach: 0
@@ -1967,7 +1967,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Block: {fileID: 1586190780468010}
   Coin: {fileID: 1486713365118086}
-  CoinImg: {fileID: 1506913285632052}
+  CoinImg: {fileID: 212127619474455222}
   Type: 0
   StepType: 0
   CharAttach: 0

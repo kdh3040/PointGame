@@ -16,7 +16,7 @@ public class RGameBlock : MonoBehaviour {
     private GameObject SawObj;
     private GameObject SawImg;
     public GameObject Coin;
-    public GameObject CoinImg;
+    public SpriteRenderer CoinImg;
     public R_BLOCK_TYPE Type;
     public RGameBlockGroup.R_BLOCK_STEP StepType = RGameBlockGroup.R_BLOCK_STEP.NONE;
     public bool CharAttach;
@@ -60,7 +60,11 @@ public class RGameBlock : MonoBehaviour {
         Coin.gameObject.SetActive(false);
         Coin.gameObject.transform.localPosition = CoinDefaultPos;
 
-        iTween.FadeTo(CoinImg.gameObject, iTween.Hash("alpha", 1f, "time", 0.1f));
+        StopAllCoroutines();
+        Color tempColor = CoinImg.color;
+        tempColor.a = 1f;
+        CoinImg.color = tempColor;
+        //iTween.FadeTo(CoinImg.gameObject, iTween.Hash("alpha", 1f, "time", 0.1f));
         StepType = stepType;
         //if(StepType != stepType)
         //{
@@ -114,10 +118,34 @@ public class RGameBlock : MonoBehaviour {
     {
         if(Type == R_BLOCK_TYPE.COIN)
         {
-            iTween.MoveTo(Coin, iTween.Hash("position", CoinMovePos, "time", 0.3f, "islocal", true, "movetopath", false, "easetype", iTween.EaseType.easeOutQuad));
-            iTween.FadeTo(CoinImg.gameObject, iTween.Hash("alpha", 0f, "delay", 0.1f, "time", 0.1f, "easetype", iTween.EaseType.easeOutQuad));
+            
+            StartCoroutine(Co_GetCoin());
+            //iTween.MoveTo(Coin, iTween.Hash("position", CoinMovePos, "time", 0.3f, "islocal", true, "movetopath", false, "easetype", iTween.EaseType.easeOutQuad));
+            //iTween.FadeTo(CoinImg.gameObject, iTween.Hash("alpha", 0f, "delay", 0.1f, "time", 0.1f, "easetype", iTween.EaseType.easeOutQuad));
         }
+
     }
+    public IEnumerator Co_GetCoin()
+    {
+        float tempTime = 1f;
+        while(tempTime > 0)
+        {
+            tempTime -= 0.1f;
+            var t = 1f - tempTime;
+            var pos = ((1 - t) * CoinDefaultPos) + ((t) * CoinMovePos);
+            Coin.gameObject.transform.localPosition = pos;
+
+            Color tempColor = CoinImg.color;
+            tempColor.a = tempTime;
+            CoinImg.color = tempColor;
+            yield return null;
+        }
+        yield return null;
+    }
+    //   StartCoroutine(IEnumerator)
+
+
+
 
     public void SetCharAttach(bool enable)
     {
