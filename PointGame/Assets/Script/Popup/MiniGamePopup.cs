@@ -37,14 +37,14 @@ public class MiniGamePopup : Popup
 
     private void Start()
     {
-        for (int i = 0; i < BlockSawList.Count; i++)
-        {
-            iTween.MoveTo(BlockSawList[i], iTween.Hash("position", new Vector3(-124f, 119f, 0), "islocal", true, "movetopath", false, "looptype", iTween.LoopType.pingPong, "easetype", iTween.EaseType.easeInOutQuad));
-        }
-        for (int i = 0; i < BlockSawImgList.Count; i++)
-        {
-            iTween.RotateTo(BlockSawImgList[i], iTween.Hash("z", -180f, "looptype", iTween.LoopType.loop, "easetype", iTween.EaseType.linear));
-        }
+        //for (int i = 0; i < BlockSawList.Count; i++)
+        //{
+        //    iTween.MoveTo(BlockSawList[i], iTween.Hash("position", new Vector3(-124f, 119f, 0), "islocal", true, "movetopath", false, "looptype", iTween.LoopType.pingPong, "easetype", iTween.EaseType.easeInOutQuad));
+        //}
+        //for (int i = 0; i < BlockSawImgList.Count; i++)
+        //{
+        //    iTween.RotateTo(BlockSawImgList[i], iTween.Hash("z", -180f, "looptype", iTween.LoopType.loop, "easetype", iTween.EaseType.linear));
+        //}
     }
 
     public class MiniGamePopupData : PopupData
@@ -221,5 +221,20 @@ public class MiniGamePopup : Popup
         Vector3 pa = BezierCurve(t, p0, p1);
         Vector3 pb = BezierCurve(t, p1, p2);
         return BezierCurve(t, pa, pb);
+    }
+
+    public void Update()
+    {
+        if (gameObject.activeSelf == false)
+            return;
+
+        for (int i = 0; i < BlockSawList.Count; i++)
+        {
+            BlockSawList[i].gameObject.transform.localPosition = new Vector3(Mathf.PingPong(Time.time * 300, 248f) -124f, BlockSawList[i].gameObject.transform.localPosition.y, BlockSawList[i].gameObject.transform.localPosition.z);
+        }
+        for (int i = 0; i < BlockSawImgList.Count; i++)
+        {
+            BlockSawImgList[i].gameObject.transform.localRotation = Quaternion.Euler(BlockSawImgList[i].gameObject.transform.localRotation.x, BlockSawImgList[i].gameObject.transform.localRotation.y, Mathf.PingPong(Time.time, 380f) * 200);
+        }
     }
 }
