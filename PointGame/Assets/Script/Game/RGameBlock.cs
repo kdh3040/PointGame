@@ -34,12 +34,12 @@ public class RGameBlock : MonoBehaviour {
         if (SawObj_2 != null)
         {
             SawObj = SawObj_2;
-            iTween.MoveTo(SawObj, iTween.Hash("position", new Vector3(-1.7f, 1.39f, 4), "islocal", true, "movetopath", false, "looptype", iTween.LoopType.pingPong, "easetype", iTween.EaseType.easeInOutQuad));
+            //iTween.MoveTo(SawObj, iTween.Hash("position", new Vector3(-1.7f, 1.39f, 4), "islocal", true, "movetopath", false, "looptype", iTween.LoopType.pingPong, "easetype", iTween.EaseType.easeInOutQuad));
         }
         else
         {
             SawObj = SawObj_3;
-            iTween.MoveTo(SawObj, iTween.Hash("position", new Vector3(-1.27f, 1.39f, 4), "islocal", true, "movetopath", false, "looptype", iTween.LoopType.pingPong, "easetype", iTween.EaseType.easeInOutQuad));
+            //.//iTween.MoveTo(SawObj, iTween.Hash("position", new Vector3(-1.27f, 1.39f, 4), "islocal", true, "movetopath", false, "looptype", iTween.LoopType.pingPong, "easetype", iTween.EaseType.easeInOutQuad));
         }
 
         if (SawImg_2 != null)
@@ -47,7 +47,7 @@ public class RGameBlock : MonoBehaviour {
         else
             SawImg = SawImg_3;
 
-        iTween.RotateTo(SawImg, iTween.Hash("z", -180f, "looptype", iTween.LoopType.loop, "easetype", iTween.EaseType.linear));
+        //iTween.RotateTo(SawImg, iTween.Hash("z", -180f, "looptype", iTween.LoopType.loop, "easetype", iTween.EaseType.linear));
     }
 
     public void SetData(R_BLOCK_TYPE type, RGameBlockGroup.R_BLOCK_STEP stepType)
@@ -61,7 +61,7 @@ public class RGameBlock : MonoBehaviour {
         Coin.gameObject.transform.localPosition = CoinDefaultPos;
 
         iTween.FadeTo(CoinImg.gameObject, iTween.Hash("alpha", 1f, "time", 0.1f));
-        
+        StepType = stepType;
         //if(StepType != stepType)
         //{
         //    StepType = stepType;
@@ -76,7 +76,7 @@ public class RGameBlock : MonoBehaviour {
         //        iTween.MoveTo(SawObj, iTween.Hash("position", new Vector3(-1.27f, 1.39f, 4), "islocal", true, "movetopath", false, "looptype", iTween.LoopType.pingPong, "easetype", iTween.EaseType.easeInOutQuad));
         //    }
         //}
-        
+
 
         switch (type)
         {
@@ -96,6 +96,18 @@ public class RGameBlock : MonoBehaviour {
             default:
                 break;
         }
+    }
+
+    public void Update()
+    {
+        if (gameObject.activeSelf == false)
+            return;
+        if(StepType == RGameBlockGroup.R_BLOCK_STEP.TWO)
+            SawObj.gameObject.transform.localPosition = new Vector3(Mathf.PingPong(Time.time * 5, 3.4f) - 1.7f, SawObj.gameObject.transform.localPosition.y, SawObj.gameObject.transform.localPosition.z);
+        else
+            SawObj.gameObject.transform.localPosition = new Vector3(Mathf.PingPong(Time.time * 5, 2.54f) - 1.27f, SawObj.gameObject.transform.localPosition.y, SawObj.gameObject.transform.localPosition.z);
+        
+        SawImg.gameObject.transform.localRotation = Quaternion.Euler(SawImg.gameObject.transform.localRotation.x, SawImg.gameObject.transform.localRotation.y, Mathf.PingPong(Time.time, 380f) * 200);
     }
 
     public void GetCoin()
