@@ -13,6 +13,7 @@ public class MainUI : MonoBehaviour {
     public Text CurrTime;
     public Text Id;
 
+    public Image LottoWinBg;
     public Text LottoWinName;
     public Text LottoWinSeries;
 
@@ -20,6 +21,7 @@ public class MainUI : MonoBehaviour {
     public Button PointSwap;
     public Button FreePoint;
     public Button SwapPoint;
+    public GameObject TopRightButtons;
 
     public Button LogoButton;
     public Button GamePlayButton;
@@ -53,39 +55,11 @@ public class MainUI : MonoBehaviour {
     {
         mBGM.Play();
 
-        var winList = TKManager.Instance.LottoWinUserList;
-        StringBuilder winCount = new StringBuilder();
-
-        for (int i = 0; i < winList.Count - 1; i++)
-        {
-            winCount.Append(string.Format("- {0:D2}회 당첨자", winList[i].Key + 1));
-            winCount.AppendLine();
-        }
-
-        LottoWinSeries.text = winCount.ToString();
-
-        StringBuilder winUser = new StringBuilder();
-
-        for (int i = 0; i < winList.Count - 1; i++)
-        {
-            winUser.Append(string.Format(" : {0}", winList[i].Value));
-            winUser.AppendLine();
-        }
-
-        LottoWinName.text = winUser.ToString();
+       
 
         Id.text = string.Format("ID : {0}", TKManager.Instance.MyData.NickName);
 
         CurrLottoTime = DateTime.Now.Hour;
-
-        for (int i = 0; i < CommonData.LottoWinTime.Length; i++)
-        {
-            if (CurrLottoTime < CommonData.LottoWinTime[i])
-            {
-                NextLottoTime.text = string.Format("다음 추첨시간 {0}:00시", CommonData.LottoWinTime[i]);
-                break;
-            }       
-        }
 
         if (TKManager.Instance.GameOverRouletteStart)
             StartCoroutine(Co_GameOverRouletteStart());
@@ -95,12 +69,62 @@ public class MainUI : MonoBehaviour {
             SwapPoint.gameObject.SetActive(false);
             FreePoint.gameObject.SetActive(false);
             HelpButton.gameObject.SetActive(false);
+            LottoButton.gameObject.SetActive(false);
+            FreeRoulette.gameObject.SetActive(false);
+
+            LottoWinSeries.gameObject.SetActive(false);
+            LottoWinName.gameObject.SetActive(false);
+            NextLottoTime.text = "";
+
+            LottoWinBg.gameObject.SetActive(false);
+
+            RectTransform pointSwapRect = PointSwap.GetComponent<RectTransform>();
+            var pos = pointSwapRect.anchoredPosition;
+            pos.y = -141f;
+            pointSwapRect.anchoredPosition = pos;
+
+            RectTransform topRightButtonsRect = TopRightButtons.GetComponent<RectTransform>();
+            pos = topRightButtonsRect.anchoredPosition;
+            pos.y = -141f;
+            topRightButtonsRect.anchoredPosition = pos;
         }
         else
         {
             SwapPoint.gameObject.SetActive(true);
             FreePoint.gameObject.SetActive(true);
             HelpButton.gameObject.SetActive(true);
+            LottoButton.gameObject.SetActive(true);
+            FreeRoulette.gameObject.SetActive(true);
+
+            var winList = TKManager.Instance.LottoWinUserList;
+            StringBuilder winCount = new StringBuilder();
+
+            for (int i = 0; i < winList.Count - 1; i++)
+            {
+                winCount.Append(string.Format("- {0:D2}회 당첨자", winList[i].Key + 1));
+                winCount.AppendLine();
+            }
+
+            LottoWinSeries.text = winCount.ToString();
+
+            StringBuilder winUser = new StringBuilder();
+
+            for (int i = 0; i < winList.Count - 1; i++)
+            {
+                winUser.Append(string.Format(" : {0}", winList[i].Value));
+                winUser.AppendLine();
+            }
+
+            LottoWinName.text = winUser.ToString();
+
+            for (int i = 0; i < CommonData.LottoWinTime.Length; i++)
+            {
+                if (CurrLottoTime < CommonData.LottoWinTime[i])
+                {
+                    NextLottoTime.text = string.Format("다음 추첨시간 {0}:00시", CommonData.LottoWinTime[i]);
+                    break;
+                }
+            }
         }
     }
 
@@ -183,53 +207,61 @@ public class MainUI : MonoBehaviour {
             AllPoint.SetValue(string.Format("{0}p / {1}c", TKManager.Instance.MyData.Point, TKManager.Instance.MyData.Cash), CountImgFont.IMG_RANGE.LEFT, CountImgFont.IMG_TYPE.YELLOW);
         }
 
-        for (int i = 0; i < TKManager.Instance.LottoLuckyNumber.Count; i++)
+        if (FirebaseManager.Instance.ReviewMode)
         {
-            int seriesCount = TKManager.Instance.LottoLuckyNumber[i].Key;
-            if (TKManager.Instance.MyData.LottoResultShowSeriesList.ContainsKey(seriesCount) == false)
-            {
-                LottoNotiObj.SetActive(true);
-                break;
-            }
-            else
-                LottoNotiObj.SetActive(false);
+            CurrTime.text = DateTime.Now.ToString("HH:mm");
         }
-
-        CurrTime.text = DateTime.Now.ToString("HH:mm");
-
-        int hourTime = DateTime.Now.Hour;
-
-        if (CurrLottoTime != hourTime)
+        else
         {
-            CurrLottoTime = hourTime;
-            bool view = false;
-            for (int i = 0; i < CommonData.LottoWinTime.Length; i++)
+            for (int i = 0; i < TKManager.Instance.LottoLuckyNumber.Count; i++)
             {
-                if (i == 0)
+                int seriesCount = TKManager.Instance.LottoLuckyNumber[i].Key;
+                if (TKManager.Instance.MyData.LottoResultShowSeriesList.ContainsKey(seriesCount) == false)
                 {
-                    if (CurrLottoTime < CommonData.LottoWinTime[i])
-                    {
-                        view = true;
-                        NextLottoTime.text = string.Format("다음 추첨시간 {0}:00시", CommonData.LottoWinTime[i]);
-                        break;
-                    }
+                    LottoNotiObj.SetActive(true);
+                    break;
                 }
                 else
-                {
-                    if (CurrLottoTime > CommonData.LottoWinTime[i - 1] && CurrLottoTime < CommonData.LottoWinTime[i])
-                    {
-                        view = true;
-                        NextLottoTime.text = string.Format("다음 추첨시간 {0}:00시", CommonData.LottoWinTime[i]);
-                        break;
-                    }
-                }
+                    LottoNotiObj.SetActive(false);
             }
 
-            if (view == false)
+            CurrTime.text = DateTime.Now.ToString("HH:mm");
+
+            int hourTime = DateTime.Now.Hour;
+
+            if (CurrLottoTime != hourTime)
             {
-                NextLottoTime.text = string.Format("다음 추첨시간 {0}:00시", CommonData.LottoWinTime[0]);
+                CurrLottoTime = hourTime;
+                bool view = false;
+                for (int i = 0; i < CommonData.LottoWinTime.Length; i++)
+                {
+                    if (i == 0)
+                    {
+                        if (CurrLottoTime < CommonData.LottoWinTime[i])
+                        {
+                            view = true;
+                            NextLottoTime.text = string.Format("다음 추첨시간 {0}:00시", CommonData.LottoWinTime[i]);
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        if (CurrLottoTime > CommonData.LottoWinTime[i - 1] && CurrLottoTime < CommonData.LottoWinTime[i])
+                        {
+                            view = true;
+                            NextLottoTime.text = string.Format("다음 추첨시간 {0}:00시", CommonData.LottoWinTime[i]);
+                            break;
+                        }
+                    }
+                }
+
+                if (view == false)
+                {
+                    NextLottoTime.text = string.Format("다음 추첨시간 {0}:00시", CommonData.LottoWinTime[0]);
+                }
             }
         }
+            
 
 
 #if UNITY_EDITOR || UNITY_ANDROID
