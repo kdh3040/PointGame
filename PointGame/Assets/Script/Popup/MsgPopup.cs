@@ -8,6 +8,7 @@ public class MsgPopup : Popup
 {
     public enum MSGPOPUP_TYPE
     {
+        NONE,
         ONE,
         TWO,
     }
@@ -56,6 +57,10 @@ public class MsgPopup : Popup
 
         switch (MsgPopupType)
         {
+            case MSGPOPUP_TYPE.NONE:
+                OkButton.gameObject.SetActive(false);
+                CancelButton.gameObject.SetActive(false);
+                break;
             case MSGPOPUP_TYPE.ONE:
                 OkButton.gameObject.SetActive(true);
                 break;

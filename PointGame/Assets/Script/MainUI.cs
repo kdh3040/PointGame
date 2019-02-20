@@ -69,6 +69,7 @@ public class MainUI : MonoBehaviour {
             HelpButton.gameObject.SetActive(false);
             LottoButton.gameObject.SetActive(false);
             FreeRoulette.gameObject.SetActive(false);
+            PushButton.gameObject.SetActive(false);
 
             LottoWinSeries.gameObject.SetActive(false);
             LottoWinName.gameObject.SetActive(false);
@@ -93,6 +94,7 @@ public class MainUI : MonoBehaviour {
             HelpButton.gameObject.SetActive(true);
             LottoButton.gameObject.SetActive(true);
             FreeRoulette.gameObject.SetActive(true);
+            PushButton.gameObject.SetActive(true);
 
             var winList = TKManager.Instance.LottoWinUserList;
             StringBuilder winCount = new StringBuilder();
@@ -140,6 +142,7 @@ public class MainUI : MonoBehaviour {
     IEnumerator Co_ReviewMode()
     {
         yield return null;
+#if (UNITY_ANDROID && !UNITY_EDITOR)
         if (FirebaseManager.Instance.ExamineMode)
         {
             Popup.ShowPopup(new MsgPopup.MsgPopupData(FirebaseManager.Instance.ExamineContrext, () =>
@@ -147,6 +150,16 @@ public class MainUI : MonoBehaviour {
                 Application.Quit();
             }));
         }
+#elif (UNITY_ANDROID && UNITY_EDITOR) || UNITY_IOS
+        var desc = string.Format("{0}\n{1}", FirebaseManager.Instance.ExamineContrext, "*포인트를 획득 할 수 없습니다.");
+        if (FirebaseManager.Instance.ExamineMode)
+        {
+            Popup.ShowPopup(new MsgPopup.MsgPopupData(desc));
+        }
+#endif
+
+
+
     }
     public void OnClickFreePoint()
     {

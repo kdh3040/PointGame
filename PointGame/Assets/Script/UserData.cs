@@ -77,6 +77,9 @@ public class UserData
     
     public void AddPoint(int point, bool first = false)
     {
+        if (FirebaseManager.Instance.ExamineMode)
+            return;
+
         AddTodayAccumulate(point);
 
         FirebaseManager.Instance.SetPoint(Point);
@@ -97,6 +100,9 @@ public class UserData
     }
     public void AddCash(int cash)
     {
+        if (FirebaseManager.Instance.ExamineMode)
+            return;
+
         Cash += cash;
 
         FirebaseManager.Instance.SetCash(Cash);

@@ -21,6 +21,7 @@ public class GameUI : MonoBehaviour {
     public GameObject GameOverPopupObj;
     public Text GameOverGetPoint;
     public Button GameOverRouletteButton;
+    public Text GameOverRouletteText;
     public Button GameOverRestartButton;
 
     public GameObject GameClearObj;
@@ -58,13 +59,10 @@ public class GameUI : MonoBehaviour {
         mAudio.clip = mClip[0];
         mAudio.Play();
 
-        if (FirebaseManager.Instance.ReviewMode)
-        {
-            GameOverRouletteButton.gameObject.SetActive(false);
-            var pos = GameOverRestartButton.gameObject.transform.localPosition;
-            pos.x = 0f;
-            GameOverRestartButton.gameObject.transform.localPosition = pos;
-        }
+        if (FirebaseManager.Instance.ReviewMode || FirebaseManager.Instance.ExamineMode)
+            GameOverRouletteText.text = "나가기";
+        else
+            GameOverRouletteText.text = "룰렛 돌리기";
     }
 
     public void ResetUI()
@@ -166,9 +164,17 @@ public class GameUI : MonoBehaviour {
     private void OnClickRoulette()
     {
         SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
-        TKManager.Instance.MyData.AddPoint(GamePlayManager.Instance.GamePoint);
-        TKManager.Instance.GameOverRouletteStart = true;
-        SceneManager.LoadScene("MainScene", LoadSceneMode.Single);
+        if (FirebaseManager.Instance.ReviewMode || FirebaseManager.Instance.ExamineMode)
+        {
+            TKManager.Instance.MyData.AddPoint(GamePlayManager.Instance.GamePoint);
+            SceneManager.LoadScene("MainScene", LoadSceneMode.Single);
+        }
+        else
+        {
+            TKManager.Instance.MyData.AddPoint(GamePlayManager.Instance.GamePoint);
+            TKManager.Instance.GameOverRouletteStart = true;
+            SceneManager.LoadScene("MainScene", LoadSceneMode.Single);
+        }
     }
 
     private void OnClickGameRestart()

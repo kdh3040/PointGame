@@ -2123,6 +2123,7 @@ MonoBehaviour:
   GameOverPopupObj: {fileID: 955050844}
   GameOverGetPoint: {fileID: 412462443}
   GameOverRouletteButton: {fileID: 1487039782}
+  GameOverRouletteText: {fileID: 863285781}
   GameOverRestartButton: {fileID: 2131423704}
   GameClearObj: {fileID: 1563981525}
   GameClearButton: {fileID: 922320782}
@@ -3976,7 +3977,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1891952070
 RectTransform:
   m_ObjectHideFlags: 0
