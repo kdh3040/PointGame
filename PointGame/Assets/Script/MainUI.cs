@@ -142,7 +142,7 @@ public class MainUI : MonoBehaviour {
         yield return null;
         if (FirebaseManager.Instance.ExamineMode)
         {
-            Popup.ShowPopup(new MsgPopup.MsgPopupData("심사중 입니다.", () =>
+            Popup.ShowPopup(new MsgPopup.MsgPopupData("점검중 입니다.", () =>
             {
                 Application.Quit();
             }));
