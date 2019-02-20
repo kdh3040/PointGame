@@ -539,27 +539,38 @@ public class AdsManager : MonoBehaviour {
         }
         else
         {
-            SetAdEndCallFunc(endAction);
-            if (Advertisement.IsReady(Lotto_rewarded_video_id))
+            if (rewardAdmobVideo.IsLoaded())
             {
-                var options = new ShowOptions { resultCallback = HandleShowLottoRewardVideoResult };
-                Advertisement.Show(Lotto_rewarded_video_id, options);
-            }
-            else if(Vungle.isAdvertAvailable(Vungle_adsID))
-            {
-                ShowVungleAds();
+                SetAdEndCallFunc(endAction);
+                this.ShowAdmobVideo();
             }
             else
             {
-                AdColony.Zone adcolonyZone = AdColony.Ads.GetZone(this.zoneId);
-                if (adcolonyZone != null || adcolonyZone.Enabled)
-                {
-                    ShowColonyAds();
-                }
-                else
-                    AdView = false;
-
+                AdView = false;
+                ShowInterstitialAds();
             }
+
+            //SetAdEndCallFunc(endAction);
+            //if (Advertisement.IsReady(Lotto_rewarded_video_id))
+            //{
+            //    var options = new ShowOptions { resultCallback = HandleShowLottoRewardVideoResult };
+            //    Advertisement.Show(Lotto_rewarded_video_id, options);
+            //}
+            //else if(Vungle.isAdvertAvailable(Vungle_adsID))
+            //{
+            //    ShowVungleAds();
+            //}
+            //else
+            //{
+            //    AdColony.Zone adcolonyZone = AdColony.Ads.GetZone(this.zoneId);
+            //    if (adcolonyZone != null || adcolonyZone.Enabled)
+            //    {
+            //        ShowColonyAds();
+            //    }
+            //    else
+            //        AdView = false;
+
+            //}
         }
     }
     
