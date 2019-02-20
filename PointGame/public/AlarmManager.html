@@ -66,6 +66,31 @@
     <br>
 
 
+        <h5 class="indigo-text">:+: 업데이트 팝업 내용 작성 칸 :+:</h5>
+        <div class="row z-depth-1">
+          <div class="col l12 m12 s12">
+            <p><span  type="input" class="indigo-text">내용</span><br>
+               <input id="Update_Content" name="abc" type="text"  /><br>
+               <button id="BTN_UPDATE" type="button" class="btn white indigo-text">업데이트 팝업 알림 등록</button>
+             </p>
+          </div>
+        </div>
+
+    <br>
+    <br>
+
+    <table>
+      <h5 class="indigo-text">:+: 업데이트 팝업 내역  :+:</h5>
+      <thead>
+        <th>내용</th>
+        <th></th>
+      </thead>
+      <tbody id="UpdateHistory"></tbody>
+    </table>
+
+    <br>
+    <br>
+
         <h5 class="indigo-text">:+: 푸시알림 작성 칸 :+:</h5>
         <div class="row z-depth-1">
           <div class="col l12 m12 s12">
@@ -201,6 +226,14 @@
       alert( '푸시알림이 삭제되었습니다' );
   }
 
+  function deleteUpdateHistory(obj) {
+      var tr = $(obj).parent().parent();
+     var td = tr.children();
+     var no = td.eq(0).text();
+
+    firebase.database().ref('UpdatePopup').remove();
+      alert( '삭제되었습니다' );
+  }
 
   function SetAlarmHistory(Index, Title, Content)
   {
@@ -249,6 +282,41 @@
   });
 
 
+
+    function SetUpdateHistory(Content)
+    {
+      //console.log(arrLottoWinUserName);
+      var my_tbody = document.getElementById('UpdateHistory');
+      // var row = my_tbody.insertRow(0); // 상단에 추가
+      var row = my_tbody.insertRow( my_tbody.rows.length ); // 하단에 추가
+      var cell1 = row.insertCell(0);
+      var cell2 = row.insertCell(1);
+
+      cell1.innerHTML = Content;
+
+      var element3 = document.createElement("input");
+      element3.type = "button";
+      element3.value = "삭제";
+      element3.addEventListener('click', function(event) {
+            var con_test = confirm("업데이트 팝업 내용을 삭제하시겠습니까?");
+            if(con_test == true){
+                deleteUpdateHistory(this);
+            }
+            else if(con_test == false){
+               alert( '취소되었습니다' );
+            }
+      })
+
+      cell2.appendChild(element3);
+    }
+
+
+    firebase.database().ref('/UpdatePopup').once('value', function(snapshot) {
+      var message = snapshot.val();
+      SetUpdateHistory(message);
+    });
+
+
       function SetPushAlarmByFireBase(Title, Content)
       {
         firebase.database().ref('/PushAlarm/'+AlarmCount+'/' + 'Title').set(Title);
@@ -259,6 +327,12 @@
 
         $("#Alarm_Count").text(AlarmCount + '개');
         alert( '푸시알림이 등록되었습니다' );
+      }
+
+      function SetUpdateAlarmByFireBase(Content)
+      {
+        firebase.database().ref('/UpdatePopup').set(Content);
+        alert( '업데이트 팝업이 등록되었습니다' );
       }
 
 
@@ -285,6 +359,25 @@
 
     });
 
+    $("#BTN_UPDATE").click(function() {
+      var Content = document.getElementById("Update_Content").value;
+
+      if(Content == '' || Content == null || Content == undefined || Content == 0 || Content == NaN){
+         alert( '업데이트 팝업 내용을 입력해주세요' );
+       }
+       else{
+         var con_test = confirm("업데이트 팝업 내용을 등록하시겠습니까?");
+         if(con_test == true){
+           SetUpdateAlarmByFireBase(Content);
+           document.getElementById("Update_Content").value = '';
+         }
+         else if(con_test == false){
+            alert( '업데이트 팝업 내용 등록이 취소되었습니다' );
+         }
+       }
+
+
+    });
 
 
 

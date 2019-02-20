@@ -40,10 +40,11 @@ public class FirebaseManager : MonoBehaviour
     public bool FirstLoadingComplete = false;
     public int LoadingCount = 0;
 
-    private int ReviewVersion = 1;
+    private int ReviewVersion = 2;
     public bool ReviewMode = true;
     public bool ExamineMode = true;
 
+    public string ExamineContrext;
 
 
     // Use this for initialization
@@ -115,6 +116,8 @@ public class FirebaseManager : MonoBehaviour
         GetLottoLuckGroup();
         GetPushAlarm();
         GetGiftProb();
+
+        GetUpdatePopup();
     }
 
 
@@ -123,7 +126,7 @@ public class FirebaseManager : MonoBehaviour
         if (FirstLoadingComplete == false)
             LoadingCount++;
 
-        if (LoadingCount == 9)
+        if (LoadingCount == 10)
             FirstLoadingComplete = true;
     }
 
@@ -869,6 +872,36 @@ public class FirebaseManager : MonoBehaviour
        }
       );
       
+    }
+
+
+    // 공지사항 파이어베이스에서 받아오기
+    public void GetUpdatePopup()
+    {
+        mDatabaseRef.Child("UpdatePopup").GetValueAsync().ContinueWith(task =>
+        {
+
+          if (task.IsFaulted)
+          {
+               // Handle the error...
+           }
+          else if (task.IsCompleted)
+          {
+
+              DataSnapshot snapshot = task.Result;
+
+              if (snapshot != null && snapshot.Exists)
+              {
+                    ExamineContrext = snapshot.Value.ToString();
+              }
+
+              AddFirstLoadingComplete();
+
+
+          }
+      }
+     );
+
     }
 
     public void SetLottoWinUserData(int Series, String Name, String Bank, String Account)
