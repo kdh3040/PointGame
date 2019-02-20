@@ -31,21 +31,7 @@ public class RGameBlock : MonoBehaviour {
 
     private void Start()
     {
-        if (SawObj_2 != null)
-        {
-            SawObj = SawObj_2;
-            //iTween.MoveTo(SawObj, iTween.Hash("position", new Vector3(-1.7f, 1.39f, 4), "islocal", true, "movetopath", false, "looptype", iTween.LoopType.pingPong, "easetype", iTween.EaseType.easeInOutQuad));
-        }
-        else
-        {
-            SawObj = SawObj_3;
-            //.//iTween.MoveTo(SawObj, iTween.Hash("position", new Vector3(-1.27f, 1.39f, 4), "islocal", true, "movetopath", false, "looptype", iTween.LoopType.pingPong, "easetype", iTween.EaseType.easeInOutQuad));
-        }
-
-        if (SawImg_2 != null)
-            SawImg = SawImg_2;
-        else
-            SawImg = SawImg_3;
+        
 
         //iTween.RotateTo(SawImg, iTween.Hash("z", -180f, "looptype", iTween.LoopType.loop, "easetype", iTween.EaseType.linear));
     }
@@ -54,6 +40,8 @@ public class RGameBlock : MonoBehaviour {
     {
         Type = type;
         CharAttach = false;
+
+        RefreahObj();
 
         Block.gameObject.SetActive(false);
         SawObj.gameObject.SetActive(false);
@@ -106,12 +94,28 @@ public class RGameBlock : MonoBehaviour {
     {
         if (gameObject.activeSelf == false)
             return;
-        if(StepType == RGameBlockGroup.R_BLOCK_STEP.TWO)
+
+        RefreahObj();
+
+        if (StepType == RGameBlockGroup.R_BLOCK_STEP.TWO)
             SawObj.gameObject.transform.localPosition = new Vector3(Mathf.PingPong(Time.time * 5, 3.4f) - 1.7f, SawObj.gameObject.transform.localPosition.y, SawObj.gameObject.transform.localPosition.z);
         else
             SawObj.gameObject.transform.localPosition = new Vector3(Mathf.PingPong(Time.time * 5, 2.54f) - 1.27f, SawObj.gameObject.transform.localPosition.y, SawObj.gameObject.transform.localPosition.z);
         
         SawImg.gameObject.transform.localRotation = Quaternion.Euler(SawImg.gameObject.transform.localRotation.x, SawImg.gameObject.transform.localRotation.y, Mathf.PingPong(Time.time, 380f) * 200);
+    }
+
+    public void RefreahObj()
+    {
+        if (SawObj_2 != null)
+            SawObj = SawObj_2;
+        else
+            SawObj = SawObj_3;
+
+        if (SawImg_2 != null)
+            SawImg = SawImg_2;
+        else
+            SawImg = SawImg_3;
     }
 
     public void GetCoin()

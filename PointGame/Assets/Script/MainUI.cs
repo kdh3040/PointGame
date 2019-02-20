@@ -55,8 +55,6 @@ public class MainUI : MonoBehaviour {
     {
         mBGM.Play();
 
-       
-
         Id.text = string.Format("ID : {0}", TKManager.Instance.MyData.NickName);
 
         CurrLottoTime = DateTime.Now.Hour;
@@ -64,7 +62,7 @@ public class MainUI : MonoBehaviour {
         if (TKManager.Instance.GameOverRouletteStart)
             StartCoroutine(Co_GameOverRouletteStart());
 
-        if(FirebaseManager.Instance.ReviewMode)
+        if(FirebaseManager.Instance.ReviewMode || FirebaseManager.Instance.ExamineMode)
         {
             SwapPoint.gameObject.SetActive(false);
             FreePoint.gameObject.SetActive(false);
@@ -126,6 +124,8 @@ public class MainUI : MonoBehaviour {
                 }
             }
         }
+
+        StartCoroutine(Co_ReviewMode());
     }
 
     IEnumerator Co_GameOverRouletteStart()
@@ -137,6 +137,17 @@ public class MainUI : MonoBehaviour {
         Popup.ShowPopup(new RoulettePopup.RoulettePopupData());
     }
 
+    IEnumerator Co_ReviewMode()
+    {
+        yield return null;
+        if (FirebaseManager.Instance.ExamineMode)
+        {
+            Popup.ShowPopup(new MsgPopup.MsgPopupData("심사중 입니다.", () =>
+            {
+                Application.Quit();
+            }));
+        }
+    }
     public void OnClickFreePoint()
     {
         SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
@@ -178,6 +189,9 @@ public class MainUI : MonoBehaviour {
 
     public void OnClickPointSwap()
     {
+        if (FirebaseManager.Instance.ReviewMode)
+            return;
+
         SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
         Popup.ShowPopup(new PointCashSwapPopup.PointCashSwapPopupData());
     }

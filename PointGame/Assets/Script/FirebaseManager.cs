@@ -42,8 +42,9 @@ public class FirebaseManager : MonoBehaviour
 
     private int ReviewVersion = 1;
     public bool ReviewMode = true;
+    public bool ExamineMode = true;
 
-    
+
 
     // Use this for initialization
     void Start()
@@ -106,6 +107,7 @@ public class FirebaseManager : MonoBehaviour
         GetUserData();
 
         GetReviewVersion();
+        GetExamineMode();
         GetLottoRefNumber();
         //GetLottoTodaySeries();
         GetLottoCurSeries();
@@ -121,7 +123,7 @@ public class FirebaseManager : MonoBehaviour
         if (FirstLoadingComplete == false)
             LoadingCount++;
 
-        if (LoadingCount == 8)
+        if (LoadingCount == 9)
             FirstLoadingComplete = true;
     }
 
@@ -703,15 +705,48 @@ public class FirebaseManager : MonoBehaviour
 
                 ReviewMode = version < ReviewVersion;
 
-                if (ReviewMode == false)
-                    AdsManager.Instance.ShowBanner();
-
                 AddFirstLoadingComplete();
 
             }
         }
       );
       
+    }
+
+    public void GetExamineMode()
+    {
+
+#if UNITY_IOS
+        string dataKey = "ios_ExamineVersion";
+#elif (UNITY_ANDROID && !UNITY_EDITOR)
+        string dataKey = "aos_ExamineVersion";
+#elif (UNITY_ANDROID && UNITY_EDITOR)
+        string dataKey = "editor_ExamineVersion";
+#endif
+        mDatabaseRef.Child(dataKey).GetValueAsync().ContinueWith(task =>
+        {
+
+            if (task.IsFaulted)
+            {
+                // Handle the error...
+            }
+            else if (task.IsCompleted)
+            {
+                DataSnapshot snapshot = task.Result;
+                int version = 0;
+                if (snapshot != null && snapshot.Exists)
+                {
+                    version = Convert.ToInt32(snapshot.Value);
+                }
+
+                ExamineMode = ReviewVersion <= version;// < ReviewVersion;
+
+                AddFirstLoadingComplete();
+
+            }
+        }
+      );
+
     }
 
     // 로또 레퍼런스 번호 파이어베이스에서 로드

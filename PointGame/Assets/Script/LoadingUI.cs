@@ -154,6 +154,9 @@ public class LoadingUI : MonoBehaviour {
             yield return null;
         }
 
+        if (FirebaseManager.Instance.ReviewMode == false && FirebaseManager.Instance.ExamineMode == false)
+            AdsManager.Instance.ShowBanner();
+
         var giftList = TKManager.Instance.MyData.GiftconURLList;
         var giftUrlList = new List<string>();
         for (int i = 0; i < giftList.Count; i++)
