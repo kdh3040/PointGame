@@ -117,14 +117,19 @@ public class MainUI : MonoBehaviour {
 
             LottoWinName.text = winUser.ToString();
 
+            bool timeView = false;
             for (int i = 0; i < CommonData.LottoWinTime.Length; i++)
             {
                 if (CurrLottoTime < CommonData.LottoWinTime[i])
                 {
                     NextLottoTime.text = string.Format("다음 추첨시간 {0}:00시", CommonData.LottoWinTime[i]);
+                    timeView = true;
                     break;
                 }
             }
+
+            if(timeView == false)
+                NextLottoTime.text = string.Format("다음 추첨시간 내일 {0}:00시", CommonData.LottoWinTime[0]);
         }
 
         StartCoroutine(Co_ReviewMode());
@@ -275,7 +280,7 @@ public class MainUI : MonoBehaviour {
                     }
                     else
                     {
-                        if (CurrLottoTime > CommonData.LottoWinTime[i - 1] && CurrLottoTime < CommonData.LottoWinTime[i])
+                        if (CurrLottoTime >= CommonData.LottoWinTime[i - 1] && CurrLottoTime < CommonData.LottoWinTime[i])
                         {
                             view = true;
                             NextLottoTime.text = string.Format("다음 추첨시간 {0}:00시", CommonData.LottoWinTime[i]);
@@ -286,7 +291,7 @@ public class MainUI : MonoBehaviour {
 
                 if (view == false)
                 {
-                    NextLottoTime.text = string.Format("다음 추첨시간 {0}:00시", CommonData.LottoWinTime[0]);
+                    NextLottoTime.text = string.Format("다음 추첨시간 내일 {0}:00시", CommonData.LottoWinTime[0]);
                 }
             }
         }
