@@ -37,8 +37,19 @@ public class MainUI : MonoBehaviour {
     public AudioSource mBGM;
     public AudioClip mClip;
 
+#if UNITY_ANDROID
+    AndroidJavaObject Activity;
+#endif
+
     private void Awake()
     {
+
+#if UNITY_ANDROID
+        //AndroidJavaClass jc = new AndroidJavaClass("com.justtreasure.treasureone.MyPluginActivity");
+        Activity = new AndroidJavaObject("com.justtreasure.treasureone.MyPluginActivity");
+        //Activity = jc.GetStatic<AndroidJavaObject>("currentActivity");
+#endif
+
         FreePoint.onClick.AddListener(OnClickFreePoint);
         LogoButton.onClick.AddListener(OnClickGamePlay);
         GamePlayButton.onClick.AddListener(OnClickGamePlay);
@@ -53,6 +64,8 @@ public class MainUI : MonoBehaviour {
 
     void Start()
     {
+
+
         mBGM.Play();
 
         Id.text = string.Format("ID : {0}", TKManager.Instance.MyData.NickName);
@@ -146,6 +159,10 @@ public class MainUI : MonoBehaviour {
 
     IEnumerator Co_ReviewMode()
     {
+        yield return null;
+#if UNITY_ANDROID
+        Activity.CallStatic("CheckRooted");
+#endif
         yield return null;
 #if (UNITY_ANDROID && !UNITY_EDITOR)
         if (FirebaseManager.Instance.ExamineMode)
@@ -322,6 +339,18 @@ public class MainUI : MonoBehaviour {
             }, MsgPopup.MSGPOPUP_TYPE.TWO));
         }
 #endif
+    }
+
+    void CheckRooted(string value)
+    {
+        if(value == "true")
+        {
+            // 루팅폰
+            Popup.ShowPopup(new MsgPopup.MsgPopupData("비정상적인 방법으로 게임을 실행 하였습니다.", () =>
+            {
+                Application.Quit();
+            }));
+        }
     }
 
 
