@@ -6107,14 +6107,15 @@ MonoBehaviour:
     m_BestFit: 0
     m_MinSize: 10
     m_MaxSize: 40
-    m_Alignment: 4
+    m_Alignment: 3
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: "- \uC77C\uC77C \uCD5C\uB300 \uB204\uC801\uD3EC\uC778\uD2B8\uB294 10000\uD3EC\uC778\uD2B8
-    \uC785\uB2C8\uB2E4."
+    \uC785\uB2C8\uB2E4.\n- \uC870\uC791\uC5D0 \uC758\uD55C \uCE90\uC2DC \uC801\uB9BD\uC740
+    \uCC98\uBC8C \uB300\uC0C1 \uC785\uB2C8\uB2E4."
 --- !u!222 &562182669
 CanvasRenderer:
   m_ObjectHideFlags: 0

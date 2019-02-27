@@ -176,14 +176,14 @@ public class LottoSlotUI : MonoBehaviour {
                 }
                 else
                 {
-                    AdsManager.Instance.ShowSkipRewardedAd();
-
-                    // TODO 번호 뽑기
-                    TKManager.Instance.MyData.RemovePoint(CommonData.LottoNumberCost);
-                    TKManager.Instance.GetLottoNumberProgress = true;
-                    StartCoroutine(Co_SetLottoNumber());
-                    FirebaseManager.Instance.SetLottoNumber();
-                    
+                    AdsManager.Instance.ShowSkipRewardedAd(() =>
+                    {
+                        // TODO 번호 뽑기
+                        TKManager.Instance.MyData.RemovePoint(CommonData.LottoNumberCost);
+                        TKManager.Instance.GetLottoNumberProgress = true;
+                        StartCoroutine(Co_SetLottoNumber());
+                        FirebaseManager.Instance.SetLottoNumber();
+                    });
                 }
             }));
         

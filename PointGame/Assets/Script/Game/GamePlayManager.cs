@@ -185,7 +185,7 @@ public class GamePlayManager : MonoBehaviour {
         yield return new WaitForSeconds(0.8f);
         //TKManager.Instance.HideHUD();
 
-        AdsManager.Instance.ShowSkipRewardedAd();
+        AdsManager.Instance.ShowSkipRewardedAd(null);
     }
 
     public void CheckGameOver()
