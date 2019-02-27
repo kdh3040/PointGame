@@ -169,16 +169,31 @@ public class MainUI : MonoBehaviour {
     public void OnClickFreePoint()
     {
         SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
+        StartCoroutine(Co_IsPlayableAds());
 
-        if(AdsManager.Instance.IsPlayableAds())
+        //if(AdsManager.Instance.IsPlayableAds())
+        //{
+        //    Popup.ShowPopup(new MiniGamePopup.MiniGamePopupData());
+        //}
+        //else
+        //{
+        //    Popup.ShowPopup(new MsgPopup.MsgPopupData("일일 시청 제한으로 인해 미니게임이 불가합니다"));
+        //}        
+    }
+    private IEnumerator Co_IsPlayableAds()
+    {
+        yield return AdsManager.Instance.Co_IsPlayableAds();
+
+        if (AdsManager.Instance.AdEnable)
         {
             Popup.ShowPopup(new MiniGamePopup.MiniGamePopupData());
         }
         else
         {
             Popup.ShowPopup(new MsgPopup.MsgPopupData("일일 시청 제한으로 인해 미니게임이 불가합니다"));
-        }        
+        }
     }
+
 
     public void OnClickGamePlay()
     {

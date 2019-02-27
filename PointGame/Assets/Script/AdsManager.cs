@@ -22,7 +22,7 @@ public class AdsManager : MonoBehaviour {
     }
 
     public bool AdView = false;
-
+    public bool AdEnable = false;
 
 
     /// ////////////////////////////////////////////////
@@ -67,6 +67,7 @@ public class AdsManager : MonoBehaviour {
     private string zoneId = string.Empty;
 
     private AdColony.InterstitialAd adColony = null;
+    private bool AdColonyInit = false;
 
     /// ////////////////////////////////////////////////
     /// 애드몹
@@ -147,6 +148,7 @@ public class AdsManager : MonoBehaviour {
 
             adColony = ad_;
             AdView = false;
+            AdColonyInit = true;
             //ShowColony();
         };
 
@@ -154,7 +156,8 @@ public class AdsManager : MonoBehaviour {
         {
             Debug.Log("AdColony.Ads.OnRequestInterstitialFailed called");
             AdView = false;
-
+            adColony = null;
+            AdColonyInit = false;
             // to do ...
             // 광고 요청에 실패했을 때 처리
 
@@ -185,13 +188,15 @@ public class AdsManager : MonoBehaviour {
                 zoneId, success, name, amount));
 
             AdView = false;
+            AdColonyInit = false;
+            RequestAdColonyAds();
 
             if (success)
-            {
+            {            
                 // to do ...
                 // 광고 시청이 완료되었을 때 처리
                 // 광고 시청에 대한 보상 지급 등 ...
-            
+
             }
         };
 
@@ -449,11 +454,13 @@ public class AdsManager : MonoBehaviour {
     {
 
         Debug.Log("**** Show Ad ****");
-
+        //AdView = false;
         if (this.adColony != null)
         {
             AdColony.Ads.ShowAd(this.adColony);
         }
+        else
+            AdView = false;
 
     }
 
@@ -472,6 +479,7 @@ public class AdsManager : MonoBehaviour {
         else
         {
             SetAdEndCallFunc(endAction);
+      
             if (Advertisement.IsReady(rewarded_video_id))
             {
                 var options = new ShowOptions { resultCallback = HandleShowRewardVideoResult };
@@ -481,6 +489,7 @@ public class AdsManager : MonoBehaviour {
             {
                 ShowVungleAds();
             }
+            
             else
             {
                 AdColony.Zone adcolonyZone = AdColony.Ads.GetZone(this.zoneId);
@@ -491,6 +500,7 @@ public class AdsManager : MonoBehaviour {
                 else
                     AdView = false;
             }
+            
         }
     }
 
@@ -716,29 +726,68 @@ public class AdsManager : MonoBehaviour {
     }
 
 
-    public bool IsPlayableAds()
-    {
-        bool rtValue = false;
+    //public bool IsPlayableAds()
+    //{
+    //    bool rtValue = false;
 
+    //    if (Advertisement.IsReady(rewarded_video_id))
+    //    {
+    //        return true;
+    //    }
+    //    else if (Vungle.isAdvertAvailable(Vungle_adsID))
+    //    {
+    //        return true;
+    //    }
+    //    else
+    //    {
+    //        AdColony.Zone adcolonyZone =  AdColony.Ads.GetZone(this.zoneId);
+    //        if (adcolonyZone != null)
+    //            return adcolonyZone.Enabled;
+    //        else
+    //            return false;
+    //    }
+
+    //    return rtValue;
+    //}
+
+    public IEnumerator Co_IsPlayableAds()
+    {
+        AdEnable = false;
+        yield return null;
+        
         if (Advertisement.IsReady(rewarded_video_id))
         {
-            return true;
-        }
+            AdEnable = true;
+            yield break;
+        }     
         else if (Vungle.isAdvertAvailable(Vungle_adsID))
         {
-            return true;
+            AdEnable = true;
+            yield break;
         }
         else
         {
-            AdColony.Zone adcolonyZone =  AdColony.Ads.GetZone(this.zoneId);
-            if (adcolonyZone != null)
-                return adcolonyZone.Enabled;
-            else
-                return false;
+            TKManager.Instance.ShowHUD();
+            float waitTime = 3f;
+            while (waitTime > 0)
+            {
+                if (AdColonyInit)
+                {
+                    AdEnable = true;
+                    TKManager.Instance.HideHUD();
+                    yield break;
+                }
+                waitTime -= Time.deltaTime;
+
+                if (waitTime < 0)
+                {
+                    AdEnable = false;
+                    RequestAdColonyAds();
+                    break;
+                }
+                yield return null;
+            }
+            TKManager.Instance.HideHUD();
         }
-
-        return rtValue;
     }
-
-
 }

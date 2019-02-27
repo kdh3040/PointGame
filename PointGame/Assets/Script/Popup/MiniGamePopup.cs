@@ -173,7 +173,37 @@ public class MiniGamePopup : Popup
 
     public void ShowInfoPopup()
     {
-        if (AdsManager.Instance.IsPlayableAds())
+        StartCoroutine(Co_IsPlayableAds());
+        //if (AdsManager.Instance.IsPlayableAds())
+        //{
+        //    PopupObj.gameObject.SetActive(true);
+        //    if (GameOver == false)
+        //    {
+        //        PopupText.text = string.Format("{0}포인트를 획득했습니다.\n재시작 하시겠습니까?", CommonData.AdsPointReward);
+        //        TKManager.Instance.MyData.AddPoint(CommonData.AdsPointReward);
+        //    }
+        //    else
+        //        PopupText.text = "재시작 하시겠습니까?";
+        //}
+        //else
+        //{
+        //    if (GameOver == false)
+        //    {
+        //        TKManager.Instance.MyData.AddPoint(CommonData.AdsPointReward);
+        //    }
+        //    ParentPopup.ShowPopup(new MsgPopup.MsgPopupData("일일 시청 제한으로 인해 미니게임이 불가합니다", () =>
+        //    {
+        //        ParentPopup.ClosePopup();
+        //    }));
+        //}
+        
+    }
+
+    private IEnumerator Co_IsPlayableAds()
+    {
+        yield return AdsManager.Instance.Co_IsPlayableAds();
+
+        if (AdsManager.Instance.AdEnable)
         {
             PopupObj.gameObject.SetActive(true);
             if (GameOver == false)
@@ -195,7 +225,6 @@ public class MiniGamePopup : Popup
                 ParentPopup.ClosePopup();
             }));
         }
-        
     }
 
     public void OnClickOk()
