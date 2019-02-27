@@ -67,6 +67,18 @@
     <br>
 
     <table>
+      <h5 class="indigo-text">:+: 복권 구매 인원 현황 :+:</h5>
+      <thead>
+        <th>회차</th>
+        <th>인원</th>
+      </thead>
+      <tbody id="lottoBuyUserConut"></tbody>
+    </table>
+
+    <br>
+    <br>
+
+    <table>
       <h5 class="indigo-text">:+: 최근 당첨자 현황 :+:</h5>
       <thead>
         <th>회차</th>
@@ -135,7 +147,7 @@
   });
 }
 
-  
+
 /*
   messaging.requestPermission().then(function() {
     console.log('Notification permission granted.');
@@ -188,6 +200,9 @@
       firebase.database().ref('/LottoCurSeries').once('value', function(snapshot) {
         var message = snapshot.val();
         LottoCurSeries = message;
+
+        firebase.database().ref('/LottoUsersBySeries/'+LottoCurSeries).set(Lottocount);
+
         LottoCurSeries += LottoSeriesRef;
       //  LottoCurSeries = 7;
         //console.log('/Lotto/'+LottoCurSeries+'_L');
@@ -256,6 +271,38 @@
 
 
   //console.log(arrLottoWinLuckyGroup);
+
+  function SetLottoUserCount(Series, UserCount)
+  {
+  //  for(var i = 0; i < arrLottoWinLuckyGroup.length; i++)
+    {
+
+
+      var my_tbody = document.getElementById('lottoBuyUserConut');
+      // var row = my_tbody.insertRow(0); // 상단에 추가
+      var row = my_tbody.insertRow( my_tbody.rows.length ); // 하단에 추가
+      var cell1 = row.insertCell(0);
+      var cell2 = row.insertCell(1);
+
+      var tempSeries = Series * 1;
+      tempSeries += 1;
+      cell1.innerHTML = tempSeries;
+      cell2.innerHTML = UserCount;
+
+    }
+
+  }
+
+  var dbTestRef = firebase.database().ref('/LottoUsersBySeries')
+  dbTestRef.on('child_added', function(data){
+    console.log( data.val());
+    var Series = data.key.toString();
+    var UserCount = data.val();
+    SetLottoUserCount(Series, UserCount);
+
+  });
+
+
 
     function SetData()
     {
