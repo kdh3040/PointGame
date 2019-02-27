@@ -526,45 +526,44 @@ public class FirebaseManager : MonoBehaviour
     // 로또 번호 파이어베이스에서 로드
     public void SetLottoNumber()
     {
-        
-        mDatabaseRef.Child("LottoCount").RunTransaction(mutableData =>
+
+        mDatabaseRef.Child("LottoRefNumber").GetValueAsync().ContinueWith(task =>
         {
-            int tempCount = Convert.ToInt32(mutableData.Value); 
-
-            if (tempCount == 0)
+            if (task.IsFaulted)
             {
-                tempCount = 0;
+                // Handle the error...
             }
-            else
+            else if (task.IsCompleted)
             {
-                mDatabaseRef.Child("LottoRefNumber").GetValueAsync().ContinueWith(task =>
+                DataSnapshot snapshot = task.Result;
+                if (snapshot != null && snapshot.Exists)
                 {
-                    if (task.IsFaulted)
+                    LottoRefNnumber = Convert.ToInt32(snapshot.Value);
+
+                    mDatabaseRef.Child("LottoCurSeries").GetValueAsync().ContinueWith(CurSeriestask =>
                     {
-                        // Handle the error...
-                    }
-                    else if (task.IsCompleted)
-                    {
-                        DataSnapshot snapshot = task.Result;
-                        if (snapshot != null && snapshot.Exists)
+                        if (CurSeriestask.IsFaulted)
                         {
-                            LottoRefNnumber = Convert.ToInt32(snapshot.Value);
-
-                            mDatabaseRef.Child("LottoCurSeries").GetValueAsync().ContinueWith(CurSeriestask =>
+                            // Handle the error...
+                        }
+                        else if (CurSeriestask.IsCompleted)
+                        {
+                            snapshot = CurSeriestask.Result;
+                            if (snapshot != null && snapshot.Exists)
                             {
-                                if (CurSeriestask.IsFaulted)
-                                {
-                                    // Handle the error...
-                                }
-                                else if (CurSeriestask.IsCompleted)
-                                {
-                                    snapshot = CurSeriestask.Result;
-                                    if (snapshot != null && snapshot.Exists)
-                                    {
-                                        LottoCurSeries = Convert.ToInt32(snapshot.Value);
-                                        TKManager.Instance.SetCurrentLottoSeriesCount(LottoCurSeries);
+                                LottoCurSeries = Convert.ToInt32(snapshot.Value);
+                                TKManager.Instance.SetCurrentLottoSeriesCount(LottoCurSeries);
 
-                                        //int tempSeries = GetCurrSeries();
+                                mDatabaseRef.Child("LottoCount").RunTransaction(mutableData =>
+                                {
+                                    int tempCount = Convert.ToInt32(mutableData.Value);
+
+                                    if (tempCount == 0)
+                                    {
+                                        tempCount = 1;
+                                    }
+                                    else
+                                    {
                                         int tempSeries = LottoCurSeries;
                                         tempSeries += CommonData.LottoRefSeries;
 
@@ -576,25 +575,29 @@ public class FirebaseManager : MonoBehaviour
                                         TKManager.Instance.MyData.SetLottoData(tempSeries, LottoRefNnumber * tempCount);
 
                                         mutableData.Value = tempCount + 1;
-                                        mDatabaseRef.Child("LottoCount").SetValueAsync(mutableData.Value);
+                                     //   mDatabaseRef.Child("TestLottoCount").SetValueAsync(mutableData.Value);
+
+
+
+
+
+
+
 
                                         TKManager.Instance.GetLottoNumberProgress = false;
                                     }
-                                }
-                            });
+
+                                    return TransactionResult.Success(mutableData);
+
+                                });                         
+                            }
                         }
-                        else
-                            LottoRefNnumber = 0;
-                    }
-                });
-
-          
+                    });
+                }
+                else
+                    LottoRefNnumber = 0;
             }
-
-          
-            return TransactionResult.Success(mutableData);
-        });
-        
+        });        
     }
 
     public void GetLottoLuckGroup()
