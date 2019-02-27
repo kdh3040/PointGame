@@ -170,41 +170,27 @@ public class LottoSlotUI : MonoBehaviour {
         ParentPopup.ShowPopup(new LottoMsgPopup.LottoMsgPopupData(string.Format("{0:n0}포인트로 번호를 뽑으시겠습니까?", CommonData.LottoNumberCost),
             () =>
             {
-                if(TKManager.Instance.MyData.Point < CommonData.LottoNumberCost)
+                FirebaseManager.Instance.GetPoint(() =>
                 {
-                    ParentPopup.ShowPopup(new MsgPopup.MsgPopupData("포인트가 부족합니다."));
-                }
-                else
-                {
-                    AdsManager.Instance.ShowSkipRewardedAd(() =>
+                    if (TKManager.Instance.MyData.Point < CommonData.LottoNumberCost)
                     {
-                        // TODO 번호 뽑기
-                        TKManager.Instance.MyData.RemovePoint(CommonData.LottoNumberCost);
-                        TKManager.Instance.GetLottoNumberProgress = true;
-                        StartCoroutine(Co_SetLottoNumber());
-                        FirebaseManager.Instance.SetLottoNumber();
-                    });
-                }
+                        ParentPopup.ShowPopup(new MsgPopup.MsgPopupData("포인트가 부족합니다."));
+                    }
+                    else
+                    {
+                        AdsManager.Instance.ShowSkipRewardedAd(() =>
+                        {
+                            FirebaseManager.Instance.SetLottoNumber(() =>
+                            {
+                                TKManager.Instance.MyData.RemovePoint(CommonData.LottoNumberCost);
+                                RefreshUI();
+                            });
+                        });
+                    }
+                });
             }));
         
     }
-
-    IEnumerator Co_SetLottoNumber()
-    {
-        TKManager.Instance.ShowHUD();
-        while (true)
-        {
-            if (TKManager.Instance.GetLottoNumberProgress == false)
-                break;
-
-            yield return null;
-        }
-
-        TKManager.Instance.HideHUD();
-
-        RefreshUI();
-    }
-
 
     /*
      * StartCoroutine(Co_GameOverRouletteStart());

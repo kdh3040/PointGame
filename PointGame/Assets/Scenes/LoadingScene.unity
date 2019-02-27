@@ -1469,6 +1469,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HUDCanvas: {fileID: 1015879525}
+  ButonImg: {fileID: 1461845982}
+  Desc: {fileID: 376153441}
 --- !u!1 &1052896930
 GameObject:
   m_ObjectHideFlags: 0
@@ -1961,6 +1963,9 @@ MonoBehaviour:
   FirstLoadingComplete: 0
   LoadingCount: 0
   ReviewMode: 1
+  ExamineMode: 1
+  ExamineContrext: 
+  FirebaseProgress: 0
 --- !u!4 &1556224094
 Transform:
   m_ObjectHideFlags: 0
@@ -2707,7 +2712,6 @@ MonoBehaviour:
   CurrLottoSeriesCount: 0
   LottoSeriesCountMin: 0
   HUD: {fileID: 1015879527}
-  GetLottoNumberProgress: 0
   PushLastIndex: 0
   PushNotiEnable: 0
   FirebaseUserId: 

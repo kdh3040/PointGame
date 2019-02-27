@@ -34,8 +34,6 @@ public class TKManager : MonoBehaviour
     public LoadingHUD HUD;
     private SaveData MySaveData = new SaveData();
 
-    public bool GetLottoNumberProgress = false;
-
     public int PushLastIndex = 0;
     public bool PushNotiEnable = false;
 
@@ -117,9 +115,10 @@ public class TKManager : MonoBehaviour
     }
 
 
-    public void ShowHUD()
+    public void ShowHUD(bool alpha = false)
     {
         HUD.gameObject.SetActive(true);
+        HUD.ShowHUD(alpha);
     }
 
     public void HideHUD()

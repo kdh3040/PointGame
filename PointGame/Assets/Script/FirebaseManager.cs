@@ -46,6 +46,9 @@ public class FirebaseManager : MonoBehaviour
 
     public string ExamineContrext;
 
+    public bool FirebaseProgress = false;
+    public Action FirebaseProgressEndCallFunc = null;
+
 
     // Use this for initialization
     void Start()
@@ -251,11 +254,11 @@ public class FirebaseManager : MonoBehaviour
                     if (tempData.ContainsKey("Cash"))
                     {
                         int tempCash = Convert.ToInt32(tempData["Cash"]);
-                        TKManager.Instance.MyData.AddCash(tempCash);
+                        TKManager.Instance.MyData.SetCash(tempCash);
                     }
                     else
                     {
-                        TKManager.Instance.MyData.AddCash(0);
+                        TKManager.Instance.MyData.SetCash(0);
                     }
 
                     if (tempData.ContainsKey("TotalAccumPoint"))
@@ -306,8 +309,9 @@ public class FirebaseManager : MonoBehaviour
     }
 
     // 사용자 보유 포인트 파이어베이스에서 로드
-    public void GetPoint()
+    public void GetPoint(Action endAction)
     {
+        SetEndCallFunc(endAction);
         int rtPoint = 0;
         
         mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("Point").GetValueAsync().ContinueWith(task =>
@@ -324,6 +328,8 @@ public class FirebaseManager : MonoBehaviour
                 else
                     rtPoint = 0;
 
+                TKManager.Instance.MyData.SetPoint(rtPoint);
+                FirebaseProgress = false;
             }
         });
         
@@ -333,8 +339,9 @@ public class FirebaseManager : MonoBehaviour
     {
         mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("TotalAccumPoint").SetValueAsync(point);
     }
-    public void GetTotalAccumPoint()
+    public void GetTotalAccumPoint(Action endAction)
     {
+        SetEndCallFunc(endAction);
         int rtPoint = 0;
         
         mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("TotalAccumPoint").GetValueAsync().ContinueWith(task =>
@@ -342,6 +349,7 @@ public class FirebaseManager : MonoBehaviour
 
             if (task.IsFaulted)
             {
+                FirebaseProgress = false;
                 // Handle the error...
             }
             else if (task.IsCompleted)
@@ -360,15 +368,16 @@ public class FirebaseManager : MonoBehaviour
     {
         mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("TodayAccumPoint").Child(GetToday()).SetValueAsync(point);
     }
-    public void GetTodayAccumPoint()
+    public void GetTodayAccumPoint(Action endAction)
     {
+        SetEndCallFunc(endAction);
         int rtPoint = 0;
         
         mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("TodaytAccumPoint").Child(GetToday()).GetValueAsync().ContinueWith(task =>
         {
-
             if (task.IsFaulted)
             {
+                FirebaseProgress = false;
                 // Handle the error...
             }
             else if (task.IsCompleted)
@@ -378,6 +387,9 @@ public class FirebaseManager : MonoBehaviour
                     rtPoint = Convert.ToInt32(snapshot.Value);
                 else
                     rtPoint = 0;
+
+                TKManager.Instance.MyData.SetTodayAccumulatePoint(rtPoint);
+                FirebaseProgress = false;
             }
         });
         
@@ -387,8 +399,9 @@ public class FirebaseManager : MonoBehaviour
     {
         mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("Cash").SetValueAsync(Cash);
     }
-    public void GetCash()
+    public void GetCash(Action endAction)
     {
+        SetEndCallFunc(endAction);
         int rtPoint = 0;
         
         mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("Cash").GetValueAsync().ContinueWith(task =>
@@ -405,6 +418,9 @@ public class FirebaseManager : MonoBehaviour
                     rtPoint = Convert.ToInt32(snapshot.Value);
                 else
                     rtPoint = 0;
+
+                TKManager.Instance.MyData.SetCash(rtPoint);
+                FirebaseProgress = false;
             }
         });
         
@@ -524,9 +540,9 @@ public class FirebaseManager : MonoBehaviour
     }
 
     // 로또 번호 파이어베이스에서 로드
-    public void SetLottoNumber()
+    public void SetLottoNumber(Action endAction)
     {
-
+        SetEndCallFunc(endAction);
         mDatabaseRef.Child("LottoRefNumber").GetValueAsync().ContinueWith(task =>
         {
             if (task.IsFaulted)
@@ -575,16 +591,8 @@ public class FirebaseManager : MonoBehaviour
                                         TKManager.Instance.MyData.SetLottoData(tempSeries, LottoRefNnumber * tempCount);
 
                                         mutableData.Value = tempCount + 1;
-                                     //   mDatabaseRef.Child("TestLottoCount").SetValueAsync(mutableData.Value);
-
-
-
-
-
-
-
-
-                                        TKManager.Instance.GetLottoNumberProgress = false;
+                                        //   mDatabaseRef.Child("TestLottoCount").SetValueAsync(mutableData.Value);
+                                        FirebaseProgress = false;
                                     }
 
                                     return TransactionResult.Success(mutableData);
@@ -932,5 +940,30 @@ public class FirebaseManager : MonoBehaviour
     void Update()
     {
 
+    }
+
+
+    public void SetEndCallFunc(Action func)
+    {
+        FirebaseProgress = true;
+        FirebaseProgressEndCallFunc = func;
+        StartCoroutine(Co_AdEndCall());
+    }
+
+    private IEnumerator Co_AdEndCall()
+    {
+        TKManager.Instance.ShowHUD(true);
+        while (true)
+        {
+            if (FirebaseProgress == false)
+                break;
+
+            yield return null;
+        }
+
+        if (FirebaseProgressEndCallFunc != null)
+            FirebaseProgressEndCallFunc();
+
+        TKManager.Instance.HideHUD();
     }
 }

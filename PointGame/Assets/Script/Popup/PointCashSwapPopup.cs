@@ -56,18 +56,20 @@ public class PointCashSwapPopup : Popup
     public void OnClickCashRefundOK()
     {
         SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
-        FirebaseManager.Instance.SetCashInfo(Name.text.ToString(), Bank.text.ToString(), AccountNumber.text.ToString(), TKManager.Instance.MyData.Cash);
+        FirebaseManager.Instance.GetCash(() =>
+        {
+            FirebaseManager.Instance.SetCashInfo(Name.text.ToString(), Bank.text.ToString(), AccountNumber.text.ToString(), TKManager.Instance.MyData.Cash);
 
+            int tempCash = TKManager.Instance.MyData.Cash;
+            int tempPoint = TKManager.Instance.MyData.AllAccumulatePoint;
+            tempPoint -= (tempCash / CommonData.PointToCashChangeValue) * CommonData.PointToCashChange;
 
-        int tempCash = TKManager.Instance.MyData.Cash;
-        int tempPoint = TKManager.Instance.MyData.AllAccumulatePoint;
-        tempPoint -= (tempCash / CommonData.PointToCashChangeValue) * CommonData.PointToCashChange;
-
-        TKManager.Instance.MyData.SetAllAccumulatePoint(tempPoint);
-        FirebaseManager.Instance.SetTotalAccumPoint(TKManager.Instance.MyData.AllAccumulatePoint);
-        TKManager.Instance.MyData.SetCash(0);
-        CashRefundInfoObj.gameObject.SetActive(true);
-        CloseAction();
+            TKManager.Instance.MyData.SetAllAccumulatePoint(tempPoint);
+            FirebaseManager.Instance.SetTotalAccumPoint(TKManager.Instance.MyData.AllAccumulatePoint);
+            TKManager.Instance.MyData.SetCash(0);
+            CashRefundInfoObj.gameObject.SetActive(true);
+            CloseAction();
+        });
     }
 
     public void OnClickOK()

@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
+using System;
 
 public class UserData
 {
@@ -74,15 +76,21 @@ public class UserData
             }
         }
     }
-    
+
+    public void SetPoint(int point)
+    {
+        Point = point;
+    }
     public void AddPoint(int point, bool first = false)
     {
         if (FirebaseManager.Instance.ExamineMode)
             return;
 
-        AddTodayAccumulate(point);
-
-        FirebaseManager.Instance.SetPoint(Point);
+        FirebaseManager.Instance.GetPoint(() =>
+        {
+            AddTodayAccumulate(point);
+            FirebaseManager.Instance.SetPoint(Point);
+        });
     }
     public void RemovePoint(int point)
     {
@@ -95,17 +103,17 @@ public class UserData
     public void SetCash(int cash)
     {
         Cash = cash;
-
-        FirebaseManager.Instance.SetCash(Cash);
     }
     public void AddCash(int cash)
     {
         if (FirebaseManager.Instance.ExamineMode)
             return;
 
-        Cash += cash;
-
-        FirebaseManager.Instance.SetCash(Cash);
+        FirebaseManager.Instance.GetCash(() =>
+        {
+            Cash += cash;
+            FirebaseManager.Instance.SetCash(Cash);
+        });
     }
     public void RemoveCash(int cash)
     {
@@ -158,7 +166,7 @@ public class UserData
         }
 
         int changeCount = AllAccumulatePoint / CommonData.PointToCashChange;
-        if(changeCount > PointToCashChangeCount)
+        if (changeCount > PointToCashChangeCount)
         {
             AddCash(CommonData.PointToCashChangeValue * (changeCount - PointToCashChangeCount));
             PointToCashChangeCount = changeCount;

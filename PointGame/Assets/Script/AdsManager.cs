@@ -702,12 +702,12 @@ public class AdsManager : MonoBehaviour {
 
     private IEnumerator Co_AdEndCall()
     {
+        yield return null;
         TKManager.Instance.ShowHUD();
         while (true)
         {
             if (AdView == false)
                 break;
-
             yield return null;
         }
 
