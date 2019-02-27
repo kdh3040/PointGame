@@ -188,10 +188,14 @@ public class GameUI : MonoBehaviour {
     {
         SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
         if (GamePlayManager.Instance.StageCount % 3 == 0)
-            AdsManager.Instance.ShowSkipRewardedAd();
+            AdsManager.Instance.ShowSkipRewardedAd( () =>
+            {
+                GamePlayManager.Instance.GameReady();
+            });
         else
+        {
             AdsManager.Instance.ShowInterstitialAds();
-        
-        GamePlayManager.Instance.GameReady();
+            GamePlayManager.Instance.GameReady();
+        }
     }
 }

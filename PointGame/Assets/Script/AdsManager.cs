@@ -539,9 +539,9 @@ public class AdsManager : MonoBehaviour {
         }
         else
         {
+            SetAdEndCallFunc(endAction);
             if (rewardAdmobVideo.IsLoaded())
             {
-                SetAdEndCallFunc(endAction);
                 this.ShowAdmobVideo();
             }
             else
@@ -611,17 +611,17 @@ public class AdsManager : MonoBehaviour {
     }
 
     // 구글애드몹 리워드 광고 스킵가능 
-    public void ShowSkipRewardedAd()
+    public void ShowSkipRewardedAd(Action endAction)
     {
         if (FirebaseManager.Instance.ReviewMode)
         {
 
         }
         else
-        {         
+        {
+            SetAdEndCallFunc(endAction);
             if (rewardAdmobVideo.IsLoaded())
             {
-                SetAdEndCallFunc(null);
                 this.ShowAdmobVideo();
             }
             else

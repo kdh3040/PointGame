@@ -196,8 +196,10 @@ public class MainUI : MonoBehaviour {
     public void OnClickFreeRoulette()
     {
         SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
-        AdsManager.Instance.ShowSkipRewardedAd();
-        Popup.ShowPopup(new RoulettePopup.RoulettePopupData());
+        AdsManager.Instance.ShowSkipRewardedAd(() =>
+        {
+            Popup.ShowPopup(new RoulettePopup.RoulettePopupData());
+        });
     }
 
     public void OnClickPointSwap()
