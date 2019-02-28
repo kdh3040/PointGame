@@ -393,7 +393,7 @@ public class AdsManager : MonoBehaviour {
 #endif
         if (FirebaseManager.Instance.ReviewMode)
         {
-
+            AdView = false;
         }
         else
         {
@@ -625,7 +625,8 @@ public class AdsManager : MonoBehaviour {
     {
         if (FirebaseManager.Instance.ReviewMode)
         {
-
+            SetAdEndCallFunc(endAction);
+            AdView = false;
         }
         else
         {
