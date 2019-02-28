@@ -23,6 +23,7 @@ public class AdsManager : MonoBehaviour {
 
     public bool AdView = false;
     public bool AdEnable = false;
+    public bool AdComplete = false;
 
 
     /// ////////////////////////////////////////////////
@@ -173,6 +174,9 @@ public class AdsManager : MonoBehaviour {
         {
             Debug.Log("AdColony.Ads.OnClosed called, expired: " + ad_.Expired);
             AdView = false;
+            adColony = null;
+            AdColonyInit = false;
+            RequestAdColonyAds();
         };
 
         AdColony.Ads.OnExpiring += (AdColony.InterstitialAd ad_) =>
@@ -189,6 +193,7 @@ public class AdsManager : MonoBehaviour {
 
             AdView = false;
             AdColonyInit = false;
+            AdComplete = true;
             RequestAdColonyAds();
 
             if (success)
@@ -236,6 +241,9 @@ public class AdsManager : MonoBehaviour {
             Debug.Log("!!!!!@ Ad finished - placementID " + placementID + ", was call to action clicked:" + args.WasCallToActionClicked + ", is completed view:"
                 + args.IsCompletedView);
             AdView = false;
+
+            if (args.IsCompletedView)
+                AdComplete = true;
         };
 
         Vungle.adPlayableEvent += (placementID, adPlayable) => {
@@ -247,8 +255,8 @@ public class AdsManager : MonoBehaviour {
             Debug.Log("!!!!!@ SDK initialized");
             AdView = false;
         };
-        
-        
+
+
     }
 
  
@@ -473,11 +481,13 @@ public class AdsManager : MonoBehaviour {
 
         if (FirebaseManager.Instance.ReviewMode)
         {
+            AdComplete = true;
             SetAdEndCallFunc(endAction);
             AdView = false;
         }
         else
         {
+            AdComplete = false;
             SetAdEndCallFunc(endAction);
       
             if (Advertisement.IsReady(rewarded_video_id))
@@ -513,6 +523,7 @@ public class AdsManager : MonoBehaviour {
                 {
                     Debug.Log("The ad was successfully shown.");
                     AdView = false;
+                    AdComplete = true;
                     // to do ...
                     // 광고 시청이 완료되었을 때 처리
 

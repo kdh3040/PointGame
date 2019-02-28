@@ -209,7 +209,14 @@ public class MiniGamePopup : Popup
             if (GameOver == false)
             {
                 PopupText.text = string.Format("{0}포인트를 획득했습니다.\n재시작 하시겠습니까?", CommonData.AdsPointReward);
-                TKManager.Instance.MyData.AddPoint(CommonData.AdsPointReward);
+                if (AdsManager.Instance.AdComplete == false)
+                    ParentPopup.ShowPopup(new MsgPopup.MsgPopupData("광고시청을 완료하셔야\n보상이 지급됩니다.", () =>
+                    {
+                        PopupObj.gameObject.SetActive(false);
+                        ParentPopup.ClosePopup();
+                    }));
+                else
+                    TKManager.Instance.MyData.AddPoint(CommonData.AdsPointReward);
             }
             else
                 PopupText.text = "재시작 하시겠습니까?";
