@@ -540,7 +540,7 @@ public class FirebaseManager : MonoBehaviour
     }
 
     // 로또 번호 파이어베이스에서 로드
-    public void SetLottoNumber(Action endAction)
+    public void SetLottoNumber(Action endAction, PopupUI popup)
     {
         SetEndCallFunc(endAction);
         mDatabaseRef.Child("LottoRefNumber").GetValueAsync().ContinueWith(task =>
@@ -548,6 +548,7 @@ public class FirebaseManager : MonoBehaviour
             if (task.IsFaulted)
             {
                 // Handle the error...
+                popup.ShowPopup(new MsgPopup.MsgPopupData("인터넷 연결이 불안정 합니다."));
             }
             else if (task.IsCompleted)
             {
@@ -561,6 +562,7 @@ public class FirebaseManager : MonoBehaviour
                         if (CurSeriestask.IsFaulted)
                         {
                             // Handle the error...
+                            popup.ShowPopup(new MsgPopup.MsgPopupData("인터넷 연결이 불안정 합니다."));
                         }
                         else if (CurSeriestask.IsCompleted)
                         {
@@ -961,9 +963,9 @@ public class FirebaseManager : MonoBehaviour
             yield return null;
         }
 
+        TKManager.Instance.HideHUD();
+
         if (FirebaseProgressEndCallFunc != null)
             FirebaseProgressEndCallFunc();
-
-        TKManager.Instance.HideHUD();
     }
 }

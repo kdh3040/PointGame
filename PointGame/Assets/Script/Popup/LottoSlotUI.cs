@@ -184,7 +184,7 @@ public class LottoSlotUI : MonoBehaviour {
                             {
                                 TKManager.Instance.MyData.RemovePoint(CommonData.LottoNumberCost);
                                 RefreshUI();
-                            });
+                            }, ParentPopup);
                         });
                     }
                 });

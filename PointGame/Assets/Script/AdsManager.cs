@@ -722,8 +722,10 @@ public class AdsManager : MonoBehaviour {
             yield return null;
         }
 
-        CallAdEndCallFunc();
         TKManager.Instance.HideHUD();
+
+        CallAdEndCallFunc();
+        
     }
 
 
