@@ -6,6 +6,9 @@ using Firebase;
 using Firebase.Database;
 using Firebase.Unity.Editor;
 
+using GooglePlayGames;
+using GooglePlayGames.BasicApi;
+using Firebase.Auth;
 
 public class FirebaseManager : MonoBehaviour
 {
@@ -60,6 +63,57 @@ public class FirebaseManager : MonoBehaviour
 
     }
 
+    public void GoogleLoginBtnOnClick()
+    {
+        Social.localUser.Authenticate(success =>
+        {
+            if (success == false) return;
+
+            StartCoroutine(coLogin());
+        });
+
+    }
+
+    IEnumerator coLogin()
+    {
+        while (System.String.IsNullOrEmpty(((PlayGamesLocalUser)Social.localUser).GetIdToken()))
+            yield return null;
+
+        string idToken = ((PlayGamesLocalUser)Social.localUser).GetIdToken();
+        string accessToken = null;
+
+        Credential credential = GoogleAuthProvider.GetCredential(idToken, accessToken);
+        auth.SignInWithCredentialAsync(credential).ContinueWith(task => {
+            if (task.IsCanceled)
+            {
+                Debug.LogError("SignInWithCredentialAsync was canceled.");
+                return;
+            }
+            if (task.IsFaulted)
+            {
+                Debug.LogError("SignInWithCredentialAsync encountered an error: " + task.Exception);
+                return;
+            }
+
+            FirebaseUser newUser = task.Result;
+            Debug.LogFormat("User signed in successfully: {0} ({1})",
+                newUser.DisplayName, newUser.UserId);           
+
+        });
+    }
+
+
+    void GooglePlayServiceInitialize()
+    {
+        PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder()
+            .RequestIdToken()
+            .Build();
+
+        PlayGamesPlatform.InitializeInstance(config);
+        PlayGamesPlatform.DebugLogEnabled = true;
+        PlayGamesPlatform.Activate();
+    }
+
     public void Init()
     {
         
@@ -67,9 +121,10 @@ public class FirebaseManager : MonoBehaviour
         auth = Firebase.Auth.FirebaseAuth.DefaultInstance;
         mDatabaseRef = FirebaseDatabase.DefaultInstance.RootReference;
 
-       Firebase.Messaging.FirebaseMessaging.TokenReceived += OnTokenReceived;
+        Firebase.Messaging.FirebaseMessaging.TokenReceived += OnTokenReceived;
         Firebase.Messaging.FirebaseMessaging.MessageReceived += OnMessageReceived;
-        
+
+        GooglePlayServiceInitialize();
     }
     
     public void TokenRefresh(Firebase.Auth.FirebaseUser user)

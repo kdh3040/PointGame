@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "641308195675-o716k27s2im6f72l5us8ouhtoq795vfr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.justtreasure.treasureone",
+            "certificate_hash": "d1b25741c1f79a2a98cd3cf7fed9a77462b0a0f8"
+          }
+        },
+        {
           "client_id": "641308195675-3g35srtqa11phlk9i8fjceo0nkd0tj19.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,13 +37,26 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "641308195675-3g35srtqa11phlk9i8fjceo0nkd0tj19.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "641308195675-fjd7b73pl88oqfu407c0l0nv7r6hvj43.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.justtreasure.treasureone"
+              }
+            }
+          ]
         },
         "ads_service": {
           "status": 2
         }
-      }
+      },
+      "admob_app_id": "ca-app-pub-7615036525367000~1421003475"
     }
   ],
   "configuration_version": "1"
