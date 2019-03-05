@@ -25,11 +25,11 @@ public class FirebaseManager : MonoBehaviour
             return _instance;
         }
     }
-    
+
     public Firebase.Auth.FirebaseAuth auth;
     Firebase.Auth.FirebaseUser user;
-   
-    
+
+
     private string googleIdToken;
     private string googleAccessToken;
     public DatabaseReference mDatabaseRef;
@@ -53,28 +53,47 @@ public class FirebaseManager : MonoBehaviour
     public Action FirebaseProgressEndCallFunc = null;
 
 
+    // 가위바위보 시작 플래그
+    // 입장시간 10분 후 에 값 변경됨
+    public int FirebaseRPSGameStatus = 0;
+
+    // 가위바위보 현재 회차
+    public int FirebaseRPSGameSeries = 0;
+
+    // 가위바위보 내 방번호
+    public int FirebaseRPSGameMyRoom = 0;
+
+    // 가위바위보 상대방 정보
+    public string FirebaseRPSGame_EnemyNick;
+    public int FirebaseRPSGame_EnemyValue = 0;
+
     // Use this for initialization
     void Start()
     {
         DontDestroyOnLoad(this);
-   
+
         LoadingCount = 0;
         FirstLoadingComplete = false;
 
+        //SetUserCode();
     }
 
-    public void GoogleLoginBtnOnClick()
+
+    // 구글로그인 
+    public void GoogleLogin()
     {
+        GooglePlayServiceInitialize();
+
         Social.localUser.Authenticate(success =>
         {
             if (success == false) return;
 
-            StartCoroutine(coLogin());
+            StartCoroutine(co_GoogleLogin());
         });
 
     }
 
-    IEnumerator coLogin()
+    IEnumerator co_GoogleLogin()
     {
         while (System.String.IsNullOrEmpty(((PlayGamesLocalUser)Social.localUser).GetIdToken()))
             yield return null;
@@ -86,18 +105,17 @@ public class FirebaseManager : MonoBehaviour
         auth.SignInWithCredentialAsync(credential).ContinueWith(task => {
             if (task.IsCanceled)
             {
-                Debug.LogError("SignInWithCredentialAsync was canceled.");
+                Debug.Log("!!!!!! SignInWithCredentialAsync canceled.");
                 return;
             }
             if (task.IsFaulted)
             {
-                Debug.LogError("SignInWithCredentialAsync encountered an error: " + task.Exception);
+                Debug.Log("!!!!!! SignInWithCredentialAsync Fault : " + task.Exception);
                 return;
             }
 
             FirebaseUser newUser = task.Result;
-            Debug.LogFormat("User signed in successfully: {0} ({1})",
-                newUser.DisplayName, newUser.UserId);           
+            Debug.Log("!!!!!! User signed successfully : " + newUser.DisplayName +" ID : " +  newUser.UserId);
 
         });
     }
@@ -116,7 +134,7 @@ public class FirebaseManager : MonoBehaviour
 
     public void Init()
     {
-        
+
         FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://treasureone-4472e.firebaseio.com/");
         auth = Firebase.Auth.FirebaseAuth.DefaultInstance;
         mDatabaseRef = FirebaseDatabase.DefaultInstance.RootReference;
@@ -124,9 +142,40 @@ public class FirebaseManager : MonoBehaviour
         Firebase.Messaging.FirebaseMessaging.TokenReceived += OnTokenReceived;
         Firebase.Messaging.FirebaseMessaging.MessageReceived += OnMessageReceived;
 
-        GooglePlayServiceInitialize();
+      
+
+        FirebaseDatabase.DefaultInstance
+       .GetReference("RPSGameStatus")
+       .ValueChanged += HandleRPSStatusChanged;
+
+        FirebaseDatabase.DefaultInstance
+        .GetReference("RPSGameSeries")
+        .ValueChanged += HandleSeriesChanged;
+
     }
-    
+
+    void HandleRPSStatusChanged(object sender, ValueChangedEventArgs args)
+    {
+        if (args.DatabaseError != null)
+        {
+            Debug.LogError(args.DatabaseError.Message);
+            return;
+        }
+        FirebaseRPSGameStatus = Convert.ToInt32(args.Snapshot.Value); 
+        Debug.Log("@@@@@@@" + FirebaseRPSGameStatus);
+    }
+
+    void HandleSeriesChanged(object sender, ValueChangedEventArgs args)
+    {
+        if (args.DatabaseError != null)
+        {
+            Debug.LogError(args.DatabaseError.Message);
+            return;
+        }
+        FirebaseRPSGameSeries = Convert.ToInt32(args.Snapshot.Value);
+        Debug.Log("@@@@@@@" + FirebaseRPSGameSeries);
+    }
+
     public void TokenRefresh(Firebase.Auth.FirebaseUser user)
     {
 
@@ -149,7 +198,7 @@ public class FirebaseManager : MonoBehaviour
         });
 
     }
-   
+
 
     public void OnTokenReceived(object sender, Firebase.Messaging.TokenReceivedEventArgs token)
     {
@@ -160,7 +209,7 @@ public class FirebaseManager : MonoBehaviour
     {
         UnityEngine.Debug.Log("Received a new message from: " + e.Message.From);
     }
-     
+
     public void GetData()
     {
         GetUserData();
@@ -190,7 +239,7 @@ public class FirebaseManager : MonoBehaviour
 
     public bool SingedInFirebase()
     {
-        
+
         auth = Firebase.Auth.FirebaseAuth.DefaultInstance;
         if (auth.CurrentUser != null)
         {
@@ -198,40 +247,14 @@ public class FirebaseManager : MonoBehaviour
             TokenRefresh(user);
             return true;
         }
-        
+
         return false;
     }
-    
-    private void LogInByGoogle()
-    {
-        
-        Firebase.Auth.Credential credential =
-       Firebase.Auth.GoogleAuthProvider.GetCredential(googleIdToken, googleAccessToken);
-        auth.SignInWithCredentialAsync(credential).ContinueWith(task =>
-        {
-            if (task.IsCanceled)
-            {
-                Debug.LogError("SignInWithCredentialAsync was canceled.");
-                return;
-            }
-            if (task.IsFaulted)
-            {
-                Debug.LogError("SignInWithCredentialAsync encountered an error: " + task.Exception);
-                return;
-            }
-
-            Firebase.Auth.FirebaseUser newUser = task.Result;
-            Debug.LogFormat("User signed in successfully: {0} ({1})",
-                newUser.DisplayName, newUser.UserId);
-        });
-        
-    }
-    
 
     // 사용자 정보 파이어베이스에 세팅
     public void SetUserData()
     {
-        
+
         mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("Index").SetValueAsync(TKManager.Instance.MyData.Index);
         mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("NickName").SetValueAsync(TKManager.Instance.MyData.NickName);
         mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("Point").SetValueAsync(TKManager.Instance.MyData.Point);
@@ -239,14 +262,14 @@ public class FirebaseManager : MonoBehaviour
         mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("TotalAccumPoint").SetValueAsync(0);
         mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("TodayAccumPoint").Child(GetToday()).SetValueAsync(0);
         mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("Cash").SetValueAsync(0);
-        
-    
+
+
     }
     // 사용자 정보 파이어베이스에서 로드
     public void GetUserData()
     {
         string userIdx = TKManager.Instance.MyData.Index;
-        
+
         mDatabaseRef.Child("Users").Child(userIdx).GetValueAsync().ContinueWith(task =>
         {
 
@@ -258,7 +281,7 @@ public class FirebaseManager : MonoBehaviour
             {
                 DataSnapshot snapshot = task.Result;
 
-                if(snapshot.Exists)
+                if (snapshot.Exists)
                 {
                     var tempData = snapshot.Value as Dictionary<string, object>;
                     int tempPoint = Convert.ToInt32(tempData["Point"]);
@@ -353,7 +376,7 @@ public class FirebaseManager : MonoBehaviour
                 //  Debug.LogFormat("UserInfo: Index : {0} NickName {1} Point {2}", TKManager.Instance.MyData.Index, TKManager.Instance.MyData.NickName, TKManager.Instance.MyData.Point);
             }
         });
-        
+
     }
 
 
@@ -368,7 +391,7 @@ public class FirebaseManager : MonoBehaviour
     {
         SetEndCallFunc(endAction);
         int rtPoint = 0;
-        
+
         mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("Point").GetValueAsync().ContinueWith(task =>
         {
             if (task.IsFaulted)
@@ -387,9 +410,9 @@ public class FirebaseManager : MonoBehaviour
                 FirebaseProgress = false;
             }
         });
-        
+
     }
-    
+
     public void SetTotalAccumPoint(int point)
     {
         mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("TotalAccumPoint").SetValueAsync(point);
@@ -398,7 +421,7 @@ public class FirebaseManager : MonoBehaviour
     {
         SetEndCallFunc(endAction);
         int rtPoint = 0;
-        
+
         mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("TotalAccumPoint").GetValueAsync().ContinueWith(task =>
         {
 
@@ -416,7 +439,7 @@ public class FirebaseManager : MonoBehaviour
                     rtPoint = 0;
             }
         });
-        
+
     }
 
     public void SetTodayAccumPoint(int point)
@@ -427,7 +450,7 @@ public class FirebaseManager : MonoBehaviour
     {
         SetEndCallFunc(endAction);
         int rtPoint = 0;
-        
+
         mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("TodaytAccumPoint").Child(GetToday()).GetValueAsync().ContinueWith(task =>
         {
             if (task.IsFaulted)
@@ -447,7 +470,7 @@ public class FirebaseManager : MonoBehaviour
                 FirebaseProgress = false;
             }
         });
-        
+
     }
 
     public void SetCash(int Cash)
@@ -458,7 +481,7 @@ public class FirebaseManager : MonoBehaviour
     {
         SetEndCallFunc(endAction);
         int rtPoint = 0;
-        
+
         mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("Cash").GetValueAsync().ContinueWith(task =>
         {
 
@@ -478,7 +501,7 @@ public class FirebaseManager : MonoBehaviour
                 FirebaseProgress = false;
             }
         });
-        
+
     }
     public void SetCashInfo(String Name, String BankName, String Account, int CachBack)
     {
@@ -487,13 +510,13 @@ public class FirebaseManager : MonoBehaviour
         mDatabaseRef.Child("CashBack").Child(TKManager.Instance.MyData.Index).Child("BankName").SetValueAsync(BankName);
         mDatabaseRef.Child("CashBack").Child(TKManager.Instance.MyData.Index).Child("Account").SetValueAsync(Account);
         mDatabaseRef.Child("CashBack").Child(TKManager.Instance.MyData.Index).Child("CachBack").SetValueAsync(CachBack);
-        
+
     }
 
     // 상품권 걸릴 확률
     public void GetGiftProb()
     {
-        
+
         mDatabaseRef.Child("GiftProb").GetValueAsync().ContinueWith(task =>
         {
 
@@ -531,13 +554,13 @@ public class FirebaseManager : MonoBehaviour
 
             }
         });
-        
+
     }
 
     public void DelGiftImage(int Index)
     {
         String tempIndex = Index.ToString() + "_G";
-       mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("Gift").Child(tempIndex).RemoveValueAsync();
+        mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("Gift").Child(tempIndex).RemoveValueAsync();
     }
 
     // 상품권 이미지 주소
@@ -547,7 +570,7 @@ public class FirebaseManager : MonoBehaviour
         string GiftImageSrc = null;
 
 
- 
+
         FirebaseDatabase.DefaultInstance.GetReference("Gift").OrderByKey().LimitToFirst(1)
        .GetValueAsync().ContinueWith(task =>
        {
@@ -578,10 +601,10 @@ public class FirebaseManager : MonoBehaviour
 
                    StartCoroutine(GetGiftconTexture(giftUrlList, Convert.ToInt32(tempIndex), endAction));
                }
-                   
+
            }
        });
-       
+
 
     }
 
@@ -654,7 +677,7 @@ public class FirebaseManager : MonoBehaviour
 
                                     return TransactionResult.Success(mutableData);
 
-                                });                         
+                                });
                             }
                         }
                     });
@@ -662,12 +685,12 @@ public class FirebaseManager : MonoBehaviour
                 else
                     LottoRefNnumber = 0;
             }
-        });        
+        });
     }
 
     public void GetLottoLuckGroup()
     {
-        
+
         FirebaseDatabase.DefaultInstance.GetReference("LottoLuckyGroup").OrderByKey().LimitToLast(5)
        .GetValueAsync().ContinueWith(task =>
        {
@@ -693,13 +716,13 @@ public class FirebaseManager : MonoBehaviour
 
                    }
                }
-                   
+
 
                AddFirstLoadingComplete();
 
            }
        });
-        
+
 
     }
     //public void GetLottoTodaySeries()
@@ -724,7 +747,7 @@ public class FirebaseManager : MonoBehaviour
 
     public void GetLottoCurSeries()
     {
-        
+
         mDatabaseRef.Child("LottoCurSeries").GetValueAsync().ContinueWith(task =>
         {
             if (task.IsFaulted)
@@ -739,18 +762,18 @@ public class FirebaseManager : MonoBehaviour
                     LottoCurSeries = Convert.ToInt32(snapshot.Value);
                     TKManager.Instance.SetCurrentLottoSeriesCount(LottoCurSeries);
                 }
-                    
+
                 AddFirstLoadingComplete();
 
             }
         }
     );
-    
+
     }
 
     public void GetReviewVersion()
     {
-        
+
 #if UNITY_IOS
         string dataKey = "ios_ReviewVersion";
 #elif (UNITY_ANDROID && !UNITY_EDITOR)
@@ -781,7 +804,7 @@ public class FirebaseManager : MonoBehaviour
             }
         }
       );
-      
+
     }
 
     public void GetExamineMode()
@@ -823,7 +846,7 @@ public class FirebaseManager : MonoBehaviour
     // 로또 레퍼런스 번호 파이어베이스에서 로드
     public void GetLottoRefNumber()
     {
-        
+
         mDatabaseRef.Child("LottoRefNumber").GetValueAsync().ContinueWith(task =>
         {
 
@@ -846,18 +869,18 @@ public class FirebaseManager : MonoBehaviour
             }
         }
       );
-      
+
     }
 
     // 로또 당첨 번호 파이어베이스에서 로드
     public void GetLottoLuckyNumber()
     {
-        
+
         mDatabaseRef.Child("LottoLuckyNumber").OrderByKey().LimitToLast(3)
-       .GetValueAsync().ContinueWith(task => 
-       
+       .GetValueAsync().ContinueWith(task =>
+
         {
-   
+
             if (task.IsFaulted)
             {
                 // Handle the error...
@@ -882,14 +905,14 @@ public class FirebaseManager : MonoBehaviour
                         TKManager.Instance.SetLottoLuckyNumber(tempSeriesToInt, tempNumber);
                     }
                 }
-                    
+
                 AddFirstLoadingComplete();
-    
+
 
             }
         }
       );
-      
+
     }
 
     // 공지사항 파이어베이스에서 받아오기
@@ -897,7 +920,7 @@ public class FirebaseManager : MonoBehaviour
     {
 
         string tempAlarmIndex = "0";
-        
+
         mDatabaseRef.Child("PushAlarm").OrderByKey().LimitToLast(4)
        .GetValueAsync().ContinueWith(task =>
 
@@ -939,7 +962,7 @@ public class FirebaseManager : MonoBehaviour
            }
        }
       );
-      
+
     }
 
 
@@ -949,41 +972,41 @@ public class FirebaseManager : MonoBehaviour
         mDatabaseRef.Child("UpdatePopup").GetValueAsync().ContinueWith(task =>
         {
 
-          if (task.IsFaulted)
-          {
-               // Handle the error...
-           }
-          else if (task.IsCompleted)
-          {
+            if (task.IsFaulted)
+            {
+                // Handle the error...
+            }
+            else if (task.IsCompleted)
+            {
 
-              DataSnapshot snapshot = task.Result;
+                DataSnapshot snapshot = task.Result;
 
-              if (snapshot != null && snapshot.Exists)
-              {
+                if (snapshot != null && snapshot.Exists)
+                {
                     ExamineContrext = snapshot.Value.ToString();
-              }
+                }
 
-              AddFirstLoadingComplete();
+                AddFirstLoadingComplete();
 
 
-          }
-      }
+            }
+        }
      );
 
     }
 
     public void SetLottoWinUserData(int Series, String Name, String Bank, String Account)
     {
-        
+
         Series += CommonData.LottoRefSeries;
         String LottoWinSeries = Series.ToString() + "_L";
 
         mDatabaseRef.Child("LottoWinUsers").Child(LottoWinSeries).Child("Name").SetValueAsync(Name);
-       mDatabaseRef.Child("LottoWinUsers").Child(LottoWinSeries).Child("Bank").SetValueAsync(Bank);
+        mDatabaseRef.Child("LottoWinUsers").Child(LottoWinSeries).Child("Bank").SetValueAsync(Bank);
         mDatabaseRef.Child("LottoWinUsers").Child(LottoWinSeries).Child("Account").SetValueAsync(Account);
 
         mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("LottoWin").Child(LottoWinSeries).SetValueAsync(1);
-        
+
     }
 
 
@@ -992,6 +1015,190 @@ public class FirebaseManager : MonoBehaviour
         string strToday = System.DateTime.Now.ToString("yyyyMMdd");
         return strToday;
     }
+
+    char[] stringChars = new char[8];
+    String finalString;
+
+    public void SetUserCode()
+    {
+        var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+     
+        var random = new System.Random();
+
+        for (int i = 0; i < stringChars.Length; i++)
+        {
+            stringChars[i] = chars[random.Next(chars.Length)];
+        }
+
+        finalString = new String(stringChars);        
+    }
+
+    public string GetUserCode()
+    {
+        return finalString;
+    }
+
+    static int tempIndex = 0;
+    // Rock–Paper–Scissors : RPS 
+    public void EnterRPSGame()
+    {   
+
+        // TODO 광고 보는 코드 추가 
+        
+        mDatabaseRef.Child("RPSUserCount").RunTransaction(mutableData =>
+        {
+            int tempCount = Convert.ToInt32(mutableData.Value);          
+
+            if (tempCount == 0)
+            {
+                tempCount = 0;
+            }
+            else
+            {
+                FirebaseRPSGameMyRoom = (tempCount - 1) / 2;
+
+
+                /*
+           mDatabaseRef.Child("RPSGame").Child(FirebaseRPSGameSeries.ToString()).Child(FirebaseRPSGameMyRoom.ToString())
+           .Child(TKManager.Instance.MyData.Index).Child("NickName").SetValueAsync(TKManager.Instance.MyData.NickName);
+
+           mDatabaseRef.Child("RPSGame").Child(FirebaseRPSGameSeries.ToString()).Child(FirebaseRPSGameMyRoom.ToString())
+           .Child(TKManager.Instance.MyData.Index).Child("Value").SetValueAsync(0);
+           */
+
+
+                SetUserCode();
+                
+                mDatabaseRef.Child("RPSGame").Child(FirebaseRPSGameSeries.ToString()).Child(FirebaseRPSGameMyRoom.ToString())
+                .Child(tempIndex.ToString()).Child("NickName").SetValueAsync(GetUserCode());
+
+                mDatabaseRef.Child("RPSGame").Child(FirebaseRPSGameSeries.ToString()).Child(FirebaseRPSGameMyRoom.ToString())
+                .Child(tempIndex.ToString()).Child("Value").SetValueAsync(0);
+
+                tempIndex += 1;
+                
+
+                mutableData.Value = tempCount + 1;
+
+                FirebaseDatabase.DefaultInstance
+                .GetReference("RPSGame").Child(FirebaseRPSGameSeries.ToString()).Child(FirebaseRPSGameMyRoom.ToString())
+                .ValueChanged += HandleGameRoomChanged;
+
+            }
+
+            return TransactionResult.Success(mutableData);
+
+        });
+
+    }
+
+    void HandleGameRoomChanged(object sender, ValueChangedEventArgs args)
+    {
+        if (args.DatabaseError != null)
+        {
+            Debug.LogError(args.DatabaseError.Message);
+            return;
+        }
+
+        DataSnapshot snapshot = args.Snapshot;
+        if (snapshot != null && snapshot.Exists)
+        {
+            foreach (var tempChild in snapshot.Children)
+            {
+                int tempIndex = Convert.ToInt32(tempChild.Key);
+                var tempData = tempChild.Value as Dictionary<string, object>;
+
+                var tempNickName = tempData["NickName"].ToString();
+                if(!tempNickName.Equals(TKManager.Instance.MyData.NickName))
+                {
+                    FirebaseRPSGame_EnemyNick = tempNickName;
+                    FirebaseRPSGame_EnemyValue = Convert.ToInt32(tempData["Value"]);
+                }
+                
+            }    
+        }
+
+        //FirebaseRPSGame_EnemyNick = Convert.ToInt32(args.Snapshot.Value);
+        Debug.Log("@@@@@@@" + FirebaseRPSGameStatus);
+    }
+    int  tempMyValue = 0;
+
+    public void PlayRPSGame(int Value)
+    {
+        tempMyValue = Value;
+        mDatabaseRef.Child("RPSGame").Child(FirebaseRPSGameSeries.ToString()).Child(FirebaseRPSGameMyRoom.ToString())
+        .Child(tempIndex.ToString()).Child("Value").SetValueAsync(Value);
+    }
+    
+    // 가위 : 1 바위 : 2 보 : 3
+    // 0 비김 , 1 이김, 2 짐
+
+    public void CheckRPSGame()
+    {
+        var result = (3 + tempMyValue - FirebaseRPSGame_EnemyValue) % 3;
+
+        if(result == 0)
+        {
+            // 비김
+        }
+        else if (result == 1)
+        {
+
+            //이김
+
+            mDatabaseRef.Child("RPSUserCount").RunTransaction(mutableData =>
+            {
+                int tempCount = Convert.ToInt32(mutableData.Value);
+
+                if (tempCount == 0)
+                {
+                    tempCount = 0;
+                }
+                else
+                {
+                    FirebaseRPSGameMyRoom = (tempCount - 1) / 2;
+
+
+                    /*
+               mDatabaseRef.Child("RPSGame").Child(FirebaseRPSGameSeries.ToString()).Child(FirebaseRPSGameMyRoom.ToString())
+               .Child(TKManager.Instance.MyData.Index).Child("NickName").SetValueAsync(TKManager.Instance.MyData.NickName);
+
+               mDatabaseRef.Child("RPSGame").Child(FirebaseRPSGameSeries.ToString()).Child(FirebaseRPSGameMyRoom.ToString())
+               .Child(TKManager.Instance.MyData.Index).Child("Value").SetValueAsync(0);
+               */
+
+
+                    SetUserCode();
+
+                    mDatabaseRef.Child("RPSGame").Child(FirebaseRPSGameSeries.ToString()).Child(FirebaseRPSGameMyRoom.ToString())
+                    .Child(tempIndex.ToString()).Child("NickName").SetValueAsync(GetUserCode());
+
+                    mDatabaseRef.Child("RPSGame").Child(FirebaseRPSGameSeries.ToString()).Child(FirebaseRPSGameMyRoom.ToString())
+                    .Child(tempIndex.ToString()).Child("Value").SetValueAsync(0);
+
+                    tempIndex += 1;
+
+
+                    mutableData.Value = tempCount + 1;
+
+                    FirebaseDatabase.DefaultInstance
+                    .GetReference("RPSGame").Child(FirebaseRPSGameSeries.ToString()).Child(FirebaseRPSGameMyRoom.ToString())
+                    .ValueChanged += HandleGameRoomChanged;
+
+                }
+
+                return TransactionResult.Success(mutableData);
+
+            });
+
+        }
+        else if (result == 2)
+        {
+            //짐
+        }
+
+    }
+
 
     // Update is called once per frame
     void Update()
