@@ -134,7 +134,7 @@ Number.prototype.to2 = function(){return this<10?'0'+this:this;};
 
 
 function showClock(){
-        console.log((new Date()).getHMS());
+        //console.log((new Date()).getHMS());
 
         for(var i=0; i<4; i++) {              //console.log(arrLottoSelectTime[i]);
          if((new Date()).getHMS() === arrLottoSelectTime[i])
@@ -149,7 +149,7 @@ function showClock(){
 
    //showClock();
 
-    exports.dbWrite = functions.database.ref('/AutoLottoSelect').onWrite((change, context) => {
+    exports.dbAutoLottoWrite = functions.database.ref('/AutoLottoSelect').onWrite((change, context) => {
      const beforeData = change.before.val(); // data before the write
      const afterData = change.after.val(); // data after the write
     AutoLottoSelectMode = afterData;
@@ -169,4 +169,22 @@ function showClock(){
 
   });
 
-SetLottoCount();
+
+  exports.dbWrite = functions.database.ref('/LottoCurSeries').onWrite((change, context) => {
+   const beforeData = change.before.val(); // data before the write
+   const afterData = change.after.val(); // data after the write
+
+  console.log("LottoCurSeries" + afterData);
+
+  var afterSeries = afterData * 1;
+  if(afterSeries < 0)
+  {
+    afterSeries += LottoRefNumber;
+    console.log("LottoCurSeries Fixed " + afterSeries);
+    firebase.database().ref('/LottoCurSeries').set(afterSeries);
+  }
+  return afterSeries;
+
+});
+
+//SetLottoCount();
