@@ -54,6 +54,7 @@ public class GamePlayManager : MonoBehaviour {
 
     void Start()
     {
+        TKManager.Instance.ReviewRankPlusScore = 0;
         TKManager.Instance.GameOverRouletteStart = false;
         // 게임에 들어 올때마다 생성
         BlockClearCount = 0;

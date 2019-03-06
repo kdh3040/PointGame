@@ -167,6 +167,7 @@ public class GameUI : MonoBehaviour {
         if (FirebaseManager.Instance.ReviewMode || FirebaseManager.Instance.ExamineMode)
         {
             TKManager.Instance.MyData.AddPoint(GamePlayManager.Instance.GamePoint);
+            TKManager.Instance.ReviewRankPlusScore = GamePlayManager.Instance.GamePoint;
             SceneManager.LoadScene("MainScene", LoadSceneMode.Single);
         }
         else
