@@ -223,7 +223,7 @@ public class FirebaseManager : MonoBehaviour
         GetLottoLuckGroup();
         GetPushAlarm();
         GetGiftProb();
-
+        GetReviewRank();
         GetUpdatePopup();
     }
 
@@ -233,7 +233,7 @@ public class FirebaseManager : MonoBehaviour
         if (FirstLoadingComplete == false)
             LoadingCount++;
 
-        if (LoadingCount == 10)
+        if (LoadingCount == 11)
             FirstLoadingComplete = true;
     }
 
@@ -1199,6 +1199,38 @@ public class FirebaseManager : MonoBehaviour
 
     }
 
+    // 공지사항 파이어베이스에서 받아오기
+    public void GetReviewRank()
+    {
+        mDatabaseRef.Child("ReviewRank").GetValueAsync().ContinueWith(task =>
+       {
+
+           if (task.IsFaulted)
+           {
+               // Handle the error...
+           }
+           else if (task.IsCompleted)
+           {
+               DataSnapshot snapshot = task.Result;
+               if (snapshot != null && snapshot.Exists)
+               {
+                   foreach (var tempChild in snapshot.Children)
+                   {
+                       var tempData = tempChild.Value as Dictionary<string, object>;
+                       var tempId = tempData["id"].ToString();
+                       var tempScore = Convert.ToInt32(tempData["score"].ToString());
+
+                       TKManager.Instance.ReviewRank.Add(new KeyValuePair<string, int>(tempId, tempScore));
+                   }
+               }
+
+               AddFirstLoadingComplete();
+           }
+       }
+      );
+
+    }
+
 
     // Update is called once per frame
     void Update()
@@ -1230,4 +1262,6 @@ public class FirebaseManager : MonoBehaviour
         if (FirebaseProgressEndCallFunc != null)
             FirebaseProgressEndCallFunc();
     }
+
+
 }

@@ -39,6 +39,9 @@ public class TKManager : MonoBehaviour
 
     public string FirebaseUserId = "";
 
+    public int ReviewRankPlusScore = 0;
+    public List<KeyValuePair<string, int>> ReviewRank = new List<KeyValuePair<string, int>>();
+
     void Start()
     {
         DontDestroyOnLoad(this);

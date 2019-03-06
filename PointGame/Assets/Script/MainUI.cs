@@ -14,6 +14,7 @@ public class MainUI : MonoBehaviour {
     public Text Id;
 
     public Image LottoWinBg;
+    public Text LottoWinTitle;
     public Text LottoWinName;
     public Text LottoWinSeries;
 
@@ -84,21 +85,66 @@ public class MainUI : MonoBehaviour {
             FreeRoulette.gameObject.SetActive(false);
             PushButton.gameObject.SetActive(false);
 
-            LottoWinSeries.gameObject.SetActive(false);
-            LottoWinName.gameObject.SetActive(false);
             NextLottoTime.text = "";
 
-            LottoWinBg.gameObject.SetActive(false);
+            LottoWinTitle.text = "랭킹";
+            LottoWinBg.gameObject.SetActive(true);
+            LottoWinSeries.gameObject.SetActive(true);
+            LottoWinName.gameObject.SetActive(true);
 
-            RectTransform pointSwapRect = PointSwap.GetComponent<RectTransform>();
-            var pos = pointSwapRect.anchoredPosition;
-            pos.y = -141f;
-            pointSwapRect.anchoredPosition = pos;
+            // 다시 들어 올때 랭킹이 바뀔수 있기때문에 처리
+            List<KeyValuePair<string, int>> rankList = new List<KeyValuePair<string, int>>();
+            rankList.AddRange(TKManager.Instance.ReviewRank);
+            for (int i = 0; i < rankList.Count; i++)
+            {
+                if (rankList[i].Value <= TKManager.Instance.MyData.Point + TKManager.Instance.ReviewRankPlusScore)
+                {
+                    rankList.Insert(i, new KeyValuePair<string, int>(TKManager.Instance.MyData.NickName, TKManager.Instance.MyData.Point + TKManager.Instance.ReviewRankPlusScore));
+                    break;
+                }
+            }
 
-            RectTransform topRightButtonsRect = TopRightButtons.GetComponent<RectTransform>();
-            pos = topRightButtonsRect.anchoredPosition;
-            pos.y = -141f;
-            topRightButtonsRect.anchoredPosition = pos;
+            StringBuilder winCount = new StringBuilder();
+            int viewRank = 0;
+            for (int i = 0; i < rankList.Count; i++)
+            {
+                winCount.Append(string.Format("- {0:D2}위", i + 1));
+                if(i < rankList.Count - 1)
+                    winCount.AppendLine();
+
+                viewRank++;
+
+                if (viewRank >= 4)
+                    break;
+            }
+
+            LottoWinSeries.text = winCount.ToString();
+
+            StringBuilder winUser = new StringBuilder();
+            viewRank = 0;
+            for (int i = 0; i < rankList.Count; i++)
+            {
+                winUser.Append(string.Format(" : {0} ({1:n0}점)", rankList[i].Key, rankList[i].Value));
+                if (i < rankList.Count - 1)
+                    winUser.AppendLine();
+
+                viewRank++;
+
+                if (viewRank >= 4)
+                    break;
+            }
+
+            LottoWinName.text = winUser.ToString();
+
+            //RectTransform pointSwapRect = PointSwap.GetComponent<RectTransform>();
+            //var pos = pointSwapRect.anchoredPosition;
+            //pos.y = -141f;
+            //pointSwapRect.anchoredPosition = pos;
+
+            //RectTransform topRightButtonsRect = TopRightButtons.GetComponent<RectTransform>();
+            //pos = topRightButtonsRect.anchoredPosition;
+            //pos.y = -141f;
+            //topRightButtonsRect.anchoredPosition = pos;
         }
         else
         {
@@ -108,6 +154,8 @@ public class MainUI : MonoBehaviour {
             LottoButton.gameObject.SetActive(true);
             FreeRoulette.gameObject.SetActive(true);
             PushButton.gameObject.SetActive(true);
+
+            LottoWinTitle.text = "* 당첨자 현황 *";
 
             var winList = TKManager.Instance.LottoWinUserList;
             StringBuilder winCount = new StringBuilder();

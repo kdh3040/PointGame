@@ -1406,6 +1406,7 @@ MonoBehaviour:
   CurrTime: {fileID: 1404080535}
   Id: {fileID: 709466910}
   LottoWinBg: {fileID: 1830503368}
+  LottoWinTitle: {fileID: 1512572479}
   LottoWinName: {fileID: 317136298}
   LottoWinSeries: {fileID: 1066508749}
   AllPoint: {fileID: 1947951505}
