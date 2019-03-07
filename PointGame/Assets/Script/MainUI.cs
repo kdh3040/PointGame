@@ -32,7 +32,7 @@ public class MainUI : MonoBehaviour {
     public GameObject LottoNotiObj;
     public Button FreeRoulette;
     public Button HelpButton;
-
+    public Button RecommenderCodeButton;
     public PopupUI Popup;
 
     public AudioSource mBGM;
@@ -61,6 +61,7 @@ public class MainUI : MonoBehaviour {
         PointSwap.onClick.AddListener(OnClickPointSwap);
         SwapPoint.onClick.AddListener(OnClickPointSwap);
         HelpButton.onClick.AddListener(OnClickHelp);
+        RecommenderCodeButton.onClick.AddListener(OnClickRecommenderCodeButton);
     }
 
     void Start()
@@ -300,7 +301,11 @@ public class MainUI : MonoBehaviour {
         SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
         Popup.ShowPopup(new HelpPopup.HelpPopupData());
     }
-    
+    public void OnClickRecommenderCodeButton()
+    {
+        SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
+        Popup.ShowPopup(new RecommenderCodePopup.RecommenderCodePopupData());
+    }
 
     private void Update()
     {
