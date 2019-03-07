@@ -21,6 +21,8 @@ public class UserData
     public Dictionary<int, bool> LottoResultShowSeriesList = new Dictionary<int, bool>();
     public Dictionary<int, bool> LottoWinSeriesList = new Dictionary<int, bool>();
 
+    public string RecommenderCode = "";
+
     // TODO 내정보, 로또정보, 가지고 있는 기프티콘 이미지 로드 할때까지 로딩 페이지에서 머무르게끔 해야함
     public void SetData(string index, string nickName, int point)
     {
@@ -174,5 +176,14 @@ public class UserData
 
         FirebaseManager.Instance.SetTodayAccumPoint(TodayAccumulatePoint);
         FirebaseManager.Instance.SetTotalAccumPoint(AllAccumulatePoint);
+    }
+
+    public void SetRecommenderCode(string code)
+    {
+        RecommenderCode = code;
+    }
+    public string GetRecommenderCode()
+    {
+        return RecommenderCode;
     }
 }

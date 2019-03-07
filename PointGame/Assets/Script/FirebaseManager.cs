@@ -349,6 +349,16 @@ public class FirebaseManager : MonoBehaviour
                         TKManager.Instance.MyData.SetAllAccumulatePoint(0);
                     }
 
+                    if (tempData.ContainsKey("RecommenderCode"))
+                    {
+                        var tempCode =tempData["RecommenderCode"].ToString();
+                        TKManager.Instance.MyData.SetRecommenderCode(tempCode);
+                    }
+                    else
+                    {
+                        TKManager.Instance.MyData.SetRecommenderCode(TKManager.Instance.MyData.Index);
+                    }
+
                     if (tempData.ContainsKey("TodayAccumPoint"))
                     {
                         var tempTodayAccumPointInfo = tempData["TodayAccumPoint"] as Dictionary<string, object>;
@@ -1017,9 +1027,8 @@ public class FirebaseManager : MonoBehaviour
     }
 
     char[] stringChars = new char[8];
-    String finalString;
 
-    public void SetUserCode()
+    public void SetRecommenderCode()
     {
         var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
      
@@ -1030,12 +1039,15 @@ public class FirebaseManager : MonoBehaviour
             stringChars[i] = chars[random.Next(chars.Length)];
         }
 
-        finalString = new String(stringChars);        
+        TKManager.Instance.MyData.RecommenderCode = new String(stringChars);
+        TKManager.Instance.MyData.RecommenderCode += "_" + TKManager.Instance.MyData.Index;
+
+        mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("RecommenderCode").SetValueAsync(TKManager.Instance.MyData.RecommenderCode);
     }
 
-    public string GetUserCode()
+    public string GetRecommenderCode()
     {
-        return finalString;
+        return TKManager.Instance.MyData.RecommenderCode;
     }
 
     static int tempIndex = 0;
@@ -1067,10 +1079,10 @@ public class FirebaseManager : MonoBehaviour
            */
 
 
-                SetUserCode();
+                SetRecommenderCode();
                 
                 mDatabaseRef.Child("RPSGame").Child(FirebaseRPSGameSeries.ToString()).Child(FirebaseRPSGameMyRoom.ToString())
-                .Child(tempIndex.ToString()).Child("NickName").SetValueAsync(GetUserCode());
+                .Child(tempIndex.ToString()).Child("NickName").SetValueAsync(GetRecommenderCode());
 
                 mDatabaseRef.Child("RPSGame").Child(FirebaseRPSGameSeries.ToString()).Child(FirebaseRPSGameMyRoom.ToString())
                 .Child(tempIndex.ToString()).Child("Value").SetValueAsync(0);
@@ -1168,10 +1180,10 @@ public class FirebaseManager : MonoBehaviour
                */
 
 
-                    SetUserCode();
+                    SetRecommenderCode();
 
                     mDatabaseRef.Child("RPSGame").Child(FirebaseRPSGameSeries.ToString()).Child(FirebaseRPSGameMyRoom.ToString())
-                    .Child(tempIndex.ToString()).Child("NickName").SetValueAsync(GetUserCode());
+                    .Child(tempIndex.ToString()).Child("NickName").SetValueAsync(GetRecommenderCode());
 
                     mDatabaseRef.Child("RPSGame").Child(FirebaseRPSGameSeries.ToString()).Child(FirebaseRPSGameMyRoom.ToString())
                     .Child(tempIndex.ToString()).Child("Value").SetValueAsync(0);
