@@ -96,7 +96,7 @@ public class LoadingUI : MonoBehaviour {
         });
     }
 
-    public void SignUpUser(string NickName)
+    public void SignUpUser(string NickName, string RecommenderCode)
     {
         FirebaseManager.Instance.mDatabaseRef.Child("UsersCount").RunTransaction(mutableData =>
         {

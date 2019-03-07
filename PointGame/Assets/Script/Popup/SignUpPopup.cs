@@ -8,34 +8,35 @@ using UnityEngine.UI;
 public class SignUpPopup : MonoBehaviour
 {
     public GameObject Login;
-    public Button KakaoLogin;
-    public Button NaverLogin;
+    public Button GoogleLogin;
+    public Button GuestLogin;
 
     public GameObject InfoInput;
     public InputField NickName;
+    public InputField RecommenderCode;
     public Button OkButton;
 
     public GameObject MsgPopup;
     public Text MsgText;
     public Button MsgOkButton;
 
-    private Action<string> EndAction;
+    private Action<string, string> EndAction;
 
     private void Awake()
     {
         OkButton.onClick.AddListener(OnClickOkButton);
         MsgOkButton.onClick.AddListener(OnClickMsgOkButton);
-        KakaoLogin.onClick.AddListener(OnClickKakaoLogin);
-        NaverLogin.onClick.AddListener(OnClickNaverLogin);
+        GoogleLogin.onClick.AddListener(OnClickGoogleLogin);
+        GuestLogin.onClick.AddListener(OnClickGuestLogin);
     }
 
-    public void init(Action<string> endAction)
+    public void init(Action<string, string> endAction)
     {
         EndAction = endAction;
 
         MsgPopup.gameObject.SetActive(false);
-        Login.gameObject.SetActive(false);
-        InfoInput.gameObject.SetActive(true);
+        Login.gameObject.SetActive(true);
+        InfoInput.gameObject.SetActive(false);
     }
 
     public void OnClickOkButton()
@@ -60,6 +61,7 @@ public class SignUpPopup : MonoBehaviour
         //}
 
         string nickName = NickName.text;
+        string recommenderCode = RecommenderCode.text;
 
         bool emptyString = true;
         for (int i = 0; i < nickName.Length; i++)
@@ -83,7 +85,7 @@ public class SignUpPopup : MonoBehaviour
         if (emptyString)
             nickName = string.Format("guest_{0:D4}", UnityEngine.Random.Range(1, 9999));
 
-        EndAction(nickName);
+        EndAction(nickName, recommenderCode);
 
         //CloseAction();
     }
@@ -94,16 +96,18 @@ public class SignUpPopup : MonoBehaviour
         MsgPopup.gameObject.SetActive(false);
     }
 
-    public void OnClickKakaoLogin()
+    public void OnClickGoogleLogin()
     {
         SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
+        // 구글 로그인 진행
         Login.gameObject.SetActive(false);
         InfoInput.gameObject.SetActive(true);
     }
 
-    public void OnClickNaverLogin()
+    public void OnClickGuestLogin()
     {
         SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
+        // 게스트 로그인 진행
         Login.gameObject.SetActive(false);
         InfoInput.gameObject.SetActive(true);
     }
