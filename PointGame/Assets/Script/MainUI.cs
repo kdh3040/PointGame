@@ -77,7 +77,14 @@ public class MainUI : MonoBehaviour {
         if (TKManager.Instance.GameOverRouletteStart)
             StartCoroutine(Co_GameOverRouletteStart());
 
-        if(FirebaseManager.Instance.ReviewMode || FirebaseManager.Instance.ExamineMode)
+        if (FirebaseManager.Instance.FirebaseRPSGameMyRoom >= 0)
+            FirebaseManager.Instance.AddHandler();
+
+
+        if (FirebaseManager.Instance.FirebaseRPSGamePlayTime < DateTime.Now.Ticks)
+            FirebaseManager.Instance.FirebaseRPSGameMyRoom = -1;
+
+            if (FirebaseManager.Instance.ReviewMode || FirebaseManager.Instance.ExamineMode)
         {
             SwapPoint.gameObject.SetActive(false);
             FreePoint.gameObject.SetActive(false);
@@ -307,6 +314,16 @@ public class MainUI : MonoBehaviour {
         Popup.ShowPopup(new RecommenderCodePopup.RecommenderCodePopupData());
     }
 
+    public void OnClickRPSGame()
+    {
+        if(FirebaseManager.Instance.FirebaseRPSGameEnterTime < DateTime.Now.Ticks)
+        {
+            // 참가 하쉴?
+            // 참가 Ok 광고
+            // 아니면 꺼져
+        }
+    }
+
     private void Update()
     {
 #if UNITY_EDITOR
@@ -380,7 +397,16 @@ public class MainUI : MonoBehaviour {
                 }
             }
         }
-            
+
+        //if(FirebaseManager.Instance.FirebaseRPSGameStatus == 1 &&
+        //    FirebaseManager.Instance.FirebaseRPSGamePlayTime < DateTime.Now.Ticks &&
+        //    FirebaseManager.Instance.FirebaseRPSGameMyRoom >= 0)
+        //{
+        //    FirebaseManager.Instance.FirebaseRPSGameStatus = 0;
+        //    // 가위바위보 시작
+        //    // 가위바위보 팝업이 떠져 있으면 리턴
+        //}
+
 
 
 #if UNITY_EDITOR || UNITY_ANDROID
