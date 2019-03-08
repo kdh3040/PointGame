@@ -72,7 +72,7 @@ public class SignUpPopup : MonoBehaviour
 
         if (emptyString == false)
         {
-            Regex engRegex = new Regex(@"[a-zA-Z0-9]");
+            Regex engRegex = new Regex(@"^[a-zA-Z0-9_]{0,20}$");
             bool ismatch = engRegex.IsMatch(nickName);
             if (ismatch == false)
             {
@@ -81,6 +81,12 @@ public class SignUpPopup : MonoBehaviour
                 return;
             }
         }
+
+        nickName = nickName.Replace(".", "");
+        nickName = nickName.Replace("#", "");
+        nickName = nickName.Replace("$", "");
+        nickName = nickName.Replace("[", "");
+        nickName = nickName.Replace("]", "");
 
         if (emptyString)
             nickName = string.Format("guest_{0:D4}", UnityEngine.Random.Range(1, 9999));

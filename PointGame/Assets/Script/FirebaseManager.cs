@@ -287,6 +287,21 @@ public class FirebaseManager : MonoBehaviour
                     int tempPoint = Convert.ToInt32(tempData["Point"]);
                     TKManager.Instance.MyData.SetData(tempData["Index"].ToString(), tempData["NickName"].ToString(), tempPoint);
 
+                    string tempNick = TKManager.Instance.MyData.NickName;
+
+                    tempNick = tempNick.Replace(".", "");
+                    tempNick = tempNick.Replace("#", "");
+                    tempNick = tempNick.Replace("$", "");
+                    tempNick = tempNick.Replace("[", "");
+                    tempNick = tempNick.Replace("]", "");
+
+                    if(tempNick.Equals(TKManager.Instance.MyData.NickName) == false)
+                    {
+                        mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("NickName").SetValueAsync(tempNick);
+                        TKManager.Instance.MyData.NickName = tempNick;
+                    }
+                        
+
                     if (tempData.ContainsKey("Lotto"))
                     {
                         var LottoInfo = tempData["Lotto"] as Dictionary<string, object>;
