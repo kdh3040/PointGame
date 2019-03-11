@@ -159,18 +159,18 @@ public class RPSPopup : Popup
         // 선택 할 수 있는 시간도 같이 흘러감
         RPSGame_MyValue = 0;
         MyRPS.gameObject.SetActive(false);
-        float enemyRPSChangeTime = 1f;
+        float enemyRPSChangeTime = 0.2f;
         float maxSelectTime = draw ? CommonData.RPS_GAME_DRAW_PLAY_TIME : CommonData.RPS_GAME_PLAY_TIME;
         float myPRSSelectTime = maxSelectTime;
-
+        RandEnemyRPS();
         while (true)
         {
-            RandEnemyRPS();
+            
             enemyRPSChangeTime -= Time.deltaTime;
 
             if (enemyRPSChangeTime < 0)
             {
-                enemyRPSChangeTime = 1f;
+                enemyRPSChangeTime = 0.2f;
                 RandEnemyRPS();
             }
 
