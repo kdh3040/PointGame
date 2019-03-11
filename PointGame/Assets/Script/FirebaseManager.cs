@@ -1261,6 +1261,8 @@ public class FirebaseManager : MonoBehaviour
                     FirebaseRPSGame_EnemyNick = tempNickName;
                     FirebaseRPSGame_EnemyValue = Convert.ToInt32(tempData["Value"]);
                     FirebaseRPSGame_EnemyIndex = Convert.ToInt32(tempIndex);
+
+                    Debug.Log("@@@@@@@" + FirebaseRPSGame_EnemyIndex + " " + FirebaseRPSGame_EnemyNick + " " + FirebaseRPSGame_EnemyValue);
                 }
                 
             }    
