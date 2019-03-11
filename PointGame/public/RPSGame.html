@@ -110,9 +110,10 @@
 
   $("#BTN_TEST_CREATE").click(function() {
 
-    for(var i = 0; i < 2000; i++)
+    for(var i = 0; i < 5; i++)
     {
       firebase.database().ref('/RPSUserList/' + i).set(i);
+    //  firebase.database().ref('/Users/' + i).remove();
     }
 
 /*
@@ -237,6 +238,16 @@
               i++;
             }
 
+              tempRoomNumber = Math.floor( i / 2) ;
+
+              if(Object.keys(message).length % 2 == 1)
+              {
+                firebase.database().ref('/RPSGame/' + RPSUserSeries + '/' + tempRoomNumber + '/' + i + '/Index/').set('1234');
+                firebase.database().ref('/RPSGame/' + RPSUserSeries + '/' + tempRoomNumber + '/' + i + '/NickName/').set("a1a2");
+                firebase.database().ref('/RPSGame/' + RPSUserSeries + '/' + tempRoomNumber + '/' + i + '/Value/').set(0);
+
+                firebase.database().ref('/RPSUserCount').set(Object.keys(message).length + 1);
+              }
               //GetRPSGame();
               });
       });
@@ -308,7 +319,13 @@
           }
           else
           {
+            tempLooserData[tempUserCount] = tempData[tempIdx * 2];
+            firebase.database().ref('/Users/'+tempLooserData[tempUserCount].Index + '/FirebaseRPSGameMyRoom').set(-1);
+            firebase.database().ref('/Users/'+tempLooserData[tempUserCount].Index + '/FirebaseRPSGameMyPosition').set(-1);
 
+            tempWinnerData[tempUserCount] = tempData[tempIdx * 2 + 1];
+            firebase.database().ref('/Users/'+tempWinnerData[tempUserCount].Index + '/FirebaseRPSGameMyRoom').set(-1);
+            firebase.database().ref('/Users/'+tempWinnerData[tempUserCount].Index + '/FirebaseRPSGameMyPosition').set(-1);
           }
         }
       }
@@ -357,8 +374,8 @@
 showClock();
 
 $("#BTN_SELECT_LUCKY").click(function() {
-  //CreateRPSGameRoom();
-  GetRPSGame();
+  CreateRPSGameRoom();
+  //GetRPSGame();
 });
 
 </script>

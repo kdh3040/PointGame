@@ -1183,6 +1183,10 @@ public class FirebaseManager : MonoBehaviour
         FirebaseRPSGameSeries = 0;
         FirebaseRPSGameMyRoom = -1;
 
+        mDatabaseRef.Child("RPSUserList").Child(TKManager.Instance.MyData.Index).SetValueAsync(TKManager.Instance.MyData.NickName);
+        
+        /*
+
         mDatabaseRef.Child("RPSUserCount").RunTransaction(mutableData =>
         {
             int tempCount = Convert.ToInt32(mutableData.Value);          
@@ -1223,10 +1227,11 @@ public class FirebaseManager : MonoBehaviour
                 //AddHandler();
             }
 
+            CreateRPSGameRoom();
             return TransactionResult.Success(mutableData);
 
         });
-
+        */
     }
 
     public void CreateRPSGameRoom()
