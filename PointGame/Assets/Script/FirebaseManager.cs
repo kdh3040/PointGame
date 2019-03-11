@@ -176,10 +176,13 @@ public class FirebaseManager : MonoBehaviour
             Debug.LogError(args.DatabaseError.Message);
             return;
         }
-        FirebaseRPSGameSeries = Convert.ToInt32(args.Snapshot.Value); 
-        // 데이터가 변경되면 실제로 게임이 시작된다.
+        if(args.Snapshot.Value != null)
+        {
+            FirebaseRPSGameSeries = Convert.ToInt32(args.Snapshot.Value);
+            // 데이터가 변경되면 실제로 게임이 시작된다.
+            AddHandler();
+        }
         Debug.Log("@@@@@@@ FirebaseRPSGameSeries " + FirebaseRPSGameSeries);
-        AddHandler();
     }
 
     void HandleRPSGameUserCountChanged(object sender, ValueChangedEventArgs args)
@@ -189,7 +192,11 @@ public class FirebaseManager : MonoBehaviour
             Debug.LogError(args.DatabaseError.Message);
             return;
         }
-        FirebaseRPSGameUserCount = Convert.ToInt32(args.Snapshot.Value);
+        if(args.Snapshot.Value != null)
+        {
+            FirebaseRPSGameUserCount = Convert.ToInt32(args.Snapshot.Value);
+        }
+        
         // 데이터가 변경되면 실제로 게임이 시작된다.
         Debug.Log("@@@@@@@ FirebaseRPSGameUserCount " + FirebaseRPSGameUserCount);
     }
@@ -203,10 +210,15 @@ public class FirebaseManager : MonoBehaviour
             Debug.LogError(args.DatabaseError.Message);
             return;
         }
-        FirebaseRPSGameMyRoom = Convert.ToInt32(args.Snapshot.Value);
-        // 데이터가 변경되면 실제로 게임이 시작된다.
+        if(args.Snapshot.Value != null)
+        {
+            FirebaseRPSGameMyRoom = Convert.ToInt32(args.Snapshot.Value);
+            // 데이터가 변경되면 실제로 게임이 시작된다.
+            AddHandler();
+        }
+
         Debug.Log("@@@@@@@ RPSGameRoomNumber " + TKManager.Instance.MyData.RPSGameRoomNumber);
-        AddHandler();
+
     }
 
     public void TokenRefresh(Firebase.Auth.FirebaseUser user)
