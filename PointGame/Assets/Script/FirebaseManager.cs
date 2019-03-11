@@ -170,6 +170,22 @@ public class FirebaseManager : MonoBehaviour
         FirebaseRPSGameSeries = Convert.ToInt32(args.Snapshot.Value); 
         // 데이터가 변경되면 실제로 게임이 시작된다.
         Debug.Log("@@@@@@@ FirebaseRPSGameSeries " + FirebaseRPSGameSeries);
+        AddHandler();
+    }
+
+
+
+    void HandleRPSGameRoomNumberChanged(object sender, ValueChangedEventArgs args)
+    {
+        if (args.DatabaseError != null)
+        {
+            Debug.LogError(args.DatabaseError.Message);
+            return;
+        }
+        FirebaseRPSGameMyRoom = Convert.ToInt32(args.Snapshot.Value);
+        // 데이터가 변경되면 실제로 게임이 시작된다.
+        Debug.Log("@@@@@@@ RPSGameRoomNumber " + TKManager.Instance.MyData.RPSGameRoomNumber);
+        AddHandler();
     }
 
     public void TokenRefresh(Firebase.Auth.FirebaseUser user)
@@ -390,6 +406,27 @@ public class FirebaseManager : MonoBehaviour
                     {
                         TKManager.Instance.MyData.SetTodayAccumulatePoint(0);
                     }
+
+                    if (tempData.ContainsKey("RPSGameRoomNumber"))
+                    {
+                        var tempRoomNumber = Convert.ToInt32(tempData["RPSGameRoomNumber"]);
+                        FirebaseRPSGameMyRoom = tempRoomNumber;
+
+                        FirebaseDatabase.DefaultInstance
+                       .GetReference("Users").Child(TKManager.Instance.MyData.Index).Child("RPSGameRoomNumber")
+                       .ValueChanged += HandleRPSGameRoomNumberChanged;
+
+                    }
+                    else
+                    {
+                        FirebaseRPSGameMyRoom = -1;
+
+                        FirebaseDatabase.DefaultInstance
+                    .GetReference("Users").Child(TKManager.Instance.MyData.Index).Child("RPSGameRoomNumber")
+                    .ValueChanged += HandleRPSGameRoomNumberChanged;
+                    }
+
+           
                 }
 
                 AddFirstLoadingComplete();

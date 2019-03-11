@@ -79,6 +79,9 @@ var arrLottoSelectTime = ['00:00:00', '03:00:00', '06:00:00', '09:00:00'];
       firebase.database().ref('/LottoCurSeries').once('value', function(snapshot) {
         var message = snapshot.val();
         LottoCurSeries = message;
+
+        firebase.database().ref('/LottoUsersBySeries/'+LottoCurSeries).set(Lottocount);
+
         LottoCurSeries += LottoSeriesRef;
       //  LottoCurSeries = 7;
         //console.log('/Lotto/'+LottoCurSeries+'_L');
