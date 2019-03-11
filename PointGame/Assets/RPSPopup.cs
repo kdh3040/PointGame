@@ -89,6 +89,8 @@ public class RPSPopup : Popup
                 {
                     ParentPopup.ShowPopup(new MsgPopup.MsgPopupData("패배하였습니다.", () =>
                     {
+                        FirebaseManager.Instance.FirebaseRPSGamePlayTime = long.MaxValue;
+                        FirebaseManager.Instance.FirebaseRPSGameMyRoom = -1;
                         CloseAction();
                     }));
                     yield break;
@@ -100,6 +102,8 @@ public class RPSPopup : Popup
             {
                 ParentPopup.ShowPopup(new MsgPopup.MsgPopupData("패배하였습니다.", () =>
                 {
+                    FirebaseManager.Instance.FirebaseRPSGamePlayTime = long.MaxValue;
+                    FirebaseManager.Instance.FirebaseRPSGameMyRoom = -1;
                     CloseAction();
                 }));
                 yield break;
@@ -108,6 +112,10 @@ public class RPSPopup : Popup
             // 승리
             if(result == 1)
             {
+                FirebaseManager.Instance.FirebaseRPSGame_EnemyIndex = 0;
+                FirebaseManager.Instance.FirebaseRPSGame_EnemyValue = 0;
+                FirebaseManager.Instance.FirebaseRPSGame_EnemyNick = "";
+                RefreshUI();
                 yield return Co_RPSGame_Result(result);
             }
         }
@@ -120,6 +128,16 @@ public class RPSPopup : Popup
 
         while (true)
         {
+            if(FirebaseManager.Instance.FirebaseRPSGameUserCount <= 1)
+            {
+                // 우승
+                ParentPopup.ShowPopup(new MsgPopup.MsgPopupData("너 우승", () =>
+                {
+                    CloseAction();
+                }));
+                TKManager.Instance.HideHUD();
+                break;
+            }
             // 상대방이 검색이 됨
             if (FirebaseManager.Instance.FirebaseRPSGame_EnemyIndex != 0)
             {
@@ -156,6 +174,9 @@ public class RPSPopup : Popup
             myPRSSelectTime -= Time.deltaTime;
             MyRPSTime.value = myPRSSelectTime / maxSelectTime;
 
+            if (myPRSSelectTime < 0)
+                yield break;
+
             yield return null;
         }
     }
@@ -164,15 +185,14 @@ public class RPSPopup : Popup
     {
         // Step 1 상대방의 데이터를 받아왔는지 체크
         TKManager.Instance.ShowHUD("결과를 확인중 입니다.");
+        FirebaseManager.Instance.SelectRPSGame(RPSGame_MyValue);
+
         float waitTime = 1.0f;
-        RPSGame_ResultWait = true;
         while (true)
         {
-            // 파베에 상대방벨류 요청
-            RPSGame_ResultWait = false;
             waitTime -= Time.deltaTime;
 
-            if(waitTime < 0 && RPSGame_ResultWait == false)
+            if(waitTime < 0)
             {
                 TKManager.Instance.HideHUD();
                 yield break;
@@ -244,6 +264,13 @@ public class RPSPopup : Popup
 
     public int GetRPSResult()
     {
+        EnemyRPS.gameObject.SetActive(true);
+        if (FirebaseManager.Instance.FirebaseRPSGame_EnemyValue > 0 &&
+            FirebaseManager.Instance.FirebaseRPSGame_EnemyValue <= 3)
+            EnemyRPS.sprite = (Sprite)Resources.Load(CommonData.RPS_GAME_IMG[FirebaseManager.Instance.FirebaseRPSGame_EnemyValue], typeof(Sprite));
+        else
+            EnemyRPS.gameObject.SetActive(false);
+
         if (RPSGame_MyValue == 0)
             return 2;
 
@@ -253,5 +280,10 @@ public class RPSPopup : Popup
     public void OnClickExit()
     {
         SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
+        ParentPopup.ShowPopup(new MsgPopup.MsgPopupData("나가시겠습니까?", () =>
+        {
+            FirebaseManager.Instance.FirebaseRPSGameMyRoom = -1;
+            FirebaseManager.Instance.FirebaseRPSGamePlayTime = long.MaxValue;
+        }));
     }
 }
