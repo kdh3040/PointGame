@@ -292,7 +292,8 @@ public class FirebaseManager : MonoBehaviour
         GetReviewRank();
         GetUpdatePopup();
         GetRPSGamePlayTime();
-        GetRPSGameEnterTime();        
+        GetRPSGameEnterTime();
+        GetRPSGameEnterStatus();
     }
 
 
@@ -301,7 +302,7 @@ public class FirebaseManager : MonoBehaviour
         if (FirstLoadingComplete == false)
             LoadingCount++;
 
-        if (LoadingCount == 13)
+        if (LoadingCount == 14)
             FirstLoadingComplete = true;
     }
 
@@ -1423,6 +1424,31 @@ public class FirebaseManager : MonoBehaviour
            }
        }
       );
+
+    }
+
+    public void GetRPSGameEnterStatus()
+    {
+        mDatabaseRef.Child("RPSUserList").Child(TKManager.Instance.MyData.Index).GetValueAsync().ContinueWith(task =>
+        {
+            if (task.IsFaulted)
+            {
+                // Handle the error...
+            }
+            else if (task.IsCompleted)
+            {
+                DataSnapshot snapshot = task.Result;
+
+                if (snapshot != null && snapshot.Exists)
+                {
+                    // 있다
+                }                    
+
+                AddFirstLoadingComplete();
+            }
+        }
+
+        );
 
     }
 
