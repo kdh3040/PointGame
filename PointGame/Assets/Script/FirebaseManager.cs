@@ -1126,6 +1126,9 @@ public class FirebaseManager : MonoBehaviour
     {
 
         // TODO 광고 보는 코드 추가 
+        FirebaseRPSGame_EnemyNick = "";
+        FirebaseRPSGame_EnemyValue = 0;
+        FirebaseRPSGame_EnemyIndex = 0;
         FirebaseRPSGameSeries = 0;
         FirebaseRPSGameMyRoom = -1;
 
@@ -1367,7 +1370,10 @@ public class FirebaseManager : MonoBehaviour
             else if (task.IsCompleted)
             {
                 DataSnapshot snapshot = task.Result;
-                FirebaseRPSGameEnterTime = long.Parse(snapshot.Value.ToString());
+                var min = long.Parse(snapshot.Value.ToString());
+                var date = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
+                date = date.AddMinutes(min);
+                FirebaseRPSGameEnterTime = date.Ticks;
                 //TKManager.Instance.SetTodayLottoSeriesMinCount(LottoTodaySeries);
 
                 AddFirstLoadingComplete();
@@ -1390,7 +1396,10 @@ public class FirebaseManager : MonoBehaviour
              else if (task.IsCompleted)
              {
                  DataSnapshot snapshot = task.Result;
-                 FirebaseRPSGamePlayTime = long.Parse(snapshot.Value.ToString());
+                var min = long.Parse(snapshot.Value.ToString());
+                var date = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
+                date = date.AddMinutes(min);
+                FirebaseRPSGamePlayTime = date.Ticks;
                  //TKManager.Instance.SetTodayLottoSeriesMinCount(LottoTodaySeries);
 
                  AddFirstLoadingComplete();
