@@ -53,6 +53,8 @@ public class RPSPopup : Popup
         MyRPSEmpty.gameObject.SetActive(true);
         MyRPS.gameObject.SetActive(false);
 
+        FirebaseManager.Instance.CreateRPSGameRoom();
+
         StartCoroutine(Co_RPSGame());
     }
 

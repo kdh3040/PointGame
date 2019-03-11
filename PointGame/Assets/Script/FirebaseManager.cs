@@ -1197,16 +1197,7 @@ public class FirebaseManager : MonoBehaviour
                 FirebaseRPSGameMyPosition = tempCount - 1;
 
                 mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("FirebaseRPSGameMyRoom").SetValueAsync(FirebaseRPSGameMyRoom);
-                mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("FirebaseRPSGameMyPosition").SetValueAsync(FirebaseRPSGameMyPosition);
-
-                mDatabaseRef.Child("RPSGame").Child(FirebaseRPSGameSeries.ToString()).Child(FirebaseRPSGameMyRoom.ToString())
-               .Child(FirebaseRPSGameMyPosition.ToString()).Child("Index").SetValueAsync(TKManager.Instance.MyData.Index);
-
-               mDatabaseRef.Child("RPSGame").Child(FirebaseRPSGameSeries.ToString()).Child(FirebaseRPSGameMyRoom.ToString())
-               .Child(FirebaseRPSGameMyPosition.ToString()).Child("NickName").SetValueAsync(TKManager.Instance.MyData.NickName);
-
-               mDatabaseRef.Child("RPSGame").Child(FirebaseRPSGameSeries.ToString()).Child(FirebaseRPSGameMyRoom.ToString())
-               .Child(FirebaseRPSGameMyPosition.ToString()).Child("Value").SetValueAsync(0);
+                mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("FirebaseRPSGameMyPosition").SetValueAsync(FirebaseRPSGameMyPosition);       
 
                 mutableData.Value = tempCount + 1;
 
@@ -1236,6 +1227,18 @@ public class FirebaseManager : MonoBehaviour
 
         });
 
+    }
+
+    public void CreateRPSGameRoom()
+    {
+        mDatabaseRef.Child("RPSGame").Child(FirebaseRPSGameSeries.ToString()).Child(FirebaseRPSGameMyRoom.ToString())
+      .Child(FirebaseRPSGameMyPosition.ToString()).Child("Index").SetValueAsync(TKManager.Instance.MyData.Index);
+
+        mDatabaseRef.Child("RPSGame").Child(FirebaseRPSGameSeries.ToString()).Child(FirebaseRPSGameMyRoom.ToString())
+        .Child(FirebaseRPSGameMyPosition.ToString()).Child("NickName").SetValueAsync(TKManager.Instance.MyData.NickName);
+
+        mDatabaseRef.Child("RPSGame").Child(FirebaseRPSGameSeries.ToString()).Child(FirebaseRPSGameMyRoom.ToString())
+        .Child(FirebaseRPSGameMyPosition.ToString()).Child("Value").SetValueAsync(0);
     }
 
     void HandleGameRoomChanged(object sender, ValueChangedEventArgs args)
