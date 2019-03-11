@@ -25763,6 +25763,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be0b207b3a2ea2849bd59919cf577a5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Close: {fileID: 407005224}
   SeriesCount: {fileID: 1866813013}
   UserCount: {fileID: 1980844431}
   EnemyId: {fileID: 478295864}

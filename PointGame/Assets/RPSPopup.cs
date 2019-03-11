@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class RPSPopup : Popup
 {
+    public Button Close;
+
     public Text SeriesCount;
     public Text UserCount;
     public Text EnemyId;
@@ -35,6 +37,7 @@ public class RPSPopup : Popup
 
     public void Awake()
     {
+        Close.onClick.AddListener(OnClickExit);
         RPSSelect_S.onClick.AddListener(OnClick_S);
         RPSSelect_R.onClick.AddListener(OnClick_R);
         RPSSelect_P.onClick.AddListener(OnClick_P);
@@ -144,6 +147,7 @@ public class RPSPopup : Popup
             if(waitTime < 0)
             {
                 TKManager.Instance.HideHUD();
+                break;
             }
 
             waitTime -= Time.deltaTime;
@@ -337,7 +341,7 @@ public class RPSPopup : Popup
         SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
         ParentPopup.ShowPopup(new MsgPopup.MsgPopupData("나가시겠습니까?", () =>
         {
-            FirebaseManager.Instance.FirebaseRPSGameMyRoom = -1;
+            FirebaseManager.Instance.FirebaseRPSGameEnterEnable = false;
             FirebaseManager.Instance.FirebaseRPSGamePlayTime = long.MaxValue;
         }));
     }
