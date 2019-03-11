@@ -60,9 +60,9 @@ public class RPSPopup : Popup
 
     public void RefreshUI()
     {
-        SeriesCount.text = string.Format("{0} 회", FirebaseManager.Instance.FirebaseRPSGameSeries);
+        SeriesCount.text = string.Format("{0} 회", FirebaseManager.Instance.FirebaseRPSGameSeries + 1);
         EnemyId.text = string.Format("ID : {0}", FirebaseManager.Instance.FirebaseRPSGame_EnemyNick);
-        UserCount.text = string.Format("남은인원 : {0}명", FirebaseManager.Instance.FirebaseRPSGameUserCount);
+        UserCount.text = string.Format("남은인원 : {0}명", FirebaseManager.Instance.FirebaseRPSGameUserCount - 1);
     }
 
     IEnumerator Co_RPSGame()
@@ -135,7 +135,7 @@ public class RPSPopup : Popup
     IEnumerator Co_RPSGame_Search()
     {
         // Step 1 상대방의 데이터를 받아왔는지 체크
-        TKManager.Instance.ShowHUD("상대방을 검색중입니다.");
+        TKManager.Instance.ShowHUD("상대방을 검색중입니다.", 30.0f);
 
         while (true)
         {
@@ -203,13 +203,13 @@ public class RPSPopup : Popup
     IEnumerator Co_RPSGame_SelectWait()
     {
         // Step 1 상대방의 데이터를 받아왔는지 체크
-        TKManager.Instance.ShowHUD("결과를 확인중 입니다.");
+        float waitTime = 5.0f;
+        TKManager.Instance.ShowHUD("결과를 확인중 입니다.", 5.0f);
 
         Debug.Log("내가 선택했다 " + RPSGame_MyValue);
         if (RPSGame_MyValue != 0)
             FirebaseManager.Instance.SelectRPSGame(RPSGame_MyValue);
 
-        float waitTime = 5.0f;
         while (true)
         {
             waitTime -= Time.deltaTime;

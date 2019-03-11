@@ -333,6 +333,7 @@ public class MainUI : MonoBehaviour {
                 // 가위바위보 참여하쉴?
                 Popup.ShowPopup(new MsgPopup.MsgPopupData("참가 신청을 하시겠습니까?", () =>
                 {
+                    Popup.ShowPopup(new MsgPopup.MsgPopupData("참가 신청이 완료 되었습니다."));
                     // 광고 보여주기
                     FirebaseManager.Instance.EnterRPSGame();
                 }, MsgPopup.MSGPOPUP_TYPE.TWO));
@@ -422,8 +423,16 @@ public class MainUI : MonoBehaviour {
         if (FirebaseManager.Instance.FirebaseRPSGamePlayTime < DateTime.Now.Ticks &&
             FirebaseManager.Instance.FirebaseRPSGameMyRoom > -1)
         {
-            FirebaseManager.Instance.FirebaseRPSGamePlayTime = long.MaxValue;
-            Popup.ShowPopup(new RPSPopup.RPSPopupData());
+            if(Popup.CurrPopupType == POPUP_TYPE.NONE)
+            {
+                FirebaseManager.Instance.FirebaseRPSGamePlayTime = long.MaxValue;
+                Popup.ShowPopup(new RPSPopup.RPSPopupData());
+            }
+            else
+            {
+                FirebaseManager.Instance.FirebaseRPSGamePlayTime = long.MaxValue;
+            }
+            
         }
 
         //if(FirebaseManager.Instance.FirebaseRPSGameStatus == 1 &&
