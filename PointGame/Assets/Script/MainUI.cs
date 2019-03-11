@@ -335,7 +335,7 @@ public class MainUI : MonoBehaviour {
                 {
                     // 광고 보여주기
                     FirebaseManager.Instance.EnterRPSGame();
-                }));
+                }, MsgPopup.MSGPOPUP_TYPE.TWO));
             }
         }
         else
