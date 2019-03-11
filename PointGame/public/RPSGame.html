@@ -222,19 +222,19 @@
               var tempRoomNumber = Math.floor( i / 2) ;
               var tempRoomPosition = i;
 
-/*
+
               firebase.database().ref('/Users/'+key + '/FirebaseRPSGameMyRoom').set(tempRoomNumber);
               firebase.database().ref('/Users/'+key + '/FirebaseRPSGameMyPosition').set(tempRoomPosition);
 
               firebase.database().ref('/RPSGame/' + RPSUserSeries + '/' + tempRoomNumber + '/' + tempRoomPosition + '/Index/').set(key);
               firebase.database().ref('/RPSGame/' + RPSUserSeries + '/' + tempRoomNumber + '/' + tempRoomPosition + '/NickName/').set(message[key]);
               firebase.database().ref('/RPSGame/' + RPSUserSeries + '/' + tempRoomNumber + '/' + tempRoomPosition + '/Value/').set(0);
-*/
 
+/*
               firebase.database().ref('/RPSGame/' + RPSUserSeries + '/' + tempRoomNumber + '/' + tempRoomPosition + '/Index/').set(key);
               firebase.database().ref('/RPSGame/' + RPSUserSeries + '/' + tempRoomNumber + '/' + tempRoomPosition + '/NickName/').set(message[key]);
               firebase.database().ref('/RPSGame/' + RPSUserSeries + '/' + tempRoomNumber + '/' + tempRoomPosition + '/Value/').set(Math.floor(Math.random() * 3 + 1));
-
+*/
               i++;
             }
 
@@ -347,8 +347,8 @@
   }
 
   var timer;
-  var arrLottoSelectTime = ['02:38:30', '02:38:55', '02:39:15', '02:39:40', '02:01:15', '02:01:35'];
-  var arrRPSGAmeStartTime = ['03:38:00', '02:38:55', '02:39:15', '02:39:40', '02:01:15', '02:01:35'];
+  var arrLottoSelectTime = ['05:40:30', '05:41:00', '05:41:30', '05:42:00', '05:42:30', '05:13:00'];
+  var arrRPSGAmeStartTime = ['05:40:00', '02:45:30', '02:39:15', '02:39:40', '02:01:15', '02:01:35'];
 
 
 
@@ -360,11 +360,16 @@
 
 
   function showClock(){
-        //  console.log((new Date()).getHMS());
+          console.log((new Date()).getHMS());
+        if((new Date()).getHMS() === arrRPSGAmeStartTime[0])
+        {
+           CreateRPSGameRoom();
+        }
+
           for(var i=0; i<6; i++) {
-           if((new Date()).getHMS() === arrRPSGAmeStartTime[i])
+           if((new Date()).getHMS() === arrLottoSelectTime[i])
            {
-              CreateRPSGameRoom();
+              GetRPSGame();
            }
         }
 
