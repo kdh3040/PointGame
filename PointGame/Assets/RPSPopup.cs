@@ -67,7 +67,8 @@ public class RPSPopup : Popup
 
     IEnumerator Co_RPSGame()
     {
-        while(true)
+        yield return Co_RPSGame_Ready();
+        while (true)
         {
             yield return Co_RPSGame_Search();
             yield return Co_RPSGame_Select(false);
@@ -129,6 +130,25 @@ public class RPSPopup : Popup
                 RefreshUI();
                 yield return Co_RPSGame_Result(result);
             }
+        }
+    }
+
+    IEnumerator Co_RPSGame_Ready()
+    {
+        // Step 1 상대방의 데이터를 받아왔는지 체크
+        float waitTime = 5.0f;
+        TKManager.Instance.ShowHUD("준비중 입니다.", 5.0f);
+
+        while (true)
+        {
+            if(waitTime < 0)
+            {
+                TKManager.Instance.HideHUD();
+            }
+
+            waitTime -= Time.deltaTime;
+
+            yield return null;
         }
     }
 
