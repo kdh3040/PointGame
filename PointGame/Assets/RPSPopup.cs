@@ -159,7 +159,7 @@ public class RPSPopup : Popup
         // 선택 할 수 있는 시간도 같이 흘러감
         RPSGame_MyValue = 0;
         MyRPS.gameObject.SetActive(false);
-        float enemyRPSChangeTime = 0.7f;
+        float enemyRPSChangeTime = 1f;
         float maxSelectTime = draw ? CommonData.RPS_GAME_DRAW_PLAY_TIME : CommonData.RPS_GAME_PLAY_TIME;
         float myPRSSelectTime = maxSelectTime;
 
@@ -170,7 +170,7 @@ public class RPSPopup : Popup
 
             if (enemyRPSChangeTime < 0)
             {
-                enemyRPSChangeTime = 0.7f;
+                enemyRPSChangeTime = 1f;
                 RandEnemyRPS();
             }
 
@@ -192,8 +192,6 @@ public class RPSPopup : Popup
         if(RPSGame_MyValue != 0)
             FirebaseManager.Instance.SelectRPSGame(RPSGame_MyValue);
 
-        EnemyRPS.gameObject.SetActive(false);
-
         float waitTime = 1.0f;
         while (true)
         {
@@ -201,13 +199,6 @@ public class RPSPopup : Popup
 
             if(waitTime < 0)
             {
-                EnemyRPS.gameObject.SetActive(true);
-                if (FirebaseManager.Instance.FirebaseRPSGame_EnemyValue > 0 &&
-                    FirebaseManager.Instance.FirebaseRPSGame_EnemyValue <= 3)
-                    EnemyRPS.sprite = (Sprite)Resources.Load(CommonData.RPS_GAME_IMG[FirebaseManager.Instance.FirebaseRPSGame_EnemyValue], typeof(Sprite));
-                else
-                    EnemyRPS.gameObject.SetActive(false);
-
                 TKManager.Instance.HideHUD();
                 yield break;
             }
@@ -219,6 +210,13 @@ public class RPSPopup : Popup
     IEnumerator Co_RPSGame_Result(int result)
     {
         float resultWaitTime = CommonData.RPS_GAME_RESULT_WAIT_TIME;
+
+        EnemyRPS.gameObject.SetActive(true);
+        if (FirebaseManager.Instance.FirebaseRPSGame_EnemyValue > 0 &&
+            FirebaseManager.Instance.FirebaseRPSGame_EnemyValue <= 3)
+            EnemyRPS.sprite = (Sprite)Resources.Load(CommonData.RPS_GAME_IMG[FirebaseManager.Instance.FirebaseRPSGame_EnemyValue], typeof(Sprite));
+        else
+            EnemyRPS.gameObject.SetActive(false);
 
         ResultObj.gameObject.SetActive(true);
         if(result == 1)
