@@ -1197,6 +1197,7 @@ public class FirebaseManager : MonoBehaviour
                 FirebaseRPSGameMyPosition = tempCount - 1;
 
                 mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("FirebaseRPSGameMyRoom").SetValueAsync(FirebaseRPSGameMyRoom);
+                mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("FirebaseRPSGameMyPosition").SetValueAsync(FirebaseRPSGameMyPosition);
 
                 mDatabaseRef.Child("RPSGame").Child(FirebaseRPSGameSeries.ToString()).Child(FirebaseRPSGameMyRoom.ToString())
                .Child(FirebaseRPSGameMyPosition.ToString()).Child("Index").SetValueAsync(TKManager.Instance.MyData.Index);
