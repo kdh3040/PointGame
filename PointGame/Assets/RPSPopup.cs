@@ -9,8 +9,10 @@ public class RPSPopup : Popup
     public Text UserCount;
     public Text EnemyId;
     public Image EnemyRPS;
+    public GameObject EnemyRPSEmpty;
     public Text MyId;
     public Image MyRPS;
+    public GameObject MyRPSEmpty;
 
     public Slider MyRPSTime;
     public Button RPSSelect_S;
@@ -46,18 +48,19 @@ public class RPSPopup : Popup
         EnemyId.text = "ID : ";
         MyId.text = string.Format("ID : {0}", TKManager.Instance.MyData.NickName);
 
-        EnemyRPS.sprite = (Sprite)Resources.Load(CommonData.RPS_GAME_IMG[1], typeof(Sprite));
-        MyRPS.sprite = (Sprite)Resources.Load(CommonData.RPS_GAME_IMG[1], typeof(Sprite));
+        EnemyRPSEmpty.gameObject.SetActive(true);
+        EnemyRPS.gameObject.SetActive(false);
+        MyRPSEmpty.gameObject.SetActive(true);
+        MyRPS.gameObject.SetActive(false);
 
         StartCoroutine(Co_RPSGame());
     }
 
     public void RefreshUI()
     {
-        // 현재 회차
         SeriesCount.text = string.Format("{0} 회", FirebaseManager.Instance.FirebaseRPSGameSeries);
         EnemyId.text = string.Format("ID : {0}", FirebaseManager.Instance.FirebaseRPSGame_EnemyNick);
-        MyId.text = string.Format("ID : {0}", TKManager.Instance.MyData.NickName);
+        UserCount.text = string.Format("남은인원 : {0}명", FirebaseManager.Instance.FirebaseRPSGameUserCount);
     }
 
     IEnumerator Co_RPSGame()
@@ -130,14 +133,17 @@ public class RPSPopup : Popup
 
         while (true)
         {
-            UserCount.text = string.Format("남은인원 : {0}명", FirebaseManager.Instance.FirebaseRPSGameUserCount);
+            
 
             if (FirebaseManager.Instance.FirebaseRPSGameUserCount <= 1)
             {
                 TKManager.Instance.HideHUD();
                 CloseAction();
                 // 우승
-                ParentPopup.ShowPopup(new MsgPopup.MsgPopupData("너 우승"));
+                ParentPopup.ShowPopup(new MsgPopup.MsgPopupData("가위바위보 우승!\n100캐쉬 획득!", () =>
+                {
+                    TKManager.Instance.MyData.AddCash(100);
+                }));
                 break;
             }
 
@@ -158,14 +164,19 @@ public class RPSPopup : Popup
         // Step 2 상대방의 가위바위보는 랜덤으로 돌아감
         // 선택 할 수 있는 시간도 같이 흘러감
         RPSGame_MyValue = 0;
+
+        EnemyRPSEmpty.gameObject.SetActive(false);
+        EnemyRPS.gameObject.SetActive(true);
+        MyRPSEmpty.gameObject.SetActive(true);
         MyRPS.gameObject.SetActive(false);
+
         float enemyRPSChangeTime = 0.2f;
         float maxSelectTime = draw ? CommonData.RPS_GAME_DRAW_PLAY_TIME : CommonData.RPS_GAME_PLAY_TIME;
         float myPRSSelectTime = maxSelectTime;
         RandEnemyRPS();
+
         while (true)
         {
-            
             enemyRPSChangeTime -= Time.deltaTime;
 
             if (enemyRPSChangeTime < 0)
@@ -211,12 +222,16 @@ public class RPSPopup : Popup
     {
         float resultWaitTime = CommonData.RPS_GAME_RESULT_WAIT_TIME;
 
-        EnemyRPS.gameObject.SetActive(true);
+        EnemyRPSEmpty.gameObject.SetActive(false);
+        EnemyRPS.gameObject.SetActive(false);
         if (FirebaseManager.Instance.FirebaseRPSGame_EnemyValue > 0 &&
             FirebaseManager.Instance.FirebaseRPSGame_EnemyValue <= 3)
+        {
+            EnemyRPS.gameObject.SetActive(true);
             EnemyRPS.sprite = (Sprite)Resources.Load(CommonData.RPS_GAME_IMG[FirebaseManager.Instance.FirebaseRPSGame_EnemyValue], typeof(Sprite));
+        }
         else
-            EnemyRPS.gameObject.SetActive(false);
+            EnemyRPSEmpty.gameObject.SetActive(true);
 
         ResultObj.gameObject.SetActive(true);
         if(result == 1)
@@ -257,6 +272,7 @@ public class RPSPopup : Popup
     public void OnClick_S()
     {
         RPSGame_MyValue = 1;
+        MyRPSEmpty.gameObject.SetActive(false);
         MyRPS.gameObject.SetActive(true);
         MyRPS.sprite = (Sprite)Resources.Load(CommonData.RPS_GAME_IMG[RPSGame_MyValue], typeof(Sprite));
     }
@@ -264,12 +280,14 @@ public class RPSPopup : Popup
     public void OnClick_R()
     {
         RPSGame_MyValue = 2;
+        MyRPSEmpty.gameObject.SetActive(false);
         MyRPS.gameObject.SetActive(true);
         MyRPS.sprite = (Sprite)Resources.Load(CommonData.RPS_GAME_IMG[RPSGame_MyValue], typeof(Sprite));
     }
     public void OnClick_P()
     {
         RPSGame_MyValue = 3;
+        MyRPSEmpty.gameObject.SetActive(false);
         MyRPS.gameObject.SetActive(true);
         MyRPS.sprite = (Sprite)Resources.Load(CommonData.RPS_GAME_IMG[RPSGame_MyValue], typeof(Sprite));
     }
