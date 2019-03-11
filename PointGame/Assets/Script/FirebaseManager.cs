@@ -1265,14 +1265,14 @@ public class FirebaseManager : MonoBehaviour
                     FirebaseRPSGame_EnemyValue = Convert.ToInt32(tempData["Value"]);
                     FirebaseRPSGame_EnemyIndex = Convert.ToInt32(tempIndex);
 
-                    Debug.Log("@@@@@@@" + FirebaseRPSGame_EnemyIndex + " " + FirebaseRPSGame_EnemyNick + " " + FirebaseRPSGame_EnemyValue);
+                    Debug.Log("@@@@@@@ HandleGameRoomChanged " + FirebaseRPSGame_EnemyIndex + " " + FirebaseRPSGame_EnemyNick + " " + FirebaseRPSGame_EnemyValue);
+                    Debug.Log("@@@@@@@ HandleGameRoomChanged_1 " + FirebaseRPSGameSeries.ToString() + " " + FirebaseRPSGameMyRoom.ToString());
                 }
                 
             }    
         }
 
         //FirebaseRPSGame_EnemyNick = Convert.ToInt32(args.Snapshot.Value);
-        Debug.Log("@@@@@@@" + FirebaseRPSGameStatus);
     }
 
     public void AddHandler()
@@ -1288,6 +1288,8 @@ public class FirebaseManager : MonoBehaviour
             RPSGameRoomChangedHandle = null;
             RPSGameRoomChangedHandle_SaveSeries = "";
             RPSGameRoomChangedHandle_SaveMyRoom = "";
+
+            Debug.Log("@@@@@@@ AddHandler Remove  " + RPSGameRoomChangedHandle_SaveSeries + " " + RPSGameRoomChangedHandle_SaveMyRoom);
         }
 
         FirebaseDatabase.DefaultInstance
@@ -1297,6 +1299,8 @@ public class FirebaseManager : MonoBehaviour
         RPSGameRoomChangedHandle_SaveSeries = FirebaseRPSGameSeries.ToString();
         RPSGameRoomChangedHandle_SaveMyRoom = FirebaseRPSGameMyRoom.ToString();
         RPSGameRoomChangedHandle = HandleGameRoomChanged;
+
+        Debug.Log("@@@@@@@ AddHandler Add  " + RPSGameRoomChangedHandle_SaveSeries + " " + RPSGameRoomChangedHandle_SaveMyRoom);
     }
 
     public void SelectRPSGame(int Value)
