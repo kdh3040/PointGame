@@ -130,12 +130,10 @@ public class RPSPopup : Popup
         {
             if(FirebaseManager.Instance.FirebaseRPSGameUserCount <= 1)
             {
-                // 우승
-                ParentPopup.ShowPopup(new MsgPopup.MsgPopupData("너 우승", () =>
-                {
-                    CloseAction();
-                }));
                 TKManager.Instance.HideHUD();
+                CloseAction();
+                // 우승
+                ParentPopup.ShowPopup(new MsgPopup.MsgPopupData("너 우승"));
                 break;
             }
             // 상대방이 검색이 됨
