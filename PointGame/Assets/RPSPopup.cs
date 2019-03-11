@@ -148,6 +148,7 @@ public class RPSPopup : Popup
             // 상대방이 검색이 됨
             if (FirebaseManager.Instance.FirebaseRPSGame_EnemyIndex != 0)
             {
+                Debug.Log("매칭됨 " + FirebaseManager.Instance.FirebaseRPSGame_EnemyIndex + " " + FirebaseManager.Instance.FirebaseRPSGame_EnemyNick + " " + FirebaseManager.Instance.FirebaseRPSGame_EnemyValue);
                 RefreshUI();
                 TKManager.Instance.HideHUD();
                 break;
@@ -198,7 +199,8 @@ public class RPSPopup : Popup
         // Step 1 상대방의 데이터를 받아왔는지 체크
         TKManager.Instance.ShowHUD("결과를 확인중 입니다.");
 
-        if(RPSGame_MyValue != 0)
+        Debug.Log("내가 선택했다 " + RPSGame_MyValue);
+        if (RPSGame_MyValue != 0)
             FirebaseManager.Instance.SelectRPSGame(RPSGame_MyValue);
 
         float waitTime = 1.0f;
@@ -230,6 +232,9 @@ public class RPSPopup : Popup
         }
         else
             EnemyRPSEmpty.gameObject.SetActive(true);
+
+        Debug.Log("결과창_1 " + FirebaseManager.Instance.FirebaseRPSGame_EnemyIndex + " " + FirebaseManager.Instance.FirebaseRPSGame_EnemyNick + " " + FirebaseManager.Instance.FirebaseRPSGame_EnemyValue);
+        Debug.Log("결과창_2 " + RPSGame_MyValue);
 
         ResultObj.gameObject.SetActive(true);
         if(result == 1)
