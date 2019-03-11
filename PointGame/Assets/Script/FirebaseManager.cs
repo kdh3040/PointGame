@@ -1256,7 +1256,7 @@ public class FirebaseManager : MonoBehaviour
     public void SelectRPSGame(int Value)
     {
         mDatabaseRef.Child("RPSGame").Child(FirebaseRPSGameSeries.ToString()).Child(FirebaseRPSGameMyRoom.ToString())
-        .Child(tempIndex.ToString()).Child("Value").SetValueAsync(Value);
+        .Child(TKManager.Instance.MyData.Index).Child("Value").SetValueAsync(Value);
     }
     
     // 가위 : 1 바위 : 2 보 : 3
