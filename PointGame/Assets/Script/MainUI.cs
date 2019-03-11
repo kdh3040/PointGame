@@ -82,7 +82,7 @@ public class MainUI : MonoBehaviour {
         if (FirebaseManager.Instance.FirebaseRPSGamePlayTime < DateTime.Now.Ticks)
         {
             FirebaseManager.Instance.FirebaseRPSGamePlayTime = long.MaxValue;
-            FirebaseManager.Instance.FirebaseRPSGameMyRoom = -1;
+            FirebaseManager.Instance.FirebaseRPSGameEnterEnable = false;
         }
 
         if (FirebaseManager.Instance.ReviewMode || FirebaseManager.Instance.ExamineMode)
@@ -323,7 +323,7 @@ public class MainUI : MonoBehaviour {
             FirebaseManager.Instance.FirebaseRPSGamePlayTime > DateTime.Now.Ticks &&
             FirebaseManager.Instance.FirebaseRPSGamePlayTime != long.MaxValue)
         {
-            if (FirebaseManager.Instance.FirebaseRPSGameMyRoom > -1)
+            if (FirebaseManager.Instance.FirebaseRPSGameEnterEnable)
             {
                 // 이미 참가 완료
                 Popup.ShowPopup(new MsgPopup.MsgPopupData("참가 신청이 완료되었습니다."));
@@ -421,15 +421,17 @@ public class MainUI : MonoBehaviour {
         }
 
         if (FirebaseManager.Instance.FirebaseRPSGamePlayTime < DateTime.Now.Ticks &&
-            FirebaseManager.Instance.FirebaseRPSGameMyRoom > -1)
+            FirebaseManager.Instance.FirebaseRPSGameEnterEnable)
         {
             if(Popup.CurrPopupType == POPUP_TYPE.NONE)
             {
+                FirebaseManager.Instance.FirebaseRPSGameEnterEnable = false;
                 FirebaseManager.Instance.FirebaseRPSGamePlayTime = long.MaxValue;
                 Popup.ShowPopup(new RPSPopup.RPSPopupData());
             }
             else
             {
+                FirebaseManager.Instance.FirebaseRPSGameEnterEnable = false;
                 FirebaseManager.Instance.FirebaseRPSGamePlayTime = long.MaxValue;
             }
             

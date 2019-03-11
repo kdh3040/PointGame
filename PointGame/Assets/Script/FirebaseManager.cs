@@ -63,6 +63,9 @@ public class FirebaseManager : MonoBehaviour
     // 가위바위보 내 방번호
     public int FirebaseRPSGameMyRoom = -1;
 
+    // 가위바위보 참가?
+    public bool FirebaseRPSGameEnterEnable = false;
+
     // 가위바위보 내 자리번호
     public int FirebaseRPSGameMyPosition = -1;
 
@@ -1442,7 +1445,10 @@ public class FirebaseManager : MonoBehaviour
                 if (snapshot != null && snapshot.Exists)
                 {
                     // 있다
-                }                    
+                    FirebaseRPSGameEnterEnable = true;
+                }
+                else
+                    FirebaseRPSGameEnterEnable = false;
 
                 AddFirstLoadingComplete();
             }
