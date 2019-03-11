@@ -63,6 +63,9 @@ public class FirebaseManager : MonoBehaviour
     // 가위바위보 내 방번호
     public int FirebaseRPSGameMyRoom = -1;
 
+    // 가위바위보 내 자리번호
+    public int FirebaseRPSGameMyPosition = -1;
+
     // 가위바위보 참가 가능시간
     public long FirebaseRPSGameEnterTime = 0;
 
@@ -221,6 +224,24 @@ public class FirebaseManager : MonoBehaviour
 
     }
 
+    void HandleRPSGamePositionNumberChanged(object sender, ValueChangedEventArgs args)
+    {
+        if (args.DatabaseError != null)
+        {
+            Debug.LogError(args.DatabaseError.Message);
+            return;
+        }
+        if (args.Snapshot.Value != null)
+        {
+            FirebaseRPSGameMyPosition = Convert.ToInt32(args.Snapshot.Value);
+            // 데이터가 변경되면 실제로 게임이 시작된다.
+        }
+
+        Debug.Log("@@@@@@@ HandleRPSGamePositionNumberChanged " + TKManager.Instance.MyData.RPSGameRoomNumber);
+
+    }
+
+    
     public void TokenRefresh(Firebase.Auth.FirebaseUser user)
     {
 
@@ -271,7 +292,7 @@ public class FirebaseManager : MonoBehaviour
         GetReviewRank();
         GetUpdatePopup();
         GetRPSGamePlayTime();
-        GetRPSGameEnterTime();
+        GetRPSGameEnterTime();        
     }
 
 
@@ -461,7 +482,25 @@ public class FirebaseManager : MonoBehaviour
                     .ValueChanged += HandleRPSGameRoomNumberChanged;
                     }
 
-           
+                    if (tempData.ContainsKey("FirebaseRPSGameMyPosition"))
+                    {
+                        var tempPositionNumber = Convert.ToInt32(tempData["FirebaseRPSGameMyPosition"]);
+                        FirebaseRPSGameMyPosition = tempPositionNumber;
+
+                        FirebaseDatabase.DefaultInstance
+                       .GetReference("Users").Child(TKManager.Instance.MyData.Index).Child("FirebaseRPSGameMyPosition")
+                       .ValueChanged += HandleRPSGamePositionNumberChanged;
+
+                    }
+                    else
+                    {
+                        FirebaseRPSGameMyPosition = -1;
+
+                        FirebaseDatabase.DefaultInstance
+                    .GetReference("Users").Child(TKManager.Instance.MyData.Index).Child("FirebaseRPSGameMyPosition")
+                    .ValueChanged += HandleRPSGamePositionNumberChanged;
+                    }
+
                 }
 
                 AddFirstLoadingComplete();
@@ -1155,17 +1194,18 @@ public class FirebaseManager : MonoBehaviour
             else
             {
                 FirebaseRPSGameMyRoom = (tempCount - 1) / 2;
+                FirebaseRPSGameMyPosition = tempCount - 1;
 
                 mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("FirebaseRPSGameMyRoom").SetValueAsync(FirebaseRPSGameMyRoom);
 
                 mDatabaseRef.Child("RPSGame").Child(FirebaseRPSGameSeries.ToString()).Child(FirebaseRPSGameMyRoom.ToString())
-               .Child(TKManager.Instance.MyData.Index).Child("Index").SetValueAsync(TKManager.Instance.MyData.Index);
+               .Child(FirebaseRPSGameMyPosition.ToString()).Child("Index").SetValueAsync(TKManager.Instance.MyData.Index);
 
                mDatabaseRef.Child("RPSGame").Child(FirebaseRPSGameSeries.ToString()).Child(FirebaseRPSGameMyRoom.ToString())
-               .Child(TKManager.Instance.MyData.Index).Child("NickName").SetValueAsync(TKManager.Instance.MyData.NickName);
+               .Child(FirebaseRPSGameMyPosition.ToString()).Child("NickName").SetValueAsync(TKManager.Instance.MyData.NickName);
 
                mDatabaseRef.Child("RPSGame").Child(FirebaseRPSGameSeries.ToString()).Child(FirebaseRPSGameMyRoom.ToString())
-               .Child(TKManager.Instance.MyData.Index).Child("Value").SetValueAsync(0);
+               .Child(FirebaseRPSGameMyPosition.ToString()).Child("Value").SetValueAsync(0);
 
                 mutableData.Value = tempCount + 1;
 
@@ -1256,7 +1296,7 @@ public class FirebaseManager : MonoBehaviour
     public void SelectRPSGame(int Value)
     {
         mDatabaseRef.Child("RPSGame").Child(FirebaseRPSGameSeries.ToString()).Child(FirebaseRPSGameMyRoom.ToString())
-        .Child(TKManager.Instance.MyData.Index).Child("Value").SetValueAsync(Value);
+        .Child(FirebaseRPSGameMyPosition.ToString()).Child("Value").SetValueAsync(Value);
     }
     
     // 가위 : 1 바위 : 2 보 : 3
