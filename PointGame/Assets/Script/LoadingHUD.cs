@@ -8,6 +8,7 @@ public class LoadingHUD : MonoBehaviour {
     public Canvas HUDCanvas;
     public Image ButonImg;
     public Text Desc;
+    public Image LoadingMark;
     // Use this for initialization
     void Start()
     {
@@ -21,15 +22,25 @@ public class LoadingHUD : MonoBehaviour {
 		
 	}
 
-    public void ShowHUD(bool alpha = false)
+    public void ShowHUD(string msg = "로딩중..")
     {
-        //var tempColor = ButonImg.color;
-        //tempColor.a = alpha ? 0f : 0.16f;
-        //ButonImg.color = tempColor;
+        Desc.text = msg;
+        StartCoroutine(Co_ShowHUD());
 
-        //if (alpha)
-        //    Desc.text = "";
-        //else
-        //    Desc.text = "로딩중..";
+        LoadingMark.gameObject.transform.localRotation = Quaternion.Euler(0, 0, 0);
+    }
+
+    public void HideHUD()
+    {
+        StopAllCoroutines();
+    }
+
+    IEnumerator Co_ShowHUD()
+    {
+        while(true)
+        {
+            LoadingMark.gameObject.transform.localRotation = Quaternion.Euler(0, 0, Mathf.PingPong(Time.time, 380f) * 200);
+            yield return null;
+        }
     }
 }

@@ -70,8 +70,12 @@ public class FirebaseManager : MonoBehaviour
     public long FirebaseRPSGamePlayTime = 0;
 
     // 가위바위보 상대방 정보
-    public string FirebaseRPSGame_EnemyNick;
+    public string FirebaseRPSGame_EnemyNick = "";
     public int FirebaseRPSGame_EnemyValue = 0;
+    public int FirebaseRPSGame_EnemyIndex = 0;
+
+    // 가위바위보에 참가 신청을 했는지?
+    public bool FirebaseRPSGame_Enter = false;
 
     // Use this for initialization
     void Start()
@@ -151,21 +155,21 @@ public class FirebaseManager : MonoBehaviour
       
 
         FirebaseDatabase.DefaultInstance
-       .GetReference("RPSGameStatus")
-       .ValueChanged += HandleRPSStatusChanged;
+       .GetReference("RPSGameSeries")
+       .ValueChanged += HandleRPSGameSeriesChanged;
 
     }
 
-    void HandleRPSStatusChanged(object sender, ValueChangedEventArgs args)
+    void HandleRPSGameSeriesChanged(object sender, ValueChangedEventArgs args)
     {
         if (args.DatabaseError != null)
         {
             Debug.LogError(args.DatabaseError.Message);
             return;
         }
-        FirebaseRPSGameStatus = Convert.ToInt32(args.Snapshot.Value); 
+        FirebaseRPSGameSeries = Convert.ToInt32(args.Snapshot.Value); 
         // 데이터가 변경되면 실제로 게임이 시작된다.
-        Debug.Log("@@@@@@@" + FirebaseRPSGameStatus);
+        Debug.Log("@@@@@@@ FirebaseRPSGameSeries " + FirebaseRPSGameSeries);
     }
 
     public void TokenRefresh(Firebase.Auth.FirebaseUser user)
@@ -1298,7 +1302,7 @@ public class FirebaseManager : MonoBehaviour
 
     private IEnumerator Co_AdEndCall()
     {
-        TKManager.Instance.ShowHUD(true);
+        TKManager.Instance.ShowHUD();
         while (true)
         {
             if (FirebaseProgress == false)

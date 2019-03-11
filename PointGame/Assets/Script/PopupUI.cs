@@ -19,6 +19,7 @@ public enum POPUP_TYPE
     HELP,
     PUSH_MSG,
     RECOMMENDER_CODE,
+    RPS_GAME,
 }
 
 public class PopupUI : MonoBehaviour {
@@ -39,6 +40,7 @@ public class PopupUI : MonoBehaviour {
     public HelpPopup HelpPopupObj;
     public PushMsgPopup PushMsgPopupObj;
     public RecommenderCodePopup RecommenderCodePopupObj;
+    public RPSPopup RPSPopupObj;
 
     public void Start()
     {
@@ -68,7 +70,8 @@ public class PopupUI : MonoBehaviour {
         PushMsgPopupObj.Initialize(this, ClosePopup);
         RecommenderCodePopupObj.gameObject.SetActive(false);
         RecommenderCodePopupObj.Initialize(this, ClosePopup);
-        
+        RPSPopupObj.gameObject.SetActive(false);
+        RPSPopupObj.Initialize(this, ClosePopup);
     }
 
     public void ShowPopup(Popup.PopupData data)
@@ -135,6 +138,10 @@ public class PopupUI : MonoBehaviour {
                 RecommenderCodePopupObj.gameObject.SetActive(true);
                 RecommenderCodePopupObj.SetData(data);
                 break;
+            case POPUP_TYPE.RPS_GAME:
+                RPSPopupObj.gameObject.SetActive(true);
+                RPSPopupObj.SetData(data);
+                break;
             default:
                 break;
         }
@@ -187,6 +194,9 @@ public class PopupUI : MonoBehaviour {
                 break;
             case POPUP_TYPE.RECOMMENDER_CODE:
                 RecommenderCodePopupObj.gameObject.SetActive(false);
+                break;
+            case POPUP_TYPE.RPS_GAME:
+                RPSPopupObj.gameObject.SetActive(false);
                 break;
             default:
                 break;
