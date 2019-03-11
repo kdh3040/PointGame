@@ -40,6 +40,7 @@ public class RPSPopup : Popup
 
     public override void SetData(PopupData data)
     {
+        ResultObj.gameObject.SetActive(false);
         RPSGame_MyValue = 0;
         SeriesCount.text = string.Format("{0} 회", 0);
         EnemyId.text = "ID : ";
@@ -187,7 +188,9 @@ public class RPSPopup : Popup
     {
         // Step 1 상대방의 데이터를 받아왔는지 체크
         TKManager.Instance.ShowHUD("결과를 확인중 입니다.");
-        FirebaseManager.Instance.SelectRPSGame(RPSGame_MyValue);
+
+        if(RPSGame_MyValue != 0)
+            FirebaseManager.Instance.SelectRPSGame(RPSGame_MyValue);
 
         float waitTime = 1.0f;
         while (true)
