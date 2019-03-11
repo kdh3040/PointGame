@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class RPSPopup : Popup
 {
     public Text SeriesCount;
+    public Text UserCount;
     public Text EnemyId;
     public Image EnemyRPS;
     public Text MyId;
@@ -128,7 +129,9 @@ public class RPSPopup : Popup
 
         while (true)
         {
-            if(FirebaseManager.Instance.FirebaseRPSGameUserCount <= 1)
+            UserCount.text = string.Format("남은인원 : {0}명", FirebaseManager.Instance.FirebaseRPSGameUserCount);
+
+            if (FirebaseManager.Instance.FirebaseRPSGameUserCount <= 1)
             {
                 TKManager.Instance.HideHUD();
                 CloseAction();
@@ -136,6 +139,7 @@ public class RPSPopup : Popup
                 ParentPopup.ShowPopup(new MsgPopup.MsgPopupData("너 우승"));
                 break;
             }
+
             // 상대방이 검색이 됨
             if (FirebaseManager.Instance.FirebaseRPSGame_EnemyIndex != 0)
             {
