@@ -133,8 +133,6 @@ public class RPSPopup : Popup
 
         while (true)
         {
-            
-
             if (FirebaseManager.Instance.FirebaseRPSGameUserCount <= 1)
             {
                 TKManager.Instance.HideHUD();
@@ -170,7 +168,7 @@ public class RPSPopup : Popup
         MyRPSEmpty.gameObject.SetActive(true);
         MyRPS.gameObject.SetActive(false);
 
-        float enemyRPSChangeTime = 0.2f;
+        float enemyRPSChangeTime = 0.05f;
         float maxSelectTime = draw ? CommonData.RPS_GAME_DRAW_PLAY_TIME : CommonData.RPS_GAME_PLAY_TIME;
         float myPRSSelectTime = maxSelectTime;
         RandEnemyRPS();
@@ -181,7 +179,7 @@ public class RPSPopup : Popup
 
             if (enemyRPSChangeTime < 0)
             {
-                enemyRPSChangeTime = 0.2f;
+                enemyRPSChangeTime = 0.05f;
                 RandEnemyRPS();
             }
 
