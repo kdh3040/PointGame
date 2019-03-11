@@ -209,7 +209,7 @@ public class RPSPopup : Popup
         if (RPSGame_MyValue != 0)
             FirebaseManager.Instance.SelectRPSGame(RPSGame_MyValue);
 
-        float waitTime = 1.0f;
+        float waitTime = 5.0f;
         while (true)
         {
             waitTime -= Time.deltaTime;

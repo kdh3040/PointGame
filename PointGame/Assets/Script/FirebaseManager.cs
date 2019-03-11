@@ -1285,11 +1285,11 @@ public class FirebaseManager : MonoBehaviour
                  .GetReference("RPSGame").Child(RPSGameRoomChangedHandle_SaveSeries).Child(RPSGameRoomChangedHandle_SaveMyRoom)
                  .ValueChanged -= RPSGameRoomChangedHandle;
 
+            Debug.Log("@@@@@@@ AddHandler Remove  " + RPSGameRoomChangedHandle_SaveSeries + " " + RPSGameRoomChangedHandle_SaveMyRoom);
+
             RPSGameRoomChangedHandle = null;
             RPSGameRoomChangedHandle_SaveSeries = "";
             RPSGameRoomChangedHandle_SaveMyRoom = "";
-
-            Debug.Log("@@@@@@@ AddHandler Remove  " + RPSGameRoomChangedHandle_SaveSeries + " " + RPSGameRoomChangedHandle_SaveMyRoom);
         }
 
         FirebaseDatabase.DefaultInstance
