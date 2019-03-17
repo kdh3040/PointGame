@@ -105,7 +105,8 @@
   var tempWinnerData = new Array();
   var tempLooserData = new Array();
   var RPSUserCount  = 1;
-  var RPSUserSeries = 0;
+  var RPSUserSeries = -1;
+  var RPSGameCurSeries = 0;
   var RPSUserStatus;
 
   $("#BTN_TEST_CREATE").click(function() {
@@ -135,6 +136,12 @@
     {
       var index = 0;
 
+	  
+	   tempData = new Array();
+	   tempWinnerData = new Array();
+	   tempLooserData = new Array();
+
+
       firebase.database().ref('/RPSUserCount').once('value', function(snapshot) {
         var message = snapshot.val();
         RPSUserCount = message;
@@ -142,11 +149,11 @@
 
         if(RPSUserCount == 1)
         {
-            firebase.database().ref('/RPSGame').remove();
-            firebase.database().ref('/RPSUserList').remove();
-            firebase.database().ref('/RPSGameSeries').set(0);
+            firebase.database().ref('/RPSGame').remove();  
+            firebase.database().ref('/RPSGameSeries').set(-1);
             firebase.database().ref('/RPSUserCount').set(0);
-            firebase.database().ref('/RPSGameCurSeries').set(RPSGameCurSeries);
+		//	firebase.database().ref('/RPSGameCurSeries').set(RPSUserSeries);
+            
         }
         else {
 
@@ -170,9 +177,9 @@
 
                         if(isEmpty(message[index][index * 2]))
                         {
-                          tempData[index * 2].NickName = "부전승";
-                          tempData[index * 2].Index = "0";
-                          tempData[index * 2].Value = null;
+                          tempData[index * 2].NickName = 'a1a2';
+                          tempData[index * 2].Index = '1234';
+                          tempData[index * 2].Value = 0;
 
                           console.log((tempData[index * 2]));
                         }
@@ -182,9 +189,9 @@
 
                         if(isEmpty(message[index][index * 2 + 1]))
                         {
-                          tempData[index * 2 + 1].NickName = '부전승';
-                          tempData[index * 2 + 1].Index = '0';
-                          tempData[index * 2 + 1].Value = null;
+                          tempData[index * 2 + 1].NickName = 'a1a2';
+                          tempData[index * 2 + 1].Index = '1234';
+                          tempData[index * 2 + 1].Value = 0;
                           console.log((tempData[index * 2 + 1]));
                         }
                         else {
@@ -209,6 +216,8 @@
       firebase.database().ref('/RPSGameSeries').once('value', function(snapshot) {
         var message = snapshot.val();
         RPSUserSeries = message;
+		RPSUserSeries *= 1;
+		RPSUserSeries = 0;
 
           firebase.database().ref('/RPSUserList').once('value', function(snapshot) {
             var message = snapshot.val();
@@ -248,7 +257,10 @@
 
                 firebase.database().ref('/RPSUserCount').set(Object.keys(message).length + 1);
               }
-              //GetRPSGame();
+
+			  firebase.database().ref('/RPSGameSeries').set(RPSUserSeries);
+
+			  firebase.database().ref('/RPSUserList').remove();
               });
       });
     }
@@ -298,13 +310,15 @@
           if(result == 1)
           {
             tempWinnerData[tempUserCount] = tempData[tempIdx * 2];
-            firebase.database().ref('/Users/'+tempWinnerData[tempUserCount].Index + '/FirebaseRPSGameMyRoom').set(tempUserCount);
+
+			var tempRoomNumber =   Math.floor(tempUserCount / 2);
+            firebase.database().ref('/Users/'+tempWinnerData[tempUserCount].Index + '/FirebaseRPSGameMyRoom').set(tempRoomNumber);
             firebase.database().ref('/Users/'+tempWinnerData[tempUserCount].Index + '/FirebaseRPSGameMyPosition').set(tempIdx * 2);
 
             tempLooserData[tempUserCount] = tempData[tempIdx * 2 + 1];
             firebase.database().ref('/Users/'+tempLooserData[tempUserCount].Index + '/FirebaseRPSGameMyRoom').set(-1);
             firebase.database().ref('/Users/'+tempLooserData[tempUserCount].Index + '/FirebaseRPSGameMyPosition').set(-1);
-            tempUserCount++ ;
+            tempUserCount++;
           }
           else if (result == 2)
           {
@@ -313,37 +327,49 @@
             firebase.database().ref('/Users/'+tempLooserData[tempUserCount].Index + '/FirebaseRPSGameMyPosition').set(-1);
 
             tempWinnerData[tempUserCount] = tempData[tempIdx * 2 + 1];
-            firebase.database().ref('/Users/'+tempWinnerData[tempUserCount].Index + '/FirebaseRPSGameMyRoom').set(tempUserCount);
+
+			var tempRoomNumber =   Math.floor(tempUserCount / 2);
+            firebase.database().ref('/Users/'+tempWinnerData[tempUserCount].Index + '/FirebaseRPSGameMyRoom').set(tempRoomNumber);
             firebase.database().ref('/Users/'+tempWinnerData[tempUserCount].Index + '/FirebaseRPSGameMyPosition').set(tempIdx * 2 + 1);
             tempUserCount++ ;
           }
           else
           {
-            tempLooserData[tempUserCount] = tempData[tempIdx * 2];
-            firebase.database().ref('/Users/'+tempLooserData[tempUserCount].Index + '/FirebaseRPSGameMyRoom').set(-1);
-            firebase.database().ref('/Users/'+tempLooserData[tempUserCount].Index + '/FirebaseRPSGameMyPosition').set(-1);
+            firebase.database().ref('/Users/'+tempData[tempIdx * 2].Index + '/FirebaseRPSGameMyRoom').set(-1);
+            firebase.database().ref('/Users/'+tempData[tempIdx * 2].Index + '/FirebaseRPSGameMyPosition').set(-1);
 
-            tempWinnerData[tempUserCount] = tempData[tempIdx * 2 + 1];
-            firebase.database().ref('/Users/'+tempWinnerData[tempUserCount].Index + '/FirebaseRPSGameMyRoom').set(-1);
-            firebase.database().ref('/Users/'+tempWinnerData[tempUserCount].Index + '/FirebaseRPSGameMyPosition').set(-1);
+            firebase.database().ref('/Users/'+tempData[tempIdx * 2 + 1].Index + '/FirebaseRPSGameMyRoom').set(-1);
+            firebase.database().ref('/Users/'+tempData[tempIdx * 2 + 1].Index + '/FirebaseRPSGameMyPosition').set(-1);
           }
         }
       }
 
+
       firebase.database().ref('/RPSGame/' + RPSUserSeries).remove();
+
       RPSUserSeries += 1;
-      firebase.database().ref('/RPSGameSeries').set(RPSUserSeries);
 
-      console.log(tempUserCount);
-      firebase.database().ref('/RPSUserCount').set(tempUserCount);
+	  if(tempWinnerData.length % 2 == 1)
+      {
+		tempWinnerData[tempWinnerData.length].NickName = 'a1a2';
+		tempWinnerData[tempWinnerData.length].Index = '1234';
+		tempWinnerData[tempWinnerData.length].Value = 0;
 
-      for(var i = 0; i<tempUserCount; i++)
+        tempUserCount++;
+       }
+
+	  for(var i = 0; i<tempUserCount; i++)
       {
         var tempRoom =   Math.floor(i / 2);
         firebase.database().ref('/RPSGame/' + RPSUserSeries + '/' + tempRoom + '/' + i + '/Index/').set(tempWinnerData[i].Index);
         firebase.database().ref('/RPSGame/' + RPSUserSeries + '/' + tempRoom + '/' + i + '/NickName/').set(tempWinnerData[i].NickName);
         firebase.database().ref('/RPSGame/' + RPSUserSeries + '/' + tempRoom + '/' + i + '/Value/').set(0);
-      }
+      }        
+
+	  console.log(tempUserCount);
+      firebase.database().ref('/RPSUserCount').set(tempUserCount);
+
+      firebase.database().ref('/RPSGameSeries').set(RPSUserSeries);
   }
 
   var timer;
