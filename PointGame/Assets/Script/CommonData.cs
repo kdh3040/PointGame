@@ -8,7 +8,7 @@ public class CommonData : MonoBehaviour
     public static int AdsPointReward = 100;
     public static int LottoNumberCost = 1000;
     public static int UserDefaultPoint = 0;
-    public static int RPSCost = 1500;
+    public static int RPSCost = 0;
 
     public static int TodayAccumulatePointLimit = 10000;
     public static int PointToCashChange = 1000;

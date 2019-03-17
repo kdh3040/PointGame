@@ -455,7 +455,7 @@ public class MainUI : MonoBehaviour {
             }
         }
 
-        if (FirebaseManager.Instance.FirebaseRPSGamePlayTime < DateTime.Now.Ticks &&
+        if (FirebaseManager.Instance.FirebaseRPSGameSeries > -1 &&
             FirebaseManager.Instance.FirebaseRPSGameEnterEnable)
         {
             if(Popup.CurrPopupType == POPUP_TYPE.NONE)

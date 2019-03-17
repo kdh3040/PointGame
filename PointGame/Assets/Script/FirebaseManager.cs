@@ -58,7 +58,7 @@ public class FirebaseManager : MonoBehaviour
     public int FirebaseRPSGameStatus = 0;
 
     // 가위바위보 현재 회차
-    public int FirebaseRPSGameSeries = 0;
+    public int FirebaseRPSGameSeries = -1;
 
     // 가위바위보 내 방번호
     public int FirebaseRPSGameMyRoom = -1;
@@ -234,7 +234,6 @@ public class FirebaseManager : MonoBehaviour
         {
             FirebaseRPSGameMyRoom = Convert.ToInt32(args.Snapshot.Value);
             // 데이터가 변경되면 실제로 게임이 시작된다.
-            AddHandler();
         }
 
         Debug.Log("@@@@@@@ RPSGameRoomNumber " + TKManager.Instance.MyData.RPSGameRoomNumber);
@@ -1308,7 +1307,7 @@ public class FirebaseManager : MonoBehaviour
         FirebaseRPSGame_EnemyNick = "";
         FirebaseRPSGame_EnemyValue = 0;
         FirebaseRPSGame_EnemyIndex = 0;
-        FirebaseRPSGameSeries = 0;
+        FirebaseRPSGameSeries = -1;
         FirebaseRPSGameMyRoom = -1;
 
         mDatabaseRef.Child("RPSUserList").Child(TKManager.Instance.MyData.Index).SetValueAsync(TKManager.Instance.MyData.NickName);
