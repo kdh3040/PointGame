@@ -117,20 +117,37 @@ public class RPSPopup : Popup
                     }
 
                     result = GetRPSResult();
-                }
 
-                // 또 비김
-                if (result == 0)
-                {
-                    Debug.Log("결과창_1_1 " + FirebaseManager.Instance.FirebaseRPSGame_EnemyIndex + " " + FirebaseManager.Instance.FirebaseRPSGame_EnemyNick + " " + FirebaseManager.Instance.FirebaseRPSGame_EnemyValue);
-                    Debug.Log("결과창_1_2 " + RPSGame_MyValue);
-                    ParentPopup.ShowPopup(new MsgPopup.MsgPopupData("패배하였습니다.", () =>
+                    // 또 비김
+                    if (result == 0)
                     {
+                        TKManager.Instance.HideHUD();
                         FirebaseManager.Instance.FirebaseRPSGamePlayTime = long.MaxValue;
                         FirebaseManager.Instance.FirebaseRPSGameMyRoom = -1;
                         CloseAction();
-                    }));
-                    yield break;
+                        // 우승
+                        ParentPopup.ShowPopup(new MsgPopup.MsgPopupData("가위바위보 준우승!\n50캐쉬 획득!", () =>
+                        {
+                            TKManager.Instance.MyData.AddCash(50);
+                        }));
+                        yield break;
+                    }
+                }
+                else
+                {
+                    // 또 비김
+                    if (result == 0)
+                    {
+                        Debug.Log("결과창_1_1 " + FirebaseManager.Instance.FirebaseRPSGame_EnemyIndex + " " + FirebaseManager.Instance.FirebaseRPSGame_EnemyNick + " " + FirebaseManager.Instance.FirebaseRPSGame_EnemyValue);
+                        Debug.Log("결과창_1_2 " + RPSGame_MyValue);
+                        ParentPopup.ShowPopup(new MsgPopup.MsgPopupData("패배하였습니다.", () =>
+                        {
+                            FirebaseManager.Instance.FirebaseRPSGamePlayTime = long.MaxValue;
+                            FirebaseManager.Instance.FirebaseRPSGameMyRoom = -1;
+                            CloseAction();
+                        }));
+                        yield break;
+                    }
                 }
             }
 
