@@ -113,15 +113,31 @@ public class RPSPopup : Popup
             // 패배
             if(result == 2)
             {
-                Debug.Log("결과창_2_1 " + FirebaseManager.Instance.FirebaseRPSGame_EnemyIndex + " " + FirebaseManager.Instance.FirebaseRPSGame_EnemyNick + " " + FirebaseManager.Instance.FirebaseRPSGame_EnemyValue);
-                Debug.Log("결과창_2_2 " + RPSGame_MyValue);
-                ParentPopup.ShowPopup(new MsgPopup.MsgPopupData("패배하였습니다.", () =>
+                if (FirebaseManager.Instance.FirebaseRPSGameUserCount <= 2)
                 {
+                    TKManager.Instance.HideHUD();
                     FirebaseManager.Instance.FirebaseRPSGamePlayTime = long.MaxValue;
                     FirebaseManager.Instance.FirebaseRPSGameMyRoom = -1;
                     CloseAction();
-                }));
-                yield break;
+                    // 우승
+                    ParentPopup.ShowPopup(new MsgPopup.MsgPopupData("가위바위보 준우승!\n50캐쉬 획득!", () =>
+                    {
+                        TKManager.Instance.MyData.AddCash(50);
+                    }));
+                    yield break;
+                }
+                else
+                {
+                    Debug.Log("결과창_2_1 " + FirebaseManager.Instance.FirebaseRPSGame_EnemyIndex + " " + FirebaseManager.Instance.FirebaseRPSGame_EnemyNick + " " + FirebaseManager.Instance.FirebaseRPSGame_EnemyValue);
+                    Debug.Log("결과창_2_2 " + RPSGame_MyValue);
+                    ParentPopup.ShowPopup(new MsgPopup.MsgPopupData("패배하였습니다.", () =>
+                    {
+                        FirebaseManager.Instance.FirebaseRPSGamePlayTime = long.MaxValue;
+                        FirebaseManager.Instance.FirebaseRPSGameMyRoom = -1;
+                        CloseAction();
+                    }));
+                    yield break;
+                }
             }
 
             // 승리
