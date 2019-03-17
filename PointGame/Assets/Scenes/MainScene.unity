@@ -2362,7 +2362,7 @@ MonoBehaviour:
   PushButton: {fileID: 121745742}
   PushBoxNotiObj: {fileID: 1707917519}
   WinnerButton: {fileID: 1750393059}
-  WinnerButtonText: {fileID: 0}
+  WinnerButtonText: {fileID: 795578224}
   LogoButton: {fileID: 1220137859}
   GamePlayButton: {fileID: 343806657}
   LottoButton: {fileID: 1622894957}
