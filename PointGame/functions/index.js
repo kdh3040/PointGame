@@ -143,7 +143,7 @@ function showClock(){
          if((new Date()).getHMS() === arrLottoSelectTime[i])
          {
               console.log(arrLottoSelectTime[i]);
-              SetLottoUserData();
+            //  SetLottoUserData();
          }
       }
 
@@ -160,11 +160,11 @@ function showClock(){
     console.log("AutoLottoSelectMode" + AutoLottoSelectMode);
     if(AutoLottoSelectMode)
     {
-      showClock();
+    //  showClock();
     }
     else
     {
-      clearTimeout(timer);
+    //  clearTimeout(timer);
       //console.log('0');
     }
 

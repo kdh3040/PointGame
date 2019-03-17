@@ -66,17 +66,7 @@
     <br>
     <br>
 
-    <table>
-      <h5 class="indigo-text">:+: 복권 구매 인원 현황 :+:</h5>
-      <thead>
-        <th>회차</th>
-        <th>인원</th>
-      </thead>
-      <tbody id="lottoBuyUserConut"></tbody>
-    </table>
 
-    <br>
-    <br>
 
     <table>
       <h5 class="indigo-text">:+: 최근 당첨자 현황 :+:</h5>
@@ -101,6 +91,22 @@
       </thead>
       <tbody id="LottoAccountInfo"></tbody>
     </table>
+
+
+        <br>
+        <br>
+
+    <table>
+      <h5 class="indigo-text">:+: 복권 구매 인원 현황 :+:</h5>
+      <thead>
+        <th>회차</th>
+        <th>인원</th>
+      </thead>
+      <tbody id="lottoBuyUserConut"></tbody>
+    </table>
+
+    <br>
+    <br>
 
   </div>
 
@@ -179,6 +185,30 @@
   arrLottoWinLuckyGroup = [];
   var LottoSelectMode;
 
+  var timer;
+  var arrLottoSelectTime = ['00:00:00', '03:00:00', '06:00:00', '09:00:00'];
+
+
+      Number.prototype.to2 = function(){return this<10?'0'+this:this;};
+       Date.prototype.getHMS = function(){
+             return this.getHours().to2() + ':' + this.getMinutes().to2() + ':'
+                  + this.getSeconds().to2();
+       }
+
+
+      function showClock(){
+              console.log((new Date()).getHMS());
+              for(var i=0; i<4; i++) {              //console.log(arrLottoSelectTime[i]);
+               if((new Date()).getHMS() === arrLottoSelectTime[i])
+               {
+                    console.log(arrLottoSelectTime[i]);
+                    SetLottoUserData();
+               }
+            }
+
+              timer = setTimeout(showClock,1000);
+          }
+
   function SetLottoCount()
   {
     firebase.database().ref('/LottoCount').once('value', function(snapshot) {
@@ -211,37 +241,49 @@
           var dbTestRef = firebase.database().ref('/Lotto/'+LottoCurSeries+'_L')
           dbTestRef.on('child_added', function(data){
 
-            //console.log(data.val(), 'key: ', data.key)
+          //  console.log(data.val(), 'key: ', data.key)
             arrLottoUser[data.key] = data.val();
             arrLottoUserKey[tempIdx] = data.key;
             tempIdx++;
           //  console.log(arrLottoUserKey);
-          //  console.log(Lottocount + '___' + arrLottoUserKey.length);
+        //    console.log(Lottocount + '___' + arrLottoUserKey.length);
             if( Lottocount == arrLottoUserKey.length +1)
             {
               var result = Math.floor(Math.random() * arrLottoUserKey.length);
-          //    console.log(result);
+
               result = arrLottoUserKey[result];
 
+              var LuckyUserExist = false;
+              for(var i = 0; i < 20; i++)
+              {
+                if(result === arrLottoWinLuckyGroup[i])
+                {
+                  LuckyUserExist = true;
+                  break;
+                }
+              }
+
+              if( LuckyUserExist === false)
+              {
+                firebase.database().ref('/LottoLuckyNumber/'+LottoCurSeries+'_L').set(arrLottoUser[result])
+                firebase.database().ref('/LottoLuckyGroup/'+LottoCurSeries+'_L').set(result)
+
+                var LottoRandNumber = Math.floor(Math.random() * 100) + 1;
+                firebase.database().ref('/LottoRefNumber').set(LottoRandNumber)
+
+                firebase.database().ref('/Lotto/'+LottoCurSeries+'_L').remove();
+                LottoCurSeries = LottoCurSeries - LottoSeriesRef;
+                LottoCurSeries += 1;
+                firebase.database().ref('/LottoCurSeries').set(LottoCurSeries)
+                firebase.database().ref('/LottoCount').set(1)
+
+              }
+              else {
+                  SetLottoUserData();
+              }
             //  console.log(result);
-
-              firebase.database().ref('/LottoLuckyNumber/'+LottoCurSeries+'_L').set(arrLottoUser[result])
-              firebase.database().ref('/LottoLuckyGroup/'+LottoCurSeries+'_L').set(result)
-
-              var LottoRandNumber = Math.floor(Math.random() * 100) + 1;
-              firebase.database().ref('/LottoRefNumber').set(LottoRandNumber)
-
-              firebase.database().ref('/Lotto/'+LottoCurSeries+'_L').remove();
-              LottoCurSeries = LottoCurSeries - LottoSeriesRef;
-              LottoCurSeries += 1;
-              firebase.database().ref('/LottoCurSeries').set(LottoCurSeries)
-              firebase.database().ref('/LottoCount').set(1)
             }
-
-
           })
-
-
         //console.log(LottoCurSeries);
       });
   });
@@ -295,7 +337,7 @@
 
   var dbTestRef = firebase.database().ref('/LottoUsersBySeries')
   dbTestRef.on('child_added', function(data){
-    console.log( data.val());
+    //console.log( data.val());
     var Series = data.key.toString();
     var UserCount = data.val();
     SetLottoUserCount(Series, UserCount);
@@ -304,7 +346,7 @@
 
 
 
-    function SetData()
+    function SetData(Series, UserCount)
     {
     //  for(var i = 0; i < arrLottoWinLuckyGroup.length; i++)
       {
@@ -316,8 +358,13 @@
         var cell1 = row.insertCell(0);
         var cell2 = row.insertCell(1);
 
-        cell1.innerHTML = arrLottoWinLuckyGroupSeries[0] + 1;
-        cell2.innerHTML = arrLottoWinLuckyGroup[arrLottoWinLuckyGroupSeries[0]];
+        var tempSeries = Series * 1;
+        tempSeries += 1;
+        cell1.innerHTML = tempSeries;
+        cell2.innerHTML = UserCount;
+
+        //cell1.innerHTML = arrLottoWinLuckyGroupSeries[0] + 1;
+        //cell2.innerHTML = arrLottoWinLuckyGroup[arrLottoWinLuckyGroupSeries[0]];
 
       }
 
@@ -425,19 +472,20 @@
 
 
                   var tempCount = 0;
-                  var dbTestRef = firebase.database().ref('/LottoLuckyGroup').orderByKey().limitToLast(1)
+                  var dbTestRef = firebase.database().ref('/LottoLuckyGroup').orderByKey().limitToLast(20)
                   dbTestRef.on('child_added', function(data){
 
                     var index = data.key.toString().split('_');
                     var Series = Number(index[0]) - LottoSeriesRef;
                     arrLottoWinLuckyGroup[Series] = data.val();
                     arrLottoWinLuckyGroupSeries[tempCount] = Series;
-                    //SetData(tempIdx, arrLottoWinLuckyGroup[tempIdx], arrLottoWinUser[tempIdx]);
+
+                    if(tempCount == 19)
+                       SetData(Series, data.val());
                     //Refresh();
 
-                    console.log(arrLottoWinLuckyGroup);
+//                    console.log(arrLottoWinLuckyGroup[Series]);
 
-                    Refresh();
                     tempCount ++;
 
                   });
@@ -454,9 +502,6 @@
 
 
 
-
-
-
     function SetLottoRefData()
     {
       firebase.database().ref('/AutoLottoSelect').once('value', function(snapshot) {
@@ -466,10 +511,14 @@
           if(LottoSelectMode == 0)
           {
             $("#BTN_TEST_CREATE").text('현재 모드 : 수동 당첨');
+            console.log("수동");
+            clearTimeout(timer);
           }
           else
           {
             $("#BTN_TEST_CREATE").text('현재 모드 : 자동 당첨');
+            console.log("자동");
+            showClock();
           }
           //console.log(LottoRefNumber);
         });
@@ -483,17 +532,21 @@
         LottoSelectMode = 1;
         firebase.database().ref('/AutoLottoSelect').set(LottoSelectMode);
         $("#BTN_TEST_CREATE").text('현재 모드 : 자동 당첨');
+        showClock();
       }
       else
       {
         LottoSelectMode = 0;
         firebase.database().ref('/AutoLottoSelect').set(LottoSelectMode);
         $("#BTN_TEST_CREATE").text('현재 모드 : 수동 당첨');
+        clearTimeout(timer);
       }
     });
 
     SetLottoCount();
     SetLottoRefData();
+
+
 
 </script>
 
