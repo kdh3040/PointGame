@@ -13,27 +13,32 @@ public class MainUI : MonoBehaviour {
     public Text CurrTime;
     public Text Id;
 
-    public Image LottoWinBg;
-    public Text LottoWinTitle;
-    public Text LottoWinName;
-    public Text LottoWinSeries;
+    //public Image LottoWinBg;
+    //public Text LottoWinTitle;
+    //public Text LottoWinName;
+    //public Text LottoWinSeries;
 
     public CountImgFont AllPoint;
     public Button PointSwap;
-    public Button FreePoint;
-    public Button SwapPoint;
+    public Button MiniGameButton;
+    public Button AllPointButton;
     public GameObject TopRightButtons;
+
+    public Button RecommenderCodeButton;
+    public Button PushButton;
+    public GameObject PushBoxNotiObj;
+    public Button WinnerButton;
+    public Text WinnerButtonText;
 
     public Button LogoButton;
     public Button GamePlayButton;
-    public Button PushButton;
-    public GameObject PushBoxNotiObj;
     public Button LottoButton;
     public GameObject LottoNotiObj;
+    public Button LottoHelpButton;
     public Button FreeRoulette;
-    public Button HelpButton;
-    public Button RecommenderCodeButton;
     public Button RPSButton;
+    public Button RPSHelpButton;
+
     public PopupUI Popup;
 
     public AudioSource mBGM;
@@ -52,18 +57,19 @@ public class MainUI : MonoBehaviour {
         //Activity = jc.GetStatic<AndroidJavaObject>("currentActivity");
 #endif
 
-        FreePoint.onClick.AddListener(OnClickFreePoint);
+        MiniGameButton.onClick.AddListener(OnClickFreePoint);
         LogoButton.onClick.AddListener(OnClickGamePlay);
         GamePlayButton.onClick.AddListener(OnClickGamePlay);
         PushButton.onClick.AddListener(OnClickPushBox);
-        FreePoint.onClick.AddListener(OnClickFreePoint);
         LottoButton.onClick.AddListener(OnClickLotto);
         FreeRoulette.onClick.AddListener(OnClickFreeRoulette);
         PointSwap.onClick.AddListener(OnClickPointSwap);
-        SwapPoint.onClick.AddListener(OnClickPointSwap);
-        HelpButton.onClick.AddListener(OnClickHelp);
+        AllPointButton.onClick.AddListener(OnClickPointSwap);
+        WinnerButton.onClick.AddListener(OnClickWinnerList);
         RecommenderCodeButton.onClick.AddListener(OnClickRecommenderCodeButton);
         RPSButton.onClick.AddListener(OnClickRPSGame);
+        LottoHelpButton.onClick.AddListener(OnClickHelp);
+        RPSHelpButton.onClick.AddListener(OnClickRPSHelp);
     }
 
     void Start()
@@ -87,64 +93,63 @@ public class MainUI : MonoBehaviour {
 
         if (FirebaseManager.Instance.ReviewMode || FirebaseManager.Instance.ExamineMode)
         {
-            SwapPoint.gameObject.SetActive(false);
-            FreePoint.gameObject.SetActive(false);
-            HelpButton.gameObject.SetActive(false);
+            PointSwap.gameObject.SetActive(false);
+            MiniGameButton.gameObject.SetActive(false);
+            PushButton.gameObject.SetActive(false);
             LottoButton.gameObject.SetActive(false);
             FreeRoulette.gameObject.SetActive(false);
-            PushButton.gameObject.SetActive(false);
             RPSButton.gameObject.SetActive(false);
-
+            WinnerButtonText.text = "랭킹";
             NextLottoTime.text = "";
 
-            LottoWinTitle.text = "랭킹";
-            LottoWinBg.gameObject.SetActive(true);
-            LottoWinSeries.gameObject.SetActive(true);
-            LottoWinName.gameObject.SetActive(true);
+            //LottoWinTitle.text = "랭킹";
+            //LottoWinBg.gameObject.SetActive(true);
+            //LottoWinSeries.gameObject.SetActive(true);
+            //LottoWinName.gameObject.SetActive(true);
 
-            // 다시 들어 올때 랭킹이 바뀔수 있기때문에 처리
-            List<KeyValuePair<string, int>> rankList = new List<KeyValuePair<string, int>>();
-            rankList.AddRange(TKManager.Instance.ReviewRank);
-            for (int i = 0; i < rankList.Count; i++)
-            {
-                if (rankList[i].Value <= TKManager.Instance.MyData.Point + TKManager.Instance.ReviewRankPlusScore)
-                {
-                    rankList.Insert(i, new KeyValuePair<string, int>(TKManager.Instance.MyData.NickName, TKManager.Instance.MyData.Point + TKManager.Instance.ReviewRankPlusScore));
-                    break;
-                }
-            }
+            //// 다시 들어 올때 랭킹이 바뀔수 있기때문에 처리
+            //List<KeyValuePair<string, int>> rankList = new List<KeyValuePair<string, int>>();
+            //rankList.AddRange(TKManager.Instance.ReviewRank);
+            //for (int i = 0; i < rankList.Count; i++)
+            //{
+            //    if (rankList[i].Value <= TKManager.Instance.MyData.Point + TKManager.Instance.ReviewRankPlusScore)
+            //    {
+            //        rankList.Insert(i, new KeyValuePair<string, int>(TKManager.Instance.MyData.NickName, TKManager.Instance.MyData.Point + TKManager.Instance.ReviewRankPlusScore));
+            //        break;
+            //    }
+            //}
 
-            StringBuilder winCount = new StringBuilder();
-            int viewRank = 0;
-            for (int i = 0; i < rankList.Count; i++)
-            {
-                winCount.Append(string.Format("- {0:D2}위", i + 1));
-                if(i < rankList.Count - 1)
-                    winCount.AppendLine();
+            //StringBuilder winCount = new StringBuilder();
+            //int viewRank = 0;
+            //for (int i = 0; i < rankList.Count; i++)
+            //{
+            //    winCount.Append(string.Format("- {0:D2}위", i + 1));
+            //    if(i < rankList.Count - 1)
+            //        winCount.AppendLine();
 
-                viewRank++;
+            //    viewRank++;
 
-                if (viewRank >= 4)
-                    break;
-            }
+            //    if (viewRank >= 4)
+            //        break;
+            //}
 
-            LottoWinSeries.text = winCount.ToString();
+            //LottoWinSeries.text = winCount.ToString();
 
-            StringBuilder winUser = new StringBuilder();
-            viewRank = 0;
-            for (int i = 0; i < rankList.Count; i++)
-            {
-                winUser.Append(string.Format(" : {0} ({1:n0}점)", rankList[i].Key, rankList[i].Value));
-                if (i < rankList.Count - 1)
-                    winUser.AppendLine();
+            //StringBuilder winUser = new StringBuilder();
+            //viewRank = 0;
+            //for (int i = 0; i < rankList.Count; i++)
+            //{
+            //    winUser.Append(string.Format(" : {0} ({1:n0}점)", rankList[i].Key, rankList[i].Value));
+            //    if (i < rankList.Count - 1)
+            //        winUser.AppendLine();
 
-                viewRank++;
+            //    viewRank++;
 
-                if (viewRank >= 4)
-                    break;
-            }
+            //    if (viewRank >= 4)
+            //        break;
+            //}
 
-            LottoWinName.text = winUser.ToString();
+            //LottoWinName.text = winUser.ToString();
 
             //RectTransform pointSwapRect = PointSwap.GetComponent<RectTransform>();
             //var pos = pointSwapRect.anchoredPosition;
@@ -158,36 +163,29 @@ public class MainUI : MonoBehaviour {
         }
         else
         {
-            SwapPoint.gameObject.SetActive(true);
-            FreePoint.gameObject.SetActive(true);
-            HelpButton.gameObject.SetActive(true);
-            LottoButton.gameObject.SetActive(true);
-            FreeRoulette.gameObject.SetActive(true);
-            RPSButton.gameObject.SetActive(true);
-            PushButton.gameObject.SetActive(true);
+            WinnerButtonText.text = "당첨자현황";
+            //LottoWinTitle.text = "* 당첨자 현황 *";
 
-            LottoWinTitle.text = "* 당첨자 현황 *";
+            //var winList = TKManager.Instance.LottoWinUserList;
+            //StringBuilder winCount = new StringBuilder();
 
-            var winList = TKManager.Instance.LottoWinUserList;
-            StringBuilder winCount = new StringBuilder();
+            //for (int i = 0; i < winList.Count - 1; i++)
+            //{
+            //    winCount.Append(string.Format("- {0:D2}회 당첨자", winList[i].Key + 1));
+            //    winCount.AppendLine();
+            //}
 
-            for (int i = 0; i < winList.Count - 1; i++)
-            {
-                winCount.Append(string.Format("- {0:D2}회 당첨자", winList[i].Key + 1));
-                winCount.AppendLine();
-            }
+            //LottoWinSeries.text = winCount.ToString();
 
-            LottoWinSeries.text = winCount.ToString();
+            //StringBuilder winUser = new StringBuilder();
 
-            StringBuilder winUser = new StringBuilder();
+            //for (int i = 0; i < winList.Count - 1; i++)
+            //{
+            //    winUser.Append(string.Format(" : {0}", winList[i].Value));
+            //    winUser.AppendLine();
+            //}
 
-            for (int i = 0; i < winList.Count - 1; i++)
-            {
-                winUser.Append(string.Format(" : {0}", winList[i].Value));
-                winUser.AppendLine();
-            }
-
-            LottoWinName.text = winUser.ToString();
+            //LottoWinName.text = winUser.ToString();
 
             bool timeView = false;
             for (int i = 0; i < CommonData.LottoWinTime.Length; i++)
@@ -311,6 +309,25 @@ public class MainUI : MonoBehaviour {
         SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
         Popup.ShowPopup(new HelpPopup.HelpPopupData());
     }
+
+    public void OnClickRPSHelp()
+    {
+        SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
+        Popup.ShowPopup(new RPSHelpPopup.RPSHelpPopupData());
+    }
+
+    public void OnClickWinnerList()
+    {
+        SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
+        if (FirebaseManager.Instance.ReviewMode || FirebaseManager.Instance.ExamineMode)
+        {
+            Popup.ShowPopup(new RankingPopup.RankingPopupData());
+        }
+        else
+        {
+            Popup.ShowPopup(new WinnerListPopup.WinnerListPopupData());
+        }
+    }
     public void OnClickRecommenderCodeButton()
     {
         SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
@@ -319,6 +336,9 @@ public class MainUI : MonoBehaviour {
 
     public void OnClickRPSGame()
     {
+        if (FirebaseManager.Instance.ReviewMode || FirebaseManager.Instance.ExamineMode)
+            return;
+
         if (FirebaseManager.Instance.FirebaseRPSGameEnterTime < DateTime.Now.Ticks &&
             FirebaseManager.Instance.FirebaseRPSGamePlayTime > DateTime.Now.Ticks &&
             FirebaseManager.Instance.FirebaseRPSGamePlayTime != long.MaxValue)
@@ -427,6 +447,9 @@ public class MainUI : MonoBehaviour {
             {
                 FirebaseManager.Instance.FirebaseRPSGameEnterEnable = false;
                 FirebaseManager.Instance.FirebaseRPSGamePlayTime = long.MaxValue;
+                if (FirebaseManager.Instance.ReviewMode || FirebaseManager.Instance.ExamineMode)
+                    return;
+
                 Popup.ShowPopup(new RPSPopup.RPSPopupData());
             }
             else

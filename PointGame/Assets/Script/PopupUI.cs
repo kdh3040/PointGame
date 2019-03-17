@@ -17,9 +17,12 @@ public enum POPUP_TYPE
     ADS,
     MINI_GAME,
     HELP,
+    RPS_HELP,
     PUSH_MSG,
     RECOMMENDER_CODE,
     RPS_GAME,
+    WINNER_LIST,
+    RANKING_LIST,
 }
 
 public class PopupUI : MonoBehaviour {
@@ -41,6 +44,9 @@ public class PopupUI : MonoBehaviour {
     public PushMsgPopup PushMsgPopupObj;
     public RecommenderCodePopup RecommenderCodePopupObj;
     public RPSPopup RPSPopupObj;
+    public WinnerListPopup WinnerListPopupObj;
+    public RankingPopup RankingPopupObj;
+    public RPSHelpPopup RPSHelpPopupObj;
 
     public void Start()
     {
@@ -72,6 +78,12 @@ public class PopupUI : MonoBehaviour {
         RecommenderCodePopupObj.Initialize(this, ClosePopup);
         RPSPopupObj.gameObject.SetActive(false);
         RPSPopupObj.Initialize(this, ClosePopup);
+        WinnerListPopupObj.gameObject.SetActive(false);
+        WinnerListPopupObj.Initialize(this, ClosePopup);
+        RankingPopupObj.gameObject.SetActive(false);
+        RankingPopupObj.Initialize(this, ClosePopup);
+        RPSHelpPopupObj.gameObject.SetActive(false);
+        RPSHelpPopupObj.Initialize(this, ClosePopup);
     }
 
     public void ShowPopup(Popup.PopupData data)
@@ -142,6 +154,18 @@ public class PopupUI : MonoBehaviour {
                 RPSPopupObj.gameObject.SetActive(true);
                 RPSPopupObj.SetData(data);
                 break;
+            case POPUP_TYPE.WINNER_LIST:
+                WinnerListPopupObj.gameObject.SetActive(true);
+                WinnerListPopupObj.SetData(data);
+                break;
+            case POPUP_TYPE.RANKING_LIST:
+                RankingPopupObj.gameObject.SetActive(true);
+                RankingPopupObj.SetData(data);
+                break;
+            case POPUP_TYPE.RPS_HELP:
+                RPSHelpPopupObj.gameObject.SetActive(true);
+                RPSHelpPopupObj.SetData(data);
+                break;
             default:
                 break;
         }
@@ -197,6 +221,15 @@ public class PopupUI : MonoBehaviour {
                 break;
             case POPUP_TYPE.RPS_GAME:
                 RPSPopupObj.gameObject.SetActive(false);
+                break;
+            case POPUP_TYPE.WINNER_LIST:
+                WinnerListPopupObj.gameObject.SetActive(false);
+                break;
+            case POPUP_TYPE.RANKING_LIST:
+                RankingPopupObj.gameObject.SetActive(false);
+                break;
+            case POPUP_TYPE.RPS_HELP:
+                RPSHelpPopupObj.gameObject.SetActive(false);
                 break;
             default:
                 break;
