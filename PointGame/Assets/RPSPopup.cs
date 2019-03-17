@@ -95,6 +95,30 @@ public class RPSPopup : Popup
                 }
 
                 result = GetRPSResult();
+
+                if (FirebaseManager.Instance.FirebaseRPSGameUserCount <= 2)
+                {
+                    // 또 비김
+                    if (result == 0)
+                    {
+                        yield return Co_RPSGame_Result(result);
+                        yield return Co_RPSGame_Select(true);
+                        yield return Co_RPSGame_SelectWait();
+                    }
+
+                    result = GetRPSResult();
+
+                    // 또 비김
+                    if (result == 0)
+                    {
+                        yield return Co_RPSGame_Result(result);
+                        yield return Co_RPSGame_Select(true);
+                        yield return Co_RPSGame_SelectWait();
+                    }
+
+                    result = GetRPSResult();
+                }
+
                 // 또 비김
                 if (result == 0)
                 {
