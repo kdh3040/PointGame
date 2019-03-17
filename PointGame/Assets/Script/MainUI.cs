@@ -353,9 +353,24 @@ public class MainUI : MonoBehaviour {
                 // 가위바위보 참여하쉴?
                 Popup.ShowPopup(new MsgPopup.MsgPopupData("참가 신청을 하시겠습니까?", () =>
                 {
-                    Popup.ShowPopup(new MsgPopup.MsgPopupData("참가 신청이 완료 되었습니다."));
-                    // 광고 보여주기
-                    FirebaseManager.Instance.EnterRPSGame();
+
+                    FirebaseManager.Instance.GetPoint(() =>
+                    {
+                        if (TKManager.Instance.MyData.Point < CommonData.RPSCost)
+                        {
+                            Popup.ShowPopup(new MsgPopup.MsgPopupData("포인트가 부족합니다."));
+                        }
+                        else
+                        {
+                            // 광고 보여주기
+                            AdsManager.Instance.ShowSkipRewardedAd(() =>
+                            {
+                                Popup.ShowPopup(new MsgPopup.MsgPopupData("참가 신청이 완료 되었습니다."));
+                                FirebaseManager.Instance.FirebaseRPSGameEnterEnable = true;
+                                FirebaseManager.Instance.EnterRPSGame();
+                            });
+                        }
+                    });
                 }, MsgPopup.MSGPOPUP_TYPE.TWO));
             }
         }
