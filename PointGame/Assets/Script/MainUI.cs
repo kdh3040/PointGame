@@ -77,7 +77,7 @@ public class MainUI : MonoBehaviour {
 
 
         mBGM.Play();
-
+        TKManager.Instance.MainUIView = true;
         Id.text = string.Format("ID : {0}", TKManager.Instance.MyData.NickName);
 
         CurrLottoTime = DateTime.Now.Hour;
@@ -271,6 +271,7 @@ public class MainUI : MonoBehaviour {
 
     public void OnClickGamePlay()
     {
+        TKManager.Instance.MainUIView = false;
         SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
         SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
     }

@@ -43,6 +43,7 @@ public class TKManager : MonoBehaviour
     public List<KeyValuePair<string, int>> ReviewRank = new List<KeyValuePair<string, int>>();
 
     public List<KeyValuePair<string, string>> RecommendUsers = new List<KeyValuePair<string, string>>();
+    public bool MainUIView = false;
 
     void Start()
     {
@@ -146,6 +147,19 @@ public class TKManager : MonoBehaviour
         HUD.HideHUD();
     }
 
+    private void Update()
+    {
+        if(MainUIView == false)
+        {
+            if (FirebaseManager.Instance.FirebaseRPSGameSeries > -1 &&
+            FirebaseManager.Instance.FirebaseRPSGameEnterEnable)
+            {
+                FirebaseManager.Instance.FirebaseRPSGameEnterEnable = false;
+                FirebaseManager.Instance.FirebaseRPSGamePlayTime = long.MaxValue;
+            }
+        }
+        
+    }
 
 
 
