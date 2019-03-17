@@ -207,7 +207,7 @@ public class RPSPopup : Popup
                 break;
             }
 
-            waitTime -= Time.deltaTime;
+            waitTime -= Time.unscaledDeltaTime;
 
             yield return null;
         }
@@ -263,7 +263,7 @@ public class RPSPopup : Popup
 
         while (true)
         {
-            enemyRPSChangeTime -= Time.deltaTime;
+            enemyRPSChangeTime -= Time.unscaledDeltaTime;
 
             if (enemyRPSChangeTime < 0)
             {
@@ -271,7 +271,7 @@ public class RPSPopup : Popup
                 RandEnemyRPS();
             }
 
-            myPRSSelectTime -= Time.deltaTime;
+            myPRSSelectTime -= Time.unscaledDeltaTime;
             MyRPSTime.value = myPRSSelectTime / maxSelectTime;
 
             if (myPRSSelectTime < 0)
@@ -293,7 +293,7 @@ public class RPSPopup : Popup
 
         while (true)
         {
-            waitTime -= Time.deltaTime;
+            waitTime -= Time.unscaledDeltaTime;
 
             if(waitTime < 0)
             {
@@ -351,7 +351,7 @@ public class RPSPopup : Popup
 
         while (true)
         {
-            resultWaitTime -= Time.deltaTime;
+            resultWaitTime -= Time.unscaledDeltaTime;
 
             if (resultWaitTime < 0)
             {
