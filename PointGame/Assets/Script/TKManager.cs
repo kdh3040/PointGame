@@ -60,9 +60,23 @@ public class TKManager : MonoBehaviour
         MyData = new UserData();
     }
 
+    public bool IsLottoLuckyUser(int series)
+    {
+        for (int i = 0; i < LottoWinUserList.Count; i++)
+        {
+            if (LottoWinUserList[i].Key == series)
+                return true;
+        }
+
+        return false;
+    }
+
     public void SetLottoWinUserData(int series, string nickName)
     {
-        LottoWinUserList.Add(new KeyValuePair<int, string>(series, nickName));
+        if(!IsLottoLuckyUser(series))
+        {
+            LottoWinUserList.Add(new KeyValuePair<int, string>(series, nickName));
+        }        
     }
 
     public void SetCurrentLottoSeriesCount(int count)

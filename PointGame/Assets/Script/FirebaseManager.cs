@@ -173,6 +173,20 @@ public class FirebaseManager : MonoBehaviour
         FirebaseDatabase.DefaultInstance
       .GetReference("RPSUserCount")
       .ValueChanged += HandleRPSGameUserCountChanged;
+        
+
+        FirebaseDatabase.DefaultInstance
+        .GetReference("LottoCurSeries")
+        .ValueChanged += HandleChangedLottoCurSeries;
+
+        FirebaseDatabase.DefaultInstance
+        .GetReference("LottoLuckyGroup").OrderByKey().LimitToLast(5)
+        .ChildAdded += HandleChildAddedLottoLuckyGroup;
+
+        FirebaseDatabase.DefaultInstance
+        .GetReference("LottoLuckyNumber").OrderByKey().LimitToLast(5)
+        .ChildAdded += HandleChildAddedLottoLuckyNumber;
+
     }
 
     void HandleRPSGameSeriesChanged(object sender, ValueChangedEventArgs args)
@@ -244,10 +258,78 @@ public class FirebaseManager : MonoBehaviour
 
     }
 
+    // 로또 회차 변경 모니터링
+    void HandleChangedLottoCurSeries(object sender, ValueChangedEventArgs args)
+    {
+        if (args.DatabaseError != null)
+        {
+            Debug.LogError(args.DatabaseError.Message);
+            return;
+        }
+        if (args.Snapshot.Value != null)
+        {
+            LottoCurSeries = Convert.ToInt32(args.Snapshot.Value);
+            TKManager.Instance.SetCurrentLottoSeriesCount(LottoCurSeries);
+        }
+
+        Debug.Log("@@@@@@@ LottoCurSeries " + LottoCurSeries);
+    }
+
+    // 로또 당첨 인원 모니터링
+    void HandleChildAddedLottoLuckyGroup(object sender, ChildChangedEventArgs args)
+    {
+        if (args.DatabaseError != null)
+        {
+            Debug.LogError(args.DatabaseError.Message);
+            return;
+        }
+        if (args.Snapshot.Value != null)
+        {
+
+            String tempIndex = args.Snapshot.Key;
+            tempIndex = tempIndex.Substring(0, tempIndex.IndexOf("_"));
+            int tempIndexToInt = Convert.ToInt32(tempIndex);
+            tempIndexToInt -= CommonData.LottoRefSeries;
+
+            String tempSrc = args.Snapshot.Value.ToString();
+
+
+            TKManager.Instance.SetLottoWinUserData(tempIndexToInt, tempSrc);
+
+            Debug.Log("@@@@@@@ HandleChildAddedLottoLuckyGroup " + tempIndexToInt);
+        }
+
+        // Do something with the data in args.Snapshot
+    }
+
+
+    // 로또 당첨번호 모니터링
+    void HandleChildAddedLottoLuckyNumber(object sender, ChildChangedEventArgs args)
+    {
+        if (args.DatabaseError != null)
+        {
+            Debug.LogError(args.DatabaseError.Message);
+            return;
+        }
+        if (args.Snapshot.Value != null)
+        {
+
+            String tempSeries = args.Snapshot.Key;
+            tempSeries = tempSeries.Substring(0, tempSeries.IndexOf("_"));
+            int tempSeriesToInt = Convert.ToInt32(tempSeries);
+            tempSeriesToInt -= CommonData.LottoRefSeries;
+
+            int tempNumber = Convert.ToInt32(args.Snapshot.Value.ToString());
+            TKManager.Instance.SetLottoLuckyNumber(tempSeriesToInt, tempNumber);
+            Debug.Log("@@@@@@@ HandleChildAddedLottoLuckyNumber " + tempSeriesToInt);
+        }
+
+        // Do something with the data in args.Snapshot
+    }
+
     
     public void TokenRefresh(Firebase.Auth.FirebaseUser user)
     {
-
         user.TokenAsync(true).ContinueWith(task => {
             if (task.IsCanceled)
             {
@@ -850,7 +932,7 @@ public class FirebaseManager : MonoBehaviour
                        tempIndexToInt -= CommonData.LottoRefSeries;
 
                        TKManager.Instance.SetLottoWinUserData(tempIndexToInt, tempSrc);
-
+                       Debug.Log("##### GetLottoLuckGroup " + tempIndexToInt);
                    }
                }
 
