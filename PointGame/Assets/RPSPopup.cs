@@ -65,7 +65,7 @@ public class RPSPopup : Popup
     {
         SeriesCount.text = string.Format("{0} 회", FirebaseManager.Instance.FirebaseRPSGameSeries + 1);
         EnemyId.text = string.Format("ID : {0}", FirebaseManager.Instance.FirebaseRPSGame_EnemyNick);
-        UserCount.text = string.Format("남은인원 : {0}명", FirebaseManager.Instance.FirebaseRPSGameUserCount - 1);
+        UserCount.text = string.Format("남은인원 : {0}명", FirebaseManager.Instance.FirebaseRPSGameUserCount);
     }
 
     IEnumerator Co_RPSGame()
