@@ -42,6 +42,8 @@ public class TKManager : MonoBehaviour
     public int ReviewRankPlusScore = 0;
     public List<KeyValuePair<string, int>> ReviewRank = new List<KeyValuePair<string, int>>();
 
+    public List<KeyValuePair<string, string>> RecommendUsers = new List<KeyValuePair<string, string>>();
+
     void Start()
     {
         DontDestroyOnLoad(this);
@@ -142,6 +144,7 @@ public class TKManager : MonoBehaviour
         public string FirebaseUserId = "";
         public int BestStage = 0;
         public int PushLastIndex = 0;
+        public string RecommendCode = "";
 
         public void Save()
         {
@@ -150,6 +153,7 @@ public class TKManager : MonoBehaviour
             FirebaseUserId = TKManager.Instance.FirebaseUserId;
             BestStage = TKManager.Instance.MyData.BestStage;
             PushLastIndex = TKManager.Instance.PushLastIndex;
+            RecommendCode = TKManager.Instance.MyData.RecommenderCode;
         }
 
         public void Load()
@@ -165,6 +169,7 @@ public class TKManager : MonoBehaviour
 
             TKManager.Instance.MyData.BestStage = BestStage;
             TKManager.Instance.PushLastIndex = PushLastIndex;
+            TKManager.Instance.MyData.RecommenderCode = RecommendCode;
         }
     }
 

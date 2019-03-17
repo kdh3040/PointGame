@@ -112,6 +112,9 @@ public class LoadingUI : MonoBehaviour {
 
                 FirebaseManager.Instance.SetUserData();
 
+                if (RecommenderCode != "")
+                    FirebaseManager.Instance.SetRecommendUser(RecommenderCode);
+
                 mutableData.Value = tempCount + 1;
                 FirebaseManager.Instance.mDatabaseRef.Child("UsersCount").SetValueAsync(mutableData.Value);
 

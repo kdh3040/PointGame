@@ -25,7 +25,12 @@ public class RecommenderCodePopup : Popup
 
     public override void SetData(PopupData data)
     {
-        Code.text = "123adskl";
+        if(TKManager.Instance.MyData.RecommenderCode == "")
+        {
+            FirebaseManager.Instance.SetRecommenderCode();
+        }        
+
+        Code.text = FirebaseManager.Instance.GetRecommenderCode();
     }
 
     public void OnClickOk()

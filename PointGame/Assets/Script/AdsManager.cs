@@ -268,6 +268,7 @@ public class AdsManager : MonoBehaviour {
             SetAdEndCallFunc(endAction);
             AdView = false;
         }
+
         else
         {
             AdComplete = false;
@@ -278,7 +279,11 @@ public class AdsManager : MonoBehaviour {
                 var options = new ShowOptions { resultCallback = HandleShowRewardVideoResult };
                 Advertisement.Show(rewarded_video_id, options);
             }
-             else
+            else if (rewardAdmobVideo.IsLoaded())
+            {
+                ShowAdmobVideo();
+            }
+            else
                 AdView = false;
 
         }
@@ -543,7 +548,12 @@ public class AdsManager : MonoBehaviour {
         {
             AdEnable = true;
             yield break;
-        }   
+        }
+        else if (rewardAdmobVideo.IsLoaded())
+        {
+            AdEnable = true;
+            yield break;
+        }
         else
         {
             AdEnable = false;

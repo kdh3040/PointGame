@@ -297,6 +297,7 @@ public class FirebaseManager : MonoBehaviour
         GetRPSGamePlayTime();
         GetRPSGameEnterTime();
         GetRPSGameEnterStatus();
+        GetRecommendUser();
     }
 
 
@@ -305,7 +306,7 @@ public class FirebaseManager : MonoBehaviour
         if (FirstLoadingComplete == false)
             LoadingCount++;
 
-        if (LoadingCount == 14)
+        if (LoadingCount == 15)
             FirstLoadingComplete = true;
     }
 
@@ -443,7 +444,8 @@ public class FirebaseManager : MonoBehaviour
                     }
                     else
                     {
-                        TKManager.Instance.MyData.SetRecommenderCode(TKManager.Instance.MyData.Index);
+                        FirebaseManager.Instance.SetRecommenderCode();
+                        //TKManager.Instance.MyData.SetRecommenderCode(TKManager.Instance.MyData.Index);
                     }
 
                     if (tempData.ContainsKey("TodayAccumPoint"))
@@ -1151,11 +1153,50 @@ public class FirebaseManager : MonoBehaviour
         return strToday;
     }
 
-    char[] stringChars = new char[8];
+    char[] stringChars = new char[4];
+
+
+    public void SetRecommendUser(string RecommendCode)
+    {
+        mDatabaseRef.Child("Recommend").Child(RecommendCode).Child(TKManager.Instance.MyData.Index).SetValueAsync(TKManager.Instance.MyData.NickName);
+    }
+    // 내 추천인 받아오기
+    public void GetRecommendUser()
+    {
+        mDatabaseRef.Child("Recommend").Child(TKManager.Instance.MyData.RecommenderCode).GetValueAsync().ContinueWith(task =>
+        {
+            if (task.IsFaulted)
+            {
+                // Handle the error...
+            }
+            else if (task.IsCompleted)
+            {
+                string tempUserNickName = null;
+                DataSnapshot snapshot = task.Result;
+
+                if (snapshot != null && snapshot.Exists)
+                {
+                    foreach (var tempChild in snapshot.Children)
+                    {
+                        String tempUserIndex = tempChild.Key;
+                        tempUserNickName = tempChild.Value.ToString();
+                        TKManager.Instance.RecommendUsers.Add(new KeyValuePair<string, string>(tempUserIndex, tempUserNickName));
+                    }
+                    mDatabaseRef.Child("Recommend").Child(TKManager.Instance.MyData.RecommenderCode).RemoveValueAsync();
+                }
+                
+                AddFirstLoadingComplete();
+
+            }
+        }
+     );
+
+    }
+
 
     public void SetRecommenderCode()
     {
-        var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
      
         var random = new System.Random();
 
@@ -1165,9 +1206,10 @@ public class FirebaseManager : MonoBehaviour
         }
 
         TKManager.Instance.MyData.RecommenderCode = new String(stringChars);
-        TKManager.Instance.MyData.RecommenderCode += "_" + TKManager.Instance.MyData.Index;
+        TKManager.Instance.MyData.RecommenderCode += TKManager.Instance.MyData.Index;
 
         mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("RecommenderCode").SetValueAsync(TKManager.Instance.MyData.RecommenderCode);
+        TKManager.Instance.SaveFile();
     }
 
     public string GetRecommenderCode()
