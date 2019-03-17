@@ -12,5 +12,6 @@
       <meta-data android:name="unityplayer.UnityActivity" android:value="true" />
     </activity>
     <service android:name="com.google.firebase.messaging.MessageForwardingService" android:exported="false" />
+    <uses-library android:name="org.apache.http.legacy" android:required="false"/>
   </application>
 </manifest>

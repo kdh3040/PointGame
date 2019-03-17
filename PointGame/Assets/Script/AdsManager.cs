@@ -38,38 +38,8 @@ public class AdsManager : MonoBehaviour {
     private const string Lotto_rewarded_video_id = "LottoAds";
 
     private RewardBasedVideoAd rewardAdmobVideo;
-
-
-    /// ////////////////////////////////////////////////
-
-
-    /// ////////////////////////////////////////////////
-    /// 벙글  셋팅
-    private string Vungle_android_AppID = "5c5e8f366eceb929941bc24d";
-    private string Vungle_iOS_AppID = "5c5e8f72330d082982b75ebe";
-
-    private string Vungle_android_AdsID = "95192-2304521";
-    private string Vungle_iOS_AdsID = "90578-2153733";
-
-    private string Vungle_adsID;
-    /// ////////////////////////////////////////////////
-
-
-
-    /// ////////////////////////////////////////////////
-    /// 애드콜로니  셋팅
-    private const string android_appId = "appa4e0780d1d51492680";
-    private const string android_zoneId = "vzd3b1fcd91ef346dab9";
-
-    private const string ios_appId = "app904eea111f4847c58e";
-    private const string ios_zoneId = "vz172fde3f76734b6f85";
-
-    private string appId = string.Empty;
-    private string zoneId = string.Empty;
-
-    private AdColony.InterstitialAd adColony = null;
-    private bool AdColonyInit = false;
-
+    
+    
     /// ////////////////////////////////////////////////
     /// 애드몹
     /// 
@@ -86,20 +56,13 @@ public class AdsManager : MonoBehaviour {
 
 
 #if UNITY_ANDROID
-        this.appId = android_appId;
-        this.zoneId = android_zoneId;
-        Vungle_adsID = Vungle_android_AdsID;
         string appId = "ca-app-pub-7615036525367000~1421003475";
         Advertisement.Initialize(android_game_id);
 #elif UNITY_IPHONE
-        Vungle_adsID = Vungle_iOS_AdsID;
-        this.appId = ios_appId;
-        this.zoneId = ios_zoneId;
         string appId = "ca-app-pub-7615036525367000~9065234368"; 
         Advertisement.Initialize(ios_game_id);
 #else
-        	Vungle_adsID = null;
-            string appId = "unexpected_platform";
+        string appId = "unexpected_platform";
 #endif
 
         ////////////////////////////////////////////////////
@@ -119,147 +82,8 @@ public class AdsManager : MonoBehaviour {
         this.RequestAdmobVideo();
 #endif
 
-
-        ////////////////////////////////////////////////////
-        //// 벙글 광고 초기화
-
-        this.RequestVungleAds();
-
-
-        ////////////////////////////////////////////////////
-        //// 애드콜로니 광고 초기화
-        
-        AdColony.Ads.OnConfigurationCompleted += (List<AdColony.Zone> zones_) =>
-        {
-            Debug.Log("AdColony.Ads.OnConfigurationCompleted called");
-            AdView = false;
-            if (zones_ == null || zones_.Count <= 0)
-            {
-                Debug.Log("Configure Failed");              
-            }
-            else
-            {
-                Debug.Log("Configure Succeeded.");
-            }
-        };
-
-        AdColony.Ads.OnRequestInterstitial += (AdColony.InterstitialAd ad_) =>
-        {
-            Debug.Log("AdColony.Ads.OnRequestInterstitial called");
-
-            adColony = ad_;
-            AdView = false;
-            AdColonyInit = true;
-            //ShowColony();
-        };
-
-        AdColony.Ads.OnRequestInterstitialFailed += () =>
-        {
-            Debug.Log("AdColony.Ads.OnRequestInterstitialFailed called");
-            AdView = false;
-            adColony = null;
-            AdColonyInit = false;
-            // to do ...
-            // 광고 요청에 실패했을 때 처리
-
-        };
-
-        AdColony.Ads.OnOpened += (AdColony.InterstitialAd ad_) =>
-        {
-            AdView = false;
-            Debug.Log("AdColony.Ads.OnOpened called");
-        };
-
-        AdColony.Ads.OnClosed += (AdColony.InterstitialAd ad_) =>
-        {
-            Debug.Log("AdColony.Ads.OnClosed called, expired: " + ad_.Expired);
-            AdView = false;
-            adColony = null;
-            AdColonyInit = false;
-            RequestAdColonyAds();
-        };
-
-        AdColony.Ads.OnExpiring += (AdColony.InterstitialAd ad_) =>
-        {
-            AdView = false;
-            Debug.Log("AdColony.Ads.OnExpiring called");
-        };
-
-        AdColony.Ads.OnRewardGranted += (string zoneId, bool success, string name, int amount) =>
-        {
-            Debug.Log(string.Format("AdColony.Ads.OnRewardGranted called\n\tzoneId: "
-                + "{0}\n\tsuccess: {1}\n\tname: {2}\n\tamount: {3}",
-                zoneId, success, name, amount));
-
-            AdView = false;
-            AdColonyInit = false;
-            AdComplete = true;
-            RequestAdColonyAds();
-
-            if (success)
-            {            
-                // to do ...
-                // 광고 시청이 완료되었을 때 처리
-                // 광고 시청에 대한 보상 지급 등 ...
-
-            }
-        };
-
-        AdColony.AppOptions appOptions = new AdColony.AppOptions();
-        appOptions.AdOrientation = AdColony.AdOrientationType.AdColonyOrientationAll;
-
-        AdColony.Ads.Configure(this.appId, appOptions, this.zoneId);
-
-        RequestAdColonyAds();
-        //
-
     }
 
-    private void RequestVungleAds()
-    {
-        string appID;
-
-#if UNITY_IPHONE
-		appID = Vungle_iOS_AppID;
-#elif UNITY_ANDROID
-        appID = Vungle_android_AppID;
-#elif UNITY_WSA_10_0 || UNITY_WINRT_8_1 || UNITY_METRO
-		appID = null;
-#endif
-
-        
-
-        Vungle.init(appID);
-        Vungle.loadAd(Vungle_adsID);
-
-        Vungle.onAdStartedEvent += (placementID) => {
-            AdView = false;
-            Debug.Log("!!!!!@ Ad " + placementID + " is starting!  Pause your game  animation or sound here.");
-        };
-
-        Vungle.onAdFinishedEvent += (placementID, args) => {
-            Debug.Log("!!!!!@ Ad finished - placementID " + placementID + ", was call to action clicked:" + args.WasCallToActionClicked + ", is completed view:"
-                + args.IsCompletedView);
-            AdView = false;
-
-            if (args.IsCompletedView)
-                AdComplete = true;
-        };
-
-        Vungle.adPlayableEvent += (placementID, adPlayable) => {
-            Debug.Log("!!!!!@ Ad's playable state has been changed! placementID " + placementID + ". Now: " + adPlayable);
-            AdView = false;
-        };
-
-        Vungle.onInitializeEvent += () => {
-            Debug.Log("!!!!!@ SDK initialized");
-            AdView = false;
-        };
-
-
-    }
-
- 
 
 
     private void RequestAdmobVideo()
@@ -312,19 +136,6 @@ public class AdsManager : MonoBehaviour {
         AdView = false;
     }
 
-
-    public void RequestAdColonyAds()
-    {
-
-        Debug.Log("**** Request Ad ****");
-
-        AdColony.AdOptions adOptions = new AdColony.AdOptions();
-        adOptions.ShowPrePopup = false;
-        adOptions.ShowPostPopup = false;
-
-        AdColony.Ads.RequestInterstitialAd(this.zoneId, adOptions);
-
-    }
 
     
     public void RequestBanner()
@@ -444,34 +255,6 @@ public class AdsManager : MonoBehaviour {
         
     }
 
-    //벙글 리워드 비디오 (스킵 불가능)
-    void ShowVungleAds()
-    {
-
-        if (Vungle.isAdvertAvailable(Vungle_adsID))
-        {
-            Vungle.playAd(Vungle_adsID);
-        }
-        else
-            AdView = false;
-        
-    }
-
-    // 애드콜로니 리워드 비디오 (스킵 불가)
-    private void ShowColonyAds()
-    {
-
-        Debug.Log("**** Show Ad ****");
-        //AdView = false;
-        if (this.adColony != null)
-        {
-            AdColony.Ads.ShowAd(this.adColony);
-        }
-        else
-            AdView = false;
-
-    }
-
 
     // 유니티애즈 미니게임 리워드 비디오 스킵 불가
     public void ShowMiniGameRewardAd(Action endAction)
@@ -495,22 +278,9 @@ public class AdsManager : MonoBehaviour {
                 var options = new ShowOptions { resultCallback = HandleShowRewardVideoResult };
                 Advertisement.Show(rewarded_video_id, options);
             }
-            else if (Vungle.isAdvertAvailable(Vungle_adsID))
-            {
-                ShowVungleAds();
-            }
-            
-            else
-            {
-                AdColony.Zone adcolonyZone = AdColony.Ads.GetZone(this.zoneId);
-                if (adcolonyZone != null ||  adcolonyZone.Enabled)
-                {
-                    ShowColonyAds();
-                }
-                else
-                    AdView = false;
-            }
-            
+             else
+                AdView = false;
+
         }
     }
 
@@ -773,35 +543,12 @@ public class AdsManager : MonoBehaviour {
         {
             AdEnable = true;
             yield break;
-        }     
-        else if (Vungle.isAdvertAvailable(Vungle_adsID))
-        {
-            AdEnable = true;
-            yield break;
-        }
+        }   
         else
         {
-            TKManager.Instance.ShowHUD();
-            float waitTime = 3f;
-            while (waitTime > 0)
-            {
-                if (AdColonyInit)
-                {
-                    AdEnable = true;
-                    TKManager.Instance.HideHUD();
-                    yield break;
-                }
-                waitTime -= Time.deltaTime;
-
-                if (waitTime < 0)
-                {
-                    AdEnable = false;
-                    RequestAdColonyAds();
-                    break;
-                }
-                yield return null;
-            }
+            AdEnable = false;
             TKManager.Instance.HideHUD();
+            yield break;
         }
     }
 }
