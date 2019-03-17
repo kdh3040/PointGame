@@ -269,8 +269,22 @@ public class RPSPopup : Popup
         ResultObj.gameObject.SetActive(true);
         if(result == 1)
         {
-            // 승리
-            ResultDesc.text = "승리하였습니다.\n잠시만 기달려주세요.";
+            if (FirebaseManager.Instance.FirebaseRPSGameUserCount <= 2)
+            {
+                TKManager.Instance.HideHUD();
+                CloseAction();
+                // 우승
+                ParentPopup.ShowPopup(new MsgPopup.MsgPopupData("가위바위보 우승!\n100캐쉬 획득!", () =>
+                {
+                    TKManager.Instance.MyData.AddCash(100);
+                }));
+                yield break;
+            }
+            else
+            {
+                // 승리
+                ResultDesc.text = "승리하였습니다.\n잠시만 기달려주세요.";
+            }
         }
         else if(result == 0)
         {
