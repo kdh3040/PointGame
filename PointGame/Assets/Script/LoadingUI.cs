@@ -111,7 +111,7 @@ public class LoadingUI : MonoBehaviour {
                 TKManager.Instance.MyData.SetData(tempCount.ToString(), NickName, CommonData.UserDefaultPoint);
 
                 FirebaseManager.Instance.SetUserData();
-
+                //FirebaseManager.Instance.SetRecommenderCode();
                 if (RecommenderCode != "")
                     FirebaseManager.Instance.SetRecommendUser(RecommenderCode);
 

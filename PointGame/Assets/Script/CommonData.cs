@@ -27,4 +27,6 @@ public class CommonData : MonoBehaviour
     public static float RPS_GAME_RESULT_WAIT_TIME = 1f;
     public static float RPS_GAME_DRAW_PLAY_TIME = 2f;
 
+    public static int RecommendGetCost = 500;
+
 }

@@ -1244,6 +1244,13 @@ public class FirebaseManager : MonoBehaviour
     // 내 추천인 받아오기
     public void GetRecommendUser()
     {
+        if(TKManager.Instance.MyData.RecommenderCode == "")
+        {
+            FirebaseManager.Instance.SetRecommenderCode();
+            AddFirstLoadingComplete();
+            return;
+        }  
+
         mDatabaseRef.Child("Recommend").Child(TKManager.Instance.MyData.RecommenderCode).GetValueAsync().ContinueWith(task =>
         {
             if (task.IsFaulted)

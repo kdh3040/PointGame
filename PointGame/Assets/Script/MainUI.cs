@@ -74,8 +74,6 @@ public class MainUI : MonoBehaviour {
 
     void Start()
     {
-
-
         mBGM.Play();
         TKManager.Instance.MainUIView = true;
         Id.text = string.Format("ID : {0}", TKManager.Instance.MyData.NickName);
@@ -200,6 +198,11 @@ public class MainUI : MonoBehaviour {
 
             if(timeView == false)
                 NextLottoTime.text = string.Format("다음 추첨시간 내일 {0}:00시", CommonData.LottoWinTime[0]);
+
+            if (TKManager.Instance.RecommendUsers.Count > 0)
+            {
+                StartCoroutine(Co_RecommendUsers());
+            }
         }
 
         StartCoroutine(Co_ReviewMode());
@@ -240,6 +243,27 @@ public class MainUI : MonoBehaviour {
 
 
     }
+
+
+    IEnumerator Co_RecommendUsers()
+    {
+        yield return null;
+        yield return null;
+        yield return null;
+        yield return null;
+        if (TKManager.Instance.RecommendUsers.Count > 0)
+        {
+            var cost = CommonData.RecommendGetCost * TKManager.Instance.RecommendUsers.Count;
+
+            Popup.ShowPopup(new MsgPopup.MsgPopupData(string.Format("{0:n0}추천포인트를\n획득했습니다", cost), () =>
+            {
+                TKManager.Instance.MyData.AddPoint(cost);
+            }));
+        }
+
+    }
+
+
     public void OnClickFreePoint()
     {
         SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
