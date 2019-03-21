@@ -126,9 +126,9 @@ public class RPSPopup : Popup
                         FirebaseManager.Instance.FirebaseRPSGameMyRoom = -1;
                         CloseAction();
                         // 우승
-                        ParentPopup.ShowPopup(new MsgPopup.MsgPopupData("가위바위보 준우승!\n50캐쉬 획득!", () =>
+                        ParentPopup.ShowPopup(new MsgPopup.MsgPopupData(string.Format("가위바위보 준우승!\n{0:n0}캐쉬 획득!", CommonData.RPS_SECOND_WINNER), () =>
                         {
-                            TKManager.Instance.MyData.AddCash(50);
+                            TKManager.Instance.MyData.AddCash(CommonData.RPS_SECOND_WINNER);
                         }));
                         yield break;
                     }
@@ -161,9 +161,9 @@ public class RPSPopup : Popup
                     FirebaseManager.Instance.FirebaseRPSGameMyRoom = -1;
                     CloseAction();
                     // 우승
-                    ParentPopup.ShowPopup(new MsgPopup.MsgPopupData("가위바위보 준우승!\n50캐쉬 획득!", () =>
+                    ParentPopup.ShowPopup(new MsgPopup.MsgPopupData(string.Format("가위바위보 준우승!\n{0:n0}캐쉬 획득!", CommonData.RPS_SECOND_WINNER), () =>
                     {
-                        TKManager.Instance.MyData.AddCash(50);
+                        TKManager.Instance.MyData.AddCash(CommonData.RPS_SECOND_WINNER);
                     }));
                     yield break;
                 }
@@ -225,9 +225,9 @@ public class RPSPopup : Popup
                 TKManager.Instance.HideHUD();
                 CloseAction();
                 // 우승
-                ParentPopup.ShowPopup(new MsgPopup.MsgPopupData("가위바위보 우승!\n100캐쉬 획득!", () =>
+                ParentPopup.ShowPopup(new MsgPopup.MsgPopupData(string.Format("가위바위보 우승!\n{0:n0}캐쉬 획득!", CommonData.RPS_WINNER), () =>
                 {
-                    TKManager.Instance.MyData.AddCash(100);
+                    TKManager.Instance.MyData.AddCash(CommonData.RPS_WINNER);
                 }));
                 break;
             }
@@ -331,9 +331,9 @@ public class RPSPopup : Popup
                 TKManager.Instance.HideHUD();
                 CloseAction();
                 // 우승
-                ParentPopup.ShowPopup(new MsgPopup.MsgPopupData("가위바위보 우승!\n100캐쉬 획득!", () =>
+                ParentPopup.ShowPopup(new MsgPopup.MsgPopupData(string.Format("가위바위보 우승!\n{0:n0}캐쉬 획득!", CommonData.RPS_WINNER), () =>
                 {
-                    TKManager.Instance.MyData.AddCash(100);
+                    TKManager.Instance.MyData.AddCash(CommonData.RPS_WINNER);
                 }));
                 yield break;
             }
