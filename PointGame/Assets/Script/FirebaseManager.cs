@@ -178,15 +178,15 @@ public class FirebaseManager : MonoBehaviour
         
 
         FirebaseDatabase.DefaultInstance
-        .GetReference("TempLottoCurSeries")
+        .GetReference("LottoCurSeries")
         .ValueChanged += HandleChangedLottoCurSeries;
 
         FirebaseDatabase.DefaultInstance
-        .GetReference("TempLottoLuckyGroup").OrderByKey().LimitToLast(5)
+        .GetReference("LottoLuckyGroup").OrderByKey().LimitToLast(5)
         .ChildAdded += HandleChildAddedLottoLuckyGroup;
 
         FirebaseDatabase.DefaultInstance
-        .GetReference("TempLottoLuckyNumber").OrderByKey().LimitToLast(5)
+        .GetReference("LottoLuckyNumber").OrderByKey().LimitToLast(5)
         .ChildAdded += HandleChildAddedLottoLuckyNumber;
 
     }
@@ -859,7 +859,7 @@ public class FirebaseManager : MonoBehaviour
                 {
                     LottoRefNnumber = Convert.ToInt32(snapshot.Value);
 
-                    mDatabaseRef.Child("TempLottoCurSeries").GetValueAsync().ContinueWith(CurSeriestask =>
+                    mDatabaseRef.Child("LottoCurSeries").GetValueAsync().ContinueWith(CurSeriestask =>
                     {
                         if (CurSeriestask.IsFaulted)
                         {
@@ -914,7 +914,7 @@ public class FirebaseManager : MonoBehaviour
     public void GetLottoLuckGroup()
     {
 
-        FirebaseDatabase.DefaultInstance.GetReference("TempLottoLuckyGroup").OrderByKey().LimitToLast(5)
+        FirebaseDatabase.DefaultInstance.GetReference("LottoLuckyGroup").OrderByKey().LimitToLast(5)
        .GetValueAsync().ContinueWith(task =>
        {
            if (task.IsFaulted)
@@ -971,7 +971,7 @@ public class FirebaseManager : MonoBehaviour
     public void GetLottoCurSeries()
     {
 
-        mDatabaseRef.Child("TempLottoCurSeries").GetValueAsync().ContinueWith(task =>
+        mDatabaseRef.Child("LottoCurSeries").GetValueAsync().ContinueWith(task =>
         {
             if (task.IsFaulted)
             {
@@ -1099,7 +1099,7 @@ public class FirebaseManager : MonoBehaviour
     public void GetLottoLuckyNumber()
     {
 
-        mDatabaseRef.Child("TempLottoLuckyNumber").OrderByKey().LimitToLast(3)
+        mDatabaseRef.Child("LottoLuckyNumber").OrderByKey().LimitToLast(3)
        .GetValueAsync().ContinueWith(task =>
 
         {
