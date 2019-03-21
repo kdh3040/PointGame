@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -26,6 +27,17 @@ public class TKManager : MonoBehaviour
 
     public List<KeyValuePair<int, string>> LottoWinUserList = new List<KeyValuePair<int, string>>();
     public List<KeyValuePair<int, int>> LottoLuckyNumber = new List<KeyValuePair<int, int>>();
+
+    public List<RPSGameWinnerData> RPSWinUserList = new List<RPSGameWinnerData>();
+    public struct RPSGameWinnerData
+    {
+        public string FirstName;
+        public string SecondName;
+        public int Count;
+    }
+    public List<KeyValuePair<long, long>> RPSEnterTimeList = new List<KeyValuePair<long, long>>();
+    public List<long> RPSPlayStartTimeList = new List<long>();
+
     // 0 베이스
     public int CurrLottoSeriesCount = 0;
     public int LottoSeriesCountMin = 0;
@@ -161,11 +173,25 @@ public class TKManager : MonoBehaviour
             FirebaseManager.Instance.FirebaseRPSGameEnterEnable)
             {
                 FirebaseManager.Instance.FirebaseRPSGameEnterEnable = false;
-                FirebaseManager.Instance.FirebaseRPSGamePlayTime = long.MaxValue;
             }
         }
         
     }
+
+    public bool IsRPSEnterTime()
+    {
+        for (int i = 0; i < RPSEnterTimeList.Count; i++)
+        {
+            if(RPSEnterTimeList[i].Key <= DateTime.Now.Ticks &&
+               RPSEnterTimeList[i].Value >= DateTime.Now.Ticks)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 
     [System.Serializable]
     public class SaveData

@@ -56,8 +56,25 @@ public class WinnerListPopup : Popup
 
         LottoWinnerName.text = winUser.ToString();
 
-        RPSWinnerCount.text = "";
-        RPSWinnerName.text = "";
+        var RPSwinList = TKManager.Instance.RPSWinUserList;
+        StringBuilder RPSwinCount = new StringBuilder();
+        StringBuilder RPSwinUser = new StringBuilder();
+        for (int i = RPSwinList.Count - 2; i <= RPSwinList.Count; i++)
+        {
+            if (i < 0 || RPSwinList.Count <= i)
+                continue;
+
+            RPSwinCount.Append(string.Format("- {0:D2}회 우승", RPSwinList[i].Count + 1));
+            RPSwinCount.Append(string.Format("- {0:D2}회 준우승", RPSwinList[i].Count + 1));
+            RPSwinCount.AppendLine();
+
+            RPSwinUser.Append(string.Format(" : {0}", RPSwinList[i].FirstName));
+            RPSwinUser.Append(string.Format(" : {0}", RPSwinList[i].SecondName));
+            RPSwinUser.AppendLine();
+        }
+
+        RPSWinnerCount.text = RPSwinCount.ToString();
+        RPSWinnerName.text = RPSwinUser.ToString();
     }
 
     public void OnClickOk()

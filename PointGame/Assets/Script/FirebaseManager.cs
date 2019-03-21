@@ -555,43 +555,17 @@ public class FirebaseManager : MonoBehaviour
                         TKManager.Instance.MyData.SetTodayAccumulatePoint(0);
                     }
 
-                    if (tempData.ContainsKey("FirebaseRPSGameMyRoom"))
-                    {
-                        var tempRoomNumber = Convert.ToInt32(tempData["FirebaseRPSGameMyRoom"]);
-                        FirebaseRPSGameMyRoom = tempRoomNumber;
+                    FirebaseRPSGameMyRoom = -1;
 
-                        FirebaseDatabase.DefaultInstance
-                       .GetReference("Users").Child(TKManager.Instance.MyData.Index).Child("FirebaseRPSGameMyRoom")
-                       .ValueChanged += HandleRPSGameRoomNumberChanged;
-
-                    }
-                    else
-                    {
-                        FirebaseRPSGameMyRoom = -1;
-
-                        FirebaseDatabase.DefaultInstance
+                    FirebaseDatabase.DefaultInstance
                     .GetReference("Users").Child(TKManager.Instance.MyData.Index).Child("FirebaseRPSGameMyRoom")
                     .ValueChanged += HandleRPSGameRoomNumberChanged;
-                    }
 
-                    if (tempData.ContainsKey("FirebaseRPSGameMyPosition"))
-                    {
-                        var tempPositionNumber = Convert.ToInt32(tempData["FirebaseRPSGameMyPosition"]);
-                        FirebaseRPSGameMyPosition = tempPositionNumber;
+                    FirebaseRPSGameMyPosition = -1;
 
-                        FirebaseDatabase.DefaultInstance
-                       .GetReference("Users").Child(TKManager.Instance.MyData.Index).Child("FirebaseRPSGameMyPosition")
-                       .ValueChanged += HandleRPSGamePositionNumberChanged;
-
-                    }
-                    else
-                    {
-                        FirebaseRPSGameMyPosition = -1;
-
-                        FirebaseDatabase.DefaultInstance
+                    FirebaseDatabase.DefaultInstance
                     .GetReference("Users").Child(TKManager.Instance.MyData.Index).Child("FirebaseRPSGameMyPosition")
                     .ValueChanged += HandleRPSGamePositionNumberChanged;
-                    }
 
                 }
 
@@ -1595,8 +1569,6 @@ public class FirebaseManager : MonoBehaviour
 
     public void GetRPSGameEnterTime()
     {
-        long[] tempFirebaseRPSGameEnterTime = new long[2];
-
         mDatabaseRef.Child("RPSGameEnterTime").GetValueAsync().ContinueWith(task =>
         {
             if (task.IsFaulted)
@@ -1612,9 +1584,11 @@ public class FirebaseManager : MonoBehaviour
                     foreach (var tempChild in snapshot.Children)
                     {
                         var min = long.Parse(tempChild.Value.ToString());
-                        var date = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
-                        date = date.AddMinutes(min);
-                        tempFirebaseRPSGameEnterTime[Convert.ToInt32(tempChild.Key)] = date.Ticks;
+                        var StartTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
+                        StartTime = StartTime.AddMinutes(min);
+                        var EndTime = StartTime.AddMinutes(min);
+
+                        TKManager.Instance.RPSEnterTimeList.Add(new KeyValuePair<long, long>(StartTime.Ticks, EndTime.Ticks));
                     }
                 }
                 AddFirstLoadingComplete();
@@ -1644,7 +1618,7 @@ public class FirebaseManager : MonoBehaviour
                         var min = long.Parse(tempChild.Value.ToString());
                         var date = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
                         date = date.AddMinutes(min);
-                        tempFirebaseRPSGamePlayTime[Convert.ToInt32(tempChild.Key)] = date.Ticks;
+                        TKManager.Instance.RPSPlayStartTimeList.Add(date.Ticks);
                     }            
                 }
                 AddFirstLoadingComplete();
@@ -1674,10 +1648,15 @@ public class FirebaseManager : MonoBehaviour
                        var tempData = tempChild.Value as Dictionary<string, object>;
                        var tempFirstNickName = tempData["first"].ToString();
                        var tempSecondNickName = tempData["second"].ToString();
+                       int tempCount = Convert.ToInt32(tempChild.Key);
 
-                       String tempIndex = tempChild.Key;
-                    
-                       Debug.Log("##### RPSGameWinnerGroup " + tempIndex);
+                       TKManager.RPSGameWinnerData tempWinnerData = new TKManager.RPSGameWinnerData();
+                       tempWinnerData.FirstName = tempFirstNickName;
+                       tempWinnerData.SecondName = tempSecondNickName;
+                       tempWinnerData.Count = tempCount;
+                       TKManager.Instance.RPSWinUserList.Add(tempWinnerData);
+
+                       Debug.Log("##### RPSGameWinnerGroup " + tempCount);
                    }
                }
 

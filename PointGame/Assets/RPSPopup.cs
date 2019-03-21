@@ -122,7 +122,6 @@ public class RPSPopup : Popup
                     if (result == 0)
                     {
                         TKManager.Instance.HideHUD();
-                        FirebaseManager.Instance.FirebaseRPSGamePlayTime = long.MaxValue;
                         FirebaseManager.Instance.FirebaseRPSGameMyRoom = -1;
                         CloseAction();
                         // 우승
@@ -142,7 +141,6 @@ public class RPSPopup : Popup
                         Debug.Log("결과창_1_2 " + RPSGame_MyValue);
                         ParentPopup.ShowPopup(new MsgPopup.MsgPopupData("패배하였습니다.", () =>
                         {
-                            FirebaseManager.Instance.FirebaseRPSGamePlayTime = long.MaxValue;
                             FirebaseManager.Instance.FirebaseRPSGameMyRoom = -1;
                             CloseAction();
                         }));
@@ -157,7 +155,6 @@ public class RPSPopup : Popup
                 if (FirebaseManager.Instance.FirebaseRPSGameUserCount <= 2)
                 {
                     TKManager.Instance.HideHUD();
-                    FirebaseManager.Instance.FirebaseRPSGamePlayTime = long.MaxValue;
                     FirebaseManager.Instance.FirebaseRPSGameMyRoom = -1;
                     CloseAction();
                     // 우승
@@ -173,7 +170,6 @@ public class RPSPopup : Popup
                     Debug.Log("결과창_2_2 " + RPSGame_MyValue);
                     ParentPopup.ShowPopup(new MsgPopup.MsgPopupData("패배하였습니다.", () =>
                     {
-                        FirebaseManager.Instance.FirebaseRPSGamePlayTime = long.MaxValue;
                         FirebaseManager.Instance.FirebaseRPSGameMyRoom = -1;
                         CloseAction();
                     }));
@@ -413,7 +409,8 @@ public class RPSPopup : Popup
         ParentPopup.ShowPopup(new MsgPopup.MsgPopupData("나가시겠습니까?", () =>
         {
             FirebaseManager.Instance.FirebaseRPSGameEnterEnable = false;
-            FirebaseManager.Instance.FirebaseRPSGamePlayTime = long.MaxValue;
+            FirebaseManager.Instance.FirebaseRPSGameMyRoom = -1;
+            FirebaseManager.Instance.FirebaseRPSGameMyPosition = -1;
         }));
     }
 }

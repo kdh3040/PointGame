@@ -87,12 +87,6 @@ public class MainUI : MonoBehaviour {
         if (TKManager.Instance.GameOverRouletteStart)
             StartCoroutine(Co_GameOverRouletteStart());
 
-        if (FirebaseManager.Instance.FirebaseRPSGamePlayTime < DateTime.Now.Ticks)
-        {
-            FirebaseManager.Instance.FirebaseRPSGamePlayTime = long.MaxValue;
-            FirebaseManager.Instance.FirebaseRPSGameEnterEnable = false;
-        }
-
         if (FirebaseManager.Instance.ReviewMode || FirebaseManager.Instance.ExamineMode)
         {
             PointSwap.gameObject.SetActive(false);
@@ -368,9 +362,7 @@ public class MainUI : MonoBehaviour {
         if (FirebaseManager.Instance.ReviewMode || FirebaseManager.Instance.ExamineMode)
             return;
 
-        if (FirebaseManager.Instance.FirebaseRPSGameEnterTime < DateTime.Now.Ticks &&
-            FirebaseManager.Instance.FirebaseRPSGamePlayTime > DateTime.Now.Ticks &&
-            FirebaseManager.Instance.FirebaseRPSGamePlayTime != long.MaxValue)
+        if (TKManager.Instance.IsRPSEnterTime())
         {
             if (FirebaseManager.Instance.FirebaseRPSGameEnterEnable)
             {
@@ -510,7 +502,6 @@ public class MainUI : MonoBehaviour {
             if(Popup.CurrPopupType == POPUP_TYPE.NONE)
             {
                 FirebaseManager.Instance.FirebaseRPSGameEnterEnable = false;
-                FirebaseManager.Instance.FirebaseRPSGamePlayTime = long.MaxValue;
                 if (FirebaseManager.Instance.ReviewMode || FirebaseManager.Instance.ExamineMode)
                     return;
 
@@ -519,7 +510,6 @@ public class MainUI : MonoBehaviour {
             else
             {
                 FirebaseManager.Instance.FirebaseRPSGameEnterEnable = false;
-                FirebaseManager.Instance.FirebaseRPSGamePlayTime = long.MaxValue;
             }
             
         }
