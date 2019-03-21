@@ -46,6 +46,19 @@ public class TKManager : MonoBehaviour
     public bool MainUIView = false;
     public bool SoundMute { get; private set; }
 
+    public List<KeyValuePair<int, object>> RPSGameWinUserList = new List<KeyValuePair<int, object>>();
+    struct RPSGameWinner
+    {
+        public string first_name;
+        public string second_name;
+
+        public RPSGameWinner(string first, string second)
+        {
+            this.first_name = first;
+            this.second_name = second;
+        }
+    }
+
     void Start()
     {
         DontDestroyOnLoad(this);
@@ -167,7 +180,26 @@ public class TKManager : MonoBehaviour
         
     }
 
+    public bool IsExistRPSGameWinner(int series)
+    {
+        for (int i = 0; i < RPSGameWinUserList.Count; i++)
+        {
+            if (RPSGameWinUserList[i].Key == series)
+                return true;
+        }
+        return false;
+    }
 
+    public void SetRPSGameWinUserData(int series, string first_name, string second_name)
+    {
+        if (!IsExistRPSGameWinner(series))
+        {
+            RPSGameWinner tempWinner = new RPSGameWinner();
+            tempWinner.first_name = first_name;
+            tempWinner.second_name = second_name;
+            RPSGameWinUserList.Add(new KeyValuePair<int, object>(series, tempWinner));
+        }
+    }
 
 
     [System.Serializable]

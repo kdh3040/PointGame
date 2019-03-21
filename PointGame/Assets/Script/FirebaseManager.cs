@@ -383,6 +383,7 @@ public class FirebaseManager : MonoBehaviour
         GetRPSGameEnterTime();
         GetRPSGameEnterStatus();
         GetRecommendUser();
+        GetRPSGameWinnerGroup();
     }
 
 
@@ -391,7 +392,7 @@ public class FirebaseManager : MonoBehaviour
         if (FirstLoadingComplete == false)
             LoadingCount++;
 
-        if (LoadingCount == 15)
+        if (LoadingCount == 16)
             FirstLoadingComplete = true;
     }
 
@@ -1639,6 +1640,43 @@ public class FirebaseManager : MonoBehaviour
              }
          }
       );
+
+    }
+
+
+    public void GetRPSGameWinnerGroup()
+    {
+
+        FirebaseDatabase.DefaultInstance.GetReference("RPSGameWinnerGroup").OrderByKey().LimitToLast(5)
+       .GetValueAsync().ContinueWith(task =>
+       {
+           if (task.IsFaulted)
+           {
+               // Handle the error...
+           }
+           else if (task.IsCompleted)
+           {
+               DataSnapshot snapshot = task.Result;
+               if (snapshot != null && snapshot.Exists)
+               {
+                   foreach (var tempChild in snapshot.Children)
+                   {
+                       String tempIndex = tempChild.Key;
+                       
+                       var tempData = snapshot.Value as List<object>;
+                    //   String tempSrc = tempChild.Value.ToString();
+
+                       TKManager.Instance.SetRPSGameWinUserData(Convert.ToInt32(tempIndex), tempData[0].ToString(), tempData[1].ToString());
+                       Debug.Log("##### RPSGameWinnerGroup " + tempIndex);
+                   }
+               }
+
+
+               AddFirstLoadingComplete();
+
+           }
+       });
+
 
     }
 

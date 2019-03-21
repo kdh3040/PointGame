@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width" />
 
-  <title>복권 관리자 페이지</title>
+  <title>가위바위보 관리자 페이지</title>
   <!-- materialize.css 포함 -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link type="text/css" rel="stylesheet" href="materialize.min.css"  media="screen,projection"/>
@@ -34,7 +34,7 @@
     <div class="nav-wrapper">
       <div class="container">
         <a href="/" class="breadcrumb">메인 페이지</a>
-        <a href="/lottoManager.html" class="breadcrumb">가위바위보 관리자</a>
+        <a href="/RPSGame.html" class="breadcrumb">가위바위보 관리자</a>
       </div>
     </div>
   </nav>
@@ -49,11 +49,34 @@
     <h3 class="indigo-text center">:+: 가위바위보  :+:</h3>
 
     <div class="row center">
-      <button id="BTN_TEST_CREATE" type="button" class="btn white indigo-text">가위바위보 참가</button>
-      <button id="BTN_SELECT_LUCKY" type="button" class="btn white indigo-text">가위바위보 결과</button>
+      <!--<button id="BTN_TEST_CREATE" type="button" class="btn white indigo-text">가위바위보 참가</button> -->
+      <button id="BTN_SELECT_LUCKY" type="button" class="btn white indigo-text">가위바위보 게임 시작</button>
     </div>
 
+    <div class="row z-depth-1">
+      <div class="col l12 m12 s12">
+        <p>
+        이번 회차 가위바위보 참가 인원 :
+          <!-- TODO 4. 상태 보기용 span 확인-->
+           <span id="LOTTO_GROUP" class="blue-text">참가 인원</span>
+         </p>
+      </div>
+    </div>
 
+    <br>
+    <br>
+
+
+
+    <table>
+      <h5 class="indigo-text">:+: 최근 우승자 현황 :+:</h5>
+      <thead>
+        <th>회차</th>
+        <th>우승</th>
+        <th>준우승</th>
+      </thead>
+      <tbody id="my-tbody"></tbody>
+    </table>
 
   </div>
 
@@ -136,7 +159,7 @@
     {
       var index = 0;
 
-	  
+
 	   tempData = new Array();
 	   tempWinnerData = new Array();
 	   tempLooserData = new Array();
@@ -149,11 +172,11 @@
 
         if(RPSUserCount == 0)
         {
-            firebase.database().ref('/RPSGame').remove();  
+            firebase.database().ref('/RPSGame').remove();
             firebase.database().ref('/RPSGameSeries').set(-1);
             firebase.database().ref('/RPSUserCount').set(0);
 		//	firebase.database().ref('/RPSGameCurSeries').set(RPSUserSeries);
-            
+
         }
         else {
 
@@ -277,8 +300,8 @@
 			  });
 
 			 // firebase.database().ref('/RPSGameSeries').set(RPSUserSeries);
-			  
-		
+
+
 
 			  firebase.database().ref('/RPSUserList').remove();
               });
@@ -306,7 +329,7 @@
 
         tempLooserData[tempIdx] = new RPSUser();
 
-      
+
 
 		 var tempMyValue = tempData[tempIdx * 2].Value;
 		 var tempEnemyValue = tempData[tempIdx * 2 + 1].Value;
@@ -319,8 +342,8 @@
 			  }
 			  else
 			  {
-				result = 2;  
-			  }			
+				result = 2;
+			  }
 		 }
 		 else
 		 {
@@ -330,8 +353,8 @@
 			  }
 			  else
 			  {
-				result = (3 + tempMyValue - tempEnemyValue) % 3; 
-			  }	
+				result = (3 + tempMyValue - tempEnemyValue) % 3;
+			  }
 		 }
 
 
@@ -402,10 +425,10 @@
 				firebase.database().ref('/Users/'+tempData[tempIdx * 2 + 1].Index + '/FirebaseRPSGameMyRoom').set(-1);
 				firebase.database().ref('/Users/'+tempData[tempIdx * 2 + 1].Index + '/FirebaseRPSGameMyPosition').set(-1);
 			}
-            
+
           }
         }
-  
+
 
 
       firebase.database().ref('/RPSGame/' + RPSUserSeries).remove();
@@ -440,9 +463,9 @@
 			firebase.database().ref('/RPSGame/' + RPSUserSeries + '/' + tempRoom + '/' + i + '/NickName/').set(tempWinnerData[i].NickName);
 			//firebase.database().ref('/RPSGame/' + RPSUserSeries + '/' + tempRoom + '/' + i + '/Value/').set(0);
 			firebase.database().ref('/RPSGame/' + RPSUserSeries + '/' + tempRoom + '/' + i + '/Value/').set(Math.floor(Math.random() * 3 + 1));
-		 }   
+		 }
 
-		  firebase.database().ref('/RPSUserCount').set(tempUserCount);	  
+		  firebase.database().ref('/RPSUserCount').set(tempUserCount);
 
 		    firebase.database().ref('/RPSGameSeries').set(RPSUserSeries, function(error) {
 				if (error) {
@@ -456,16 +479,16 @@
 
 	  else
 	  {
-	      firebase.database().ref('/RPSGame').remove();  
+	      firebase.database().ref('/RPSGame').remove();
           firebase.database().ref('/RPSGameSeries').set(-1);
           firebase.database().ref('/RPSUserCount').set(0);
 
 	      firebase.database().ref('/Users/'+tempWinnerData[0].Index + '/FirebaseRPSGameMyRoom').set(-1);
           firebase.database().ref('/Users/'+tempWinnerData[0].Index + '/FirebaseRPSGameMyPosition').set(-1);
-	  }	  
+	  }
 
 	  console.log(tempUserCount);
- 
+
   }
 
   var timer;
@@ -483,11 +506,11 @@
 
 
   function showClock(){
-         
+
         if((new Date()).getHMS() === arrRPSGAmeStartTime[0])
         {
 			console.log((new Date()).getHMS(5));
-           CreateRPSGameRoom();		
+           CreateRPSGameRoom();
         }
           timer = setTimeout(showClock,1000);
       }
@@ -499,12 +522,62 @@
 showClock();
 
 $("#BTN_SELECT_LUCKY").click(function() {
- for(var i = 1312; i < 3000; i++)
-    {
-      //firebase.database().ref('/RPSUserList/' + (i)).set(i);
-      firebase.database().ref('/Users/' + i).remove();
-    }
-  //GetRPSGame();
+    CreateRPSGameRoom();
+});
+
+function SetRPSCount()
+{
+  firebase.database().ref('/RPSUserCount').once('value', function(snapshot) {
+    var message = snapshot.val();
+    RPSUserCount = message;
+     console.log(RPSUserCount);
+    $("#LOTTO_GROUP").text(RPSUserCount + '명');
+});
+}
+
+SetRPSCount();
+
+function SetData(Series, UserCount)
+{
+//  for(var i = 0; i < arrLottoWinLuckyGroup.length; i++)
+  {
+
+
+    var my_tbody = document.getElementById('my-tbody');
+    // var row = my_tbody.insertRow(0); // 상단에 추가
+    var row = my_tbody.insertRow( my_tbody.rows.length ); // 하단에 추가
+    var cell1 = row.insertCell(0);
+    var cell2 = row.insertCell(1);
+
+    var tempSeries = Series * 1;
+    tempSeries += 1;
+    cell1.innerHTML = tempSeries;
+    cell2.innerHTML = UserCount;
+
+    //cell1.innerHTML = arrLottoWinLuckyGroupSeries[0] + 1;
+    //cell2.innerHTML = arrLottoWinLuckyGroup[arrLottoWinLuckyGroupSeries[0]];
+
+  }
+
+}
+
+var tempCount = 0;
+var dbTestRef = firebase.database().ref('/LottoLuckyGroup').orderByKey().limitToLast(20)
+dbTestRef.on('child_added', function(data){
+
+  var index = data.key.toString().split('_');
+  var Series = Number(index[0]) - LottoSeriesRef;
+  arrLottoWinLuckyGroup[Series] = data.val();
+  arrLottoWinLuckyGroupSeries[tempCount] = Series;
+
+  if(tempCount == 19)
+     SetData(Series, data.val());
+  //Refresh();
+
+//                    console.log(arrLottoWinLuckyGroup[Series]);
+
+  tempCount ++;
+
 });
 
 </script>
