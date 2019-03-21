@@ -70,10 +70,10 @@ public class FirebaseManager : MonoBehaviour
     public int FirebaseRPSGameMyPosition = -1;
 
     // 가위바위보 참가 가능시간
-    public long FirebaseRPSGameEnterTime = 0;
+    public long FirebaseRPSGameEnterTime = 0;    
 
     // 가위바위보 게임 시작 시간
-    public long FirebaseRPSGamePlayTime = 0;
+    public long FirebaseRPSGamePlayTime = 0;    
 
     // 가위바위보 게임 생존자
     public long FirebaseRPSGameUserCount = 0;
@@ -1595,58 +1595,68 @@ public class FirebaseManager : MonoBehaviour
 
     public void GetRPSGameEnterTime()
     {
+        long[] tempFirebaseRPSGameEnterTime = new long[2];
+
         mDatabaseRef.Child("RPSGameEnterTime").GetValueAsync().ContinueWith(task =>
         {
             if (task.IsFaulted)
             {
                 // Handle the error...
             }
+
             else if (task.IsCompleted)
             {
                 DataSnapshot snapshot = task.Result;
-                var min = long.Parse(snapshot.Value.ToString());
-                var date = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
-                date = date.AddMinutes(min);
-                FirebaseRPSGameEnterTime = date.Ticks;
-                //TKManager.Instance.SetTodayLottoSeriesMinCount(LottoTodaySeries);
-
+                if (snapshot != null && snapshot.Exists)
+                {
+                    foreach (var tempChild in snapshot.Children)
+                    {
+                        var min = long.Parse(tempChild.Value.ToString());
+                        var date = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
+                        date = date.AddMinutes(min);
+                        tempFirebaseRPSGameEnterTime[Convert.ToInt32(tempChild.Key)] = date.Ticks;
+                    }
+                }
                 AddFirstLoadingComplete();
             }
-        }
-
-        );
+        });
 
     }
 
     public void GetRPSGamePlayTime()
     {
+         long[] tempFirebaseRPSGamePlayTime = new long[2];
 
         mDatabaseRef.Child("RPSGamePlayTime").GetValueAsync().ContinueWith(task =>
         {
-             if (task.IsFaulted)
-             {
-                 // Handle the error...
-             }
-             else if (task.IsCompleted)
-             {
-                 DataSnapshot snapshot = task.Result;
-                var min = long.Parse(snapshot.Value.ToString());
-                var date = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
-                date = date.AddMinutes(min);
-                FirebaseRPSGamePlayTime = date.Ticks;
-                 //TKManager.Instance.SetTodayLottoSeriesMinCount(LottoTodaySeries);
+            if (task.IsFaulted)
+            {
+                // Handle the error...
+            }
 
-                 AddFirstLoadingComplete();
-             }
-         }
-      );
+            else if (task.IsCompleted)
+            {
+                DataSnapshot snapshot = task.Result;
+                if (snapshot != null && snapshot.Exists)
+                {
+                    foreach (var tempChild in snapshot.Children)
+                    {
+                        var min = long.Parse(tempChild.Value.ToString());
+                        var date = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
+                        date = date.AddMinutes(min);
+                        tempFirebaseRPSGamePlayTime[Convert.ToInt32(tempChild.Key)] = date.Ticks;
+                    }            
+                }
+                AddFirstLoadingComplete();
+            }
+
+        });
 
     }
 
 
     public void GetRPSGameWinnerGroup()
     {
-
         FirebaseDatabase.DefaultInstance.GetReference("RPSGameWinnerGroup").OrderByKey().LimitToLast(5)
        .GetValueAsync().ContinueWith(task =>
        {
@@ -1661,16 +1671,15 @@ public class FirebaseManager : MonoBehaviour
                {
                    foreach (var tempChild in snapshot.Children)
                    {
-                       String tempIndex = tempChild.Key;
-                       
-                       var tempData = snapshot.Value as List<object>;
-                    //   String tempSrc = tempChild.Value.ToString();
+                       var tempData = tempChild.Value as Dictionary<string, object>;
+                       var tempFirstNickName = tempData["first"].ToString();
+                       var tempSecondNickName = tempData["second"].ToString();
 
-                       TKManager.Instance.SetRPSGameWinUserData(Convert.ToInt32(tempIndex), tempData[0].ToString(), tempData[1].ToString());
+                       String tempIndex = tempChild.Key;
+                    
                        Debug.Log("##### RPSGameWinnerGroup " + tempIndex);
                    }
                }
-
 
                AddFirstLoadingComplete();
 

@@ -78,6 +78,18 @@
       <tbody id="my-tbody"></tbody>
     </table>
 
+    <br>
+    <br>
+
+  <table>
+    <h5 class="indigo-text">:+: 가위바위보 참가 인원 현황 :+:</h5>
+    <thead>
+      <th>회차</th>
+      <th>인원</th>
+    </thead>
+    <tbody id="RPSGameUserConut"></tbody>
+  </table>
+
   </div>
 
 
@@ -140,20 +152,137 @@
     //  firebase.database().ref('/Users/' + i).remove();
     }
 
-/*
-  var tempuserCount = RPSUserCount - 1;
-  var tempRoom =   Math.floor(tempuserCount / 2);
-
-    console.log(tempRoom);
-    firebase.database().ref('/RPSGame/' + RPSUserSeries + '/' + tempRoom + '/' + tempuserCount + '/Index/').set(RPSUserCount.toString());
-    firebase.database().ref('/RPSGame/' + RPSUserSeries + '/' + tempRoom + '/' + tempuserCount + '/NickName/').set(RPSUserCount.toString());
-    firebase.database().ref('/RPSGame/' + RPSUserSeries + '/' + tempRoom + '/' + tempuserCount + '/Value/').set(Math.floor(Math.random() * 3) + 1);
-
-    RPSUserCount += 1;
-    firebase.database().ref('/RPSUserCount').set(RPSUserCount);
-    */
   });
 
+function SetCurSeies(first, second)
+{
+  firebase.database().ref('/RPSGameCurSeries').once('value', function(snapshot) {
+    var message = snapshot.val();
+    RPSGameCurSeries = message;
+    RPSGameCurSeries *= 1;
+
+    firebase.database().ref('/RPSGameWinnerGroup/'+RPSGameCurSeries + '/' + 'first').set(first);
+    firebase.database().ref('/RPSGameWinnerGroup/'+RPSGameCurSeries + '/' + 'second').set(second);
+
+    RPSGameCurSeries += 1;
+    firebase.database().ref('/RPSGameCurSeries').set(RPSGameCurSeries);
+  });
+}
+
+function SetUsersBuSeries(UsersCount)
+{
+  firebase.database().ref('/RPSGameCurSeries').once('value', function(snapshot) {
+    var message = snapshot.val();
+    RPSGameCurSeries = message;
+    RPSGameCurSeries *= 1;
+
+    firebase.database().ref('/RPSUsersBySeries' + '/' + RPSGameCurSeries ).set(UsersCount);
+  });
+}
+
+
+
+  function SetRPSGameUserCount(Series, UserCount)
+  {
+  //  for(var i = 0; i < arrLottoWinLuckyGroup.length; i++)
+    {
+
+
+      var my_tbody = document.getElementById('RPSGameUserConut');
+      // var row = my_tbody.insertRow(0); // 상단에 추가
+      var row = my_tbody.insertRow( my_tbody.rows.length ); // 하단에 추가
+      var cell1 = row.insertCell(0);
+      var cell2 = row.insertCell(1);
+
+      var tempSeries = Series * 1;
+      tempSeries += 1;
+      cell1.innerHTML = tempSeries;
+      cell2.innerHTML = UserCount;
+
+    }
+
+  }
+
+  var dbTestRef = firebase.database().ref('/RPSGameCurSeries')
+  dbTestRef.on('child_added', function(data){
+    //console.log( data.val());
+    var Series = data.key.toString();
+    var UserCount = data.val();
+    SetRPSGameUserCount(Series, UserCount);
+
+  });
+
+
+    function CreateRPSGameRoom()
+    {
+	 console.log("Create " + (new Date()).getHMS());
+
+      var i  = 0;
+      firebase.database().ref('/RPSGameSeries').once('value', function(snapshot) {
+        var message = snapshot.val();
+        RPSUserSeries = message;
+    		RPSUserSeries *= 1;
+    		RPSUserSeries = 0;
+
+          firebase.database().ref('/RPSUserList').once('value', function(snapshot) {
+            var message = snapshot.val();
+
+            //console.log(Object.keys(message).length);
+
+            firebase.database().ref('/RPSUserCount').set(Object.keys(message).length);
+            SetUsersBuSeries(Object.keys(message).length);
+
+            for(var key in message)
+            {
+              var tempRoomNumber = Math.floor( i / 2) ;
+              var tempRoomPosition = i;
+
+
+              firebase.database().ref('/Users/'+key + '/FirebaseRPSGameMyRoom').set(tempRoomNumber);
+              firebase.database().ref('/Users/'+key + '/FirebaseRPSGameMyPosition').set(tempRoomPosition);
+
+              firebase.database().ref('/RPSGame/' + RPSUserSeries + '/' + tempRoomNumber + '/' + tempRoomPosition + '/Index/').set(key);
+              firebase.database().ref('/RPSGame/' + RPSUserSeries + '/' + tempRoomNumber + '/' + tempRoomPosition + '/NickName/').set(message[key]);
+			  firebase.database().ref('/RPSGame/' + RPSUserSeries + '/' + tempRoomNumber + '/' + tempRoomPosition + '/Value/').set(Math.floor(Math.random() * 3 + 1));
+              //firebase.database().ref('/RPSGame/' + RPSUserSeries + '/' + tempRoomNumber + '/' + tempRoomPosition + '/Value/').set(0);
+
+/*
+              firebase.database().ref('/RPSGame/' + RPSUserSeries + '/' + tempRoomNumber + '/' + tempRoomPosition + '/Index/').set(key);
+              firebase.database().ref('/RPSGame/' + RPSUserSeries + '/' + tempRoomNumber + '/' + tempRoomPosition + '/NickName/').set(message[key]);
+              firebase.database().ref('/RPSGame/' + RPSUserSeries + '/' + tempRoomNumber + '/' + tempRoomPosition + '/Value/').set(Math.floor(Math.random() * 3 + 1));
+*/
+              i++;
+            }
+
+              tempRoomNumber = Math.floor( i / 2) ;
+
+              if(Object.keys(message).length % 2 == 1)
+              {
+                firebase.database().ref('/RPSGame/' + RPSUserSeries + '/' + tempRoomNumber + '/' + i + '/Index/').set('1234');
+                firebase.database().ref('/RPSGame/' + RPSUserSeries + '/' + tempRoomNumber + '/' + i + '/NickName/').set("a1a2");
+                firebase.database().ref('/RPSGame/' + RPSUserSeries + '/' + tempRoomNumber + '/' + i + '/Value/').set(0);
+
+                firebase.database().ref('/RPSUserCount').set(Object.keys(message).length + 1);
+              }
+
+			  	console.log("SetSeries call " + (new Date()).getHMS());
+			   firebase.database().ref('/RPSGameSeries').set(RPSUserSeries, function(error) {
+				if (error) {
+				  // The write failed...
+				} else {
+					console.log("SetSeries comp " + (new Date()).getHMS());
+				  CheckTimer();
+				}
+			  });
+
+			 // firebase.database().ref('/RPSGameSeries').set(RPSUserSeries);
+
+
+
+			  firebase.database().ref('/RPSUserList').remove();
+              });
+      });
+    }
 
     function GetRPSGame()
     {
@@ -238,75 +367,6 @@
       });
     }
 
-    function CreateRPSGameRoom()
-    {
-	 console.log("Create " + (new Date()).getHMS());
-
-      var i  = 0;
-      firebase.database().ref('/RPSGameSeries').once('value', function(snapshot) {
-        var message = snapshot.val();
-        RPSUserSeries = message;
-		RPSUserSeries *= 1;
-		RPSUserSeries = 0;
-
-          firebase.database().ref('/RPSUserList').once('value', function(snapshot) {
-            var message = snapshot.val();
-
-            //console.log(Object.keys(message).length);
-
-            firebase.database().ref('/RPSUserCount').set(Object.keys(message).length);
-
-            for(var key in message)
-            {
-              var tempRoomNumber = Math.floor( i / 2) ;
-              var tempRoomPosition = i;
-
-
-              firebase.database().ref('/Users/'+key + '/FirebaseRPSGameMyRoom').set(tempRoomNumber);
-              firebase.database().ref('/Users/'+key + '/FirebaseRPSGameMyPosition').set(tempRoomPosition);
-
-              firebase.database().ref('/RPSGame/' + RPSUserSeries + '/' + tempRoomNumber + '/' + tempRoomPosition + '/Index/').set(key);
-              firebase.database().ref('/RPSGame/' + RPSUserSeries + '/' + tempRoomNumber + '/' + tempRoomPosition + '/NickName/').set(message[key]);
-			  firebase.database().ref('/RPSGame/' + RPSUserSeries + '/' + tempRoomNumber + '/' + tempRoomPosition + '/Value/').set(Math.floor(Math.random() * 3 + 1));
-              //firebase.database().ref('/RPSGame/' + RPSUserSeries + '/' + tempRoomNumber + '/' + tempRoomPosition + '/Value/').set(0);
-
-/*
-              firebase.database().ref('/RPSGame/' + RPSUserSeries + '/' + tempRoomNumber + '/' + tempRoomPosition + '/Index/').set(key);
-              firebase.database().ref('/RPSGame/' + RPSUserSeries + '/' + tempRoomNumber + '/' + tempRoomPosition + '/NickName/').set(message[key]);
-              firebase.database().ref('/RPSGame/' + RPSUserSeries + '/' + tempRoomNumber + '/' + tempRoomPosition + '/Value/').set(Math.floor(Math.random() * 3 + 1));
-*/
-              i++;
-            }
-
-              tempRoomNumber = Math.floor( i / 2) ;
-
-              if(Object.keys(message).length % 2 == 1)
-              {
-                firebase.database().ref('/RPSGame/' + RPSUserSeries + '/' + tempRoomNumber + '/' + i + '/Index/').set('1234');
-                firebase.database().ref('/RPSGame/' + RPSUserSeries + '/' + tempRoomNumber + '/' + i + '/NickName/').set("a1a2");
-                firebase.database().ref('/RPSGame/' + RPSUserSeries + '/' + tempRoomNumber + '/' + i + '/Value/').set(0);
-
-                firebase.database().ref('/RPSUserCount').set(Object.keys(message).length + 1);
-              }
-
-			  	console.log("SetSeries call " + (new Date()).getHMS());
-			   firebase.database().ref('/RPSGameSeries').set(RPSUserSeries, function(error) {
-				if (error) {
-				  // The write failed...
-				} else {
-					console.log("SetSeries comp " + (new Date()).getHMS());
-				  CheckTimer();
-				}
-			  });
-
-			 // firebase.database().ref('/RPSGameSeries').set(RPSUserSeries);
-
-
-
-			  firebase.database().ref('/RPSUserList').remove();
-              });
-      });
-    }
 
   //GetRPSGame();
 
@@ -480,11 +540,14 @@
 	  else
 	  {
 	      firebase.database().ref('/RPSGame').remove();
-          firebase.database().ref('/RPSGameSeries').set(-1);
-          firebase.database().ref('/RPSUserCount').set(0);
+        firebase.database().ref('/RPSGameSeries').set(-1);
+        firebase.database().ref('/RPSUserCount').set(0);
 
 	      firebase.database().ref('/Users/'+tempWinnerData[0].Index + '/FirebaseRPSGameMyRoom').set(-1);
-          firebase.database().ref('/Users/'+tempWinnerData[0].Index + '/FirebaseRPSGameMyPosition').set(-1);
+        firebase.database().ref('/Users/'+tempWinnerData[0].Index + '/FirebaseRPSGameMyPosition').set(-1);
+
+        SetCurSeies(tempWinnerData[0].NickName, tempWinnerData[1].NickName);
+
 	  }
 
 	  console.log(tempUserCount);
@@ -530,14 +593,14 @@ function SetRPSCount()
   firebase.database().ref('/RPSUserCount').once('value', function(snapshot) {
     var message = snapshot.val();
     RPSUserCount = message;
-     console.log(RPSUserCount);
+//     console.log(RPSUserCount);
     $("#LOTTO_GROUP").text(RPSUserCount + '명');
 });
 }
 
 SetRPSCount();
 
-function SetData(Series, UserCount)
+function SetData(Series, first, second)
 {
 //  for(var i = 0; i < arrLottoWinLuckyGroup.length; i++)
   {
@@ -548,11 +611,13 @@ function SetData(Series, UserCount)
     var row = my_tbody.insertRow( my_tbody.rows.length ); // 하단에 추가
     var cell1 = row.insertCell(0);
     var cell2 = row.insertCell(1);
+    var cell3 = row.insertCell(2);
 
     var tempSeries = Series * 1;
     tempSeries += 1;
     cell1.innerHTML = tempSeries;
-    cell2.innerHTML = UserCount;
+    cell2.innerHTML = first;
+    cell3.innerHTML = second;
 
     //cell1.innerHTML = arrLottoWinLuckyGroupSeries[0] + 1;
     //cell2.innerHTML = arrLottoWinLuckyGroup[arrLottoWinLuckyGroupSeries[0]];
@@ -562,16 +627,16 @@ function SetData(Series, UserCount)
 }
 
 var tempCount = 0;
-var dbTestRef = firebase.database().ref('/LottoLuckyGroup').orderByKey().limitToLast(20)
+var dbTestRef = firebase.database().ref('/RPSGameWinnerGroup').orderByKey().limitToLast(4)
 dbTestRef.on('child_added', function(data){
 
-  var index = data.key.toString().split('_');
-  var Series = Number(index[0]) - LottoSeriesRef;
-  arrLottoWinLuckyGroup[Series] = data.val();
-  arrLottoWinLuckyGroupSeries[tempCount] = Series;
+  var index = data.key.toString();
+//                    console.log(index);
+  //                  console.log(data);
 
-  if(tempCount == 19)
-     SetData(Series, data.val());
+
+
+     SetData(index, data.val().first, data.val().second);
   //Refresh();
 
 //                    console.log(arrLottoWinLuckyGroup[Series]);
