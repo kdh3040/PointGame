@@ -106,6 +106,9 @@ public class SignUpPopup : MonoBehaviour
     {
         SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
         // 구글 로그인 진행
+        FirebaseManager.Instance.GoogleLogin();
+
+
         Login.gameObject.SetActive(false);
         InfoInput.gameObject.SetActive(true);
     }
