@@ -143,6 +143,7 @@
   var RPSUserSeries = -1;
   var RPSGameCurSeries = 0;
   var RPSUserStatus;
+  var FinalCount = 0;
 
   $("#BTN_TEST_CREATE").click(function() {
 
@@ -449,7 +450,7 @@ function SetUsersBuSeries(UsersCount)
           {
             tempWinnerData[tempUserCount] = tempData[tempIdx * 2];
 
-			var tempRoomNumber =   Math.floor(tempUserCount / 2);
+		      	var tempRoomNumber =   Math.floor(tempUserCount / 2);
             firebase.database().ref('/Users/'+tempWinnerData[tempUserCount].Index + '/FirebaseRPSGameMyRoom').set(tempRoomNumber);
             firebase.database().ref('/Users/'+tempWinnerData[tempUserCount].Index + '/FirebaseRPSGameMyPosition').set(tempUserCount);
 
@@ -458,33 +459,36 @@ function SetUsersBuSeries(UsersCount)
             firebase.database().ref('/Users/'+tempLooserData[tempUserCount].Index + '/FirebaseRPSGameMyPosition').set(-1);
             tempUserCount++;
           }
+
           else if (result == 2)
           {
+
             tempLooserData[tempUserCount] = tempData[tempIdx * 2];
             firebase.database().ref('/Users/'+tempLooserData[tempUserCount].Index + '/FirebaseRPSGameMyRoom').set(-1);
             firebase.database().ref('/Users/'+tempLooserData[tempUserCount].Index + '/FirebaseRPSGameMyPosition').set(-1);
 
             tempWinnerData[tempUserCount] = tempData[tempIdx * 2 + 1];
 
-			var tempRoomNumber =   Math.floor(tempUserCount / 2);
+		      	var tempRoomNumber =   Math.floor(tempUserCount / 2);
             firebase.database().ref('/Users/'+tempWinnerData[tempUserCount].Index + '/FirebaseRPSGameMyRoom').set(tempRoomNumber);
             firebase.database().ref('/Users/'+tempWinnerData[tempUserCount].Index + '/FirebaseRPSGameMyPosition').set(tempUserCount);
             tempUserCount++ ;
           }
+
           else
           {
-			if(tempUserRoomCount === 1)
-			{
-				return;
-			}
-			else
-			{
-				firebase.database().ref('/Users/'+tempData[tempIdx * 2].Index + '/FirebaseRPSGameMyRoom').set(-1);
-				firebase.database().ref('/Users/'+tempData[tempIdx * 2].Index + '/FirebaseRPSGameMyPosition').set(-1);
+        			if(tempUserRoomCount === 1)
+        			{
+        				return;
+        			}
+        			else
+        			{
+        				firebase.database().ref('/Users/'+tempData[tempIdx * 2].Index + '/FirebaseRPSGameMyRoom').set(-1);
+        				firebase.database().ref('/Users/'+tempData[tempIdx * 2].Index + '/FirebaseRPSGameMyPosition').set(-1);
 
-				firebase.database().ref('/Users/'+tempData[tempIdx * 2 + 1].Index + '/FirebaseRPSGameMyRoom').set(-1);
-				firebase.database().ref('/Users/'+tempData[tempIdx * 2 + 1].Index + '/FirebaseRPSGameMyPosition').set(-1);
-			}
+        				firebase.database().ref('/Users/'+tempData[tempIdx * 2 + 1].Index + '/FirebaseRPSGameMyRoom').set(-1);
+        				firebase.database().ref('/Users/'+tempData[tempIdx * 2 + 1].Index + '/FirebaseRPSGameMyPosition').set(-1);
+        			}
 
           }
         }

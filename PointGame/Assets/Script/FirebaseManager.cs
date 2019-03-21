@@ -43,7 +43,7 @@ public class FirebaseManager : MonoBehaviour
     public bool FirstLoadingComplete = false;
     public int LoadingCount = 0;
 
-    private int ReviewVersion = 2;
+    private int ReviewVersion = 3;
     public bool ReviewMode = true;
     public bool ExamineMode = true;
 
@@ -108,12 +108,37 @@ public class FirebaseManager : MonoBehaviour
     {
         GooglePlayServiceInitialize();
 
-        Social.localUser.Authenticate(success =>
-        {
-            if (success == false) return;
+#if UNITY_ANDROID
 
-            StartCoroutine(co_GoogleLogin());
+        PlayGamesPlatform.Instance.Authenticate((bool success) =>
+        {
+            if (success)
+            {
+               // StartCoroutine(co_GoogleLogin());
+            }
+            else
+            {
+                // to do ...
+                // 구글 플레이 게임 서비스 로그인 실패 처리
+            }
         });
+
+#elif UNITY_IOS
+ 
+        Social.localUser.Authenticate((bool success) =>
+        {
+            if (success)
+            {
+                // to do ...
+                // 애플 게임 센터 로그인 성공 처리
+            }
+            else
+            {
+                // to do ...
+                // 애플 게임 센터 로그인 실패 처리
+            }
+        }); 
+#endif
 
     }
 
@@ -147,6 +172,9 @@ public class FirebaseManager : MonoBehaviour
 
     void GooglePlayServiceInitialize()
     {
+
+#if UNITY_ANDROID
+
         PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder()
             .RequestIdToken()
             .Build();
@@ -154,6 +182,11 @@ public class FirebaseManager : MonoBehaviour
         PlayGamesPlatform.InitializeInstance(config);
         PlayGamesPlatform.DebugLogEnabled = true;
         PlayGamesPlatform.Activate();
+
+#elif UNITY_IOS 
+        GameCenterPlatform.ShowDefaultAchievementCompletionBanner(true); 
+#endif
+
     }
 
     public void Init()
