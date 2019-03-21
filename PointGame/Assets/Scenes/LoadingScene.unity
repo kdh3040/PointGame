@@ -1283,6 +1283,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Login: {fileID: 887947743}
   GoogleLogin: {fileID: 1888901930}
+  LoginMsg: {fileID: 1650341904}
+  InfoMsg: {fileID: 1615902550}
   GuestLogin: {fileID: 837582014}
   InfoInput: {fileID: 1052896930}
   NickName: {fileID: 1061428659}
@@ -2586,7 +2588,8 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "- \uAD6C\uAE00\uB85C\uADF8\uC778\uC740 \uD544\uC218\uAC00 \uC544\uB2D9\uB2C8\uB2E4."
+  m_Text: "- \uC560\uD50C \uAC8C\uC784\uC13C\uD130 \uB85C\uADF8\uC778\uC740 \uD544\uC218\uAC00
+    \uC544\uB2D9\uB2C8\uB2E4."
 --- !u!222 &1615902551
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2665,7 +2668,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\uAD6C\uAE00 \uB85C\uADF8\uC778"
+  m_Text: "\uC560\uD50C \uB85C\uADF8\uC778"
 --- !u!222 &1650341905
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3340,6 +3343,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GameOverRouletteStart: 0
+  RPSPlayStartTimeList: 
   CurrLottoSeriesCount: 0
   LottoSeriesCountMin: 0
   HUD: {fileID: 1015879527}

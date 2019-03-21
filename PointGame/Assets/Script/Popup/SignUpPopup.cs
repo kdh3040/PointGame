@@ -9,6 +9,8 @@ public class SignUpPopup : MonoBehaviour
 {
     public GameObject Login;
     public Button GoogleLogin;
+    public Text LoginMsg;
+    public Text InfoMsg;
     public Button GuestLogin;
 
     public GameObject InfoInput;
@@ -37,6 +39,20 @@ public class SignUpPopup : MonoBehaviour
         MsgPopup.gameObject.SetActive(false);
         Login.gameObject.SetActive(true);
         InfoInput.gameObject.SetActive(false);
+
+
+#if UNITY_ANDROID
+
+        LoginMsg.text = "구글 로그인";
+        InfoMsg.text = "구글 로그인은 필수가 아닙니다.";
+#elif UNITY_IOS
+ 
+        LoginMsg.text = "애플 로그인";
+        InfoMsg.text = "애플 게임센터 로그인은 필수가 아닙니다.";
+#endif
+
+
+
     }
 
     public void OnClickOkButton()
