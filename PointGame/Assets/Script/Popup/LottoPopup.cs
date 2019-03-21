@@ -31,6 +31,23 @@ public class LottoPopup : Popup
 
     public override void SetData(PopupData data)
     {
+        FirebaseManager.Instance.LottoPopupRefresh = RefrehUI;
+        RefrehUI();
+        if (FirebaseManager.Instance.ReviewMode)
+            Info.text = "- 1000포인트를 사용하여 행운번호를 뽑아보세요.\n- 하루 최대 4명의 행운의 당첨자가 뽑힙니다.\n- 2000포인트의 주인공이 되어보세요~\n** 해피박스는 애플과의 관계가 일절 없습니다";
+        else
+            Info.text = "- 1000포인트를 사용하여 행운번호를 뽑아보세요.\n- 일일 9시, 12시, 15시, 18시에 추점을 진행합니다.\n- 당첨금액은 20000원 입니다.";
+    }
+
+    public void OnClickOk()
+    {
+        FirebaseManager.Instance.LottoPopupRefresh = null;
+        SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
+        CloseAction();
+    }
+
+    public void RefrehUI()
+    {
         for (int i = 0; i < LottoSlotList.Count; i++)
         {
             if (TKManager.Instance.LottoSeriesCountMin < 0)
@@ -40,16 +57,5 @@ public class LottoPopup : Popup
 
             LottoSlotList[i].ParentPopup = ParentPopup;
         }
-
-        if (FirebaseManager.Instance.ReviewMode)
-            Info.text = "- 1000포인트를 사용하여 행운번호를 뽑아보세요.\n- 하루 최대 4명의 행운의 당첨자가 뽑힙니다.\n- 2000포인트의 주인공이 되어보세요~\n** 해피박스는 애플과의 관계가 일절 없습니다";
-        else
-            Info.text = "- 1000포인트를 사용하여 행운번호를 뽑아보세요.\n- 일일 9시, 12시, 15시, 18시에 추점을 진행합니다.\n- 당첨금액은 20000원 입니다.";
-    }
-
-    public void OnClickOk()
-    {
-        SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
-        CloseAction();
     }
 }

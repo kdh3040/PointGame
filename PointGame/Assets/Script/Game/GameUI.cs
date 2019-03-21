@@ -56,8 +56,11 @@ public class GameUI : MonoBehaviour {
 
     void Start()
     {
-        mAudio.clip = mClip[0];
-        mAudio.Play();
+        if (TKManager.Instance.SoundMute == false)
+        {
+            mAudio.clip = mClip[0];
+            mAudio.Play();
+        }
 
         if (FirebaseManager.Instance.ReviewMode || FirebaseManager.Instance.ExamineMode)
             GameOverRouletteText.text = "나가기";

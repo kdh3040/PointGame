@@ -44,6 +44,7 @@ public class TKManager : MonoBehaviour
 
     public List<KeyValuePair<string, string>> RecommendUsers = new List<KeyValuePair<string, string>>();
     public bool MainUIView = false;
+    public bool SoundMute { get; private set; }
 
     void Start()
     {
@@ -147,6 +148,11 @@ public class TKManager : MonoBehaviour
         HUD.HideHUD();
     }
 
+    public void SetSoundMute(bool enable)
+    {
+        SoundMute = enable;
+        SaveFile();
+    }
     private void Update()
     {
         if(MainUIView == false)
@@ -173,6 +179,7 @@ public class TKManager : MonoBehaviour
         public int BestStage = 0;
         public int PushLastIndex = 0;
         public string RecommendCode = "";
+        public bool SoundMute = false;
 
         public void Save()
         {
@@ -182,6 +189,7 @@ public class TKManager : MonoBehaviour
             BestStage = TKManager.Instance.MyData.BestStage;
             PushLastIndex = TKManager.Instance.PushLastIndex;
             RecommendCode = TKManager.Instance.MyData.RecommenderCode;
+            SoundMute = TKManager.Instance.SoundMute;
         }
 
         public void Load()
@@ -198,6 +206,7 @@ public class TKManager : MonoBehaviour
             TKManager.Instance.MyData.BestStage = BestStage;
             TKManager.Instance.PushLastIndex = PushLastIndex;
             TKManager.Instance.MyData.RecommenderCode = RecommendCode;
+            TKManager.Instance.SoundMute = SoundMute;
         }
     }
 

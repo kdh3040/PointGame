@@ -42,7 +42,10 @@ public class SoundManager : MonoBehaviour {
 
     public void PlayFXSound(SOUND_TYPE type)
     {
-        mFxAudio.clip = mFxSound[(int)type];
-        mFxAudio.Play();
+        if (TKManager.Instance.SoundMute == false)
+        {
+            mFxAudio.clip = mFxSound[(int)type];
+            mFxAudio.Play();
+        }
     }
 }

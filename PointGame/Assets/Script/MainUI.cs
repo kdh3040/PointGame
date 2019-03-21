@@ -39,6 +39,9 @@ public class MainUI : MonoBehaviour {
     public Button RPSButton;
     public Button RPSHelpButton;
 
+    public Button SoundButton;
+    public Image SoundImg;
+
     public PopupUI Popup;
 
     public AudioSource mBGM;
@@ -70,15 +73,16 @@ public class MainUI : MonoBehaviour {
         RPSButton.onClick.AddListener(OnClickRPSGame);
         LottoHelpButton.onClick.AddListener(OnClickHelp);
         RPSHelpButton.onClick.AddListener(OnClickRPSHelp);
+        SoundButton.onClick.AddListener(OnClickSoundChange);
     }
 
     void Start()
     {
-        mBGM.Play();
         TKManager.Instance.MainUIView = true;
         Id.text = string.Format("ID : {0}", TKManager.Instance.MyData.NickName);
 
         CurrLottoTime = DateTime.Now.Hour;
+        RefreshSound();
 
         if (TKManager.Instance.GameOverRouletteStart)
             StartCoroutine(Co_GameOverRouletteStart());
@@ -406,6 +410,27 @@ public class MainUI : MonoBehaviour {
         }
     }
 
+    public void OnClickSoundChange()
+    {
+        TKManager.Instance.SetSoundMute(!TKManager.Instance.SoundMute);
+        RefreshSound();
+    }
+
+    public void RefreshSound()
+    {
+        if (TKManager.Instance.SoundMute)
+        {
+            SoundImg.sprite = (Sprite)Resources.Load("icon_sound_off", typeof(Sprite));
+            mBGM.Stop();
+        }
+        else
+        {
+            // 사운드
+            SoundImg.sprite = (Sprite)Resources.Load("icon_sound_on", typeof(Sprite));
+            mBGM.Play();
+        }
+    }
+
     private void Update()
     {
 #if UNITY_EDITOR
@@ -431,10 +456,9 @@ public class MainUI : MonoBehaviour {
         }
         else
         {
-            for (int i = 0; i < TKManager.Instance.LottoLuckyNumber.Count; i++)
+            for (int i = TKManager.Instance.LottoSeriesCountMin; i < TKManager.Instance.CurrLottoSeriesCount; i++)
             {
-                int seriesCount = TKManager.Instance.LottoLuckyNumber[i].Key;
-                if (TKManager.Instance.MyData.LottoResultShowSeriesList.ContainsKey(seriesCount) == false)
+                if (TKManager.Instance.MyData.LottoResultShowSeriesList.ContainsKey(i) == false)
                 {
                     LottoNotiObj.SetActive(true);
                     break;

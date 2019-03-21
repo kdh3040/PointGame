@@ -31,23 +31,33 @@ public class WinnerListPopup : Popup
         var winList = TKManager.Instance.LottoWinUserList;
         StringBuilder winCount = new StringBuilder();
 
-        for (int i = 0; i < winList.Count - 1; i++)
+        if (winList.Count < 2)
         {
-            winCount.Append(string.Format("- {0:D2}회 당첨자", winList[i].Key + 1));
-            winCount.AppendLine();
+            LottoWinnerCount.text = "";
+            LottoWinnerName.text = "";
+        }
+        else
+        {
+            for (int i = winList.Count - 2; i >= 0; i--)
+            {
+                winCount.Append(string.Format("- {0:D2}회 당첨자", winList[i].Key + 1));
+                winCount.AppendLine();
+            }
+
+            LottoWinnerCount.text = winCount.ToString();
+
+            StringBuilder winUser = new StringBuilder();
+
+            for (int i = winList.Count - 2; i >= 0; i--)
+            {
+                winUser.Append(string.Format(" : {0}", winList[i].Value));
+                winUser.AppendLine();
+            }
+
+            LottoWinnerName.text = winUser.ToString();
         }
 
-        LottoWinnerCount.text = winCount.ToString();
-
-        StringBuilder winUser = new StringBuilder();
-
-        for (int i = 0; i < winList.Count - 1; i++)
-        {
-            winUser.Append(string.Format(" : {0}", winList[i].Value));
-            winUser.AppendLine();
-        }
-
-        LottoWinnerName.text = winUser.ToString();
+        
 
         RPSWinnerCount.text = "";
         RPSWinnerName.text = "";

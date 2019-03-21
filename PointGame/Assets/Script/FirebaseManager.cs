@@ -89,6 +89,8 @@ public class FirebaseManager : MonoBehaviour
     private EventHandler<ValueChangedEventArgs> RPSGameRoomChangedHandle = null;
     private string RPSGameRoomChangedHandle_SaveSeries = "";
     private string RPSGameRoomChangedHandle_SaveMyRoom = "";
+
+    public Action LottoPopupRefresh = null;
     // Use this for initialization
     void Start()
     {
@@ -176,15 +178,15 @@ public class FirebaseManager : MonoBehaviour
         
 
         FirebaseDatabase.DefaultInstance
-        .GetReference("LottoCurSeries")
+        .GetReference("TempLottoCurSeries")
         .ValueChanged += HandleChangedLottoCurSeries;
 
         FirebaseDatabase.DefaultInstance
-        .GetReference("LottoLuckyGroup").OrderByKey().LimitToLast(5)
+        .GetReference("TempLottoLuckyGroup").OrderByKey().LimitToLast(5)
         .ChildAdded += HandleChildAddedLottoLuckyGroup;
 
         FirebaseDatabase.DefaultInstance
-        .GetReference("LottoLuckyNumber").OrderByKey().LimitToLast(5)
+        .GetReference("TempLottoLuckyNumber").OrderByKey().LimitToLast(5)
         .ChildAdded += HandleChildAddedLottoLuckyNumber;
 
     }
@@ -320,6 +322,8 @@ public class FirebaseManager : MonoBehaviour
 
             int tempNumber = Convert.ToInt32(args.Snapshot.Value.ToString());
             TKManager.Instance.SetLottoLuckyNumber(tempSeriesToInt, tempNumber);
+            if (LottoPopupRefresh != null)
+                LottoPopupRefresh();
             Debug.Log("@@@@@@@ HandleChildAddedLottoLuckyNumber " + tempSeriesToInt);
         }
 
@@ -854,7 +858,7 @@ public class FirebaseManager : MonoBehaviour
                 {
                     LottoRefNnumber = Convert.ToInt32(snapshot.Value);
 
-                    mDatabaseRef.Child("LottoCurSeries").GetValueAsync().ContinueWith(CurSeriestask =>
+                    mDatabaseRef.Child("TempLottoCurSeries").GetValueAsync().ContinueWith(CurSeriestask =>
                     {
                         if (CurSeriestask.IsFaulted)
                         {
@@ -909,7 +913,7 @@ public class FirebaseManager : MonoBehaviour
     public void GetLottoLuckGroup()
     {
 
-        FirebaseDatabase.DefaultInstance.GetReference("LottoLuckyGroup").OrderByKey().LimitToLast(5)
+        FirebaseDatabase.DefaultInstance.GetReference("TempLottoLuckyGroup").OrderByKey().LimitToLast(5)
        .GetValueAsync().ContinueWith(task =>
        {
            if (task.IsFaulted)
@@ -966,7 +970,7 @@ public class FirebaseManager : MonoBehaviour
     public void GetLottoCurSeries()
     {
 
-        mDatabaseRef.Child("LottoCurSeries").GetValueAsync().ContinueWith(task =>
+        mDatabaseRef.Child("TempLottoCurSeries").GetValueAsync().ContinueWith(task =>
         {
             if (task.IsFaulted)
             {
@@ -1094,7 +1098,7 @@ public class FirebaseManager : MonoBehaviour
     public void GetLottoLuckyNumber()
     {
 
-        mDatabaseRef.Child("LottoLuckyNumber").OrderByKey().LimitToLast(3)
+        mDatabaseRef.Child("TempLottoLuckyNumber").OrderByKey().LimitToLast(3)
        .GetValueAsync().ContinueWith(task =>
 
         {
