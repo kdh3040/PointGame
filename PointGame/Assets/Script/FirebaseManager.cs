@@ -10,6 +10,8 @@ using GooglePlayGames;
 using GooglePlayGames.BasicApi;
 using Firebase.Auth;
 
+using UnityEngine.SocialPlatforms.GameCenter;
+
 public class FirebaseManager : MonoBehaviour
 {
 
@@ -129,11 +131,13 @@ public class FirebaseManager : MonoBehaviour
         {
             if (success)
             {
+                Debug.Log("@@@@@@@ Social.localUser.Authenticate success");
                 // to do ...
                 // 애플 게임 센터 로그인 성공 처리
             }
             else
             {
+                Debug.Log("@@@@@@@ Social.localUser.Authenticate fail");
                 // to do ...
                 // 애플 게임 센터 로그인 실패 처리
             }
@@ -141,7 +145,7 @@ public class FirebaseManager : MonoBehaviour
 #endif
 
     }
-
+#if UNITY_ANDROID
     IEnumerator co_GoogleLogin()
     {
         while (System.String.IsNullOrEmpty(((PlayGamesLocalUser)Social.localUser).GetIdToken()))
@@ -169,7 +173,7 @@ public class FirebaseManager : MonoBehaviour
         });
     }
 
-
+#endif
     void GooglePlayServiceInitialize()
     {
 
@@ -183,7 +187,7 @@ public class FirebaseManager : MonoBehaviour
         PlayGamesPlatform.DebugLogEnabled = true;
         PlayGamesPlatform.Activate();
 
-#elif UNITY_IOS 
+#elif UNITY_IOS
         GameCenterPlatform.ShowDefaultAchievementCompletionBanner(true); 
 #endif
 
@@ -454,8 +458,8 @@ public class FirebaseManager : MonoBehaviour
         mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("TotalAccumPoint").SetValueAsync(0);
         mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("TodayAccumPoint").Child(GetToday()).SetValueAsync(0);
         mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("Cash").SetValueAsync(0);
-
-
+        mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("FirebaseRPSGameMyRoom").SetValueAsync(-1);
+        mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("FirebaseRPSGameMyPosition").SetValueAsync(-1);
     }
     // 사용자 정보 파이어베이스에서 로드
     public void GetUserData()

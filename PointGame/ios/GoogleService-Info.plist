@@ -7,34 +7,36 @@
 	<key>AD_UNIT_ID_FOR_INTERSTITIAL_TEST</key>
 	<string>ca-app-pub-3940256099942544/4411468910</string>
 	<key>CLIENT_ID</key>
-	<string>996170955465-outuuvsoghneacn50g7akvq841vv7vsi.apps.googleusercontent.com</string>
+	<string>641308195675-japi0dlkhtqtva59tcmnav0urthb0fmn.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.996170955465-outuuvsoghneacn50g7akvq841vv7vsi</string>
+	<string>com.googleusercontent.apps.641308195675-japi0dlkhtqtva59tcmnav0urthb0fmn</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>641308195675-o716k27s2im6f72l5us8ouhtoq795vfr.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
-	<string>AIzaSyAZ6HOQ4gKvdZ7xPvRSLC5AvHuRB7AtKDg</string>
+	<string>AIzaSyCYbqiokujH72BOeD3m0RwblawKXe2FtMA</string>
 	<key>GCM_SENDER_ID</key>
-	<string>996170955465</string>
+	<string>641308195675</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>freemoa</string>
+	<string>com.justtreasure.treasureonetwo</string>
 	<key>PROJECT_ID</key>
-	<string>pointgame-2177a</string>
+	<string>treasureone-4472e</string>
 	<key>STORAGE_BUCKET</key>
-	<string>pointgame-2177a.appspot.com</string>
+	<string>treasureone-4472e.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<true></true>
 	<key>IS_ANALYTICS_ENABLED</key>
 	<false></false>
 	<key>IS_APPINVITE_ENABLED</key>
-	<false></false>
+	<true></true>
 	<key>IS_GCM_ENABLED</key>
 	<true></true>
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:996170955465:ios:fe42e2690fe9a1fa</string>
+	<string>1:641308195675:ios:33db87c769eec1ae</string>
 	<key>DATABASE_URL</key>
-	<string>https://pointgame-2177a.firebaseio.com</string>
+	<string>https://treasureone-4472e.firebaseio.com</string>
 </dict>
 </plist>

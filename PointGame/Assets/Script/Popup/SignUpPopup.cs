@@ -44,11 +44,11 @@ public class SignUpPopup : MonoBehaviour
 #if UNITY_ANDROID
 
         LoginMsg.text = "구글 로그인";
-        InfoMsg.text = "구글 로그인은 필수가 아닙니다.";
+        InfoMsg.text = "- 구글 로그인은 필수가 아닙니다.";
 #elif UNITY_IOS
  
         LoginMsg.text = "애플 로그인";
-        InfoMsg.text = "애플 게임센터 로그인은 필수가 아닙니다.";
+        InfoMsg.text = "- 애플 게임센터 로그인은 필수가 아닙니다.";
 #endif
 
 
