@@ -28,36 +28,33 @@ public class WinnerListPopup : Popup
 
     public override void SetData(PopupData data)
     {
-        var winList = TKManager.Instance.LottoWinUserList;
+        var winList = new List<KeyValuePair<int, string>>();
+        winList.AddRange(TKManager.Instance.LottoWinUserList);
         StringBuilder winCount = new StringBuilder();
 
-        if (winList.Count < 2)
+        for (int i = winList.Count - 5; i <= winList.Count - 2; i++)
         {
-            LottoWinnerCount.text = "";
-            LottoWinnerName.text = "";
-        }
-        else
-        {
-            for (int i = winList.Count - 2; i >= 0; i--)
-            {
-                winCount.Append(string.Format("- {0:D2}회 당첨자", winList[i].Key + 1));
-                winCount.AppendLine();
-            }
+            if (i < 0 || winList.Count <= i)
+                continue;
 
-            LottoWinnerCount.text = winCount.ToString();
-
-            StringBuilder winUser = new StringBuilder();
-
-            for (int i = winList.Count - 2; i >= 0; i--)
-            {
-                winUser.Append(string.Format(" : {0}", winList[i].Value));
-                winUser.AppendLine();
-            }
-
-            LottoWinnerName.text = winUser.ToString();
+            winCount.Append(string.Format("- {0:D2}회 당첨자", winList[i].Key + 1));
+            winCount.AppendLine();
         }
 
-        
+        LottoWinnerCount.text = winCount.ToString();
+
+        StringBuilder winUser = new StringBuilder();
+
+        for (int i = winList.Count - 5; i <= winList.Count - 2; i++)
+        {
+            if (i < 0 || winList.Count <= i)
+                continue;
+
+            winUser.Append(string.Format(" : {0}", winList[i].Value));
+            winUser.AppendLine();
+        }
+
+        LottoWinnerName.text = winUser.ToString();
 
         RPSWinnerCount.text = "";
         RPSWinnerName.text = "";
