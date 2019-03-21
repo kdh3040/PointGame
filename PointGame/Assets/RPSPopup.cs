@@ -197,7 +197,7 @@ public class RPSPopup : Popup
     {
         // Step 1 상대방의 데이터를 받아왔는지 체크
         float waitTime = 5.0f;
-        TKManager.Instance.ShowHUD("준비중 입니다.", 5.0f);
+        TKManager.Instance.ShowHUD("잠시만 기다려주세요", 5.0f);
 
         while (true)
         {
@@ -216,7 +216,7 @@ public class RPSPopup : Popup
     IEnumerator Co_RPSGame_Search()
     {
         // Step 1 상대방의 데이터를 받아왔는지 체크
-        TKManager.Instance.ShowHUD("상대방을 검색중입니다.", 30.0f);
+        TKManager.Instance.ShowHUD("게임 시작까지 남은 시간", 30.0f);
 
         while (true)
         {
@@ -340,13 +340,13 @@ public class RPSPopup : Popup
             else
             {
                 // 승리
-                ResultDesc.text = "승리하였습니다.\n잠시만 기달려주세요.";
+                ResultDesc.text = "승리하였습니다.\n잠시만 기다려주세요.";
             }
         }
         else if(result == 0)
         {
             // 비김
-            ResultDesc.text = "비겼습니다.\n잠시만 기달려주세요.";
+            ResultDesc.text = "비겼습니다.\n잠시만 기다려주세요.";
         }
 
         while (true)
