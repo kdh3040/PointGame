@@ -99,6 +99,10 @@ public class MainUI : MonoBehaviour {
             RefreshRankWinnerList();
 
             NextLottoTime.text = "";
+            
+#if UNITY_IOS
+            HappyBoxButton.gameObject.SetActive(false);
+#endif
         }
         else
         {
