@@ -301,6 +301,8 @@ public class RPSPopup : Popup
         Debug.Log("결과창_1 " + FirebaseManager.Instance.FirebaseRPSGame_EnemyIndex + " " + FirebaseManager.Instance.FirebaseRPSGame_EnemyNick + " " + FirebaseManager.Instance.FirebaseRPSGame_EnemyValue);
         Debug.Log("결과창_2 " + RPSGame_MyValue);
 
+        FirebaseManager.Instance.SelectRPSGame(0);
+
         ResultObj.gameObject.SetActive(true);
         if(result == 1)
         {
