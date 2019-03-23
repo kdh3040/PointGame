@@ -1713,7 +1713,7 @@ public class FirebaseManager : MonoBehaviour
                         var min = long.Parse(tempChild.Value.ToString());
                         var StartTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
                         StartTime = StartTime.AddMinutes(min);
-                        var EndTime = StartTime.AddMinutes(30);
+                        var EndTime = StartTime.AddHours(3);
 
                         TKManager.Instance.RPSEnterTimeList.Add(new KeyValuePair<long, long>(StartTime.Ticks, EndTime.Ticks));
                     }
