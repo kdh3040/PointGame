@@ -301,7 +301,7 @@ public class RPSPopup : Popup
         Debug.Log("결과창_1 " + FirebaseManager.Instance.FirebaseRPSGame_EnemyIndex + " " + FirebaseManager.Instance.FirebaseRPSGame_EnemyNick + " " + FirebaseManager.Instance.FirebaseRPSGame_EnemyValue);
         Debug.Log("결과창_2 " + RPSGame_MyValue);
 
-        FirebaseManager.Instance.SelectRPSGame(0);
+        
 
         ResultObj.gameObject.SetActive(true);
         if(result == 1)
@@ -322,6 +322,7 @@ public class RPSPopup : Popup
         else if(result == 0)
         {
             // 비김
+            FirebaseManager.Instance.SelectRPSGame(0);
             ResultDesc.text = "비겼습니다\n잠시만 기다려주세요";
         }
         else if (result == 2)

@@ -343,13 +343,12 @@ public class MainUI : MonoBehaviour {
         for (int i = 0; i < rankList.Count; i++)
         {
             winCount.Append(string.Format("- {0:D2}위", i + 1));
-            if (i < rankList.Count - 1)
-                winCount.AppendLine();
-
             viewRank++;
 
             if (viewRank >= 4)
                 break;
+            else
+                winCount.AppendLine();
         }
 
         RankingCount.text = winCount.ToString();
@@ -359,13 +358,12 @@ public class MainUI : MonoBehaviour {
         for (int i = 0; i < rankList.Count; i++)
         {
             winUser.Append(string.Format(" : {0} ({1:n0}점)", rankList[i].Key, rankList[i].Value));
-            if (i < rankList.Count - 1)
-                winUser.AppendLine();
-
             viewRank++;
 
             if (viewRank >= 4)
                 break;
+            else
+                winCount.AppendLine();
         }
 
         RankingName.text = winUser.ToString();
@@ -470,9 +468,6 @@ public class MainUI : MonoBehaviour {
             if (Popup.CurrPopupType == POPUP_TYPE.NONE)
             {
                 FirebaseManager.Instance.FirebaseRPSGameEnterEnable = false;
-                if (FirebaseManager.Instance.ReviewMode || FirebaseManager.Instance.ExamineMode)
-                    return;
-
                 Popup.ShowPopup(new RPSPopup.RPSPopupData());
             }
             else
