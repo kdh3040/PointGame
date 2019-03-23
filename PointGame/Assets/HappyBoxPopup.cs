@@ -87,6 +87,7 @@ public class HappyBoxPopup : Popup
                                 ParentPopup.ShowPopup(new MsgPopup.MsgPopupData("참가 신청이 완료 되었습니다"));
                                 FirebaseManager.Instance.FirebaseRPSGameEnterEnable = true;
                                 FirebaseManager.Instance.EnterRPSGame();
+                                TKManager.Instance.MyData.RemovePoint(CommonData.RPSCost);
                             });
                         }
                     });
