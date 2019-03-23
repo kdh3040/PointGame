@@ -35,8 +35,9 @@ namespace GoogleMobileAds.Api
         // Creates a Singleton RewardBasedVideoAd.
         private RewardBasedVideoAd()
         {
-            Type googleMobileAdsClientFactory = Type.GetType(
-                "GoogleMobileAds.GoogleMobileAdsClientFactory,Assembly-CSharp");
+            //Type googleMobileAdsClientFactory = Type.GetType(
+            //  "GoogleMobileAds.GoogleMobileAdsClientFactory,Assembly-CSharp");
+            Type googleMobileAdsClientFactory = typeof(GoogleMobileAdsClientFactory);
             MethodInfo method = googleMobileAdsClientFactory.GetMethod(
                 "BuildRewardBasedVideoAdClient",
                 BindingFlags.Static | BindingFlags.Public);

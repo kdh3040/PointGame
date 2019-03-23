@@ -38,8 +38,9 @@ namespace GoogleMobileAds.Api
             this.TemplateIds = new HashSet<string>(builder.TemplateIds);
             this.AdTypes = new HashSet<NativeAdType>(builder.AdTypes);
 
-            Type googleMobileAdsClientFactory = Type.GetType(
-                "GoogleMobileAds.GoogleMobileAdsClientFactory,Assembly-CSharp");
+            //Type googleMobileAdsClientFactory = Type.GetType(
+            //    "GoogleMobileAds.GoogleMobileAdsClientFactory,Assembly-CSharp");
+            Type googleMobileAdsClientFactory = typeof(GoogleMobileAdsClientFactory);
             MethodInfo method = googleMobileAdsClientFactory.GetMethod(
                 "BuildAdLoaderClient",
                 BindingFlags.Static | BindingFlags.Public);

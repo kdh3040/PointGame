@@ -30,8 +30,9 @@ namespace GoogleMobileAds.Api
 
         private static IMobileAdsClient GetMobileAdsClient()
         {
-            Type googleMobileAdsClientFactory = Type.GetType(
-                "GoogleMobileAds.GoogleMobileAdsClientFactory,Assembly-CSharp");
+            //Type googleMobileAdsClientFactory = Type.GetType(
+              //  "GoogleMobileAds.GoogleMobileAdsClientFactory,Assembly-CSharp");
+            Type googleMobileAdsClientFactory = typeof(GoogleMobileAdsClientFactory);
             MethodInfo method = googleMobileAdsClientFactory.GetMethod(
                 "MobileAdsInstance",
                 BindingFlags.Static | BindingFlags.Public);
