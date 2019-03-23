@@ -10,7 +10,9 @@ using GooglePlayGames;
 using GooglePlayGames.BasicApi;
 using Firebase.Auth;
 
-//using UnityEngine.SocialPlatforms.GameCenter;
+#if UNITY_IOS
+using UnityEngine.SocialPlatforms.GameCenter;
+#endif
 
 public class FirebaseManager : MonoBehaviour
 {
