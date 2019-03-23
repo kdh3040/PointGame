@@ -235,6 +235,10 @@ public class FirebaseManager : MonoBehaviour
         .GetReference("LottoLuckyNumber").OrderByKey().LimitToLast(5)
         .ChildAdded += HandleChildAddedLottoLuckyNumber;
 
+        FirebaseDatabase.DefaultInstance
+        .GetReference("RPSGameWinnerGroup").OrderByKey().LimitToLast(5)
+        .ChildAdded += HandleChildAddedRPSGameWinnerGroup;
+
     }
 
     void HandleRPSGameSeriesChanged(object sender, ValueChangedEventArgs args)
@@ -376,7 +380,34 @@ public class FirebaseManager : MonoBehaviour
         // Do something with the data in args.Snapshot
     }
 
-    
+    // 가위바위보 우승자 모니터링
+    void HandleChildAddedRPSGameWinnerGroup(object sender, ChildChangedEventArgs args)
+    {
+        if (args.DatabaseError != null)
+        {
+            Debug.LogError(args.DatabaseError.Message);
+            return;
+        }
+        if (args.Snapshot.Value != null)
+        {
+            var tempData = args.Snapshot.Value as Dictionary<string, object>;
+            var tempFirstNickName = tempData["first"].ToString();
+            var tempSecondNickName = tempData["second"].ToString();
+            int tempCount = Convert.ToInt32(args.Snapshot.Key);
+
+            TKManager.RPSGameWinnerData tempWinnerData = new TKManager.RPSGameWinnerData();
+            tempWinnerData.FirstName = tempFirstNickName;
+            tempWinnerData.SecondName = tempSecondNickName;
+            tempWinnerData.Count = tempCount;
+            TKManager.Instance.RPSWinUserList.Add(tempWinnerData);
+
+            Debug.Log("##### RPSGameWinnerGroup " + tempCount);
+        }
+
+        // Do something with the data in args.Snapshot
+    }
+
+
     public void TokenRefresh(Firebase.Auth.FirebaseUser user)
     {
         //user.TokenAsync(true).ContinueWith(task => {
@@ -430,7 +461,7 @@ public class FirebaseManager : MonoBehaviour
         GetRPSGamePlayTime();
         GetRPSGameEnterTime();
         GetRPSGameEnterStatus();
-        
+
         GetRPSGameWinnerGroup();
         GetRPSWinnerPrizeMoney();
         GetRPSWinnerSecPrizeMoney();

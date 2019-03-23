@@ -363,7 +363,7 @@ public class MainUI : MonoBehaviour {
             if (viewRank >= 4)
                 break;
             else
-                winCount.AppendLine();
+                winUser.AppendLine();
         }
 
         RankingName.text = winUser.ToString();
