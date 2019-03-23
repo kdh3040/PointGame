@@ -49,7 +49,7 @@
     <h3 class="indigo-text center">:+: 가위바위보  :+:</h3>
 
     <div class="row center">
-      <!--<button id="BTN_TEST_CREATE" type="button" class="btn white indigo-text">가위바위보 참가</button> -->
+      <button id="BTN_TEST_CREATE" type="button" class="btn white indigo-text">가위바위보 참가</button>
       <button id="BTN_SELECT_LUCKY" type="button" class="btn white indigo-text">가위바위보 게임 시작</button>
     </div>
 
@@ -147,6 +147,8 @@
 
   $("#BTN_TEST_CREATE").click(function() {
 
+    //SetCurSeies('asdasd','asdasdasfggg');
+
     for(var i = 0; i < 100; i++)
     {
       firebase.database().ref('/RPSUserList/' + (i)).set(i);
@@ -162,8 +164,16 @@ function SetCurSeies(first, second)
     RPSGameCurSeries = message;
     RPSGameCurSeries *= 1;
 
+    firebase.database().ref('/RPSGameWinnerGroup/' + RPSGameCurSeries).set({
+      first: first,
+      second: second
+    });
+
+
+/*
     firebase.database().ref('/RPSGameWinnerGroup/'+RPSGameCurSeries + '/' + 'first').set(first);
     firebase.database().ref('/RPSGameWinnerGroup/'+RPSGameCurSeries + '/' + 'second').set(second);
+*/
 
     RPSGameCurSeries += 1;
     firebase.database().ref('/RPSGameCurSeries').set(RPSGameCurSeries);
@@ -244,7 +254,7 @@ function SetUsersBuSeries(UsersCount)
 
               firebase.database().ref('/RPSGame/' + RPSUserSeries + '/' + tempRoomNumber + '/' + tempRoomPosition + '/Index/').set(key);
               firebase.database().ref('/RPSGame/' + RPSUserSeries + '/' + tempRoomNumber + '/' + tempRoomPosition + '/NickName/').set(message[key]);
-			  firebase.database().ref('/RPSGame/' + RPSUserSeries + '/' + tempRoomNumber + '/' + tempRoomPosition + '/Value/').set(Math.floor(Math.random() * 3 + 1));
+			        firebase.database().ref('/RPSGame/' + RPSUserSeries + '/' + tempRoomNumber + '/' + tempRoomPosition + '/Value/').set(Math.floor(Math.random() * 3 + 1));
               //firebase.database().ref('/RPSGame/' + RPSUserSeries + '/' + tempRoomNumber + '/' + tempRoomPosition + '/Value/').set(0);
 
 /*
@@ -260,7 +270,7 @@ function SetUsersBuSeries(UsersCount)
               if(Object.keys(message).length % 2 == 1)
               {
                 firebase.database().ref('/RPSGame/' + RPSUserSeries + '/' + tempRoomNumber + '/' + i + '/Index/').set('1234');
-                firebase.database().ref('/RPSGame/' + RPSUserSeries + '/' + tempRoomNumber + '/' + i + '/NickName/').set("a1a2");
+                firebase.database().ref('/RPSGame/' + RPSUserSeries + '/' + tempRoomNumber + '/' + i + '/NickName/').set('v'+Math.floor(Math.random() * 10000 + 1));
                 firebase.database().ref('/RPSGame/' + RPSUserSeries + '/' + tempRoomNumber + '/' + i + '/Value/').set(0);
 
                 firebase.database().ref('/RPSUserCount').set(Object.keys(message).length + 1);
@@ -499,13 +509,16 @@ function SetUsersBuSeries(UsersCount)
 
       RPSUserSeries += 1;
 
-	  if(tempUserCount > 1)
+	  //if(tempUserCount > 1)
+
+    if(tempUserRoomCount > 1)
 	  {
 		  if(tempUserCount % 2 == 1)
 		  {
 			var tempUserData = new Array();
 			tempUserData = new RPSUser();
-			tempUserData.NickName = 'a1a2';
+
+			tempUserData.NickName = 'g'+Math.floor(Math.random() * 10000 + 1);
 			tempUserData.Index = '1234';
 			tempUserData.Value = 0;
 
@@ -526,7 +539,8 @@ function SetUsersBuSeries(UsersCount)
 			firebase.database().ref('/RPSGame/' + RPSUserSeries + '/' + tempRoom + '/' + i + '/Index/').set(tempWinnerData[i].Index);
 			firebase.database().ref('/RPSGame/' + RPSUserSeries + '/' + tempRoom + '/' + i + '/NickName/').set(tempWinnerData[i].NickName);
 			//firebase.database().ref('/RPSGame/' + RPSUserSeries + '/' + tempRoom + '/' + i + '/Value/').set(0);
-			firebase.database().ref('/RPSGame/' + RPSUserSeries + '/' + tempRoom + '/' + i + '/Value/').set(Math.floor(Math.random() * 3 + 1));
+      firebase.database().ref('/RPSGame/' + RPSUserSeries + '/' + tempRoom + '/' + i + '/Value/').set(Math.floor(Math.random() * 3 + 1));
+
 		 }
 
 		  firebase.database().ref('/RPSUserCount').set(tempUserCount);
@@ -550,7 +564,7 @@ function SetUsersBuSeries(UsersCount)
 	      firebase.database().ref('/Users/'+tempWinnerData[0].Index + '/FirebaseRPSGameMyRoom').set(-1);
         firebase.database().ref('/Users/'+tempWinnerData[0].Index + '/FirebaseRPSGameMyPosition').set(-1);
 
-        SetCurSeies(tempWinnerData[0].NickName, tempWinnerData[1].NickName);
+        SetCurSeies(tempWinnerData[0].NickName, tempLooserData[0].NickName);
 
 	  }
 
@@ -561,7 +575,7 @@ function SetUsersBuSeries(UsersCount)
   var timer;
   var Checktimer;
   //var arrLottoSelectTime = ['02:12:40', '02:13:20', '02:13:00', '01:42:00', '05:42:30', '05:13:00'];
-  var arrRPSGAmeStartTime = ['03:53:10'];
+  var arrRPSGAmeStartTime = ['12:30:00', '18:30:00', '21:19:00'];
 
 
 
@@ -574,11 +588,14 @@ function SetUsersBuSeries(UsersCount)
 
   function showClock(){
 
-        if((new Date()).getHMS() === arrRPSGAmeStartTime[0])
+      for(var i = 0; i < arrRPSGAmeStartTime.length; i++)
+      {
+        if((new Date()).getHMS() === arrRPSGAmeStartTime[i])
         {
-			console.log((new Date()).getHMS(5));
            CreateRPSGameRoom();
         }
+      }
+
           timer = setTimeout(showClock,1000);
       }
 
