@@ -34,7 +34,7 @@ public class HelpPopup : Popup
         //}
 
         var str = HelpDesc.text;
-        str += string.Format("\n- 1등 {0}캐시 2등 {1}캐시 지급", FirebaseManager.Instance.FirebaseRPSWinnerPrizeMoney, FirebaseManager.Instance.FirebaseRPSWinnerSecPrizeMoney);
+        str += string.Format("\n- 1등에겐 {0}캐시 2등에게는 {1}캐시 지급됩니다", FirebaseManager.Instance.FirebaseRPSWinnerPrizeMoney, FirebaseManager.Instance.FirebaseRPSWinnerSecPrizeMoney);
         HelpDesc.text = str;
     }
 

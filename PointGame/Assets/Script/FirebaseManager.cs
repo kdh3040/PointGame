@@ -59,7 +59,7 @@ public class FirebaseManager : MonoBehaviour
     // 입장시간 10분 후 에 값 변경됨
     public int FirebaseRPSGameStatus = 0;
 
-    // 가위바위보 현재 회차
+    // 가위바위보 현재 차전
     public int FirebaseRPSGameSeries = -1;
 
     // 가위바위보 내 방번호
@@ -97,6 +97,9 @@ public class FirebaseManager : MonoBehaviour
 
     // 가위바위보 준우승 상금
     public int FirebaseRPSWinnerSecPrizeMoney = 0;
+
+    // 가위바위보 현재 회차
+    public int FirebaseRPSGameCurSeries = 0;
 
     public Action LottoPopupRefresh = null;
     // Use this for initialization
@@ -421,14 +424,18 @@ public class FirebaseManager : MonoBehaviour
         GetPushAlarm();
         GetGiftProb();
         GetReviewRank();
+        GetRecommendUser();
         GetUpdatePopup();
+
         GetRPSGamePlayTime();
         GetRPSGameEnterTime();
         GetRPSGameEnterStatus();
-        GetRecommendUser();
+        
         GetRPSGameWinnerGroup();
         GetRPSWinnerPrizeMoney();
         GetRPSWinnerSecPrizeMoney();
+
+        GetRPSGameCurSeries();
     }
 
 
@@ -437,7 +444,7 @@ public class FirebaseManager : MonoBehaviour
         if (FirstLoadingComplete == false)
             LoadingCount++;
 
-        if (LoadingCount == 18)
+        if (LoadingCount == 19)
             FirstLoadingComplete = true;
     }
 
@@ -1377,6 +1384,32 @@ public class FirebaseManager : MonoBehaviour
     );
 
     }
+
+    // 가위바위보 현재 회차
+    public void GetRPSGameCurSeries()
+    {
+        mDatabaseRef.Child("RPSGameCurSeries").GetValueAsync().ContinueWith(task =>
+        {
+            if (task.IsFaulted)
+            {
+                // Handle the error...
+            }
+            else if (task.IsCompleted)
+            {
+                DataSnapshot snapshot = task.Result;
+                if (snapshot != null && snapshot.Exists)
+                {
+                    FirebaseRPSGameCurSeries = Convert.ToInt32(snapshot.Value);
+                }
+
+                AddFirstLoadingComplete();
+
+            }
+        }
+    );
+
+    }
+    
 
     static int tempIndex = 0;
     // Rock–Paper–Scissors : RPS 
