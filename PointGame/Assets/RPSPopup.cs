@@ -406,6 +406,7 @@ public class RPSPopup : Popup
                 ParentPopup.ShowPopup(new MsgPopup.MsgPopupData(string.Format("가위바위보 1등\n{0:n0}포인트 획득", FirebaseManager.Instance.FirebaseRPSWinnerPrizeMoney), () =>
                 {
                     TKManager.Instance.MyData.AddPoint(FirebaseManager.Instance.FirebaseRPSWinnerPrizeMoney);
+                    AdsManager.Instance.ShowSkipRewardedAd(null);
                 }));
             }
             else
@@ -413,6 +414,7 @@ public class RPSPopup : Popup
                 ParentPopup.ShowPopup(new MsgPopup.MsgPopupData(string.Format("가위바위보 2등\n{0:n0}포인트 획득", FirebaseManager.Instance.FirebaseRPSWinnerSecPrizeMoney), () =>
                 {
                     TKManager.Instance.MyData.AddPoint(FirebaseManager.Instance.FirebaseRPSWinnerSecPrizeMoney);
+                    AdsManager.Instance.ShowSkipRewardedAd(null);
                 }));
             }
         }
@@ -423,6 +425,7 @@ public class RPSPopup : Popup
                 ParentPopup.ShowPopup(new MsgPopup.MsgPopupData(string.Format("가위바위보 1등\n{0:n0}캐쉬 획득", FirebaseManager.Instance.FirebaseRPSWinnerPrizeMoney), () =>
                 {
                     TKManager.Instance.MyData.AddCash(FirebaseManager.Instance.FirebaseRPSWinnerPrizeMoney);
+                    AdsManager.Instance.ShowSkipRewardedAd(null);
                 }));
             }
             else
@@ -430,6 +433,7 @@ public class RPSPopup : Popup
                 ParentPopup.ShowPopup(new MsgPopup.MsgPopupData(string.Format("가위바위보 2등\n{0:n0}캐쉬 획득", FirebaseManager.Instance.FirebaseRPSWinnerSecPrizeMoney), () =>
                 {
                     TKManager.Instance.MyData.AddCash(FirebaseManager.Instance.FirebaseRPSWinnerSecPrizeMoney);
+                    AdsManager.Instance.ShowSkipRewardedAd(null);
                 }));
             }
         }
