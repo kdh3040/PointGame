@@ -300,21 +300,24 @@ public class MainUI : MonoBehaviour {
     public void RefreshRPSWinnerList()
     {
         var RPSwinList = TKManager.Instance.RPSWinUserList;
+
         StringBuilder RPSwinCount = new StringBuilder();
         StringBuilder RPSwinUser = new StringBuilder();
-        for (int i = RPSwinList.Count - 2; i <= RPSwinList.Count; i++)
+        for (int i = RPSwinList.Count - 2; i < RPSwinList.Count; i++)
         {
             if (i < 0 || RPSwinList.Count <= i)
                 continue;
 
             RPSwinCount.Append(string.Format("- {0:D2}회 1등", RPSwinList[i].Count + 1));
+            RPSwinCount.AppendLine();
             RPSwinCount.Append(string.Format("- {0:D2}회 2등", RPSwinList[i].Count + 1));
-            if(i < RPSwinList.Count)
+            if(i < RPSwinList.Count - 1)
                 RPSwinCount.AppendLine();
 
             RPSwinUser.Append(string.Format(" : {0}", RPSwinList[i].FirstName));
+            RPSwinUser.AppendLine();
             RPSwinUser.Append(string.Format(" : {0}", RPSwinList[i].SecondName));
-            if (i < RPSwinList.Count)
+            if (i < RPSwinList.Count - 1)
                 RPSwinUser.AppendLine();
         }
 
