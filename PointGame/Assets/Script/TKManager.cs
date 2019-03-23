@@ -148,10 +148,10 @@ public class TKManager : MonoBehaviour
     }
 
 
-    public void ShowHUD(string msg = "로딩중..", float waitTime = 0)
+    public void ShowHUD(string msg = "로딩중", float waitTime = 0, string subMsg = "")
     {
         HUD.gameObject.SetActive(true);
-        HUD.ShowHUD(msg, waitTime);
+        HUD.ShowHUD(msg, waitTime, subMsg);
     }
 
     public void HideHUD()

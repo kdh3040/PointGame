@@ -47,7 +47,7 @@ public class PointCashSwapPopup : Popup
         SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
         if (TKManager.Instance.MyData.Cash < CommonData.MinCashChange)
         {
-            ParentPopup.ShowPopup(new MsgPopup.MsgPopupData(string.Format("{0} 캐시 부터 교환 가능합니다.", CommonData.MinCashChange)));
+            ParentPopup.ShowPopup(new MsgPopup.MsgPopupData(string.Format("{0} 캐시 부터 교환 가능합니다", CommonData.MinCashChange)));
         }
         else
             CashRefundInfoObj.gameObject.SetActive(true);

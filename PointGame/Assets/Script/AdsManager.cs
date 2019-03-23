@@ -284,8 +284,11 @@ public class AdsManager : MonoBehaviour {
                 ShowAdmobVideo();
             }
             else
+            {
+                AdComplete = true;
                 AdView = false;
-
+                ShowInterstitialAds();
+            }
         }
     }
 
@@ -556,7 +559,7 @@ public class AdsManager : MonoBehaviour {
         }
         else
         {
-            AdEnable = false;
+            AdEnable = true;
             TKManager.Instance.HideHUD();
             yield break;
         }

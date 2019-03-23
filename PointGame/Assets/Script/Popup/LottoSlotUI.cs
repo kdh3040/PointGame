@@ -128,7 +128,7 @@ public class LottoSlotUI : MonoBehaviour {
                     if(TKManager.Instance.MyData.LottoWinSeriesList.ContainsKey(SeriesCount))
                     {
                         LottoResult_Continue.gameObject.SetActive(true);
-                        LottoResult_Continue.text = "당첨금을 수령 하였습니다.";
+                        LottoResult_Continue.text = "당첨금을 수령 하였습니다";
                     }
                     else
                     {
@@ -140,7 +140,7 @@ public class LottoSlotUI : MonoBehaviour {
                 else
                 {
                     LottoResult_Continue.gameObject.SetActive(true);
-                    LottoResult_Continue.text = "다음 기회에..";
+                    LottoResult_Continue.text = "다음 기회에";
                 }
             }
         }
@@ -174,7 +174,7 @@ public class LottoSlotUI : MonoBehaviour {
                 {
                     if (TKManager.Instance.MyData.Point < CommonData.LottoNumberCost)
                     {
-                        ParentPopup.ShowPopup(new MsgPopup.MsgPopupData("포인트가 부족합니다."));
+                        ParentPopup.ShowPopup(new MsgPopup.MsgPopupData("포인트가 부족합니다"));
                     }
                     else
                     {

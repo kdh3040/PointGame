@@ -57,7 +57,7 @@ public class MiniGamePopup : Popup
 
     public override void SetData(PopupData data)
     {
-        InfoText.text = string.Format("미니게임\n{0}포인트\n동전을 찾아보세요~", CommonData.AdsPointReward);
+        InfoText.text = string.Format("미니게임\n{0}포인트\n동전을 찾아보세요", CommonData.AdsPointReward);
 
         GameReady();
     }
@@ -210,7 +210,7 @@ public class MiniGamePopup : Popup
             {
                 PopupText.text = string.Format("{0}포인트를 획득했습니다.\n재시작 하시겠습니까?", CommonData.AdsPointReward);
                 if (AdsManager.Instance.AdComplete == false)
-                    ParentPopup.ShowPopup(new MsgPopup.MsgPopupData("광고시청을 완료하셔야\n보상이 지급됩니다.", () =>
+                    ParentPopup.ShowPopup(new MsgPopup.MsgPopupData("광고시청을 완료하셔야\n보상이 지급됩니다", () =>
                     {
                         PopupObj.gameObject.SetActive(false);
                         ParentPopup.ClosePopup();

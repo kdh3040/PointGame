@@ -124,11 +124,7 @@ public class RPSPopup : Popup
                         TKManager.Instance.HideHUD();
                         FirebaseManager.Instance.FirebaseRPSGameMyRoom = -1;
                         CloseAction();
-                        // 우승
-                        ParentPopup.ShowPopup(new MsgPopup.MsgPopupData(string.Format("가위바위보 준우승!\n{0:n0}캐쉬 획득!", CommonData.RPS_SECOND_WINNER), () =>
-                        {
-                            TKManager.Instance.MyData.AddCash(CommonData.RPS_SECOND_WINNER);
-                        }));
+                        EndVictory(false);
                         yield break;
                     }
                 }
@@ -139,11 +135,7 @@ public class RPSPopup : Popup
                     {
                         Debug.Log("결과창_1_1 " + FirebaseManager.Instance.FirebaseRPSGame_EnemyIndex + " " + FirebaseManager.Instance.FirebaseRPSGame_EnemyNick + " " + FirebaseManager.Instance.FirebaseRPSGame_EnemyValue);
                         Debug.Log("결과창_1_2 " + RPSGame_MyValue);
-                        ParentPopup.ShowPopup(new MsgPopup.MsgPopupData("패배하였습니다.", () =>
-                        {
-                            FirebaseManager.Instance.FirebaseRPSGameMyRoom = -1;
-                            CloseAction();
-                        }));
+                        EndDefeat();
                         yield break;
                     }
                 }
@@ -157,22 +149,14 @@ public class RPSPopup : Popup
                     TKManager.Instance.HideHUD();
                     FirebaseManager.Instance.FirebaseRPSGameMyRoom = -1;
                     CloseAction();
-                    // 우승
-                    ParentPopup.ShowPopup(new MsgPopup.MsgPopupData(string.Format("가위바위보 준우승!\n{0:n0}캐쉬 획득!", CommonData.RPS_SECOND_WINNER), () =>
-                    {
-                        TKManager.Instance.MyData.AddCash(CommonData.RPS_SECOND_WINNER);
-                    }));
+                    EndVictory(false);
                     yield break;
                 }
                 else
                 {
                     Debug.Log("결과창_2_1 " + FirebaseManager.Instance.FirebaseRPSGame_EnemyIndex + " " + FirebaseManager.Instance.FirebaseRPSGame_EnemyNick + " " + FirebaseManager.Instance.FirebaseRPSGame_EnemyValue);
                     Debug.Log("결과창_2_2 " + RPSGame_MyValue);
-                    ParentPopup.ShowPopup(new MsgPopup.MsgPopupData("패배하였습니다.", () =>
-                    {
-                        FirebaseManager.Instance.FirebaseRPSGameMyRoom = -1;
-                        CloseAction();
-                    }));
+                    EndDefeat();
                     yield break;
                 }
             }
@@ -212,7 +196,7 @@ public class RPSPopup : Popup
     IEnumerator Co_RPSGame_Search()
     {
         // Step 1 상대방의 데이터를 받아왔는지 체크
-        TKManager.Instance.ShowHUD("게임 시작까지 남은 시간", 30.0f);
+        TKManager.Instance.ShowHUD("게임 시작까지 남은 시간", 30.0f, "매칭이 완료 되면 바로 시작합니다");
 
         while (true)
         {
@@ -220,11 +204,7 @@ public class RPSPopup : Popup
             {
                 TKManager.Instance.HideHUD();
                 CloseAction();
-                // 우승
-                ParentPopup.ShowPopup(new MsgPopup.MsgPopupData(string.Format("가위바위보 우승!\n{0:n0}캐쉬 획득!", CommonData.RPS_WINNER), () =>
-                {
-                    TKManager.Instance.MyData.AddCash(CommonData.RPS_WINNER);
-                }));
+                EndVictory(true);
                 break;
             }
 
@@ -281,7 +261,7 @@ public class RPSPopup : Popup
     {
         // Step 1 상대방의 데이터를 받아왔는지 체크
         float waitTime = 5.0f;
-        TKManager.Instance.ShowHUD("결과를 확인중 입니다.", 5.0f);
+        TKManager.Instance.ShowHUD("결과를 확인중 입니다", 5.0f);
 
         Debug.Log("내가 선택했다 " + RPSGame_MyValue);
         if (RPSGame_MyValue != 0)
@@ -326,23 +306,24 @@ public class RPSPopup : Popup
             {
                 TKManager.Instance.HideHUD();
                 CloseAction();
-                // 우승
-                ParentPopup.ShowPopup(new MsgPopup.MsgPopupData(string.Format("가위바위보 우승!\n{0:n0}캐쉬 획득!", CommonData.RPS_WINNER), () =>
-                {
-                    TKManager.Instance.MyData.AddCash(CommonData.RPS_WINNER);
-                }));
+                EndVictory(true);
                 yield break;
             }
             else
             {
                 // 승리
-                ResultDesc.text = "승리하였습니다.\n잠시만 기다려주세요.";
+                ResultDesc.text = "승리하였습니다\n잠시만 기다려주세요";
             }
         }
         else if(result == 0)
         {
             // 비김
-            ResultDesc.text = "비겼습니다.\n잠시만 기다려주세요.";
+            ResultDesc.text = "비겼습니다\n잠시만 기다려주세요";
+        }
+        else if (result == 2)
+        {
+            // 패배
+            ResultDesc.text = "패배하였습니다\n잠시만 기다려주세요";
         }
 
         while (true)
@@ -411,6 +392,59 @@ public class RPSPopup : Popup
             FirebaseManager.Instance.FirebaseRPSGameEnterEnable = false;
             FirebaseManager.Instance.FirebaseRPSGameMyRoom = -1;
             FirebaseManager.Instance.FirebaseRPSGameMyPosition = -1;
+        }));
+    }
+
+    public void EndVictory(bool win)
+    {
+        if (FirebaseManager.Instance.ReviewMode)
+        {
+            if (win)
+            {
+                ParentPopup.ShowPopup(new MsgPopup.MsgPopupData(string.Format("가위바위보 1등\n{0:n0}포인트 획득", FirebaseManager.Instance.FirebaseRPSWinnerPrizeMoney), () =>
+                {
+                    TKManager.Instance.MyData.AddPoint(FirebaseManager.Instance.FirebaseRPSWinnerPrizeMoney);
+                }));
+            }
+            else
+            {
+                ParentPopup.ShowPopup(new MsgPopup.MsgPopupData(string.Format("가위바위보 2등\n{0:n0}포인트 획득", FirebaseManager.Instance.FirebaseRPSWinnerSecPrizeMoney), () =>
+                {
+                    TKManager.Instance.MyData.AddPoint(FirebaseManager.Instance.FirebaseRPSWinnerSecPrizeMoney);
+                }));
+            }
+        }
+        else
+        {
+            if (win)
+            {
+                ParentPopup.ShowPopup(new MsgPopup.MsgPopupData(string.Format("가위바위보 1등\n{0:n0}캐쉬 획득", FirebaseManager.Instance.FirebaseRPSWinnerPrizeMoney), () =>
+                {
+                    TKManager.Instance.MyData.AddCash(FirebaseManager.Instance.FirebaseRPSWinnerPrizeMoney);
+                }));
+            }
+            else
+            {
+                ParentPopup.ShowPopup(new MsgPopup.MsgPopupData(string.Format("가위바위보 2등\n{0:n0}캐쉬 획득", FirebaseManager.Instance.FirebaseRPSWinnerSecPrizeMoney), () =>
+                {
+                    TKManager.Instance.MyData.AddCash(FirebaseManager.Instance.FirebaseRPSWinnerSecPrizeMoney);
+                }));
+            }
+        }
+    }
+
+    public void EndDefeat()
+    {
+        TKManager.Instance.HideHUD();
+        CloseAction();
+
+        ParentPopup.ShowPopup(new MsgPopup.MsgPopupData("패배하였습니다", () =>
+        {
+            FirebaseManager.Instance.FirebaseRPSGameEnterEnable = false;
+            FirebaseManager.Instance.FirebaseRPSGameMyRoom = -1;
+            FirebaseManager.Instance.FirebaseRPSGameMyPosition = -1;
+            CloseAction();
+            AdsManager.Instance.ShowSkipRewardedAd(null);
         }));
     }
 }

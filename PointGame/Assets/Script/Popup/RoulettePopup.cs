@@ -73,9 +73,9 @@ public class RoulettePopup : Popup
         }
 
         if (FirebaseManager.Instance.ReviewMode)
-            Info.text = "시작버튼을 눌러 포인트를 획득하세요~\n* 프리룰렛은 애플과의 관계가 일절 없습니다 *";
+            Info.text = "시작버튼을 눌러 포인트를 획득하세요\n* 프리룰렛은 애플과의 관계가 일절 없습니다 *";
         else
-            Info.text = "시작버튼을 눌러 포인트를 획득하세요~";
+            Info.text = "시작버튼을 눌러 포인트를 획득하세요";
     }
 
     public void OnClickOk()

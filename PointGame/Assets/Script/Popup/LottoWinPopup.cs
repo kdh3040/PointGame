@@ -62,7 +62,7 @@ public class LottoWinPopup : Popup
         msg.AppendLine(string.Format("은행 : {0}", Bank.text.ToString()));
         msg.AppendLine(string.Format("계좌번호 : {0}", AccountNumber.text.ToString()));
         msg.AppendLine("위 정보로 당첨금을 수령 하시겠습니까?");
-        msg.Append("* 지급 정보는 1회만 입력 가능합니다.");
+        msg.Append("* 지급 정보는 1회만 입력 가능합니다");
 
         ParentPopup.ShowPopup(new MsgPopup.MsgPopupData(msg.ToString(), () =>
         {

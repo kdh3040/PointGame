@@ -23,6 +23,7 @@ public enum POPUP_TYPE
     RPS_GAME,
     WINNER_LIST,
     RANKING_LIST,
+    HAPPY_BOX,
 }
 
 public class PopupUI : MonoBehaviour {
@@ -47,6 +48,7 @@ public class PopupUI : MonoBehaviour {
     public WinnerListPopup WinnerListPopupObj;
     public RankingPopup RankingPopupObj;
     public RPSHelpPopup RPSHelpPopupObj;
+    public HappyBoxPopup HappyBoxPopupObj;
 
     public void Start()
     {
@@ -84,6 +86,8 @@ public class PopupUI : MonoBehaviour {
         RankingPopupObj.Initialize(this, ClosePopup);
         RPSHelpPopupObj.gameObject.SetActive(false);
         RPSHelpPopupObj.Initialize(this, ClosePopup);
+        HappyBoxPopupObj.gameObject.SetActive(false);
+        HappyBoxPopupObj.Initialize(this, ClosePopup);
     }
 
     public void ShowPopup(Popup.PopupData data)
@@ -166,6 +170,10 @@ public class PopupUI : MonoBehaviour {
                 RPSHelpPopupObj.gameObject.SetActive(true);
                 RPSHelpPopupObj.SetData(data);
                 break;
+            case POPUP_TYPE.HAPPY_BOX:
+                HappyBoxPopupObj.gameObject.SetActive(true);
+                HappyBoxPopupObj.SetData(data);
+                break;
             default:
                 break;
         }
@@ -230,6 +238,9 @@ public class PopupUI : MonoBehaviour {
                 break;
             case POPUP_TYPE.RPS_HELP:
                 RPSHelpPopupObj.gameObject.SetActive(false);
+                break;
+            case POPUP_TYPE.HAPPY_BOX:
+                HappyBoxPopupObj.gameObject.SetActive(false);
                 break;
             default:
                 break;
