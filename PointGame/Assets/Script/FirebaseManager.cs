@@ -395,13 +395,26 @@ public class FirebaseManager : MonoBehaviour
             var tempSecondNickName = tempData["second"].ToString();
             int tempCount = Convert.ToInt32(args.Snapshot.Key);
 
-            TKManager.RPSGameWinnerData tempWinnerData = new TKManager.RPSGameWinnerData();
-            tempWinnerData.FirstName = tempFirstNickName;
-            tempWinnerData.SecondName = tempSecondNickName;
-            tempWinnerData.Count = tempCount;
-            TKManager.Instance.RPSWinUserList.Add(tempWinnerData);
+            bool plusEnable = true;
+            for (int i = 0; i < TKManager.Instance.RPSWinUserList.Count; i++)
+            {
+                if (TKManager.Instance.RPSWinUserList[i].Count == tempCount)
+                {
+                    plusEnable = false;
+                    break;
+                }
+                    
+            }
+            if(plusEnable)
+            {
+                TKManager.RPSGameWinnerData tempWinnerData = new TKManager.RPSGameWinnerData();
+                tempWinnerData.FirstName = tempFirstNickName;
+                tempWinnerData.SecondName = tempSecondNickName;
+                tempWinnerData.Count = tempCount;
+                TKManager.Instance.RPSWinUserList.Add(tempWinnerData);
 
-            Debug.Log("##### RPSGameWinnerGroup " + tempCount);
+                Debug.Log("##### RPSGameWinnerGroup " + tempCount);
+            }
         }
 
         // Do something with the data in args.Snapshot
@@ -1808,13 +1821,27 @@ public class FirebaseManager : MonoBehaviour
                        var tempSecondNickName = tempData["second"].ToString();
                        int tempCount = Convert.ToInt32(tempChild.Key);
 
-                       TKManager.RPSGameWinnerData tempWinnerData = new TKManager.RPSGameWinnerData();
-                       tempWinnerData.FirstName = tempFirstNickName;
-                       tempWinnerData.SecondName = tempSecondNickName;
-                       tempWinnerData.Count = tempCount;
-                       TKManager.Instance.RPSWinUserList.Add(tempWinnerData);
 
-                       Debug.Log("##### RPSGameWinnerGroup " + tempCount);
+                       bool plusEnable = true;
+                       for (int i = 0; i < TKManager.Instance.RPSWinUserList.Count; i++)
+                       {
+                           if (TKManager.Instance.RPSWinUserList[i].Count == tempCount)
+                           {
+                               plusEnable = false;
+                               break;
+                           }
+
+                       }
+                       if (plusEnable)
+                       {
+                           TKManager.RPSGameWinnerData tempWinnerData = new TKManager.RPSGameWinnerData();
+                           tempWinnerData.FirstName = tempFirstNickName;
+                           tempWinnerData.SecondName = tempSecondNickName;
+                           tempWinnerData.Count = tempCount;
+                           TKManager.Instance.RPSWinUserList.Add(tempWinnerData);
+
+                           Debug.Log("##### RPSGameWinnerGroup " + tempCount);
+                       }
                    }
                }
 
