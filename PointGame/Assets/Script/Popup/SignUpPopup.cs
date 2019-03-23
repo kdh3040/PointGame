@@ -111,10 +111,18 @@ public class SignUpPopup : MonoBehaviour
         if (emptyString)
             NickNameStr = string.Format("guest_{0:D4}", UnityEngine.Random.Range(1, 9999));
 
-        MsgOkButton.onClick.RemoveAllListeners();
-        MsgOkButton.onClick.AddListener(OnClickMsgLoginOkButton);
-        MsgPopup.gameObject.SetActive(true);
-        MsgText.text = "게임 설명과 푸시 알림을\n확인 후 플레이 하시기 바랍니다";
+        if(FirebaseManager.Instance.ReviewMode)
+        {
+            MsgOkButton.onClick.RemoveAllListeners();
+            MsgOkButton.onClick.AddListener(OnClickMsgLoginOkButton);
+            MsgPopup.gameObject.SetActive(true);
+            MsgText.text = "게임 설명과 푸시 알림을\n확인 후 플레이 하시기 바랍니다";
+        }
+        else
+        {
+            EndAction(NickNameStr, RecommenderCodeStr);
+        }
+        
 
 
         //CloseAction();
