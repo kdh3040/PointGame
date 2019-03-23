@@ -59,7 +59,9 @@ public class AdsManager : MonoBehaviour {
         string appId = "ca-app-pub-7615036525367000~1421003475";
         Advertisement.Initialize(android_game_id);
 #elif UNITY_IPHONE
-        string appId = "ca-app-pub-7615036525367000~8107038549"; 
+        //string appId = "ca-app-pub-7615036525367000~8107038549"; 
+          string appId = "ca-app-pub-3940256099942544~1458002511";
+
         Advertisement.Initialize(ios_game_id);
 #else
         string appId = "unexpected_platform";
@@ -91,7 +93,8 @@ public class AdsManager : MonoBehaviour {
 #if UNITY_ANDROID
         string adUnitId = "ca-app-pub-7615036525367000/9414508134";
 #elif UNITY_IPHONE
-            string adUnitId = "ca-app-pub-7615036525367000/2447872970";
+            //string adUnitId = "ca-app-pub-7615036525367000/2447872970";
+                string adUnitId = "ca-app-pub-3940256099942544/1712485313";
 #else
             string adUnitId = "unexpected_platform";
 #endif
@@ -145,7 +148,8 @@ public class AdsManager : MonoBehaviour {
 
 
 #elif UNITY_IPHONE
-        string adUnitId = "ca-app-pub-7615036525367000/5129876636";
+        //string adUnitId = "ca-app-pub-7615036525367000/5129876636";
+        string adUnitId = "ca-app-pub-3940256099942544/2934735716";
         
 #else
             string adUnitId = "unexpected_platform";
@@ -189,7 +193,8 @@ public class AdsManager : MonoBehaviour {
 #if UNITY_ANDROID
         string adUnitId = "ca-app-pub-7615036525367000/3352784828";
 #elif UNITY_IPHONE
-        string adUnitId = "ca-app-pub-7615036525367000/4030038646";
+        //string adUnitId = "ca-app-pub-7615036525367000/4030038646";
+           string adUnitId = "ca-app-pub-3940256099942544/4411468910";
         
 #else
         string adUnitId = "unexpected_platform";
