@@ -8,6 +8,7 @@ public class HappyBoxPopup : Popup
     public Button LottoButton;
     public GameObject LottoNotiObj;
     public Button RPSButton;
+    public Text RPSButtonText;
     
     public Button OkButton;
 
@@ -28,7 +29,7 @@ public class HappyBoxPopup : Popup
 
     public override void SetData(PopupData data)
     {
-       
+        RPSButtonText.text = string.Format("{0}회 가위바위보", FirebaseManager.Instance.FirebaseRPSGameCurSeries + 1);
     }
 
     private void Update()

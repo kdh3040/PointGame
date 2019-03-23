@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class RPSPopup : Popup
 {
     public Button Close;
+    public Text Title;
 
     public Text SeriesCount;
     public Text UserCount;
@@ -46,8 +47,9 @@ public class RPSPopup : Popup
     public override void SetData(PopupData data)
     {
         ResultObj.gameObject.SetActive(false);
+        Title.text = string.Format("{0}회 가위바위보", FirebaseManager.Instance.FirebaseRPSGameCurSeries + 1);
         RPSGame_MyValue = 0;
-        SeriesCount.text = string.Format("{0} 회", 0);
+        SeriesCount.text = "";
         EnemyId.text = "ID : ";
         MyId.text = string.Format("ID : {0}", TKManager.Instance.MyData.NickName);
 
@@ -63,7 +65,7 @@ public class RPSPopup : Popup
 
     public void RefreshUI()
     {
-        SeriesCount.text = string.Format("{0} 회", FirebaseManager.Instance.FirebaseRPSGameSeries + 1);
+        SeriesCount.text = string.Format("{0}차전", FirebaseManager.Instance.FirebaseRPSGameSeries + 1);
         EnemyId.text = string.Format("ID : {0}", FirebaseManager.Instance.FirebaseRPSGame_EnemyNick);
         UserCount.text = string.Format("남은인원 : {0}명", FirebaseManager.Instance.FirebaseRPSGameUserCount);
     }
