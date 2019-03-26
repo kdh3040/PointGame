@@ -137,7 +137,7 @@ Number.prototype.to2 = function(){return this<10?'0'+this:this;};
 
 
 function showClock(){
-        //console.log((new Date()).getHMS());
+        console.log((new Date()).getHMS());
 
         for(var i=0; i<4; i++) {              //console.log(arrLottoSelectTime[i]);
          if((new Date()).getHMS() === arrLottoSelectTime[i])
@@ -147,10 +147,10 @@ function showClock(){
          }
       }
 
-        timer = setTimeout(showClock,1000);
+        timer = setTimeout(showClock,1000 *60);
     }
 
-   //showClock();
+   showClock();
 
     exports.dbAutoLottoWrite = functions.database.ref('/AutoLottoSelect').onWrite((change, context) => {
      const beforeData = change.before.val(); // data before the write

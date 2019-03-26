@@ -43,7 +43,7 @@ public class AdsManager : MonoBehaviour {
     /// ////////////////////////////////////////////////
     /// 애드몹
     /// 
-    AdRequest request;
+
 
 
 
@@ -98,7 +98,7 @@ public class AdsManager : MonoBehaviour {
 #else
             string adUnitId = "unexpected_platform";
 #endif
-        request = new AdRequest.Builder().Build();
+        AdRequest request = new AdRequest.Builder().Build();
         this.rewardAdmobVideo.LoadAd(request, adUnitId);
         
     }
@@ -121,7 +121,7 @@ public class AdsManager : MonoBehaviour {
     {
         AdView = false;
         Debug.Log("!!!!!@ Ad " + "HandleRewardBasedVideoClosed");
-        this.RequestAdmobVideo();        
+        //this.RequestAdmobVideo();        
     }
 
     public void HandleRewardBasedVideoRewarded(object sender, Reward args)
@@ -159,11 +159,10 @@ public class AdsManager : MonoBehaviour {
         // Create a 320x50 banner at the top of the screen.
 
         bannerView = new BannerView(adUnitId, AdSize.Banner, AdPosition.Bottom );
-        
-        
-        // Create an empty ad request.
-        request = new AdRequest.Builder().Build();
 
+
+        // Create an empty ad request.
+       
         // Load the banner with the request.
 
        // this.bannerView.LoadAd(request);
@@ -178,6 +177,7 @@ public class AdsManager : MonoBehaviour {
         if (this.bannerView == null)
             return;
 
+        AdRequest request = new AdRequest.Builder().Build();
         this.bannerView.LoadAd(request);
         this.bannerView.Show();
     }
@@ -203,10 +203,18 @@ public class AdsManager : MonoBehaviour {
 
         this.interstitial = new InterstitialAd(adUnitId);
 
-        request = new AdRequest.Builder().Build();
+        AdRequest request = new AdRequest.Builder().Build();
         this.interstitial.LoadAd(request);
- 
+        this.interstitial.OnAdClosed += HandleOnInterstitialAdClosed;
+    }
 
+    public void HandleOnInterstitialAdClosed(object sender, EventArgs args)
+    {
+        print("HandleOnInterstitialAdClosed event received.");
+
+        this.interstitial.Destroy();
+
+        RequestInterstitial();
     }
 
     // 스테이지  구글 애드몹 전면 광고
@@ -226,16 +234,13 @@ public class AdsManager : MonoBehaviour {
             if (this.interstitial == null)
                 return;
 
-            if (this.interstitial.IsLoaded())
+            if (!this.interstitial.IsLoaded())
             {
-                this.interstitial.Show();
+                RequestInterstitial();
+                return;
             }
-            else
-            {
-                this.RequestInterstitial();
-                this.interstitial.Show();
-            }
-            
+
+            this.interstitial.Show();            
         }        
     }
 
@@ -258,7 +263,8 @@ public class AdsManager : MonoBehaviour {
         {
             ShowInterstitialAds();
         }
-        
+
+        RequestAdmobVideo();
     }
 
 
@@ -279,7 +285,7 @@ public class AdsManager : MonoBehaviour {
         {
             AdComplete = false;
             SetAdEndCallFunc(endAction);
-
+            
             if (Advertisement.IsReady(rewarded_video_id))
             {
                 var options = new ShowOptions { resultCallback = HandleShowRewardVideoResult };

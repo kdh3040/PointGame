@@ -61,10 +61,10 @@
     <file>Assets/Plugins/Android/com.google.firebase.firebase-database-16.1.0.aar</file>
     <file>Assets/Plugins/Android/com.google.firebase.firebase-database-collection-16.0.1.aar</file>
     <file>Assets/Plugins/Android/com.google.firebase.firebase-database-unity-5.4.3</file>
-    <file>Assets/Plugins/Android/com.google.firebase.firebase-iid-17.1.0.aar</file>
+    <file>Assets/Plugins/Android/com.google.firebase.firebase-iid-17.1.1.aar</file>
     <file>Assets/Plugins/Android/com.google.firebase.firebase-iid-interop-16.0.1.aar</file>
     <file>Assets/Plugins/Android/com.google.firebase.firebase-measurement-connector-17.0.1.aar</file>
-    <file>Assets/Plugins/Android/com.google.firebase.firebase-messaging-17.4.0.aar</file>
+    <file>Assets/Plugins/Android/com.google.firebase.firebase-messaging-17.5.0.aar</file>
     <file>Assets/Plugins/Android/com.google.firebase.firebase-messaging-unity-5.4.3</file>
     <file>Assets/Plugins/Android/com.google.games.gpgs-plugin-support-0.9.62</file>
   </files>
