@@ -382,6 +382,23 @@ public class MainUI : MonoBehaviour {
         else
             AllPoint.SetValue(string.Format("{0}p / {1}c", TKManager.Instance.MyData.Point, TKManager.Instance.MyData.Cash), CountImgFont.IMG_RANGE.LEFT, CountImgFont.IMG_TYPE.YELLOW);
 
+#if UNITY_IOS
+        if (FirebaseManager.Instance.ReviewMode)
+        {
+            UpdateCurrTime();
+        }
+        else
+        {
+            UpdateCurrTime();
+            UpdateNoti();
+            UpdateNextLottoTime();
+            UpdateRPS();
+
+            RefreshLottoWinnerList();
+            RefreshRPSWinnerList();
+        }
+        
+#else
         UpdateCurrTime();
         UpdateNoti();
         UpdateNextLottoTime();
@@ -389,7 +406,7 @@ public class MainUI : MonoBehaviour {
 
         RefreshLottoWinnerList();
         RefreshRPSWinnerList();
-
+#endif
 
 #if UNITY_EDITOR || UNITY_ANDROID
         if (Popup.IsShowPopup(POPUP_TYPE.MSG) == false && Input.GetKeyUp(KeyCode.Escape))
