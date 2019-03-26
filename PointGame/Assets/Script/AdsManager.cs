@@ -137,6 +137,7 @@ public class AdsManager : MonoBehaviour {
                         + amount.ToString() + " " + type);
 
         AdView = false;
+        AdComplete = true;
     }
 
 
@@ -278,7 +279,7 @@ public class AdsManager : MonoBehaviour {
         {
             AdComplete = false;
             SetAdEndCallFunc(endAction);
-      
+
             if (Advertisement.IsReady(rewarded_video_id))
             {
                 var options = new ShowOptions { resultCallback = HandleShowRewardVideoResult };
@@ -291,7 +292,7 @@ public class AdsManager : MonoBehaviour {
             else
             {
                 AdComplete = true;
-                AdView = false;
+                AdView = false; 
                 ShowInterstitialAds();
             }
         }
