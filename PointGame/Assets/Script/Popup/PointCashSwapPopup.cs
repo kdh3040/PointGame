@@ -66,7 +66,7 @@ public class PointCashSwapPopup : Popup
 
             TKManager.Instance.MyData.SetAllAccumulatePoint(tempPoint);
             FirebaseManager.Instance.SetTotalAccumPoint(TKManager.Instance.MyData.AllAccumulatePoint);
-            TKManager.Instance.MyData.SetCash(0);
+            TKManager.Instance.MyData.RemoveCash(tempCash);
             CashRefundInfoObj.gameObject.SetActive(true);
             CloseAction();
         });
