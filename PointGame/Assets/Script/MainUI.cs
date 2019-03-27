@@ -275,7 +275,7 @@ public class MainUI : MonoBehaviour {
             if (i < 0 || winList.Count <= i)
                 continue;
 
-            winCount.Append(string.Format("- {0:D2}회 당첨자", winList[i].Key + 1));
+            winCount.Append(string.Format("- {0:D2}회", winList[i].Key + 1));
             if(i < winList.Count - 2)
                 winCount.AppendLine();
         }
