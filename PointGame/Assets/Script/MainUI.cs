@@ -14,10 +14,14 @@ public class MainUI : MonoBehaviour {
     public Text Id;
 
     public GameObject LottoWinnerObj;
+    public RectTransform LottoWinnerCountRect;
     public Text LottoWinnerCount;
+    public RectTransform LottoWinnerNameRect;
     public Text LottoWinnerName;
     public GameObject RPSWinnerObj;
+    public RectTransform RPSWinnerCountRect;
     public Text RPSWinnerCount;
+    public RectTransform RPSWinnerNameRect;
     public Text RPSWinnerName;
     public GameObject RankingObj;
     public Text RankingCount;
@@ -48,6 +52,9 @@ public class MainUI : MonoBehaviour {
 
     public AudioSource mBGM;
     public AudioClip mClip;
+
+    private List<KeyValuePair<int, string>> LottoWinList = new List<KeyValuePair<int, string>>();
+    private List<TKManager.RPSGameWinnerData> RPSGameWinnerList = new List<TKManager.RPSGameWinnerData>();
 
 #if UNITY_ANDROID
     AndroidJavaObject Activity;
@@ -266,17 +273,21 @@ public class MainUI : MonoBehaviour {
 
     public void RefreshLottoWinnerList()
     {
-        var winList = new List<KeyValuePair<int, string>>();
-        winList.AddRange(TKManager.Instance.LottoWinUserList);
+        
+        if (LottoWinList.Count == TKManager.Instance.LottoWinUserList.Count)
+            return;
+
+        LottoWinList.Clear();
+        LottoWinList.AddRange(TKManager.Instance.LottoWinUserList);
         StringBuilder winCount = new StringBuilder();
 
-        for (int i = winList.Count - 5; i <= winList.Count - 2; i++)
+        for (int i = LottoWinList.Count - 5; i <= LottoWinList.Count - 2; i++)
         {
-            if (i < 0 || winList.Count <= i)
+            if (i < 0 || LottoWinList.Count <= i)
                 continue;
 
-            winCount.Append(string.Format("- {0:D2}회", winList[i].Key + 1));
-            if(i < winList.Count - 2)
+            winCount.Append(string.Format("- {0:D2}회", LottoWinList[i].Key + 1));
+            if(i < LottoWinList.Count - 2)
                 winCount.AppendLine();
         }
 
@@ -284,45 +295,98 @@ public class MainUI : MonoBehaviour {
 
         StringBuilder winUser = new StringBuilder();
 
-        for (int i = winList.Count - 5; i <= winList.Count - 2; i++)
+        for (int i = LottoWinList.Count - 5; i <= LottoWinList.Count - 2; i++)
         {
-            if (i < 0 || winList.Count <= i)
+            if (i < 0 || LottoWinList.Count <= i)
                 continue;
 
-            winUser.Append(string.Format(" : {0}", winList[i].Value));
-            if (i < winList.Count - 2)
+            winUser.Append(string.Format(" : {0}", LottoWinList[i].Value));
+            if (i < LottoWinList.Count - 2)
                 winUser.AppendLine();
         }
 
         LottoWinnerName.text = winUser.ToString();
+        
+        Canvas.ForceUpdateCanvases();
+        RefreshLottoWinnerListSize();
+    }
+
+    public void RefreshLottoWinnerListSize()
+    {
+        int line = LottoWinnerCount.cachedTextGenerator.lineCount;
+        LayoutRebuilder.ForceRebuildLayoutImmediate(LottoWinnerCountRect);
+        LayoutRebuilder.ForceRebuildLayoutImmediate(LottoWinnerNameRect);
+
+        var width = LottoWinnerCountRect.sizeDelta.x + LottoWinnerNameRect.sizeDelta.x;
+        if(width > 530f)
+        {
+            LottoWinnerNameRect.sizeDelta = new Vector2(530f - LottoWinnerCountRect.sizeDelta.x, LottoWinnerNameRect.sizeDelta.y);
+        }
+
+        LayoutRebuilder.ForceRebuildLayoutImmediate(LottoWinnerNameRect);
+        
+        if(line != LottoWinnerName.cachedTextGenerator.lineCount)
+        {
+            LottoWinnerName.resizeTextMaxSize = LottoWinnerName.resizeTextMaxSize - 1;
+        }
+        else
+            LottoWinnerCount.fontSize = LottoWinnerName.cachedTextGenerator.fontSizeUsedForBestFit;
     }
 
     public void RefreshRPSWinnerList()
     {
-        var RPSwinList = TKManager.Instance.RPSWinUserList;
+        if (RPSGameWinnerList.Count == TKManager.Instance.RPSWinUserList.Count)
+            return;
 
+        RPSGameWinnerList.Clear();
+        RPSGameWinnerList.AddRange(TKManager.Instance.RPSWinUserList);
         StringBuilder RPSwinCount = new StringBuilder();
         StringBuilder RPSwinUser = new StringBuilder();
-        for (int i = RPSwinList.Count - 2; i < RPSwinList.Count; i++)
+        for (int i = RPSGameWinnerList.Count - 2; i < RPSGameWinnerList.Count; i++)
         {
-            if (i < 0 || RPSwinList.Count <= i)
+            if (i < 0 || RPSGameWinnerList.Count <= i)
                 continue;
 
-            RPSwinCount.Append(string.Format("- {0:D2}회 1등", RPSwinList[i].Count + 1));
+            RPSwinCount.Append(string.Format("- {0:D2}회 1등", RPSGameWinnerList[i].Count + 1));
             RPSwinCount.AppendLine();
-            RPSwinCount.Append(string.Format("- {0:D2}회 2등", RPSwinList[i].Count + 1));
-            if(i < RPSwinList.Count - 1)
+            RPSwinCount.Append(string.Format("- {0:D2}회 2등", RPSGameWinnerList[i].Count + 1));
+            if(i < RPSGameWinnerList.Count - 1)
                 RPSwinCount.AppendLine();
 
-            RPSwinUser.Append(string.Format(" : {0}", RPSwinList[i].FirstName));
+            RPSwinUser.Append(string.Format(" : {0}", RPSGameWinnerList[i].FirstName));
             RPSwinUser.AppendLine();
-            RPSwinUser.Append(string.Format(" : {0}", RPSwinList[i].SecondName));
-            if (i < RPSwinList.Count - 1)
+            RPSwinUser.Append(string.Format(" : {0}", RPSGameWinnerList[i].SecondName));
+            if (i < RPSGameWinnerList.Count - 1)
                 RPSwinUser.AppendLine();
         }
 
         RPSWinnerCount.text = RPSwinCount.ToString();
         RPSWinnerName.text = RPSwinUser.ToString();
+
+        Canvas.ForceUpdateCanvases();
+        RefreshRPSWinnerListSize();
+    }
+
+    public void RefreshRPSWinnerListSize()
+    {
+        int line = RPSWinnerCount.cachedTextGenerator.lineCount;
+        LayoutRebuilder.ForceRebuildLayoutImmediate(RPSWinnerCountRect);
+        LayoutRebuilder.ForceRebuildLayoutImmediate(RPSWinnerNameRect);
+
+        var width = RPSWinnerCountRect.sizeDelta.x + RPSWinnerNameRect.sizeDelta.x;
+        if (width > 530f)
+        {
+            RPSWinnerNameRect.sizeDelta = new Vector2(530f - RPSWinnerCountRect.sizeDelta.x, RPSWinnerNameRect.sizeDelta.y);
+        }
+
+        LayoutRebuilder.ForceRebuildLayoutImmediate(RPSWinnerNameRect);
+
+        if (line != RPSWinnerName.cachedTextGenerator.lineCount)
+        {
+            RPSWinnerName.resizeTextMaxSize = RPSWinnerName.resizeTextMaxSize - 1;
+        }
+        else
+            RPSWinnerCount.fontSize = RPSWinnerName.cachedTextGenerator.fontSizeUsedForBestFit;
     }
 
     public void RefreshRankWinnerList()

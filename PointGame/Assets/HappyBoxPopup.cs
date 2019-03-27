@@ -60,52 +60,7 @@ public class HappyBoxPopup : Popup
     }
     public void OnClickRPS()
     {
-        if (FirebaseManager.Instance.FirebaseRPSGameEnterEnable)
-        {
-            // 이미 참가 완료
-            ParentPopup.ShowPopup(new MsgPopup.MsgPopupData("참가 신청이 완료되었습니다"));
-        }
-        else
-        {
-            if (TKManager.Instance.IsRPSEnterTime())
-            {
-                if (FirebaseManager.Instance.FirebaseRPSGameEnterEnable)
-                {
-                    // 이미 참가 완료
-                    ParentPopup.ShowPopup(new MsgPopup.MsgPopupData("참가 신청이 완료되었습니다"));
-                }
-                else
-                {
-                    // 가위바위보 참여하쉴?
-                    ParentPopup.ShowPopup(new MsgPopup.MsgPopupData("참가 신청을 하시겠습니까?", () =>
-                    {
-
-                        FirebaseManager.Instance.GetPoint(() =>
-                        {
-                            if (TKManager.Instance.MyData.Point < CommonData.RPSCost)
-                            {
-                                ParentPopup.ShowPopup(new MsgPopup.MsgPopupData("포인트가 부족합니다"));
-                            }
-                            else
-                            {
-                                // 광고 보여주기
-                                AdsManager.Instance.ShowSkipRewardedAd(() =>
-                                {
-                                    ParentPopup.ShowPopup(new MsgPopup.MsgPopupData("참가 신청이 완료 되었습니다"));
-                                    FirebaseManager.Instance.FirebaseRPSGameEnterEnable = true;
-                                    FirebaseManager.Instance.EnterRPSGame();
-                                    TKManager.Instance.MyData.RemovePoint(CommonData.RPSCost);
-                                });
-                            }
-                        });
-                    }, MsgPopup.MSGPOPUP_TYPE.TWO));
-                }
-            }
-            else
-            {
-                // TODO 가위바위보에 참가 불가능 또는 가위바위보 진행중
-                ParentPopup.ShowPopup(new MsgPopup.MsgPopupData("현재 참여 할 수 없습니다"));
-            }
-        }  
+        SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
+        ParentPopup.ShowPopup(new RPGJoinPopup.RPGJoinPopupData());
     }
 }

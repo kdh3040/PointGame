@@ -17,7 +17,7 @@ public enum POPUP_TYPE
     ADS,
     MINI_GAME,
     HELP,
-    RPS_HELP,
+    RPS_JOIN,
     PUSH_MSG,
     RECOMMENDER_CODE,
     RPS_GAME,
@@ -47,7 +47,7 @@ public class PopupUI : MonoBehaviour {
     public RPSPopup RPSPopupObj;
     public WinnerListPopup WinnerListPopupObj;
     public RankingPopup RankingPopupObj;
-    public RPSHelpPopup RPSHelpPopupObj;
+    public RPGJoinPopup RPSJoinPopupObj;
     public HappyBoxPopup HappyBoxPopupObj;
 
     public void Start()
@@ -84,8 +84,8 @@ public class PopupUI : MonoBehaviour {
         WinnerListPopupObj.Initialize(this, ClosePopup);
         RankingPopupObj.gameObject.SetActive(false);
         RankingPopupObj.Initialize(this, ClosePopup);
-        RPSHelpPopupObj.gameObject.SetActive(false);
-        RPSHelpPopupObj.Initialize(this, ClosePopup);
+        RPSJoinPopupObj.gameObject.SetActive(false);
+        RPSJoinPopupObj.Initialize(this, ClosePopup);
         HappyBoxPopupObj.gameObject.SetActive(false);
         HappyBoxPopupObj.Initialize(this, ClosePopup);
     }
@@ -166,9 +166,9 @@ public class PopupUI : MonoBehaviour {
                 RankingPopupObj.gameObject.SetActive(true);
                 RankingPopupObj.SetData(data);
                 break;
-            case POPUP_TYPE.RPS_HELP:
-                RPSHelpPopupObj.gameObject.SetActive(true);
-                RPSHelpPopupObj.SetData(data);
+            case POPUP_TYPE.RPS_JOIN:
+                RPSJoinPopupObj.gameObject.SetActive(true);
+                RPSJoinPopupObj.SetData(data);
                 break;
             case POPUP_TYPE.HAPPY_BOX:
                 HappyBoxPopupObj.gameObject.SetActive(true);
@@ -236,8 +236,8 @@ public class PopupUI : MonoBehaviour {
             case POPUP_TYPE.RANKING_LIST:
                 RankingPopupObj.gameObject.SetActive(false);
                 break;
-            case POPUP_TYPE.RPS_HELP:
-                RPSHelpPopupObj.gameObject.SetActive(false);
+            case POPUP_TYPE.RPS_JOIN:
+                RPSJoinPopupObj.gameObject.SetActive(false);
                 break;
             case POPUP_TYPE.HAPPY_BOX:
                 HappyBoxPopupObj.gameObject.SetActive(false);

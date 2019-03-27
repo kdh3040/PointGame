@@ -17,6 +17,7 @@ public class RPSPopup : Popup
     public Image MyRPS;
     public GameObject MyRPSEmpty;
 
+    public Text SelectRemainTime;
     public Slider MyRPSTime;
     public Button RPSSelect_S;
     public Button RPSSelect_R;
@@ -57,6 +58,8 @@ public class RPSPopup : Popup
         EnemyRPS.gameObject.SetActive(false);
         MyRPSEmpty.gameObject.SetActive(true);
         MyRPS.gameObject.SetActive(false);
+
+        SelectRemainTime.text = "선택 남은시간 : 0초";
 
         //FirebaseManager.Instance.CreateRPSGameRoom();
 
@@ -250,6 +253,12 @@ public class RPSPopup : Popup
             }
 
             myPRSSelectTime -= Time.unscaledDeltaTime;
+
+            if (myPRSSelectTime < 0)
+                SelectRemainTime.text = "선택 남은시간 : 0.00초";
+            else
+                SelectRemainTime.text = string.Format("선택 남은시간 : {0:F2}초", myPRSSelectTime);
+
             MyRPSTime.value = myPRSSelectTime / maxSelectTime;
 
             if (myPRSSelectTime < 0)
@@ -397,6 +406,7 @@ public class RPSPopup : Popup
             FirebaseManager.Instance.FirebaseRPSGameEnterEnable = false;
             FirebaseManager.Instance.FirebaseRPSGameMyRoom = -1;
             FirebaseManager.Instance.FirebaseRPSGameMyPosition = -1;
+            CloseAction();
         }));
     }
 
