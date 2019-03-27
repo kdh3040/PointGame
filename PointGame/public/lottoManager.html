@@ -92,9 +92,23 @@
       <tbody id="LottoAccountInfo"></tbody>
     </table>
 
+        <br>
+        <br>
 
-        <br>
-        <br>
+            <table>
+              <h5 class="indigo-text">:+: 당첨금 수령 내역  :+:</h5>
+              <thead>
+                <th>성명</th>
+                <th>계좌정보</th>
+                <th>수령 금액</th>
+                <th>수령 횟수</th>
+
+              </thead>
+              <tbody id="LottoHistory"></tbody>
+            </table>
+
+                <br>
+                <br>
 
     <table>
       <h5 class="indigo-text">:+: 복권 구매 인원 현황 :+:</h5>
@@ -370,6 +384,60 @@
 
     }
 
+
+    function SetLottoHistoryList(Name, Bank, Account, Count)
+    {
+
+      //console.log(arrLottoWinUserName);
+
+      var my_tbody = document.getElementById('LottoHistory');
+      // var row = my_tbody.insertRow(0); // 상단에 추가
+      var row = my_tbody.insertRow( my_tbody.rows.length ); // 하단에 추가
+      var cell1 = row.insertCell(0);
+      var cell2 = row.insertCell(1);
+      var cell3 = row.insertCell(2);
+      var cell4 = row.insertCell(3);
+
+      cell1.innerHTML = Name;
+      cell2.innerHTML = Bank + '   ' + Account;
+      cell3.innerHTML = Count * 20000 + '원';
+      cell4.innerHTML = Count;
+
+    }
+
+
+
+    function SetLottoHistory(Name, Bank, Account)
+    {
+      var Count = 0;
+      var cash = 0;
+
+      firebase.database().ref('/LottoHistory/'+Account).once('value', function(snapshot) {
+        var message = snapshot.val();
+        console.log(message);
+        if(message === null)
+        {
+          console.log("@@@");
+          firebase.database().ref('/LottoHistory/'+ Account + '/Name').set(Name);
+          firebase.database().ref('/LottoHistory/'+ Account + '/Bank').set(Bank);
+          firebase.database().ref('/LottoHistory/'+ Account + '/Account').set(Account);
+          firebase.database().ref('/LottoHistory/'+ Account + '/Count').set(1);
+        }
+        else {
+          Count = snapshot.val().Count;
+          Count++;
+          console.log(Count);
+          firebase.database().ref('/LottoHistory/'+ Account + '/Name').set(Name);
+          firebase.database().ref('/LottoHistory/'+ Account + '/Bank').set(Bank);
+          firebase.database().ref('/LottoHistory/'+ Account + '/Account').set(Account);
+          firebase.database().ref('/LottoHistory/'+ Account + '/Count').set(Count);
+
+        }
+      });
+    }
+
+
+
     function deleteLine(obj) {
         var tr = $(obj).parent().parent();
        var td = tr.children();
@@ -408,7 +476,9 @@
       element3.type = "button";
       element3.value = "지급완료";
       element3.addEventListener('click', function(event) {
-      deleteLine(this);
+      SetLottoHistory(Name, Bank, Account);
+      //deleteLine(this);
+
       })
 
       cell3.appendChild(element3);
@@ -542,6 +612,24 @@
         clearTimeout(timer);
       }
     });
+
+
+    function refresh() {
+      var dbTestRef = firebase.database().ref('/LottoHistory')
+      dbTestRef.on('child_added', function(data){
+        //console.log(data.key);
+        var index = data.key.toString();
+
+        console.log(data.val().CachBack);
+
+        SetLottoHistoryList(data.val().Name, data.val().Bank, data.val().Account, data.val().Count);
+
+
+      });
+
+    }
+
+    refresh();
 
     SetLottoCount();
     SetLottoRefData();

@@ -53,6 +53,7 @@
       <h5 class="indigo-text">:+:  캐시백 신청 내역  :+:</h5>
       <thead>
         <th>신청자 아이디</th>
+        <th>신청자 닉네임</th>
         <th>신청자 정보</th>
         <th>신청 금액</th>
         <th>지급 확인</th>
@@ -61,6 +62,21 @@
       <tbody id="CashAccountInfo"></tbody>
     </table>
 
+<br>
+<br>
+
+    <table>
+      <h5 class="indigo-text">:+:  캐시백 환급자 내역  :+:</h5>
+      <thead>
+        <th>신청자 아이디</th>
+        <th>신청자 닉네임</th>
+        <th>신청자 정보</th>
+        <th>신청 금액</th>
+        <th>신청 횟수</th>
+
+      </thead>
+      <tbody id="CashHistoryAccountInfo"></tbody>
+    </table>
 
   </div>
 
@@ -151,11 +167,55 @@
 <th>지급 확인</th>
 */
 
+function SetCashBackHistory(Index,NickName, Name, Bank, Account, Cash)
+{
+  var Count = 0;
+  var cash = Cash;
 
-    function SetLottoAccountData(Index, Name, Bank, Account, Cash)
+  firebase.database().ref('/CashBackHistory/'+Index).once('value', function(snapshot) {
+    var message = snapshot.val();
+    console.log(message);
+    if(message === null)
     {
+      console.log("@@@");
+      firebase.database().ref('/CashBackHistory/'+ Index + '/NickName').set(NickName);
+      firebase.database().ref('/CashBackHistory/'+ Index + '/Name').set(Name);
+      firebase.database().ref('/CashBackHistory/'+ Index + '/Bank').set(Bank);
+      firebase.database().ref('/CashBackHistory/'+ Index + '/Account').set(Account);
+      firebase.database().ref('/CashBackHistory/'+ Index + '/Cash').set(Cash);
+      firebase.database().ref('/CashBackHistory/'+ Index + '/Count').set(1);
 
 
+    }
+    else {
+      Count = snapshot.val().Count;
+      Count++;
+      console.log(Count);
+
+      var tempCash = snapshot.val().Cash;
+      tempCash *= 1;
+      console.log(tempCash);
+
+      cash += tempCash;
+      console.log(cash);
+
+      firebase.database().ref('/CashBackHistory/'+ Index + '/NickName').set(NickName);
+      firebase.database().ref('/CashBackHistory/'+ Index + '/Name').set(Name);
+      firebase.database().ref('/CashBackHistory/'+ Index + '/Bank').set(Bank);
+      firebase.database().ref('/CashBackHistory/'+ Index + '/Account').set(Account);
+      firebase.database().ref('/CashBackHistory/'+ Index + '/Cash').set(cash);
+      firebase.database().ref('/CashBackHistory/'+ Index + '/Count').set(Count);
+
+
+    }
+
+
+  });
+}
+
+
+    function SetLottoAccountData(Index,NickName, Name, Bank, Account, Cash)
+    {
       var my_tbody = document.getElementById('CashAccountInfo');
       // var row = my_tbody.insertRow(0); // 상단에 추가
       var row = my_tbody.insertRow( my_tbody.rows.length ); // 하단에 추가
@@ -163,20 +223,45 @@
       var cell2 = row.insertCell(1);
       var cell3 = row.insertCell(2);
       var cell4 = row.insertCell(3);
+      var cell5 = row.insertCell(4);
 
       cell1.innerHTML = Index;
-      cell2.innerHTML = Bank + '   ' + Account + '   (' + Name + ')';
-      cell3.innerHTML = Cash;
+      cell2.innerHTML = NickName;
+      cell3.innerHTML = Bank + '   ' + Account + '   (' + Name + ')';
+      cell4.innerHTML = Cash;
 
       var element3 = document.createElement("input");
       element3.type = "button";
       element3.value = "지급완료";
       element3.addEventListener('click', function(event) {
-      deleteLine(this);
+      SetCashBackHistory(Index,NickName, Name, Bank, Account, Cash);
+      //deleteLine(this);
       })
 
-      cell4.appendChild(element3);
+      cell5.appendChild(element3);
     }
+
+
+
+        function SetCashBackHistoryList(Index,NickName, Name, Bank, Account, Cash, Count)
+        {
+          var my_tbody = document.getElementById('CashHistoryAccountInfo');
+          // var row = my_tbody.insertRow(0); // 상단에 추가
+          var row = my_tbody.insertRow( my_tbody.rows.length ); // 하단에 추가
+          var cell1 = row.insertCell(0);
+          var cell2 = row.insertCell(1);
+          var cell3 = row.insertCell(2);
+          var cell4 = row.insertCell(3);
+          var cell5 = row.insertCell(4);
+
+
+          cell1.innerHTML = Index;
+          cell2.innerHTML = NickName;
+          cell3.innerHTML = Bank + '   ' + Account + '   (' + Name + ')';
+          cell4.innerHTML = Cash;
+          cell5.innerHTML = Count;
+        }
+
 
     function deleteLine(obj) {
         var tr = $(obj).parent().parent();
@@ -198,10 +283,27 @@
 
         console.log(data.val().CachBack);
 
-        SetLottoAccountData(index, data.val().Name, data.val().BankName, data.val().Account, data.val().CachBack);
+        SetLottoAccountData(index, data.val().NickName, data.val().Name, data.val().BankName, data.val().Account, data.val().CachBack);
 
 
       });
+
+      function refresh() {
+        var dbTestRef = firebase.database().ref('/CashBackHistory')
+        dbTestRef.on('child_added', function(data){
+          //console.log(data.key);
+          var index = data.key.toString();
+
+          console.log(data.val().CachBack);
+
+          SetCashBackHistoryList(index, data.val().NickName, data.val().Name, data.val().Bank, data.val().Account, data.val().Cash, data.val().Count);
+
+
+        });
+
+      }
+
+refresh();
 
 
 </script>
