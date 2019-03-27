@@ -105,6 +105,7 @@ public class UserData
     }
     public void SetCash(int cash)
     {
+        // 클라세팅용 함수
         Cash = cash;
     }
     public void AddCash(int cash)
