@@ -273,7 +273,6 @@ public class MainUI : MonoBehaviour {
 
     public void RefreshLottoWinnerList()
     {
-        
         if (LottoWinList.Count == TKManager.Instance.LottoWinUserList.Count)
             return;
 
@@ -307,31 +306,31 @@ public class MainUI : MonoBehaviour {
 
         LottoWinnerName.text = winUser.ToString();
         
-        Canvas.ForceUpdateCanvases();
-        RefreshLottoWinnerListSize();
+        //Canvas.ForceUpdateCanvases();
+        //RefreshLottoWinnerListSize();
     }
 
-    public void RefreshLottoWinnerListSize()
-    {
-        int line = LottoWinnerCount.cachedTextGenerator.lineCount;
-        LayoutRebuilder.ForceRebuildLayoutImmediate(LottoWinnerCountRect);
-        LayoutRebuilder.ForceRebuildLayoutImmediate(LottoWinnerNameRect);
+    //public void RefreshLottoWinnerListSize()
+    //{
+    //    int line = LottoWinnerCount.cachedTextGenerator.lineCount;
+    //    LayoutRebuilder.ForceRebuildLayoutImmediate(LottoWinnerCountRect);
+    //    LayoutRebuilder.ForceRebuildLayoutImmediate(LottoWinnerNameRect);
 
-        var width = LottoWinnerCountRect.sizeDelta.x + LottoWinnerNameRect.sizeDelta.x;
-        if(width > 530f)
-        {
-            LottoWinnerNameRect.sizeDelta = new Vector2(530f - LottoWinnerCountRect.sizeDelta.x, LottoWinnerNameRect.sizeDelta.y);
-        }
+    //    var width = LottoWinnerCountRect.sizeDelta.x + LottoWinnerNameRect.sizeDelta.x;
+    //    if(width > 530f)
+    //    {
+    //        LottoWinnerNameRect.sizeDelta = new Vector2(530f - LottoWinnerCountRect.sizeDelta.x, LottoWinnerNameRect.sizeDelta.y);
+    //    }
 
-        LayoutRebuilder.ForceRebuildLayoutImmediate(LottoWinnerNameRect);
+    //    LayoutRebuilder.ForceRebuildLayoutImmediate(LottoWinnerNameRect);
         
-        if(line != LottoWinnerName.cachedTextGenerator.lineCount)
-        {
-            LottoWinnerName.resizeTextMaxSize = LottoWinnerName.resizeTextMaxSize - 1;
-        }
-        else
-            LottoWinnerCount.fontSize = LottoWinnerName.cachedTextGenerator.fontSizeUsedForBestFit;
-    }
+    //    if(line != LottoWinnerName.cachedTextGenerator.lineCount)
+    //    {
+    //        LottoWinnerName.resizeTextMaxSize = LottoWinnerName.resizeTextMaxSize - 1;
+    //    }
+    //    else
+    //        LottoWinnerCount.fontSize = LottoWinnerName.cachedTextGenerator.fontSizeUsedForBestFit;
+    //}
 
     public void RefreshRPSWinnerList()
     {
@@ -363,31 +362,31 @@ public class MainUI : MonoBehaviour {
         RPSWinnerCount.text = RPSwinCount.ToString();
         RPSWinnerName.text = RPSwinUser.ToString();
 
-        Canvas.ForceUpdateCanvases();
-        RefreshRPSWinnerListSize();
+        //Canvas.ForceUpdateCanvases();
+        //RefreshRPSWinnerListSize();
     }
 
-    public void RefreshRPSWinnerListSize()
-    {
-        int line = RPSWinnerCount.cachedTextGenerator.lineCount;
-        LayoutRebuilder.ForceRebuildLayoutImmediate(RPSWinnerCountRect);
-        LayoutRebuilder.ForceRebuildLayoutImmediate(RPSWinnerNameRect);
+    //public void RefreshRPSWinnerListSize()
+    //{
+    //    int line = RPSWinnerCount.cachedTextGenerator.lineCount;
+    //    LayoutRebuilder.ForceRebuildLayoutImmediate(RPSWinnerCountRect);
+    //    LayoutRebuilder.ForceRebuildLayoutImmediate(RPSWinnerNameRect);
 
-        var width = RPSWinnerCountRect.sizeDelta.x + RPSWinnerNameRect.sizeDelta.x;
-        if (width > 530f)
-        {
-            RPSWinnerNameRect.sizeDelta = new Vector2(530f - RPSWinnerCountRect.sizeDelta.x, RPSWinnerNameRect.sizeDelta.y);
-        }
+    //    var width = RPSWinnerCountRect.sizeDelta.x + RPSWinnerNameRect.sizeDelta.x;
+    //    if (width > 530f)
+    //    {
+    //        RPSWinnerNameRect.sizeDelta = new Vector2(530f - RPSWinnerCountRect.sizeDelta.x, RPSWinnerNameRect.sizeDelta.y);
+    //    }
 
-        LayoutRebuilder.ForceRebuildLayoutImmediate(RPSWinnerNameRect);
+    //    LayoutRebuilder.ForceRebuildLayoutImmediate(RPSWinnerNameRect);
 
-        if (line != RPSWinnerName.cachedTextGenerator.lineCount)
-        {
-            RPSWinnerName.resizeTextMaxSize = RPSWinnerName.resizeTextMaxSize - 1;
-        }
-        else
-            RPSWinnerCount.fontSize = RPSWinnerName.cachedTextGenerator.fontSizeUsedForBestFit;
-    }
+    //    if (line != RPSWinnerName.cachedTextGenerator.lineCount)
+    //    {
+    //        RPSWinnerName.resizeTextMaxSize = RPSWinnerName.resizeTextMaxSize - 1;
+    //    }
+    //    else
+    //        RPSWinnerCount.fontSize = RPSWinnerName.cachedTextGenerator.fontSizeUsedForBestFit;
+    //}
 
     public void RefreshRankWinnerList()
     {
