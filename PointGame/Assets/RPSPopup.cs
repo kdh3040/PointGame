@@ -181,8 +181,8 @@ public class RPSPopup : Popup
     IEnumerator Co_RPSGame_Ready()
     {
         // Step 1 상대방의 데이터를 받아왔는지 체크
-        float waitTime = 5.0f;
-        TKManager.Instance.ShowHUD("잠시만 기다려주세요", 5.0f);
+        float waitTime = 30.0f;
+        TKManager.Instance.ShowHUD("잠시만 기다려주세요", 30.0f);
 
         while (true)
         {
@@ -403,6 +403,8 @@ public class RPSPopup : Popup
         SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
         ParentPopup.ShowPopup(new MsgPopup.MsgPopupData("나가시겠습니까?", () =>
         {
+            FirebaseManager.Instance.SelectRPSGame(0);
+            FirebaseManager.Instance.ResetMyRPSGame();
             FirebaseManager.Instance.FirebaseRPSGameEnterEnable = false;
             FirebaseManager.Instance.FirebaseRPSGameMyRoom = -1;
             FirebaseManager.Instance.FirebaseRPSGameMyPosition = -1;
@@ -459,6 +461,7 @@ public class RPSPopup : Popup
 
         ParentPopup.ShowPopup(new MsgPopup.MsgPopupData("패배하였습니다", () =>
         {
+            FirebaseManager.Instance.ResetMyRPSGame();
             FirebaseManager.Instance.FirebaseRPSGameEnterEnable = false;
             FirebaseManager.Instance.FirebaseRPSGameMyRoom = -1;
             FirebaseManager.Instance.FirebaseRPSGameMyPosition = -1;
