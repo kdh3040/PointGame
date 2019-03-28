@@ -12,6 +12,7 @@ public class LoadingHUD : MonoBehaviour {
     public Text SubDesc;
 
     private string Msg;
+    private string WaitTimeMsg = "";
     private float WaitTime = 0;
     // Use this for initialization
     void Start()
@@ -23,20 +24,33 @@ public class LoadingHUD : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-        if (WaitTime > 1)
-            Desc.text = string.Format("{0}\n{1}초", Msg, (int)WaitTime);
+        if (WaitTime > 0)
+        {
+            if(WaitTimeMsg == "")
+                Desc.text = string.Format("{0}\n{1}초", Msg, (int)WaitTime);
+            else
+                Desc.text = string.Format("{0}{1}", Msg, string.Format(WaitTimeMsg, (int)WaitTime));
+        }
+            
         else
             Desc.text = Msg;
 
         WaitTime -= Time.deltaTime;
     }
 
-    public void ShowHUD(string msg = "로딩중", float waitTime = 0, string subMsg = "")
+    public void ShowHUD(string msg = "로딩중", string subMsg = "", float waitTime = 0, string waitTimeMsg = "")
     {
+        Msg = "";
+        WaitTime = 0;
+        Desc.text = Msg;
+        SubDesc.text = "";
+        WaitTimeMsg = "";
+
         Msg = msg;
-        WaitTime = waitTime + 1;
+        WaitTime = waitTime;
         Desc.text = Msg;
         SubDesc.text = subMsg;
+        WaitTimeMsg = waitTimeMsg;
         StartCoroutine(Co_ShowHUD());
 
         LoadingMark.gameObject.transform.localRotation = Quaternion.Euler(0, 0, 0);
