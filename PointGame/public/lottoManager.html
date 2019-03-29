@@ -211,12 +211,12 @@
 
 
       function showClock(){
-              console.log((new Date()).getHMS());
+              //console.log((new Date()).getHMS());
               for(var i=0; i<4; i++) {              //console.log(arrLottoSelectTime[i]);
                if((new Date()).getHMS() === arrLottoSelectTime[i])
                {
                     console.log(arrLottoSelectTime[i]);
-                    SetLottoUserData();
+                    //SetLottoUserData();
                }
             }
 
@@ -477,7 +477,7 @@
       element3.value = "지급완료";
       element3.addEventListener('click', function(event) {
       SetLottoHistory(Name, Bank, Account);
-      //deleteLine(this);
+      deleteLine(this);
 
       })
 
@@ -582,13 +582,13 @@
           {
             $("#BTN_TEST_CREATE").text('현재 모드 : 수동 당첨');
             console.log("수동");
-            clearTimeout(timer);
+            //clearTimeout(timer);
           }
           else
           {
             $("#BTN_TEST_CREATE").text('현재 모드 : 자동 당첨');
             console.log("자동");
-            showClock();
+            //showClock();
           }
           //console.log(LottoRefNumber);
         });
@@ -602,14 +602,14 @@
         LottoSelectMode = 1;
         firebase.database().ref('/AutoLottoSelect').set(LottoSelectMode);
         $("#BTN_TEST_CREATE").text('현재 모드 : 자동 당첨');
-        showClock();
+        //showClock();
       }
       else
       {
         LottoSelectMode = 0;
         firebase.database().ref('/AutoLottoSelect').set(LottoSelectMode);
         $("#BTN_TEST_CREATE").text('현재 모드 : 수동 당첨');
-        clearTimeout(timer);
+        //clearTimeout(timer);
       }
     });
 

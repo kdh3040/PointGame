@@ -235,7 +235,7 @@ function SetCashBackHistory(Index,NickName, Name, Bank, Account, Cash)
       element3.value = "지급완료";
       element3.addEventListener('click', function(event) {
       SetCashBackHistory(Index,NickName, Name, Bank, Account, Cash);
-      //deleteLine(this);
+      deleteLine(this);
       })
 
       cell5.appendChild(element3);

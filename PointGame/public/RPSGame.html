@@ -215,7 +215,7 @@ function SetUsersBuSeries(UsersCount)
 
   }
 
-  var dbTestRef = firebase.database().ref('/RPSGameCurSeries')
+  var dbTestRef = firebase.database().ref('/RPSUsersBySeries')
   dbTestRef.on('child_added', function(data){
     //console.log( data.val());
     var Series = data.key.toString();
@@ -575,6 +575,7 @@ function SetUsersBuSeries(UsersCount)
 
   var timer;
   var Checktimer;
+  var CheckFinaltimer;
   //var arrLottoSelectTime = ['02:12:40', '02:13:20', '02:13:00', '01:42:00', '05:42:30', '05:13:00'];
   var arrRPSGAmeStartTime = ['12:30:00', '18:30:00'];
 
@@ -602,6 +603,10 @@ function SetUsersBuSeries(UsersCount)
 
 	    function CheckTimer(){
           Checktimer = setTimeout(GetRPSGame,40000);
+      }
+
+      function CheckFinalTimer(){
+          Checktimer = setTimeout(GetRPSGame,1000 * 60);
       }
 
 showClock();
