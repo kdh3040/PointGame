@@ -1600,7 +1600,13 @@ public class FirebaseManager : MonoBehaviour
         mDatabaseRef.Child("RPSGame").Child(FirebaseRPSGameSeries.ToString()).Child(FirebaseRPSGameMyRoom.ToString())
         .Child(FirebaseRPSGameMyPosition.ToString()).Child("Value").SetValueAsync(Value);
     }
-    
+
+    public void ResetMyRPSGame()
+    {
+        mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("FirebaseRPSGameMyPosition").SetValueAsync(-1);
+        mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("FirebaseRPSGameMyRoom").SetValueAsync(-1);
+    }
+
     // 가위 : 1 바위 : 2 보 : 3
     // 0 비김 , 1 이김, 2 짐
 
@@ -1632,7 +1638,7 @@ public class FirebaseManager : MonoBehaviour
     //        else
     //        {
     //            FirebaseRPSGameMyRoom = (tempCount - 1) / 2;
-                
+
     //            // 핸드러를 달기위해서 클라에서 변경
     //            FirebaseRPSGameSeries += 1;
 

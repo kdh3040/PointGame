@@ -181,8 +181,8 @@ public class RPSPopup : Popup
     IEnumerator Co_RPSGame_Ready()
     {
         // Step 1 상대방의 데이터를 받아왔는지 체크
-        float waitTime = 5.0f;
-        TKManager.Instance.ShowHUD("잠시만 기다려주세요", 5.0f);
+        float waitTime = 30.0f;
+        TKManager.Instance.ShowHUD("가위바위보 게임", "", 30f, "\n시작 {0}초전");
 
         while (true)
         {
@@ -201,7 +201,7 @@ public class RPSPopup : Popup
     IEnumerator Co_RPSGame_Search()
     {
         // Step 1 상대방의 데이터를 받아왔는지 체크
-        TKManager.Instance.ShowHUD("게임 시작까지 남은 시간", 30.0f, "매칭이 완료 되면 바로 시작합니다");
+        TKManager.Instance.ShowHUD("게임 시작까지 남은 시간", "매칭이 완료 되면 바로 시작합니다", 30.0f);
 
         while (true)
         {
@@ -272,7 +272,7 @@ public class RPSPopup : Popup
     {
         // Step 1 상대방의 데이터를 받아왔는지 체크
         float waitTime = 5.0f;
-        TKManager.Instance.ShowHUD("결과를 확인중 입니다", 5.0f);
+        TKManager.Instance.ShowHUD("결과를 확인중 입니다", "", 5.0f);
 
         Debug.Log("내가 선택했다 " + RPSGame_MyValue);
         if (RPSGame_MyValue != 0)
@@ -403,6 +403,8 @@ public class RPSPopup : Popup
         SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
         ParentPopup.ShowPopup(new MsgPopup.MsgPopupData("나가시겠습니까?", () =>
         {
+            FirebaseManager.Instance.SelectRPSGame(0);
+            FirebaseManager.Instance.ResetMyRPSGame();
             FirebaseManager.Instance.FirebaseRPSGameEnterEnable = false;
             FirebaseManager.Instance.FirebaseRPSGameMyRoom = -1;
             FirebaseManager.Instance.FirebaseRPSGameMyPosition = -1;
@@ -459,6 +461,7 @@ public class RPSPopup : Popup
 
         ParentPopup.ShowPopup(new MsgPopup.MsgPopupData("패배하였습니다", () =>
         {
+            FirebaseManager.Instance.ResetMyRPSGame();
             FirebaseManager.Instance.FirebaseRPSGameEnterEnable = false;
             FirebaseManager.Instance.FirebaseRPSGameMyRoom = -1;
             FirebaseManager.Instance.FirebaseRPSGameMyPosition = -1;
