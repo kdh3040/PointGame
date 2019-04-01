@@ -1470,7 +1470,7 @@ public class FirebaseManager : MonoBehaviour
         FirebaseRPSGameSeries = -1;
         FirebaseRPSGameMyRoom = -1;
 
-        mDatabaseRef.Child("TempRPSUserList").Child(TKManager.Instance.MyData.Index).SetValueAsync(TKManager.Instance.MyData.NickName);
+        mDatabaseRef.Child("RPSUserList").Child(TKManager.Instance.MyData.Index).SetValueAsync(TKManager.Instance.MyData.NickName);
         
         /*
 
@@ -1721,7 +1721,7 @@ public class FirebaseManager : MonoBehaviour
 
     public void GetRPSGameEnterStatus()
     {
-        mDatabaseRef.Child("TempRPSUserList").Child(TKManager.Instance.MyData.Index).GetValueAsync().ContinueWith(task =>
+        mDatabaseRef.Child("RPSUserList").Child(TKManager.Instance.MyData.Index).GetValueAsync().ContinueWith(task =>
         {
             if (task.IsFaulted)
             {
