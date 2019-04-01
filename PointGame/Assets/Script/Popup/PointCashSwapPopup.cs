@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -56,20 +57,54 @@ public class PointCashSwapPopup : Popup
     public void OnClickCashRefundOK()
     {
         SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
-        FirebaseManager.Instance.GetCash(() =>
+
+        if(Name.text.ToString() == "" ||
+            Bank.text.ToString() == "" ||
+            AccountNumber.text.ToString() == "")
         {
-            FirebaseManager.Instance.SetCashInfo(Name.text.ToString(), Bank.text.ToString(), AccountNumber.text.ToString(), TKManager.Instance.MyData.Cash);
+            ParentPopup.ShowPopup(new MsgPopup.MsgPopupData("교환 정보에\n빈칸이 있습니다"));
+            return;
+        }
+        StringBuilder msg = new StringBuilder();
+        msg.AppendLine(string.Format("이름 : {0}", Name.text.ToString()));
+        msg.AppendLine(string.Format("은행 : {0}", Bank.text.ToString()));
+        msg.AppendLine(string.Format("계좌번호 : {0}", AccountNumber.text.ToString()));
+        msg.AppendLine("위 정보로 교환금을 수령 하시겠습니까?");
+        msg.Append("* 교환 정보는 1회만 입력 가능합니다");
 
-            int tempCash = TKManager.Instance.MyData.Cash;
-            int tempPoint = TKManager.Instance.MyData.AllAccumulatePoint;
-            tempPoint -= (tempCash / CommonData.PointToCashChangeValue) * CommonData.PointToCashChange;
+        ParentPopup.ShowPopup(new MsgPopup.MsgPopupData(msg.ToString(), () =>
+        {
+            FirebaseManager.Instance.GetCash(() =>
+            {
+                //FirebaseManager.Instance.SetCashInfo(Name.text.ToString(), Bank.text.ToString(), AccountNumber.text.ToString(), TKManager.Instance.MyData.Cash);
 
-            TKManager.Instance.MyData.SetAllAccumulatePoint(tempPoint);
-            FirebaseManager.Instance.SetTotalAccumPoint(TKManager.Instance.MyData.AllAccumulatePoint);
-            TKManager.Instance.MyData.RemoveCash(tempCash);
-            CashRefundInfoObj.gameObject.SetActive(true);
-            CloseAction();
-        });
+                int tempCash = TKManager.Instance.MyData.Cash;
+                int minChangeValue = tempCash / CommonData.MinCashChangeUnit;
+                int refundCash = minChangeValue * CommonData.MinCashChangeUnit;
+                if(refundCash < CommonData.MinCashChange)
+                {
+                    CloseAction();
+                    ParentPopup.ShowPopup(new MsgPopup.MsgPopupData("캐시를 교환 할 수 없습니다"));
+                    return;
+                }
+
+                FirebaseManager.Instance.SetCashInfo(Name.text.ToString(), Bank.text.ToString(), AccountNumber.text.ToString(), refundCash);
+
+                int tempPoint = TKManager.Instance.MyData.AllAccumulatePoint;
+                tempPoint -= (refundCash / CommonData.PointToCashChangeValue) * CommonData.PointToCashChange;
+
+                TKManager.Instance.MyData.SetAllAccumulatePoint(tempPoint);
+                FirebaseManager.Instance.SetTotalAccumPoint(TKManager.Instance.MyData.AllAccumulatePoint);
+                TKManager.Instance.MyData.RemoveCash(refundCash);
+                CashRefundInfoObj.gameObject.SetActive(true);
+                CloseAction();
+            });
+
+        }, MsgPopup.MSGPOPUP_TYPE.TWO, TextAnchor.MiddleLeft));
+
+
+
+        
     }
 
     public void OnClickOK()

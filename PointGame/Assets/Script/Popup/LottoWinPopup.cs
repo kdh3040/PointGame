@@ -57,6 +57,14 @@ public class LottoWinPopup : Popup
     {
         SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
 
+        if (Name.text.ToString() == "" ||
+            Bank.text.ToString() == "" ||
+            AccountNumber.text.ToString() == "")
+        {
+            ParentPopup.ShowPopup(new MsgPopup.MsgPopupData("지급 정보에\n빈칸이 있습니다"));
+            return;
+        }
+
         StringBuilder msg = new StringBuilder();
         msg.AppendLine(string.Format("이름 : {0}", Name.text.ToString()));
         msg.AppendLine(string.Format("은행 : {0}", Bank.text.ToString()));
