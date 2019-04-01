@@ -78,6 +78,8 @@ public class MainUI : MonoBehaviour {
         HappyBoxButton.onClick.AddListener(OnClickHappyBox);
         MiniGameButton.onClick.AddListener(OnClickMiniGame);
         SoundButton.onClick.AddListener(OnClickSoundChange);
+
+        AdsManager.Instance.RequestBanner();
     }
 
     void Start()

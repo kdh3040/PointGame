@@ -71,15 +71,15 @@ public class AdsManager : MonoBehaviour {
         //// 구글 애드몹  광고 초기화
         // Initialize the Google Mobile Ads SDK.
         MobileAds.Initialize(appId);
-
+        
         this.rewardAdmobVideo = RewardBasedVideoAd.Instance;
         rewardAdmobVideo.OnAdLoaded += HandleRewardBasedVideoLoaded;
         rewardAdmobVideo.OnAdFailedToLoad += HandleRewardBasedVideoFailedToLoad;
         rewardAdmobVideo.OnAdRewarded += HandleRewardBasedVideoRewarded;
-        rewardAdmobVideo.OnAdClosed += HandleRewardBasedVideoClosed;
+        rewardAdmobVideo.OnAdClosed += HandleRewardBasedVideoClosed;        
 
 #if !UNITY_EDITOR
-        this.RequestBanner();
+        //this.RequestBanner();
         this.RequestInterstitial();
         this.RequestAdmobVideo();
 #endif
@@ -121,7 +121,7 @@ public class AdsManager : MonoBehaviour {
     {
         AdView = false;
         Debug.Log("!!!!!@ Ad " + "HandleRewardBasedVideoClosed");
-        //this.RequestAdmobVideo();        
+        this.RequestAdmobVideo();        
     }
 
     public void HandleRewardBasedVideoRewarded(object sender, Reward args)
@@ -140,8 +140,11 @@ public class AdsManager : MonoBehaviour {
         AdComplete = true;
     }
 
+    private int ConvertPixelsToDP(float pixels)
+    {
+        return (int)(pixels / (Screen.dpi / 160));
+    }
 
-    
     public void RequestBanner()
     {
 #if UNITY_ANDROID
@@ -154,18 +157,24 @@ public class AdsManager : MonoBehaviour {
         
 #else
             string adUnitId = "unexpected_platform";
-#endif
+#endif        
+        
+        float tempSize = Screen.height / 1280;
 
-        // Create a 320x50 banner at the top of the screen.
-
-        bannerView = new BannerView(adUnitId, AdSize.Banner, AdPosition.Bottom );
-
+        if(tempSize > 0)
+            bannerView = new BannerView(adUnitId, AdSize.SmartBanner, 0, ConvertPixelsToDP(Screen.height - (tempSize * AdSize.Banner.Height * Screen.dpi / 160)));
+        else
+            bannerView = new BannerView(adUnitId, AdSize.SmartBanner, 0, ConvertPixelsToDP(Screen.height - (AdSize.Banner.Height * Screen.dpi / 160)));        
 
         // Create an empty ad request.
-       
+
         // Load the banner with the request.
 
-       // this.bannerView.LoadAd(request);
+        // this.bannerView.LoadAd(request);
+
+
+        if (FirebaseManager.Instance.ReviewMode == false && FirebaseManager.Instance.ExamineMode == false)
+            AdsManager.Instance.ShowBanner();
 
     }
 
@@ -255,6 +264,11 @@ public class AdsManager : MonoBehaviour {
         AdView = false;
         return;
 #endif
+
+        AdView = false;
+        if (this.rewardAdmobVideo == null)
+            return;
+
         if (rewardAdmobVideo.IsLoaded())
         {
             rewardAdmobVideo.Show();

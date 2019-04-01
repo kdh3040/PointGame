@@ -26,13 +26,28 @@ namespace GoogleMobileAds.Api
         public static void Initialize(string appId)
         {
             client.Initialize(appId);
+            MobileAdsEventExecutor.Initialize();
+        }
+
+        public static void SetApplicationMuted(bool muted)
+        {
+            client.SetApplicationMuted(muted);
+        }
+
+        public static void SetApplicationVolume(float volume)
+        {
+            client.SetApplicationVolume(volume);
+        }
+
+        public static void SetiOSAppPauseOnBackground(bool pause)
+        {
+            client.SetiOSAppPauseOnBackground(pause);
         }
 
         private static IMobileAdsClient GetMobileAdsClient()
         {
-            //Type googleMobileAdsClientFactory = Type.GetType(
-              //  "GoogleMobileAds.GoogleMobileAdsClientFactory,Assembly-CSharp");
-            Type googleMobileAdsClientFactory = typeof(GoogleMobileAdsClientFactory);
+            Type googleMobileAdsClientFactory = Type.GetType(
+                "GoogleMobileAds.GoogleMobileAdsClientFactory,Assembly-CSharp");
             MethodInfo method = googleMobileAdsClientFactory.GetMethod(
                 "MobileAdsInstance",
                 BindingFlags.Static | BindingFlags.Public);

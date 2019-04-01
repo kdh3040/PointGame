@@ -241,8 +241,8 @@
 
 
           function CheckFirstTimer(){
-              //CheckFirstTimer = setTimeout(GetRPSGame,1000 * 60);
-              CheckFirstTimer = setTimeout(GetRPSGame,1000 * 40);
+              CheckFirstTimer = setTimeout(GetRPSGame,1000 * 70);
+              //CheckFirstTimer = setTimeout(GetRPSGame,1000 * 40);
           }
 
           function CheckTimer(){
@@ -322,7 +322,7 @@
         		RPSUserSeries *= 1;
         		RPSUserSeries = 0;
 
-              firebase.database().ref('/RPSUserList').once('value', function(snapshot) {
+              firebase.database().ref('/tempRPSUserList').once('value', function(snapshot) {
                 var message = snapshot.val();
 
                 //console.log(Object.keys(message).length);
@@ -651,7 +651,7 @@
     	      firebase.database().ref('/Users/'+tempWinnerData[0].Index + '/FirebaseRPSGameMyRoom').set(-1);
             firebase.database().ref('/Users/'+tempWinnerData[0].Index + '/FirebaseRPSGameMyPosition').set(-1);
 
-            SetCurSeies(tempWinnerData[0].NickName, tempLooserData[0].NickName);
+            //SetCurSeies(tempWinnerData[0].NickName, tempLooserData[0].NickName);
 
     	  }
 
