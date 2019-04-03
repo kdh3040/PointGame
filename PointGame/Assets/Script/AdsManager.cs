@@ -239,16 +239,22 @@ public class AdsManager : MonoBehaviour {
         }
         else
         {
-            AdView = false;
+            
             if (this.interstitial == null)
+            {
+                AdComplete = true;
+                AdView = false;
                 return;
+            }
+                
 
             if (!this.interstitial.IsLoaded())
             {
                 RequestInterstitial();
                 return;
             }
-
+            AdComplete = true;
+            AdView = false;
             this.interstitial.Show();            
         }        
     }
@@ -261,13 +267,17 @@ public class AdsManager : MonoBehaviour {
     private void ShowAdmobVideo()
     {
 #if UNITY_EDITOR
+        AdComplete = true;
         AdView = false;
         return;
 #endif
 
-        AdView = false;
         if (this.rewardAdmobVideo == null)
+        {
+            AdComplete = true;
+            AdView = false;
             return;
+        }
 
         if (rewardAdmobVideo.IsLoaded())
         {
@@ -278,7 +288,7 @@ public class AdsManager : MonoBehaviour {
             ShowInterstitialAds();
         }
 
-        RequestAdmobVideo();
+        //RequestAdmobVideo();
     }
 
 
@@ -299,7 +309,7 @@ public class AdsManager : MonoBehaviour {
         {
             AdComplete = false;
             SetAdEndCallFunc(endAction);
-            
+
             if (Advertisement.IsReady(rewarded_video_id))
             {
                 var options = new ShowOptions { resultCallback = HandleShowRewardVideoResult };
