@@ -415,7 +415,7 @@ firebase.database().ref('/LottoCount').set(1);
                   if(Object.keys(message).length % 2 == 1)
                   {
                     firebase.database().ref('/RPSGame/' + RPSUserSeries + '/' + tempRoomNumber + '/' + i + '/Index/').set('1234');
-                    firebase.database().ref('/RPSGame/' + RPSUserSeries + '/' + tempRoomNumber + '/' + i + '/NickName/').set('v'+Math.floor(Math.random() * 10000 + 1));
+                    firebase.database().ref('/RPSGame/' + RPSUserSeries + '/' + tempRoomNumber + '/' + i + '/NickName/').set('guest_'+Math.floor(Math.random() * 10000 + 1));
                     firebase.database().ref('/RPSGame/' + RPSUserSeries + '/' + tempRoomNumber + '/' + i + '/Value/').set(0);
 
                     firebase.database().ref('/RPSUserCount').set(Object.keys(message).length + 1);
@@ -665,7 +665,7 @@ firebase.database().ref('/LottoCount').set(1);
     			var tempUserData = new Array();
     			tempUserData = new RPSUser();
 
-    			tempUserData.NickName = 'g'+Math.floor(Math.random() * 10000 + 1);
+    			tempUserData.NickName = 'guest_'+Math.floor(Math.random() * 10000 + 1);
     			tempUserData.Index = '1234';
     			tempUserData.Value = 0;
 
