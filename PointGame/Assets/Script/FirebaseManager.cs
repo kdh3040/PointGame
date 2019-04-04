@@ -1071,6 +1071,7 @@ public class FirebaseManager : MonoBehaviour
 
 #if UNITY_IOS
         string dataKey = "ios_ReviewVersion";
+        //string dataKey = "editor_ReviewVersion";
 #elif (UNITY_ANDROID && !UNITY_EDITOR)
         string dataKey = "aos_ReviewVersion";
 #elif (UNITY_ANDROID && UNITY_EDITOR)

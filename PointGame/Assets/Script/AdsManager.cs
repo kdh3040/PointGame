@@ -161,10 +161,15 @@ public class AdsManager : MonoBehaviour {
         
         float tempSize = Screen.height / 1280;
 
-        if(tempSize > 0)
+#if UNITY_IPHONE
+        bannerView = new BannerView(adUnitId, AdSize.SmartBanner, AdPosition.Bottom);
+#else
+        if (tempSize > 0)
             bannerView = new BannerView(adUnitId, AdSize.SmartBanner, 0, ConvertPixelsToDP(Screen.height - (tempSize * AdSize.Banner.Height * Screen.dpi / 160)));
         else
             bannerView = new BannerView(adUnitId, AdSize.SmartBanner, 0, ConvertPixelsToDP(Screen.height - (AdSize.Banner.Height * Screen.dpi / 160)));        
+#endif
+
 
         // Create an empty ad request.
 
