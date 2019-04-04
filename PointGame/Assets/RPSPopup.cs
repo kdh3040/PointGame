@@ -182,7 +182,7 @@ public class RPSPopup : Popup
     {
         // Step 1 상대방의 데이터를 받아왔는지 체크
         float waitTime = 30.0f;
-        TKManager.Instance.ShowHUD("가위바위보 게임", "", 30f, "\n시작 {0}초전");
+        TKManager.Instance.ShowHUD("가위바위보 게임", "", 60f, "\n시작 {0}초전");
 
         while (true)
         {

@@ -16,6 +16,7 @@ public class PointCashSwapPopup : Popup
     public InputField Bank;
     public InputField AccountNumber;
     public Button CashRefundInfoOKButton;
+    public Button CashRefundInfoCancelButton;
 
     public Button OkButton;
 
@@ -31,6 +32,7 @@ public class PointCashSwapPopup : Popup
     {
         CashRefundButton.onClick.AddListener(OnClickCashRefund);
         CashRefundInfoOKButton.onClick.AddListener(OnClickCashRefundOK);
+        CashRefundInfoCancelButton.onClick.AddListener(OnClickCashRefundCencel);
         OkButton.onClick.AddListener(OnClickOK);
     }
 
@@ -48,7 +50,7 @@ public class PointCashSwapPopup : Popup
         SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
         if (TKManager.Instance.MyData.Cash < CommonData.MinCashChange)
         {
-            ParentPopup.ShowPopup(new MsgPopup.MsgPopupData(string.Format("{0} 캐시 부터 교환 가능합니다", CommonData.MinCashChange)));
+            ParentPopup.ShowPopup(new MsgPopup.MsgPopupData(string.Format("{0} 캐시 부터 {1} 캐시 단위로 교환 가능합니다", CommonData.MinCashChange, CommonData.MinCashChangeUnit)));
         }
         else
             CashRefundInfoObj.gameObject.SetActive(true);
@@ -96,15 +98,17 @@ public class PointCashSwapPopup : Popup
                 TKManager.Instance.MyData.SetAllAccumulatePoint(tempPoint);
                 FirebaseManager.Instance.SetTotalAccumPoint(TKManager.Instance.MyData.AllAccumulatePoint);
                 TKManager.Instance.MyData.RemoveCash(refundCash);
-                CashRefundInfoObj.gameObject.SetActive(true);
+                CashRefundInfoObj.gameObject.SetActive(false);
                 CloseAction();
             });
 
         }, MsgPopup.MSGPOPUP_TYPE.TWO, TextAnchor.MiddleLeft));
+    }
 
-
-
-        
+    public void OnClickCashRefundCencel()
+    {
+        SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
+        CashRefundInfoObj.gameObject.SetActive(false);
     }
 
     public void OnClickOK()
