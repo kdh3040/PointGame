@@ -203,6 +203,28 @@
     }
 
 
+    function Test()
+    {
+      firebase.database().ref('/LottoLuckyGroup').orderByKey().limitToLast(20).once('value', function(snapshot) {
+        var message = snapshot.val();
+
+
+
+        for(var key in message)
+        {
+            if(message[key] === 'jhe6cyrtgu')
+            {
+                console.log('asdasd');
+            }
+            else {
+                //console.log(message[key]);
+            }
+
+        }
+
+      });
+    }
+//Test();
 
       Number.prototype.to2 = function(){return this<10?'0'+this:this;};
        Date.prototype.getHMS = function(){
@@ -215,7 +237,7 @@
 
               callcount ++;
 
-              if(callcount === 60 * 30)
+              if(callcount > 60 * 10)
               {
                 console.log((new Date()).getHMS());
                 callcount = 0;
@@ -241,8 +263,8 @@
 
 
           function CheckFirstTimer(){
+              //CheckFirstTimer = setTimeout(GetRPSGame,1000 * 100);
               CheckFirstTimer = setTimeout(GetRPSGame,1000 * 70);
-              //CheckFirstTimer = setTimeout(GetRPSGame,1000 * 40);
           }
 
           function CheckTimer(){
@@ -250,51 +272,87 @@
           }
 
 
-
   function SetLottoUserData()
   {
 
+    console.log("SetLottoUserData");
     firebase.database().ref('/LottoCount').once('value', function(snapshot) {
       var message = snapshot.val();
       Lottocount = message;
       Lottocount *= 1;
+      console.log("LottoCount : " + Lottocount);
 
       firebase.database().ref('/LottoCurSeries').once('value', function(snapshot) {
         var message = snapshot.val();
         LottoCurSeries = message;
         LottoCurSeries *= 1;
 
+        console.log("LottoCurSeries : " + LottoCurSeries);
         firebase.database().ref('/LottoUsersBySeries/'+LottoCurSeries).set(Lottocount);
 
         LottoCurSeries += LottoSeriesRef;
+        console.log("LottoCurSeries : " + LottoCurSeries);
 
-        var tempIdx = 0;
-          var dbTestRef = firebase.database().ref('/Lotto/'+LottoCurSeries+'_L')
-          dbTestRef.on('child_added', function(data){
+        firebase.database().ref('/Lotto/'+LottoCurSeries+'_L').once('value', function(snapshot) {
+        //console.log(snapshot.val());
+        var tempLottoCount = Object.keys(snapshot.val()).length;
+        var tempLottoResult = Math.floor(Math.random() * tempLottoCount);
 
-            arrLottoUser[data.key] = data.val();
-            arrLottoUserKey[tempIdx] = data.key;
-            tempIdx++;
+        console.log(tempLottoResult);
 
-            if( Lottocount == arrLottoUserKey.length +1)
-            {
-              var result = Math.floor(Math.random() * arrLottoUserKey.length);
+        arrLottoUserKey = Object.keys(snapshot.val());
 
-              result = arrLottoUserKey[result];
+        console.log(arrLottoUserKey[tempLottoResult]);
+        var tempLottoWinner =snapshot.val()[arrLottoUserKey[tempLottoResult]];
+        console.log(tempLottoWinner);
 
-              firebase.database().ref('/LottoLuckyNumber/'+LottoCurSeries+'_L').set(arrLottoUser[result])
-              firebase.database().ref('/LottoLuckyGroup/'+LottoCurSeries+'_L').set(result)
 
-              var LottoRandNumber = Math.floor(Math.random() * 100) + 1;
-              firebase.database().ref('/LottoRefNumber').set(LottoRandNumber)
 
-              firebase.database().ref('/Lotto/'+LottoCurSeries+'_L').remove();
-              LottoCurSeries = LottoCurSeries - LottoSeriesRef;
-              LottoCurSeries += 1;
-              firebase.database().ref('/LottoCurSeries').set(LottoCurSeries);
-              firebase.database().ref('/LottoCount').set(1);
-            }
-          })
+firebase.database().ref('/LottoLuckyNumber/'+LottoCurSeries+'_L').set(snapshot.val()[arrLottoUserKey[tempLottoResult]])
+firebase.database().ref('/LottoLuckyGroup/'+LottoCurSeries+'_L').set(arrLottoUserKey[tempLottoResult])
+
+var LottoRandNumber = Math.floor(Math.random() * 200) + 1;
+firebase.database().ref('/LottoRefNumber').set(LottoRandNumber)
+
+firebase.database().ref('/Lotto/'+LottoCurSeries+'_L').remove();
+LottoCurSeries = LottoCurSeries - LottoSeriesRef;
+LottoCurSeries += 1;
+firebase.database().ref('/LottoCurSeries').set(LottoCurSeries);
+firebase.database().ref('/LottoCount').set(1);
+
+/*
+        firebase.database().ref('/LottoLuckyGroup').orderByKey().limitToLast(20).once('value', function(snapshot) {
+          var message = snapshot.val();
+          var tempExist = false;
+          for(var key in message)
+          {
+              if(message[key] === tempLottoWinner)
+              {
+                  console.log('중복');
+                  SetLottoUserData();
+                  tempExist = true;
+                  break;
+              }
+          }
+
+              if(tempExist === false)
+              {
+                firebase.database().ref('/LottoLuckyNumber/'+LottoCurSeries+'_L').set(snapshot.val()[arrLottoUserKey[tempLottoResult]])
+                firebase.database().ref('/LottoLuckyGroup/'+LottoCurSeries+'_L').set(arrLottoUserKey[tempLottoResult])
+
+                var LottoRandNumber = Math.floor(Math.random() * 200) + 1;
+                firebase.database().ref('/LottoRefNumber').set(LottoRandNumber)
+
+                firebase.database().ref('/Lotto/'+LottoCurSeries+'_L').remove();
+                LottoCurSeries = LottoCurSeries - LottoSeriesRef;
+                LottoCurSeries += 1;
+                firebase.database().ref('/LottoCurSeries').set(LottoCurSeries);
+                firebase.database().ref('/LottoCount').set(1);
+              }
+
+              });
+              */
+          });
       });
   });
 
@@ -364,6 +422,8 @@
                   }
 
     			  	console.log("SetSeries call " + (new Date()).getHMS());
+
+
     			   firebase.database().ref('/RPSGameSeries').set(RPSUserSeries, function(error) {
     				if (error) {
     				  // The write failed...
