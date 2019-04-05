@@ -130,8 +130,8 @@
   var LottoSelectMode;
 
   var timer;
-  var CheckGametimer;
-  var CheckFirstTimer;
+  var nCheckGametimer;
+  var nCheckFirstTimer;
   var arrLottoSelectTime = ['09:00:00', '12:00:00', '15:00:00', '18:00:00'];
   var arrRPSSelectTime = ['12:30:00', '18:30:00'];
 
@@ -232,9 +232,14 @@
                   + this.getSeconds().to2();
        }
 
+      function StartTimer()
+      {
+            timer = setInterval(showClock,1000);
+      }
 
       function showClock(){
 
+            //console.log((new Date()).getHMS());
               callcount ++;
 
               if(callcount > 60 * 10)
@@ -258,17 +263,16 @@
                   CreateRPSGameRoom();
              }
             }
-              timer = setTimeout(showClock,1000);
           }
 
 
           function CheckFirstTimer(){
-              //CheckFirstTimer = setTimeout(GetRPSGame,1000 * 100);
-              CheckFirstTimer = setTimeout(GetRPSGame,1000 * 70);
+              nCheckFirstTimer = setTimeout(GetRPSGame,1000 * 100);
+              //CheckFirstTimer = setTimeout(GetRPSGame,1000 * 70);
           }
 
           function CheckTimer(){
-              CheckGametimer = setTimeout(GetRPSGame,1000 * 40);
+              nCheckGametimer = setTimeout(GetRPSGame,1000 * 40);
           }
 
 
@@ -720,7 +724,7 @@ firebase.database().ref('/LottoCount').set(1);
       }
 
 
-showClock();
+StartTimer();
 
 
 </script>
