@@ -137,6 +137,7 @@
 
 
   var callcount = 0;
+  var windowsRefreshTimeCount = 0;
 
     var isEmpty = function(value){
       if( value == 0 || value == "" || value == null || value == undefined || ( value != null && typeof value == "object" && !Object.keys(value).length ) )
@@ -231,18 +232,37 @@
              return this.getHours().to2() + ':' + this.getMinutes().to2() + ':'
                   + this.getSeconds().to2();
        }
+	   
+	   /*var FirestStartCheckTimer;
+	   
+	   function FirstStartTime()
+	   {
+	      FirestStartCheckTimer = setInterval(FirstStartTimeCheck,1);
+	   }
+	   function FirstStartTimeCheck()
+	   {
+			var date = new Date();
+			console.log(date.getMilliseconds());
+			if(date.getMilliseconds() === 0)
+			{
+				StartTimer();
+				clearInterval(FirestStartCheckTimer);
+			}
+	   }*/
 
       function StartTimer()
       {
+			callcount = 0;
             timer = setInterval(showClock,1000);
       }
 
       function showClock(){
 
             //console.log((new Date()).getHMS());
+			//console.log((new Date()).getMilliseconds());
               callcount ++;
 
-              if(callcount > 60 * 10)
+              if(callcount >= 60 * 10)
               {
                 console.log((new Date()).getHMS());
                 callcount = 0;
@@ -263,6 +283,12 @@
                   CreateRPSGameRoom();
              }
             }
+
+			if((new Date()).getHMS() === '00:00:00')
+			{
+				window.location.reload()
+			}
+			
           }
 
 
