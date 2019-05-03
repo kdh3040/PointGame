@@ -26,6 +26,8 @@ public class UserData
 
     private int AdsViewCount = 0;
 
+    public bool NewUser = false;
+
     // TODO 내정보, 로또정보, 가지고 있는 기프티콘 이미지 로드 할때까지 로딩 페이지에서 머무르게끔 해야함
     public void SetData(string index, string nickName)
     {
@@ -81,11 +83,20 @@ public class UserData
         }
     }
 
+    public void UpdateOldUserPoint()
+    {
+        if(NewUser == false)
+        {
+            Point = TKManager.Instance.ChangeCashToPoint(Cash);
+            FirebaseManager.Instance.SetPoint(Point);
+        }
+    }
+
     public void SetCash(int cash)
     {
         Cash = cash;
-        Point = TKManager.Instance.ChangeCashToPoint(Cash);
-        FirebaseManager.Instance.SetPoint(Point);
+        //Point = TKManager.Instance.ChangeCashToPoint(Cash);
+        //FirebaseManager.Instance.SetPoint(Point);
     }
 
     public void AddCash(int addCash)
@@ -110,38 +121,68 @@ public class UserData
     public void SetPoint(int point)
     {
         Point = point;
-        Cash = TKManager.Instance.ChangePointToCash(Point);
-        FirebaseManager.Instance.SetCash(Cash);
+        //Cash = TKManager.Instance.ChangePointToCash(Point);
+        //FirebaseManager.Instance.SetCash(Cash);
     }
 
     public void AddPoint(int addPoint)
     {
         FirebaseManager.Instance.GetPoint(() =>
         {
+            bool minusPoint = addPoint < 0 ? true : false;
             int tempPoint = Point + addPoint;
-            if (tempPoint >= CommonData.TodayAccumulatePointLimit)
+
+            if (minusPoint == false)
             {
-                int tempValue_2 = CommonData.TodayAccumulatePointLimit - TodayAccumulatePoint;
-                TodayAccumulatePoint += tempValue_2;
-                AllAccumulatePoint += tempValue_2;
-                Point += tempValue_2;
+                if (TodayAccumulatePoint + addPoint >= CommonData.TodayAccumulatePointLimit)
+                {
+                    int tempValue_2 = CommonData.TodayAccumulatePointLimit - TodayAccumulatePoint;
+                    TodayAccumulatePoint += tempValue_2;
+                    AllAccumulatePoint += tempValue_2;
+                    Point += tempValue_2;
+
+                    FirebaseManager.Instance.AddTotalPoint(tempValue_2);
+                }
+                else
+                {
+                    TodayAccumulatePoint += addPoint;
+                    AllAccumulatePoint += addPoint;
+                    Point += addPoint;
+
+                    FirebaseManager.Instance.AddTotalPoint(addPoint);
+                }
             }
             else
             {
-                TodayAccumulatePoint += addPoint;
-                AllAccumulatePoint += addPoint;
-                Point += addPoint;
-
-                FirebaseManager.Instance.AddTotalPoint(addPoint);
+                Point = tempPoint;
             }
 
             if (Point < 0)
                 Point = 0;
 
-            Cash = TKManager.Instance.ChangePointToCash(Point);
+            if(minusPoint)
+            {
+                Cash = TKManager.Instance.ChangePointToCash(Point);
 
-            FirebaseManager.Instance.SetPoint(Point);
-            FirebaseManager.Instance.SetCash(Cash);
+                FirebaseManager.Instance.SetPoint(Point);
+                FirebaseManager.Instance.SetCash(Cash);
+            }
+            else
+            {
+                int tempCash = TKManager.Instance.ChangePointToCash(Point);
+
+                if (tempCash > Cash)
+                {
+                    Cash = TKManager.Instance.ChangePointToCash(Point);
+
+                    FirebaseManager.Instance.SetPoint(Point);
+                    FirebaseManager.Instance.SetCash(Cash);
+                }
+                else
+                {
+                    FirebaseManager.Instance.SetPoint(Point);
+                }
+            }
         });
     }
 
