@@ -260,6 +260,7 @@ public class AdsManager : MonoBehaviour {
             }
             AdComplete = true;
             AdView = false;
+            TKManager.Instance.MyData.AddAdsCount();
             this.interstitial.Show();            
         }        
     }
@@ -286,6 +287,7 @@ public class AdsManager : MonoBehaviour {
 
         if (rewardAdmobVideo.IsLoaded())
         {
+            TKManager.Instance.MyData.AddAdsCount();
             rewardAdmobVideo.Show();
         }
         else
@@ -317,6 +319,7 @@ public class AdsManager : MonoBehaviour {
 
             if (Advertisement.IsReady(rewarded_video_id))
             {
+                TKManager.Instance.MyData.AddAdsCount();
                 var options = new ShowOptions { resultCallback = HandleShowRewardVideoResult };
                 Advertisement.Show(rewarded_video_id, options);
             }
@@ -600,7 +603,6 @@ public class AdsManager : MonoBehaviour {
         }
         else
         {
-            AdEnable = true;
             TKManager.Instance.HideHUD();
             yield break;
         }

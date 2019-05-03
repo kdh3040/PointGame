@@ -227,7 +227,7 @@ public class MiniGamePopup : Popup
             {
                 TKManager.Instance.MyData.AddPoint(CommonData.AdsPointReward);
             }
-            ParentPopup.ShowPopup(new MsgPopup.MsgPopupData("일일 시청 제한으로 인해 미니게임이 불가합니다", () =>
+            ParentPopup.ShowPopup(new MsgPopup.MsgPopupData("잠시후 다시 플레이 하세요", () =>
             {
                 ParentPopup.ClosePopup();
             }));

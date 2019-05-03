@@ -192,6 +192,70 @@ public class TKManager : MonoBehaviour
         return false;
     }
 
+    public int ChangeCashToPoint(int cash)
+    {
+        int oneCashPoint = CommonData.PointToCashChange / CommonData.PointToCashChangeValue;
+        int tempPoint = cash * oneCashPoint;
+
+        int count = 0;
+        int bonusCount = 0;
+        while(true)
+        {
+            bool whileBreak = false;
+            for (int i = 0; i < CommonData.ChangePointBonusArr.Length; i++)
+            {
+                if (tempPoint < CommonData.ChangePointBonusArr[i] + CommonData.ChangePointMax * count)
+                {
+                    whileBreak = true;
+                    break;
+                }
+
+                bonusCount++;
+            }
+
+            count++;
+
+            if (whileBreak)
+                break;
+        }
+
+        tempPoint -= bonusCount * CommonData.BonusPoint;
+
+        return tempPoint;
+    }
+
+    public int ChangePointToCash(int point)
+    {
+        int tempPoint = point;
+        int tempCash = (tempPoint / CommonData.PointToCashChange) * CommonData.PointToCashChangeValue;
+
+        int count = 0;
+        int bonusCount = 0;
+        while (true)
+        {
+            bool whileBreak = false;
+            for (int i = 0; i < CommonData.ChangePointBonusArr.Length; i++)
+            {
+                if (tempPoint < CommonData.ChangePointBonusArr[i] + CommonData.ChangePointMax * count)
+                {
+                    whileBreak = true;
+                    break;
+                }
+
+                bonusCount++;
+            }
+
+            count++;
+
+            if (whileBreak)
+                break;
+        }
+
+        tempCash += bonusCount * CommonData.BonusCash;
+
+        return 100;
+    }
+
 
     [System.Serializable]
     public class SaveData

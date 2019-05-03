@@ -231,10 +231,17 @@ public class LottoSlotUI : MonoBehaviour {
         }
         else
         {
-            ParentPopup.ShowPopup(new LottoWinPopup.LottoWinPopupData(SeriesCount, () =>
+            ParentPopup.ShowPopup(new MsgPopup.MsgPopupData("당첨을 축하드립니다!\n30000P 획득!", () =>
             {
+                TKManager.Instance.MyData.AddPoint(30000);
+                TKManager.Instance.MyData.LottoWinSeriesList.Add(SeriesCount, true);
                 RefreshUI();
             }));
+
+            //ParentPopup.ShowPopup(new LottoWinPopup.LottoWinPopupData(SeriesCount, () =>
+            //{
+            //    RefreshUI();
+            //}));
         }
         
     }
