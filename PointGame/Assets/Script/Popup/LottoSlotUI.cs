@@ -231,7 +231,7 @@ public class LottoSlotUI : MonoBehaviour {
         }
         else
         {
-            ParentPopup.ShowPopup(new MsgPopup.MsgPopupData(string.Format("당첨을 축하드립니다!\n{0}P 획득!", CommonData.LottoWinBonus), () =>
+            ParentPopup.ShowPopup(new MsgPopup.MsgPopupData(string.Format("당첨을 축하드립니다!\n{0:n0}P 획득!", CommonData.LottoWinBonus), () =>
             {
                 TKManager.Instance.MyData.AddPoint(CommonData.LottoWinBonus);
                 TKManager.Instance.MyData.LottoWinSeriesList.Add(SeriesCount, true);
