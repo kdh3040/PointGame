@@ -90,6 +90,9 @@ public class MainUI : MonoBehaviour {
         CurrLottoTime = 0;
         RefreshSound();
 
+        LottoWinnerCount.text = "";
+        LottoWinnerName.text = "";
+
         if (TKManager.Instance.GameOverRouletteStart)
             StartCoroutine(Co_GameOverRouletteStart());
 
@@ -240,6 +243,7 @@ public class MainUI : MonoBehaviour {
         SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
         Popup.ShowPopup(new PointCashSwapPopup.PointCashSwapPopupData());
     }
+
     public void OnClickHelp()
     {
         SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
@@ -277,6 +281,7 @@ public class MainUI : MonoBehaviour {
     {
         if (LottoWinList.Count == TKManager.Instance.LottoWinUserList.Count)
             return;
+            
 
         LottoWinList.Clear();
         LottoWinList.AddRange(TKManager.Instance.LottoWinUserList);
