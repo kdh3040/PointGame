@@ -132,6 +132,8 @@ public class UserData
                 TodayAccumulatePoint += addPoint;
                 AllAccumulatePoint += addPoint;
                 Point += addPoint;
+
+                FirebaseManager.Instance.AddTotalPoint(addPoint);
             }
 
             if (Point < 0)
