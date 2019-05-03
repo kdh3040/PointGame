@@ -511,6 +511,8 @@ public class FirebaseManager : MonoBehaviour
     // 사용자 정보 파이어베이스에 세팅
     public void SetUserData()
     {
+        mDatabaseRef.Child("UserNameList").Child(TKManager.Instance.MyData.NickName).SetValueAsync(TKManager.Instance.MyData.Index);
+
         mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("Index").SetValueAsync(TKManager.Instance.MyData.Index);
         mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("NickName").SetValueAsync(TKManager.Instance.MyData.NickName);
         mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("Point").SetValueAsync(TKManager.Instance.MyData.Point);
@@ -1925,10 +1927,36 @@ public class FirebaseManager : MonoBehaviour
 
             }
         }
-    );
+    );             
+    }
 
 
-     
+    // 닉네임 중복 체크
+    public void IsExistNickName(string NickName)
+    {
+        var tempNickNameExist = false;
+
+        mDatabaseRef.Child("UserNameList").Child(NickName).GetValueAsync().ContinueWith(task =>
+        {
+            if (task.IsFaulted)
+            {
+                // Handle the error...
+            }
+            else if (task.IsCompleted)
+            {
+                DataSnapshot snapshot = task.Result;
+
+                if (snapshot.Exists || snapshot.Value != null)
+                {
+                    tempNickNameExist = true;
+                }
+                else
+                {
+                    tempNickNameExist = false;
+                }
+                //  Debug.LogFormat("UserInfo: Index : {0} NickName {1} Point {2}", TKManager.Instance.MyData.Index, TKManager.Instance.MyData.NickName, TKManager.Instance.MyData.Point);
+            }
+        });
     }
 
     // Update is called once per frame
