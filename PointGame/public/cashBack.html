@@ -46,8 +46,20 @@
   <!-- 내용영역 -->
   <div class="container" id="CONTENTS">
     <!-- 핵심 -->
-    <h3 class="indigo-text center">:+: 캐시백 신청자 내역 :+:</h3>
+    <h3 class="indigo-text center">:+: 포인트 및 캐시백 내역 :+:</h3>
 
+    <table>
+      <h5 class="indigo-text">:+:  포인트 획득 내역  :+:</h5>
+      <thead>
+        <th>날짜</th>
+        <th>획득 포인트</th>
+        <th>획득 캐시</th>
+      </thead>
+      <tbody id="TotalPointInfo"></tbody>
+    </table>
+
+<br>
+<br>
 
     <table>
       <h5 class="indigo-text">:+:  캐시백 신청 내역  :+:</h5>
@@ -169,6 +181,45 @@
 <th>지급 확인</th>
 */
 
+
+var ChangePointBonusArr = [40000, 80000,100000];
+
+    function ChangePointToCash(point)
+   {
+       var tempPoint = point;
+       var tempCash = (tempPoint / 1000) * 50;
+
+       var count = 0;
+       var bonusCount = 0;
+       while (true)
+       {
+           var whileBreak = false;
+           for (var i = 0; i < 3; i++)
+           {
+               if (tempPoint < ChangePointBonusArr[i] + 100000 * count)
+               {
+                   whileBreak = true;
+                   break;
+               }
+
+               bonusCount++;
+           }
+
+           count++;
+
+           if (whileBreak)
+               break;
+       }
+
+       tempCash += bonusCount * 100;
+
+       if(tempCash < 1)
+       tempCash = 0;
+
+       return tempCash;
+   }
+
+
 function SetCashBackHistory(Index,NickName, Name, Bank, Account, Cash)
 {
   var Count = 0;
@@ -214,6 +265,22 @@ function SetCashBackHistory(Index,NickName, Name, Bank, Account, Cash)
 
   });
 }
+
+function SetTotalPointData(Date, Point)
+{
+  var my_tbody = document.getElementById('TotalPointInfo');
+  // var row = my_tbody.insertRow(0); // 상단에 추가
+  var row = my_tbody.insertRow( my_tbody.rows.length ); // 하단에 추가
+  var cell1 = row.insertCell(0);
+  var cell2 = row.insertCell(1);
+  var cell3 = row.insertCell(2);
+
+  cell1.innerHTML = Date;
+  cell2.innerHTML = Point;
+  cell3.innerHTML = ChangePointToCash(Point);
+
+}
+
 
 
     function SetLottoAccountData(Date, Index,NickName, Name, Bank, Account, Cash, AdsViewCount)
@@ -292,20 +359,20 @@ function SetCashBackHistory(Index,NickName, Name, Bank, Account, Cash)
         currentDate = '0' + currentDate;
 
       var result = currentYear + currentMonth + currentDate;
-      console.log(result);
+    //  console.log(result);
 
       //var dbTestRef = firebase.database().ref('/CashBack/' + result)
       var dbTestRef = firebase.database().ref('/CashBack/')
       dbTestRef.on('child_added', function(data){
       //  console.log(data.val().keys);
         var message = data.val();
-        console.log(Object.keys(message).length);
+      //  console.log(Object.keys(message).length);
 
         var index = data.key.toString();
 
         for(var key in message)
         {
-          console.log(message[key]);
+        //  console.log(message[key]);
           SetLottoAccountData(data.key, key, message[key].NickName, message[key].Name, message[key].BankName, message[key].Account, message[key].CachBack, message[key].AdsViewCount);
         }
 
@@ -318,6 +385,38 @@ function SetCashBackHistory(Index,NickName, Name, Bank, Account, Cash)
 
 
        GetCachBackData();
+
+
+       function GetPointData() {
+
+         var d = new Date();
+         var currentYear = d.getFullYear().toString();
+         var currentMonth =  (d.getMonth() + 1).toString();
+         if(currentMonth < 10)
+           currentMonth = '0' + currentMonth;
+         var currentDate = d.getDate().toString();
+         if(currentDate < 10)
+           currentDate = '0' + currentDate;
+
+         var result = currentYear + currentMonth + currentDate;
+         console.log(result);
+
+         //var dbTestRef = firebase.database().ref('/CashBack/' + result)
+         var dbTestRef = firebase.database().ref('/TotalPoint/')
+         dbTestRef.on('child_added', function(data){
+         //  console.log(data.val().keys);
+           var message = data.val();
+           console.log(data.key);
+           SetTotalPointData(data.key, data.val());
+
+
+           //console.log(data.val().CachBack);
+
+         });
+       }
+
+      GetPointData();
+
       function refresh() {
         var dbTestRef = firebase.database().ref('/CashBackHistory')
         dbTestRef.on('child_added', function(data){
@@ -334,6 +433,8 @@ function SetCashBackHistory(Index,NickName, Name, Bank, Account, Cash)
       }
 
 refresh();
+
+
 
 
 </script>
