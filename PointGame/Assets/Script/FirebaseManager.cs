@@ -56,6 +56,8 @@ public class FirebaseManager : MonoBehaviour
     public bool FirebaseProgress = false;
     public Action FirebaseProgressEndCallFunc = null;
 
+    public bool NickNameExist = false;
+
 
     // 가위바위보 시작 플래그
     // 입장시간 10분 후 에 값 변경됨
@@ -543,7 +545,7 @@ public class FirebaseManager : MonoBehaviour
                 {
                     var tempData = snapshot.Value as Dictionary<string, object>;
                     int tempPoint = Convert.ToInt32(tempData["Point"]);
-                    TKManager.Instance.MyData.SetData(tempData["Index"].ToString(), tempData["NickName"].ToString(), tempPoint);
+                    TKManager.Instance.MyData.SetData(tempData["Index"].ToString(), tempData["NickName"].ToString());
 
                     string tempNick = TKManager.Instance.MyData.NickName;
 
@@ -1932,9 +1934,10 @@ public class FirebaseManager : MonoBehaviour
 
 
     // 닉네임 중복 체크
-    public void IsExistNickName(string NickName)
+    public void IsExistNickName(string NickName, Action endAction)
     {
-        var tempNickNameExist = false;
+        SetEndCallFunc(endAction);
+        NickNameExist = false;
 
         mDatabaseRef.Child("UserNameList").Child(NickName).GetValueAsync().ContinueWith(task =>
         {
@@ -1948,12 +1951,14 @@ public class FirebaseManager : MonoBehaviour
 
                 if (snapshot.Exists || snapshot.Value != null)
                 {
-                    tempNickNameExist = true;
+                    NickNameExist = true;
                 }
                 else
                 {
-                    tempNickNameExist = false;
+                    NickNameExist = false;
                 }
+
+                FirebaseProgress = false;
                 //  Debug.LogFormat("UserInfo: Index : {0} NickName {1} Point {2}", TKManager.Instance.MyData.Index, TKManager.Instance.MyData.NickName, TKManager.Instance.MyData.Point);
             }
         });

@@ -81,24 +81,28 @@ public class PointCashSwapPopup : Popup
                 //FirebaseManager.Instance.SetCashInfo(Name.text.ToString(), Bank.text.ToString(), AccountNumber.text.ToString(), TKManager.Instance.MyData.Cash);
 
                 int tempCash = TKManager.Instance.MyData.Cash;
-                int minChangeValue = (tempCash - CommonData.MinCashChange) / CommonData.MinCashChangeUnit;
-                int refundCash = CommonData.MinCashChange + minChangeValue * CommonData.MinCashChangeUnit;
-                if(refundCash < CommonData.MinCashChange)
+                int refundCash = 0;
+
+                if (tempCash - CommonData.MinCashChange == 0)
+                {
+                    refundCash = CommonData.MinCashChange;
+                }
+                else if(tempCash - CommonData.MinCashChange < 0)
                 {
                     CloseAction();
                     ParentPopup.ShowPopup(new MsgPopup.MsgPopupData("캐시를 교환 할 수 없습니다"));
                     return;
                 }
+                else
+                {
+                    int minChangeValue = (tempCash - CommonData.MinCashChange) / CommonData.MinCashChangeUnit;
+                    refundCash = CommonData.MinCashChange + minChangeValue * CommonData.MinCashChangeUnit;
+                }
 
                 FirebaseManager.Instance.SetCashInfo(Name.text.ToString(), Bank.text.ToString(), AccountNumber.text.ToString(), refundCash);
-
-                int tempPoint = TKManager.Instance.MyData.AllAccumulatePoint;
-                tempPoint -= (refundCash / CommonData.PointToCashChangeValue) * CommonData.PointToCashChange;
-
-                TKManager.Instance.MyData.SetAllAccumulatePoint(tempPoint);
-                FirebaseManager.Instance.SetTotalAccumPoint(TKManager.Instance.MyData.AllAccumulatePoint);
                 TKManager.Instance.MyData.RemoveCash(refundCash);
                 CashRefundInfoObj.gameObject.SetActive(false);
+                TKManager.Instance.MyData.ResetAdsCount();
                 CloseAction();
             });
 

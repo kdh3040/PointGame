@@ -37,4 +37,6 @@ public class CommonData : MonoBehaviour
     public static int BonusCash = 100;
     public static int BonusPoint = 2000;
 
+    public static int LottoWinBonus = 30000;
+
 }

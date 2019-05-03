@@ -109,21 +109,55 @@ public class SignUpPopup : MonoBehaviour
         NickNameStr = NickNameStr.Replace("]", "");
 
         if (emptyString)
+        {
             NickNameStr = string.Format("guest_{0:D4}", UnityEngine.Random.Range(1, 9999));
 
-        if(FirebaseManager.Instance.ReviewMode)
-        {
-            EndAction(NickNameStr, RecommenderCodeStr);
+            if (FirebaseManager.Instance.ReviewMode)
+            {
+                EndAction(NickNameStr, RecommenderCodeStr);
+            }
+            else
+            {
+                MsgOkButton.onClick.RemoveAllListeners();
+                MsgOkButton.onClick.AddListener(OnClickMsgLoginOkButton);
+                MsgPopup.gameObject.SetActive(true);
+                MsgText.text = "게임 설명과 푸시 알림을\n확인 후 플레이 하시기 바랍니다";
+            }
         }
         else
         {
-            MsgOkButton.onClick.RemoveAllListeners();
-            MsgOkButton.onClick.AddListener(OnClickMsgLoginOkButton);
-            MsgPopup.gameObject.SetActive(true);
-            MsgText.text = "게임 설명과 푸시 알림을\n확인 후 플레이 하시기 바랍니다";
+            if (FirebaseManager.Instance.ReviewMode)
+            {
+                EndAction(NickNameStr, RecommenderCodeStr);
+            }
+            else
+            {
+                FirebaseManager.Instance.IsExistNickName(NickNameStr, () =>
+                {
+                    if (FirebaseManager.Instance.NickNameExist)
+                    {
+                        MsgOkButton.onClick.RemoveAllListeners();
+                        MsgOkButton.onClick.AddListener(OnClickMsgOkButton);
+                        MsgPopup.gameObject.SetActive(true);
+                        MsgText.text = "닉네임이 중복 입니다";
+                    }
+                    else
+                    {
+                        if (FirebaseManager.Instance.ReviewMode)
+                        {
+                            EndAction(NickNameStr, RecommenderCodeStr);
+                        }
+                        else
+                        {
+                            MsgOkButton.onClick.RemoveAllListeners();
+                            MsgOkButton.onClick.AddListener(OnClickMsgLoginOkButton);
+                            MsgPopup.gameObject.SetActive(true);
+                            MsgText.text = "게임 설명과 푸시 알림을\n확인 후 플레이 하시기 바랍니다";
+                        }
+                    }
+                });
+            }
         }
-        
-
 
         //CloseAction();
     }

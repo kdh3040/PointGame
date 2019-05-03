@@ -27,11 +27,10 @@ public class UserData
     private int AdsViewCount = 0;
 
     // TODO 내정보, 로또정보, 가지고 있는 기프티콘 이미지 로드 할때까지 로딩 페이지에서 머무르게끔 해야함
-    public void SetData(string index, string nickName, int point)
+    public void SetData(string index, string nickName)
     {
         Index = index;
         NickName = nickName;
-        Point = point;
 
        
 
@@ -287,5 +286,9 @@ public class UserData
         AdsViewCount++;
         FirebaseManager.Instance.AddAdsCount(AdsViewCount);
     }
-    
+    public void ResetAdsCount()
+    {
+        AdsViewCount = 0;
+        FirebaseManager.Instance.AddAdsCount(0);
+    }
 }

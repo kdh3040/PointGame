@@ -194,6 +194,9 @@ public class TKManager : MonoBehaviour
 
     public int ChangeCashToPoint(int cash)
     {
+        if (cash < 0)
+            return 0;
+
         int oneCashPoint = CommonData.PointToCashChange / CommonData.PointToCashChangeValue;
         int tempPoint = cash * oneCashPoint;
 
@@ -226,6 +229,9 @@ public class TKManager : MonoBehaviour
 
     public int ChangePointToCash(int point)
     {
+        if (point < 0)
+            return 0;
+
         int tempPoint = point;
         int tempCash = (tempPoint / CommonData.PointToCashChange) * CommonData.PointToCashChangeValue;
 
@@ -253,7 +259,7 @@ public class TKManager : MonoBehaviour
 
         tempCash += bonusCount * CommonData.BonusCash;
 
-        return 100;
+        return tempCash;
     }
 
 
