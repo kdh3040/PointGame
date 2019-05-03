@@ -1102,7 +1102,7 @@ public class FirebaseManager : MonoBehaviour
 
     }
 
-    public void GetReviewVersion()
+    public void GetReviewVersion(Action endAction = null)
     {
 
 #if UNITY_IOS
@@ -1115,6 +1115,9 @@ public class FirebaseManager : MonoBehaviour
 #else
         string dataKey = "editor_ReviewVersion";
 #endif
+        if(endAction != null)
+            SetEndCallFunc(endAction);
+
         mDatabaseRef.Child(dataKey).GetValueAsync().ContinueWith(task =>
         {
 
@@ -1133,7 +1136,10 @@ public class FirebaseManager : MonoBehaviour
 
                 ReviewMode = version < ReviewVersion;
                 //ReviewMode = true;
-                AddFirstLoadingComplete();
+                if(endAction == null)
+                    AddFirstLoadingComplete();
+                else
+                    FirebaseProgress = false;
 
             }
         }

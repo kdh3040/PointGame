@@ -42,7 +42,7 @@ public class SignUpPopup : MonoBehaviour
         Login.gameObject.SetActive(true);
         InfoInput.gameObject.SetActive(false);
 
-
+        FirebaseManager.Instance.GetReviewVersion(() => { });
 #if UNITY_ANDROID
 
         LoginMsg.text = "구글 로그인";
