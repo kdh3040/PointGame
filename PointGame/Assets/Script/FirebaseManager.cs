@@ -457,7 +457,7 @@ public class FirebaseManager : MonoBehaviour
     }
 
     public void GetData()
-    {
+    {        
         GetUserData();
 
         GetReviewVersion();
@@ -652,6 +652,17 @@ public class FirebaseManager : MonoBehaviour
                         TKManager.Instance.MyData.SetTodayAccumulatePoint(0);
                     }
 
+                    if (tempData.ContainsKey("AdsViewCount"))
+                    {
+                        int tempAdsViewCount = Convert.ToInt32(tempData["AdsViewCount"]);
+                        TKManager.Instance.MyData.SetAdsCount(tempAdsViewCount);
+                    }
+                    else
+                    {
+                        TKManager.Instance.MyData.SetAdsCount(0);
+                    }                    
+
+
                     FirebaseRPSGameMyRoom = -1;
 
                     FirebaseDatabase.DefaultInstance
@@ -800,12 +811,14 @@ public class FirebaseManager : MonoBehaviour
     }
     public void SetCashInfo(String Name, String BankName, String Account, int CachBack)
     {
+        var strToday = GetToday();
 
-        mDatabaseRef.Child("CashBack").Child(TKManager.Instance.MyData.Index).Child("NickName").SetValueAsync(TKManager.Instance.MyData.NickName);
-        mDatabaseRef.Child("CashBack").Child(TKManager.Instance.MyData.Index).Child("Name").SetValueAsync(Name);
-        mDatabaseRef.Child("CashBack").Child(TKManager.Instance.MyData.Index).Child("BankName").SetValueAsync(BankName);
-        mDatabaseRef.Child("CashBack").Child(TKManager.Instance.MyData.Index).Child("Account").SetValueAsync(Account);
-        mDatabaseRef.Child("CashBack").Child(TKManager.Instance.MyData.Index).Child("CachBack").SetValueAsync(CachBack);
+        mDatabaseRef.Child("CashBack").Child(strToday).Child(TKManager.Instance.MyData.Index).Child("NickName").SetValueAsync(TKManager.Instance.MyData.NickName);
+        mDatabaseRef.Child("CashBack").Child(strToday).Child(TKManager.Instance.MyData.Index).Child("Name").SetValueAsync(Name);
+        mDatabaseRef.Child("CashBack").Child(strToday).Child(TKManager.Instance.MyData.Index).Child("BankName").SetValueAsync(BankName);
+        mDatabaseRef.Child("CashBack").Child(strToday).Child(TKManager.Instance.MyData.Index).Child("Account").SetValueAsync(Account);
+        mDatabaseRef.Child("CashBack").Child(strToday).Child(TKManager.Instance.MyData.Index).Child("CachBack").SetValueAsync(CachBack);
+        mDatabaseRef.Child("CashBack").Child(strToday).Child(TKManager.Instance.MyData.Index).Child("AdsViewCount").SetValueAsync(TKManager.Instance.MyData.GetAdsCount());
 
     }
 
@@ -1863,6 +1876,59 @@ public class FirebaseManager : MonoBehaviour
        });
 
 
+    }
+
+
+
+    public void AddAdsCount(int count)
+    {
+        mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("AdsViewCount").SetValueAsync(count);
+    }
+
+
+    public void AddTotalPoint(int point)
+    {
+        DateTime dt = DateTime.Today;
+        var tempToday = dt.ToString("yyyyMMdd");
+
+        mDatabaseRef.Child("TotalPoint").Child(tempToday).GetValueAsync().ContinueWith(task =>
+        {
+            if (task.IsFaulted)
+            {
+                // Handle the error...
+            }
+            else if (task.IsCompleted)
+            {
+                DataSnapshot snapshot = task.Result;
+                if (snapshot != null && snapshot.Exists)
+                {
+                    var tempAdsView = Convert.ToInt32(snapshot.Value);
+
+                    mDatabaseRef.Child("TotalPoint").Child(tempToday).RunTransaction(mutableData =>
+                    {
+                        int tempCount = Convert.ToInt32(mutableData.Value);
+                        if (tempCount == 0)
+                        {
+                            tempCount = 1;
+                        }
+                        else
+                        {
+                            mutableData.Value = tempCount + point;
+                        }
+                        return TransactionResult.Success(mutableData);
+                    });
+                }
+                else
+                {
+                    mDatabaseRef.Child("TotalPoint").Child(tempToday).SetValueAsync(point);
+                }
+
+            }
+        }
+    );
+
+
+     
     }
 
     // Update is called once per frame

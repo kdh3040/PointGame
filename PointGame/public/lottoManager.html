@@ -80,7 +80,20 @@
 
     <br>
     <br>
+    
+    <table>
+      <h5 class="indigo-text">:+: 복권 구매 인원 현황 :+:
+      <span id="LOTTO_AVE_PURCHASE" class="blue-text">평균 구매 인원</span></h5>
 
+      <thead>
+        <th>회차</th>
+        <th>인원</th>
+      </thead>
+      <tbody id="lottoBuyUserConut"></tbody>
+    </table>
+
+    <br>
+    <br>
     <table>
       <h5 class="indigo-text">:+: 당첨금 신청 내역  :+:</h5>
       <thead>
@@ -110,17 +123,7 @@
                 <br>
                 <br>
 
-    <table>
-      <h5 class="indigo-text">:+: 복권 구매 인원 현황 :+:</h5>
-      <thead>
-        <th>회차</th>
-        <th>인원</th>
-      </thead>
-      <tbody id="lottoBuyUserConut"></tbody>
-    </table>
 
-    <br>
-    <br>
 
   </div>
 
@@ -349,11 +352,25 @@
 
   }
 
-  var dbTestRef = firebase.database().ref('/LottoUsersBySeries')
+var totalUserCount = 0;
+
+  var dbTestRef = firebase.database().ref('/LottoUsersBySeries')//.orderByKey().limitToLast(5)
   dbTestRef.on('child_added', function(data){
     //console.log( data.val());
     var Series = data.key.toString();
     var UserCount = data.val();
+
+    totalUserCount += UserCount;
+    $("#LOTTO_AVE_PURCHASE").text('평균 ' + Math.ceil(totalUserCount / Series) + '명');
+
+  });
+
+  var dbTestRef = firebase.database().ref('/LottoUsersBySeries').orderByKey().limitToLast(5)
+  dbTestRef.on('child_added', function(data){
+    //console.log( data.val());
+    var Series = data.key.toString();
+    var UserCount = data.val();
+
     SetLottoUserCount(Series, UserCount);
 
   });

@@ -91,10 +91,12 @@ public class UserData
         if (FirebaseManager.Instance.ExamineMode)
             return;
 
+        FirebaseManager.Instance.AddTotalPoint(point);
+
         FirebaseManager.Instance.GetPoint(() =>
         {
             AddTodayAccumulate(point);
-            FirebaseManager.Instance.SetPoint(Point);
+            FirebaseManager.Instance.SetPoint(Point);           
         });
     }
     public void RemovePoint(int point)
@@ -195,9 +197,14 @@ public class UserData
     {
         AdsViewCount = count;
     }
-
+    public int GetAdsCount()
+    {
+        return AdsViewCount;
+    }
     public void AddAdsCount()
     {
         AdsViewCount++;
+        FirebaseManager.Instance.AddAdsCount(AdsViewCount);
     }
+    
 }

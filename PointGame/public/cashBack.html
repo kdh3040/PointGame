@@ -52,8 +52,10 @@
     <table>
       <h5 class="indigo-text">:+:  캐시백 신청 내역  :+:</h5>
       <thead>
+        <th>신청 날짜</th>
         <th>신청자 아이디</th>
         <th>신청자 닉네임</th>
+        <th>신청자 광고 횟수</th>
         <th>신청자 정보</th>
         <th>신청 금액</th>
         <th>지급 확인</th>
@@ -214,7 +216,7 @@ function SetCashBackHistory(Index,NickName, Name, Bank, Account, Cash)
 }
 
 
-    function SetLottoAccountData(Index,NickName, Name, Bank, Account, Cash)
+    function SetLottoAccountData(Date, Index,NickName, Name, Bank, Account, Cash, AdsViewCount)
     {
       var my_tbody = document.getElementById('CashAccountInfo');
       // var row = my_tbody.insertRow(0); // 상단에 추가
@@ -224,11 +226,15 @@ function SetCashBackHistory(Index,NickName, Name, Bank, Account, Cash)
       var cell3 = row.insertCell(2);
       var cell4 = row.insertCell(3);
       var cell5 = row.insertCell(4);
+      var cell6 = row.insertCell(5);
+      var cell7 = row.insertCell(6);
 
-      cell1.innerHTML = Index;
-      cell2.innerHTML = NickName;
-      cell3.innerHTML = Bank + '   ' + Account + '   (' + Name + ')';
-      cell4.innerHTML = Cash;
+      cell1.innerHTML = Date;
+      cell2.innerHTML = Index;
+      cell3.innerHTML = NickName;
+      cell4.innerHTML = AdsViewCount;
+      cell5.innerHTML = Bank + '   ' + Account + '   (' + Name + ')';
+      cell6.innerHTML = Cash;
 
       var element3 = document.createElement("input");
       element3.type = "button";
@@ -238,7 +244,7 @@ function SetCashBackHistory(Index,NickName, Name, Bank, Account, Cash)
       deleteLine(this);
       })
 
-      cell5.appendChild(element3);
+      cell7.appendChild(element3);
     }
 
 
@@ -274,20 +280,44 @@ function SetCashBackHistory(Index,NickName, Name, Bank, Account, Cash)
         tr.remove();
     }
 
+    function GetCachBackData() {
 
+      var d = new Date();
+      var currentYear = d.getFullYear().toString();
+      var currentMonth =  (d.getMonth() + 1).toString();
+      if(currentMonth < 10)
+        currentMonth = '0' + currentMonth;
+      var currentDate = d.getDate().toString();
+      if(currentDate < 10)
+        currentDate = '0' + currentDate;
 
-      var dbTestRef = firebase.database().ref('/CashBack')
+      var result = currentYear + currentMonth + currentDate;
+      console.log(result);
+
+      //var dbTestRef = firebase.database().ref('/CashBack/' + result)
+      var dbTestRef = firebase.database().ref('/CashBack/')
       dbTestRef.on('child_added', function(data){
-        //console.log(data.key);
+      //  console.log(data.val().keys);
+        var message = data.val();
+        console.log(Object.keys(message).length);
+
         var index = data.key.toString();
 
-        console.log(data.val().CachBack);
+        for(var key in message)
+        {
+          console.log(message[key]);
+          SetLottoAccountData(data.key, key, message[key].NickName, message[key].Name, message[key].BankName, message[key].Account, message[key].CachBack, message[key].AdsViewCount);
+        }
 
-        SetLottoAccountData(index, data.val().NickName, data.val().Name, data.val().BankName, data.val().Account, data.val().CachBack);
+        //console.log(data.val().CachBack);
 
 
       });
 
+    }
+
+
+       GetCachBackData();
       function refresh() {
         var dbTestRef = firebase.database().ref('/CashBackHistory')
         dbTestRef.on('child_added', function(data){
