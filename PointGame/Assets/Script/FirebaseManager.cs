@@ -1076,6 +1076,8 @@ public class FirebaseManager : MonoBehaviour
         string dataKey = "aos_ReviewVersion";
 #elif (UNITY_ANDROID && UNITY_EDITOR)
         string dataKey = "editor_ReviewVersion";
+#else
+        string dataKey = "editor_ReviewVersion";
 #endif
         mDatabaseRef.Child(dataKey).GetValueAsync().ContinueWith(task =>
         {

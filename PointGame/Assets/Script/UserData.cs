@@ -24,6 +24,8 @@ public class UserData
     public string RecommenderCode = "";
     public int RPSGameRoomNumber = 0;
 
+    private int AdsViewCount = 0;
+
     // TODO 내정보, 로또정보, 가지고 있는 기프티콘 이미지 로드 할때까지 로딩 페이지에서 머무르게끔 해야함
     public void SetData(string index, string nickName, int point)
     {
@@ -187,5 +189,15 @@ public class UserData
     public string GetRecommenderCode()
     {
         return RecommenderCode;
+    }
+
+    public void SetAdsCount(int count)
+    {
+        AdsViewCount = count;
+    }
+
+    public void AddAdsCount()
+    {
+        AdsViewCount++;
     }
 }
