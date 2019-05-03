@@ -233,7 +233,8 @@ public class TKManager : MonoBehaviour
             return 0;
 
         int tempPoint = point;
-        int tempCash = (int)((float)(tempPoint / CommonData.PointToCashChange) * CommonData.PointToCashChangeValue);
+        //int tempCash = (int)(((float)tempPoint / (float)CommonData.PointToCashChange) * CommonData.PointToCashChangeValue);
+        int tempCash = (tempPoint / CommonData.PointToCashChange) * CommonData.PointToCashChangeValue;
 
         int count = 0;
         int bonusCount = 0;

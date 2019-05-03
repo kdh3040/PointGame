@@ -47,7 +47,7 @@ public class FirebaseManager : MonoBehaviour
     public bool FirstLoadingComplete = false;
     public int LoadingCount = 0;
 
-    private int ReviewVersion = 3;
+    private int ReviewVersion = 4;
     public bool ReviewMode = true;
     public bool ExamineMode = true;
 
@@ -524,6 +524,8 @@ public class FirebaseManager : MonoBehaviour
         mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("Cash").SetValueAsync(0);
         mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("FirebaseRPSGameMyRoom").SetValueAsync(-1);
         mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("FirebaseRPSGameMyPosition").SetValueAsync(-1);
+
+        mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("NewUser").SetValueAsync(true);
     }
     // 사용자 정보 파이어베이스에서 로드
     public void GetUserData()
@@ -544,8 +546,15 @@ public class FirebaseManager : MonoBehaviour
                 if (snapshot.Exists)
                 {
                     var tempData = snapshot.Value as Dictionary<string, object>;
-                    int tempPoint = Convert.ToInt32(tempData["Point"]);
+                    //int tempPoint = Convert.ToInt32(tempData["Point"]);
                     TKManager.Instance.MyData.SetData(tempData["Index"].ToString(), tempData["NickName"].ToString());
+
+                    if (tempData.ContainsKey("NewUser") == false)
+                        TKManager.Instance.MyData.NewUser = false;
+                    else
+                        TKManager.Instance.MyData.NewUser = true;
+
+                    mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("NewUser").SetValueAsync(true);
 
                     string tempNick = TKManager.Instance.MyData.NickName;
 
@@ -612,6 +621,16 @@ public class FirebaseManager : MonoBehaviour
                     else
                     {
                         TKManager.Instance.MyData.SetCash(0);
+                    }
+
+                    if (tempData.ContainsKey("Point"))
+                    {
+                        int tempPoint = Convert.ToInt32(tempData["Point"]);
+                        TKManager.Instance.MyData.SetPoint(tempPoint);
+                    }
+                    else
+                    {
+                        TKManager.Instance.MyData.SetPoint(0);
                     }
 
                     if (tempData.ContainsKey("TotalAccumPoint"))

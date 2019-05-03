@@ -167,6 +167,8 @@ public class LoadingUI : MonoBehaviour {
 
         yield return ImageCache.Instance.GetTexture(giftUrlList);
 
+        TKManager.Instance.MyData.UpdateOldUserPoint();
+
         yield return null;
         TKManager.Instance.HideHUD();
         SceneManager.LoadScene("MainScene", LoadSceneMode.Single);
