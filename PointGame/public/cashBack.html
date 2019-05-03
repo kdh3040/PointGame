@@ -187,8 +187,8 @@ var ChangePointBonusArr = [40000, 80000,100000];
     function ChangePointToCash(point)
    {
        var tempPoint = point;
-       var tempCash = (tempPoint / 1000) * 50;
-
+       var tempCash = Math.floor(tempPoint / 1000) * 50;
+      
        var count = 0;
        var bonusCount = 0;
        while (true)
@@ -213,7 +213,7 @@ var ChangePointBonusArr = [40000, 80000,100000];
 
        tempCash += bonusCount * 100;
 
-       if(tempCash < 1)
+       if(tempCash < 50)
        tempCash = 0;
 
        return tempCash;
