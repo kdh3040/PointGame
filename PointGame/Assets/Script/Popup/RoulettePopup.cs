@@ -61,7 +61,7 @@ public class RoulettePopup : Popup
                 if (i == 0)
                 {
                     RoulettePointText[i].gameObject.SetActive(true);
-                    RoulettePointText[i].text = string.Format("{0:n0}C", RoulettePercent[i].Key);
+                    RoulettePointText[i].text = "꽝";//string.Format("{0:n0}C", RoulettePercent[i].Key);
                 }
                 else
                 {
@@ -132,7 +132,8 @@ public class RoulettePopup : Popup
         else
         {
             if (roulettePercentIndex == 0)
-                ParentPopup.ShowPopup(new RoulettePointResultPopup.RoulettePointResultPopupData(keyValue.Key, RoulettePointResultPopup.POINT_TYPE.CASH));
+                ParentPopup.ShowPopup(new MsgPopup.MsgPopupData("꽝 입니다\n다시 도전해보세요"));
+            //ParentPopup.ShowPopup(new RoulettePointResultPopup.RoulettePointResultPopupData(keyValue.Key, RoulettePointResultPopup.POINT_TYPE.CASH));
             else
                 ParentPopup.ShowPopup(new RoulettePointResultPopup.RoulettePointResultPopupData(keyValue.Key, RoulettePointResultPopup.POINT_TYPE.POINT));
         }

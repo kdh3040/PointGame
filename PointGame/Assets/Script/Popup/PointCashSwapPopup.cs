@@ -81,8 +81,8 @@ public class PointCashSwapPopup : Popup
                 //FirebaseManager.Instance.SetCashInfo(Name.text.ToString(), Bank.text.ToString(), AccountNumber.text.ToString(), TKManager.Instance.MyData.Cash);
 
                 int tempCash = TKManager.Instance.MyData.Cash;
-                int minChangeValue = tempCash / CommonData.MinCashChangeUnit;
-                int refundCash = minChangeValue * CommonData.MinCashChangeUnit;
+                int minChangeValue = (tempCash - CommonData.MinCashChange) / CommonData.MinCashChangeUnit;
+                int refundCash = CommonData.MinCashChange + minChangeValue * CommonData.MinCashChangeUnit;
                 if(refundCash < CommonData.MinCashChange)
                 {
                     CloseAction();

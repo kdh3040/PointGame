@@ -82,57 +82,71 @@ public class UserData
         }
     }
 
-    public void SetPoint(int point)
-    {
-        Point = point;
-    }
-    public void AddPoint(int point, bool first = false)
-    {
-        if (FirebaseManager.Instance.ExamineMode)
-            return;
-
-        FirebaseManager.Instance.GetPoint(() =>
-        {
-            AddTodayAccumulate(point);
-            FirebaseManager.Instance.SetPoint(Point);
-        });
-    }
-    public void RemovePoint(int point)
-    {
-        Point -= point;
-        if (Point < 0)
-            Point = 0;
-
-        FirebaseManager.Instance.SetPoint(Point);
-    }
     public void SetCash(int cash)
     {
-        // 클라세팅용 함수
         Cash = cash;
+        Point = TKManager.Instance.ChangeCashToPoint(Cash);
+        FirebaseManager.Instance.SetPoint(Point);
     }
-    public void AddCash(int cash)
-    {
-        if (FirebaseManager.Instance.ExamineMode)
-            return;
 
+    public void AddCash(int addCash)
+    {
         FirebaseManager.Instance.GetCash(() =>
         {
-            Cash += cash;
+            Cash += addCash;
+            if (Cash < 0)
+                Cash = 0;
+
+            Point = TKManager.Instance.ChangeCashToPoint(Cash);
+            FirebaseManager.Instance.SetPoint(Point);
             FirebaseManager.Instance.SetCash(Cash);
         });
     }
-    public void RemoveCash(int cash)
-    {
-        Cash -= cash;
-        if (Cash < 0)
-            Cash = 0;
 
+    public void RemoveCash(int removeCash)
+    {
+        AddCash(-removeCash);
+    }
+
+    public void SetPoint(int point)
+    {
+        Point = point;
+        Cash = TKManager.Instance.ChangePointToCash(Point);
         FirebaseManager.Instance.SetCash(Cash);
     }
 
-    public void SetTodayAccumulatePoint(int point)
+    public void AddPoint(int addPoint)
     {
-        TodayAccumulatePoint = point;
+        FirebaseManager.Instance.GetPoint(() =>
+        {
+            int tempPoint = Point + addPoint;
+            if (tempPoint >= CommonData.TodayAccumulatePointLimit)
+            {
+                int tempValue_2 = CommonData.TodayAccumulatePointLimit - TodayAccumulatePoint;
+                TodayAccumulatePoint += tempValue_2;
+                AllAccumulatePoint += tempValue_2;
+                Point += tempValue_2;
+            }
+            else
+            {
+                TodayAccumulatePoint += addPoint;
+                AllAccumulatePoint += addPoint;
+                Point += addPoint;
+            }
+
+            if (Point < 0)
+                Point = 0;
+
+            Cash = TKManager.Instance.ChangePointToCash(Point);
+
+            FirebaseManager.Instance.SetPoint(Point);
+            FirebaseManager.Instance.SetCash(Cash);
+        });
+    }
+
+    public void RemovePoint(int removePoint)
+    {
+        AddPoint(-removePoint);
     }
 
     public void SetAllAccumulatePoint(int point)
@@ -140,47 +154,114 @@ public class UserData
         AllAccumulatePoint = point;
         if (AllAccumulatePoint < 0)
             AllAccumulatePoint = 0;
-
-        PointToCashChangeCount = AllAccumulatePoint / CommonData.PointToCashChange;
-
-        //if (Cash > PointToCashChangeCount * CommonData.PointToCashChangeValue)
-        //{
-        //    Cash = PointToCashChangeCount * CommonData.PointToCashChangeValue;
-        //    FirebaseManager.Instance.SetCash(Cash);
-        //}
-            
     }
 
-    public void AddTodayAccumulate(int point)
+    public void SetTodayAccumulatePoint(int point)
     {
-        if (TodayAccumulatePoint >= CommonData.TodayAccumulatePointLimit)
-            return;
-
-        int tempValue = TodayAccumulatePoint + point;
-        if (tempValue >= CommonData.TodayAccumulatePointLimit)
-        {
-            int tempValue_2 = CommonData.TodayAccumulatePointLimit - TodayAccumulatePoint;
-            TodayAccumulatePoint += tempValue_2;
-            AllAccumulatePoint += tempValue_2;
-            Point += tempValue_2;
-        }
-        else
-        {
-            TodayAccumulatePoint += point;
-            AllAccumulatePoint += point;
-            Point += point;
-        }
-
-        int changeCount = AllAccumulatePoint / CommonData.PointToCashChange;
-        if (changeCount > PointToCashChangeCount)
-        {
-            AddCash(CommonData.PointToCashChangeValue * (changeCount - PointToCashChangeCount));
-            PointToCashChangeCount = changeCount;
-        }
-
-        FirebaseManager.Instance.SetTodayAccumPoint(TodayAccumulatePoint);
-        FirebaseManager.Instance.SetTotalAccumPoint(AllAccumulatePoint);
+        TodayAccumulatePoint = point;
+        if (TodayAccumulatePoint < 0)
+            TodayAccumulatePoint = 0;
     }
+
+    //public void SetPoint(int point)
+    //{
+    //    Point = point;
+    //}
+    //public void AddPoint(int point, bool first = false)
+    //{
+    //    if (FirebaseManager.Instance.ExamineMode)
+    //        return;
+
+    //    FirebaseManager.Instance.GetPoint(() =>
+    //    {
+    //        AddTodayAccumulate(point);
+    //        FirebaseManager.Instance.SetPoint(Point);
+    //    });
+    //}
+    //public void RemovePoint(int point)
+    //{
+    //    Point -= point;
+    //    if (Point < 0)
+    //        Point = 0;
+
+    //    FirebaseManager.Instance.SetPoint(Point);
+    //}
+    //public void SetCash(int cash)
+    //{
+    //    // 클라세팅용 함수
+    //    Cash = cash;
+    //}
+    //public void AddCash(int cash)
+    //{
+    //    if (FirebaseManager.Instance.ExamineMode)
+    //        return;
+
+    //    FirebaseManager.Instance.GetCash(() =>
+    //    {
+    //        Cash += cash;
+    //        FirebaseManager.Instance.SetCash(Cash);
+    //    });
+    //}
+    //public void RemoveCash(int cash)
+    //{
+    //    Cash -= cash;
+    //    if (Cash < 0)
+    //        Cash = 0;
+
+    //    FirebaseManager.Instance.SetCash(Cash);
+    //}
+
+    //public void SetTodayAccumulatePoint(int point)
+    //{
+    //    TodayAccumulatePoint = point;
+    //}
+
+    //public void SetAllAccumulatePoint(int point)
+    //{
+    //    AllAccumulatePoint = point;
+    //    if (AllAccumulatePoint < 0)
+    //        AllAccumulatePoint = 0;
+
+    //    PointToCashChangeCount = AllAccumulatePoint / CommonData.PointToCashChange;
+
+    //    //if (Cash > PointToCashChangeCount * CommonData.PointToCashChangeValue)
+    //    //{
+    //    //    Cash = PointToCashChangeCount * CommonData.PointToCashChangeValue;
+    //    //    FirebaseManager.Instance.SetCash(Cash);
+    //    //}
+
+    //}
+
+    //public void AddTodayAccumulate(int point)
+    //{
+    //    if (TodayAccumulatePoint >= CommonData.TodayAccumulatePointLimit)
+    //        return;
+
+    //    int tempValue = TodayAccumulatePoint + point;
+    //    if (tempValue >= CommonData.TodayAccumulatePointLimit)
+    //    {
+    //        int tempValue_2 = CommonData.TodayAccumulatePointLimit - TodayAccumulatePoint;
+    //        TodayAccumulatePoint += tempValue_2;
+    //        AllAccumulatePoint += tempValue_2;
+    //        Point += tempValue_2;
+    //    }
+    //    else
+    //    {
+    //        TodayAccumulatePoint += point;
+    //        AllAccumulatePoint += point;
+    //        Point += point;
+    //    }
+
+    //    int changeCount = AllAccumulatePoint / CommonData.PointToCashChange;
+    //    if (changeCount > PointToCashChangeCount)
+    //    {
+    //        AddCash(CommonData.PointToCashChangeValue * (changeCount - PointToCashChangeCount));
+    //        PointToCashChangeCount = changeCount;
+    //    }
+
+    //    FirebaseManager.Instance.SetTodayAccumPoint(TodayAccumulatePoint);
+    //    FirebaseManager.Instance.SetTotalAccumPoint(AllAccumulatePoint);
+    //}
 
     public void SetRecommenderCode(string code)
     {

@@ -12,11 +12,11 @@ public class CommonData : MonoBehaviour
     public static int RPS_WINNER = 5000;
     public static int RPS_SECOND_WINNER = 3000;
 
-    public static int TodayAccumulatePointLimit = 10000;
+    public static int TodayAccumulatePointLimit = 100000;
     public static int PointToCashChange = 1000;
-    public static int PointToCashChangeValue = 12;
-    public static int MinCashChange = 5000;
-    public static int MinCashChangeUnit = 1000;
+    public static int PointToCashChangeValue = 50;
+    public static int MinCashChange = 50000;
+    public static int MinCashChangeUnit = 20000;
 
     public static int LottoRefSeries = 1000000;
 
@@ -31,5 +31,10 @@ public class CommonData : MonoBehaviour
     public static float RPS_GAME_DRAW_PLAY_TIME = 3f;
 
     public static int RecommendGetCost = 500;
+
+    public static int ChangePointMax = 100000;
+    public static int[] ChangePointBonusArr = { 40000, 80000, 100000 };
+    public static int BonusCash = 100;
+    public static int BonusPoint = 2000;
 
 }
