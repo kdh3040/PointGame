@@ -34,9 +34,9 @@ public class LottoPopup : Popup
         FirebaseManager.Instance.LottoPopupRefresh = RefrehUI;
         RefrehUI();
         if (FirebaseManager.Instance.ReviewMode)
-            Info.text = "- 1,000P를 사용하여 행운 번호를 뽑아보세요\n- 100명 참여시 행운의 당첨자가 뽑힙니다\n- 2,000포인트의 주인공이 되어보세요\n** 랜덤 번호는 애플과의 관계가 일절 없습니다";
+            Info.text = "- 1,000P를 사용하여 행운 번호를 뽑아보세요\n- 100명 참여 시 행운의 당첨자가 뽑힙니다\n- 2,000포인트의 주인공이 되어보세요\n** 랜덤 번호는 애플과의 관계가 일절 없습니다";
         else
-            Info.text = string.Format("- 1,000P를 사용하여 행운 번호를 뽑아보세요\n- 100명 참여시 추첨을 진행합니다\n- 당첨시 {0:n0}P가 지급됩니다", CommonData.LottoWinBonus);
+            Info.text = string.Format("- 1,000P를 사용하여 행운 번호를 뽑아보세요\n- 100명 참여시 자동으로 추첨을 진행합니다\n- 당첨시 {0:n0}P가 지급됩니다", CommonData.LottoWinBonus);
         // 1000P를 사용하여 행운 번호를 뽑아보세요. 100명 참여시 자동 추첨 진행 , 당첨금액은 2000캐시
         //    Info.text = "- 1000포인트를 사용하여 행운번호를 뽑아보세요\n- 하루 최대 4명의 행운의 당첨자가 뽑힙니다\n- 2000포인트의 주인공이 되어보세요\n** 랜덤 번호는 애플과의 관계가 일절 없습니다";
         //else

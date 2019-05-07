@@ -24,6 +24,7 @@ public class AdsManager : MonoBehaviour {
     public bool AdView = false;
     public bool AdEnable = false;
     public bool AdComplete = false;
+    public bool AdmobVideoLoding = false;
 
 
     /// ////////////////////////////////////////////////
@@ -76,7 +77,9 @@ public class AdsManager : MonoBehaviour {
         rewardAdmobVideo.OnAdLoaded += HandleRewardBasedVideoLoaded;
         rewardAdmobVideo.OnAdFailedToLoad += HandleRewardBasedVideoFailedToLoad;
         rewardAdmobVideo.OnAdRewarded += HandleRewardBasedVideoRewarded;
-        rewardAdmobVideo.OnAdClosed += HandleRewardBasedVideoClosed;        
+        rewardAdmobVideo.OnAdClosed += HandleRewardBasedVideoClosed;
+
+        AdmobVideoLoding = false;
 
 #if !UNITY_EDITOR
         //this.RequestBanner();
@@ -108,20 +111,22 @@ public class AdsManager : MonoBehaviour {
     {
         Debug.Log("!!!!!@ Ad HandleRewardBasedVideoLoaded event received");
         MonoBehaviour.print("HandleRewardBasedVideoLoaded event received");
+        AdmobVideoLoding = true;
     }
 
     public void HandleRewardBasedVideoFailedToLoad(object sender, AdFailedToLoadEventArgs args)
     {
         AdView = false;
         Debug.Log("!!!!!@ Ad HandleRewardBasedVideoFailedToLoad");
+        AdmobVideoLoding = false;
         this.RequestAdmobVideo();
-       
     }
     public void HandleRewardBasedVideoClosed(object sender, EventArgs args)
     {
         AdView = false;
         Debug.Log("!!!!!@ Ad " + "HandleRewardBasedVideoClosed");
-        this.RequestAdmobVideo();        
+        AdmobVideoLoding = false;
+        this.RequestAdmobVideo();
     }
 
     public void HandleRewardBasedVideoRewarded(object sender, Reward args)
@@ -603,6 +608,26 @@ public class AdsManager : MonoBehaviour {
         }
         else
         {
+            float waitTime = 3f;
+            TKManager.Instance.ShowHUD();
+            while (AdmobVideoLoding == false)
+            {
+                if (AdmobVideoLoding)
+                {
+                    AdEnable = true;
+                    break;
+                }
+
+                waitTime -= Time.deltaTime;
+
+                if (AdmobVideoLoding == false && waitTime < 0f)
+                {
+                    this.RequestAdmobVideo();
+                    break;
+                }
+
+                yield return null;
+            }
             TKManager.Instance.HideHUD();
             yield break;
         }
