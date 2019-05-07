@@ -151,6 +151,8 @@ public class UserData
 
                     FirebaseManager.Instance.AddTotalPoint(addPoint);
                 }
+                SetAllAccumulatePoint(AllAccumulatePoint);
+                SetTodayAccumulatePoint(TodayAccumulatePoint);
             }
             else
             {
@@ -196,6 +198,8 @@ public class UserData
         AllAccumulatePoint = point;
         if (AllAccumulatePoint < 0)
             AllAccumulatePoint = 0;
+
+        FirebaseManager.Instance.SetTotalAccumPoint(AllAccumulatePoint);
     }
 
     public void SetTodayAccumulatePoint(int point)
@@ -203,6 +207,8 @@ public class UserData
         TodayAccumulatePoint = point;
         if (TodayAccumulatePoint < 0)
             TodayAccumulatePoint = 0;
+
+        FirebaseManager.Instance.SetTodayAccumPoint(TodayAccumulatePoint);
     }
 
     //public void SetPoint(int point)

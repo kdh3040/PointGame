@@ -1974,14 +1974,22 @@ public class FirebaseManager : MonoBehaviour
             {
                 DataSnapshot snapshot = task.Result;
 
-                if (snapshot.Exists || snapshot.Value != null)
+
+                if (snapshot != null)
                 {
-                    NickNameExist = true;
+                    if (snapshot.Exists || snapshot.Value != null)
+                    {
+                        NickNameExist = true;
+                    }
+                    else
+                    {
+                        NickNameExist = false;
+                    }
                 }
                 else
-                {
                     NickNameExist = false;
-                }
+
+
 
                 FirebaseProgress = false;
                 //  Debug.LogFormat("UserInfo: Index : {0} NickName {1} Point {2}", TKManager.Instance.MyData.Index, TKManager.Instance.MyData.NickName, TKManager.Instance.MyData.Point);
