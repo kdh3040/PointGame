@@ -609,9 +609,9 @@ public class AdsManager : MonoBehaviour {
         }
         else
         {
-            float waitTime = 3f;
+            float waitTime = 5f;
             TKManager.Instance.ShowHUD();
-            while (AdmobVideoLoding == false)
+            while (true)
             {
                 if (AdmobVideoLoding)
                 {
