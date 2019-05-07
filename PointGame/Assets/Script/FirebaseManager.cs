@@ -1153,7 +1153,7 @@ public class FirebaseManager : MonoBehaviour
 #if UNITY_IOS
         string dataKey = "ios_ExamineVersion";
 #elif (UNITY_ANDROID && !UNITY_EDITOR)
-        string dataKey = "aos_ExamineVersion";
+        string dataKey = "editor_ExamineVersion";
 #elif (UNITY_ANDROID && UNITY_EDITOR)
         string dataKey = "editor_ExamineVersion";
 #endif
