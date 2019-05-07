@@ -96,7 +96,9 @@ public class MainUI : MonoBehaviour {
         if (TKManager.Instance.GameOverRouletteStart)
             StartCoroutine(Co_GameOverRouletteStart());
 
-        if (FirebaseManager.Instance.ReviewMode || FirebaseManager.Instance.ExamineMode)
+        // TODO 테스트
+        // if (FirebaseManager.Instance.ReviewMode || FirebaseManager.Instance.ExamineMode)
+        if(FirebaseManager.Instance.ReviewMode)
         {
             PointSwap.gameObject.SetActive(false);
             HelpButton.gameObject.SetActive(false);
@@ -147,21 +149,28 @@ public class MainUI : MonoBehaviour {
         Activity.CallStatic("CheckRooted");
 #endif
         yield return null;
-#if (UNITY_ANDROID && !UNITY_EDITOR)
-        if (FirebaseManager.Instance.ExamineMode)
-        {
-            Popup.ShowPopup(new MsgPopup.MsgPopupData(FirebaseManager.Instance.ExamineContrext, () =>
-            {
-                Application.Quit();
-            }));
-        }
-#elif (UNITY_ANDROID && UNITY_EDITOR) || UNITY_IOS
+
+        //#if (UNITY_ANDROID && !UNITY_EDITOR)
+        //        if (FirebaseManager.Instance.ExamineMode)
+        //        {
+        //            Popup.ShowPopup(new MsgPopup.MsgPopupData(FirebaseManager.Instance.ExamineContrext, () =>
+        //            {
+        //                Application.Quit();
+        //            }));
+        //        }
+        //#elif (UNITY_ANDROID && UNITY_EDITOR) || UNITY_IOS
+        //        var desc = string.Format("{0}\n{1}", FirebaseManager.Instance.ExamineContrext, "*포인트를 획득 할 수 없습니다");
+        //        if (FirebaseManager.Instance.ExamineMode)
+        //        {
+        //            Popup.ShowPopup(new MsgPopup.MsgPopupData(desc));
+        //        }
+        //#endif
+        // TODO 테스트
         var desc = string.Format("{0}\n{1}", FirebaseManager.Instance.ExamineContrext, "*포인트를 획득 할 수 없습니다");
-        if (FirebaseManager.Instance.ExamineMode)
+        //if (FirebaseManager.Instance.ExamineMode)
         {
             Popup.ShowPopup(new MsgPopup.MsgPopupData(desc));
         }
-#endif
 
     }
 

@@ -172,7 +172,7 @@ public class AdsManager : MonoBehaviour {
         if (tempSize > 0)
             bannerView = new BannerView(adUnitId, AdSize.SmartBanner, 0, ConvertPixelsToDP(Screen.height - (tempSize * AdSize.Banner.Height * Screen.dpi / 160)));
         else
-            bannerView = new BannerView(adUnitId, AdSize.SmartBanner, 0, ConvertPixelsToDP(Screen.height - (AdSize.Banner.Height * Screen.dpi / 160)));        
+            bannerView = new BannerView(adUnitId, AdSize.SmartBanner, 0, ConvertPixelsToDP(Screen.height - (AdSize.Banner.Height * Screen.dpi / 160)));
 #endif
 
 
@@ -182,8 +182,9 @@ public class AdsManager : MonoBehaviour {
 
         // this.bannerView.LoadAd(request);
 
-
-        if (FirebaseManager.Instance.ReviewMode == false && FirebaseManager.Instance.ExamineMode == false)
+        // TODO 테스트
+        // if (FirebaseManager.Instance.ReviewMode == false && FirebaseManager.Instance.ExamineMode == false)
+        if (FirebaseManager.Instance.ReviewMode == false)
             AdsManager.Instance.ShowBanner();
 
     }

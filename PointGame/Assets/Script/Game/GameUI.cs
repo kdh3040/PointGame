@@ -62,7 +62,9 @@ public class GameUI : MonoBehaviour {
             mAudio.Play();
         }
 
-        if (FirebaseManager.Instance.ReviewMode || FirebaseManager.Instance.ExamineMode)
+        // TODO 테스트
+        // if (FirebaseManager.Instance.ReviewMode || FirebaseManager.Instance.ExamineMode)
+        if (FirebaseManager.Instance.ReviewMode)
             GameOverRouletteText.text = "나가기";
         else
             GameOverRouletteText.text = "룰렛 돌리기";
@@ -167,7 +169,9 @@ public class GameUI : MonoBehaviour {
     private void OnClickRoulette()
     {
         SoundManager.Instance.PlayFXSound(SoundManager.SOUND_TYPE.BUTTON);
-        if (FirebaseManager.Instance.ReviewMode || FirebaseManager.Instance.ExamineMode)
+        // TODO 테스트
+        // if (FirebaseManager.Instance.ReviewMode || FirebaseManager.Instance.ExamineMode)
+        if (FirebaseManager.Instance.ReviewMode)
         {
             TKManager.Instance.MyData.AddPoint(GamePlayManager.Instance.GamePoint);
             TKManager.Instance.ReviewRankPlusScore = GamePlayManager.Instance.GamePoint;
