@@ -1803,6 +1803,8 @@ public class FirebaseManager : MonoBehaviour
 
             else if (task.IsCompleted)
             {
+                // 파베 데이터베이스 루트에 RPSGameEnterTime 추가
+                // 하단에 [ 540, 900 ] 추가
                 DataSnapshot snapshot = task.Result;
                 if (snapshot != null && snapshot.Exists)
                 {
