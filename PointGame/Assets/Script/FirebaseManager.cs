@@ -242,7 +242,6 @@ public class FirebaseManager : MonoBehaviour
         FirebaseDatabase.DefaultInstance
         .GetReference("RPSGameWinnerGroup").OrderByKey().LimitToLast(5)
         .ChildAdded += HandleChildAddedRPSGameWinnerGroup;
-
     }
 
     void HandleRPSGameSeriesChanged(object sender, ValueChangedEventArgs args)
@@ -484,6 +483,7 @@ public class FirebaseManager : MonoBehaviour
         GetRPSWinnerSecPrizeMoney();
 
         GetRPSGameCurSeries();
+        IsAcquirePointMode();
     }
 
 
@@ -492,7 +492,7 @@ public class FirebaseManager : MonoBehaviour
         if (FirstLoadingComplete == false)
             LoadingCount++;
 
-        if (LoadingCount == 19)
+        if (LoadingCount == 20)
             FirstLoadingComplete = true;
     }
 
@@ -1997,6 +1997,34 @@ public class FirebaseManager : MonoBehaviour
                 //  Debug.LogFormat("UserInfo: Index : {0} NickName {1} Point {2}", TKManager.Instance.MyData.Index, TKManager.Instance.MyData.NickName, TKManager.Instance.MyData.Point);
             }
         });
+    }
+
+    // 포인트 쌓이는 모드인지 판단
+    public void IsAcquirePointMode()
+    {
+        var rtValue = 0;
+
+        mDatabaseRef.Child("AcquirePointMode").GetValueAsync().ContinueWith(task =>
+        {
+            if (task.IsFaulted)
+            {
+                // Handle the error...
+            }
+            else if (task.IsCompleted)
+            {
+                DataSnapshot snapshot = task.Result;
+                if (snapshot != null && snapshot.Exists)
+                {
+                    rtValue = Convert.ToInt32(snapshot.Value);
+                }
+                else
+                {
+                    rtValue = 0;
+                }
+            }
+            AddFirstLoadingComplete();
+        }
+    );
     }
 
     // Update is called once per frame
