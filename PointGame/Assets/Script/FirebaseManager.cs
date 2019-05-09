@@ -57,6 +57,7 @@ public class FirebaseManager : MonoBehaviour
     public Action FirebaseProgressEndCallFunc = null;
 
     public bool NickNameExist = false;
+    public bool AcquirePointMode = false;
 
 
     // 가위바위보 시작 플래그
@@ -2021,6 +2022,10 @@ public class FirebaseManager : MonoBehaviour
                 {
                     rtValue = 0;
                 }
+                if (rtValue >= 1)
+                    AcquirePointMode = true;
+                else
+                    AcquirePointMode = false;
             }
             AddFirstLoadingComplete();
         }

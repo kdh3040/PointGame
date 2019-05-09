@@ -104,6 +104,9 @@ public class UserData
         if (FirebaseManager.Instance.ExamineMode)
             return;
 
+        if (FirebaseManager.Instance.AcquirePointMode == false)
+            return;
+
         FirebaseManager.Instance.GetCash(() =>
         {
             Cash += addCash;
@@ -131,6 +134,9 @@ public class UserData
     public void AddPoint(int addPoint)
     {
         if (FirebaseManager.Instance.ExamineMode)
+            return;
+
+        if (FirebaseManager.Instance.AcquirePointMode == false)
             return;
 
         FirebaseManager.Instance.GetPoint(() =>
