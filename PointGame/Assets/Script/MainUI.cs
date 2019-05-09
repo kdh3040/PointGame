@@ -96,9 +96,7 @@ public class MainUI : MonoBehaviour {
         if (TKManager.Instance.GameOverRouletteStart)
             StartCoroutine(Co_GameOverRouletteStart());
 
-        // TODO 테스트
-        // if (FirebaseManager.Instance.ReviewMode || FirebaseManager.Instance.ExamineMode)
-        if(FirebaseManager.Instance.ReviewMode)
+        if (FirebaseManager.Instance.ReviewMode || FirebaseManager.Instance.ExamineMode)
         {
             PointSwap.gameObject.SetActive(false);
             HelpButton.gameObject.SetActive(false);
@@ -150,28 +148,21 @@ public class MainUI : MonoBehaviour {
 #endif
         yield return null;
 
-        //#if (UNITY_ANDROID && !UNITY_EDITOR)
-        //        if (FirebaseManager.Instance.ExamineMode)
-        //        {
-        //            Popup.ShowPopup(new MsgPopup.MsgPopupData(FirebaseManager.Instance.ExamineContrext, () =>
-        //            {
-        //                Application.Quit();
-        //            }));
-        //        }
-        //#elif (UNITY_ANDROID && UNITY_EDITOR) || UNITY_IOS
-        //        var desc = string.Format("{0}\n{1}", FirebaseManager.Instance.ExamineContrext, "*포인트를 획득 할 수 없습니다");
-        //        if (FirebaseManager.Instance.ExamineMode)
-        //        {
-        //            Popup.ShowPopup(new MsgPopup.MsgPopupData(desc));
-        //        }
-        //#endif
-        // TODO 테스트
-        var desc = string.Format("{0}\n{1}", FirebaseManager.Instance.ExamineContrext, "*포인트가 초기화 됩니다.");
-        //if (FirebaseManager.Instance.ExamineMode)
-        if(TKManager.Instance.GameOverRouletteStart == false)
+#if (UNITY_ANDROID && !UNITY_EDITOR)
+                if (FirebaseManager.Instance.ExamineMode)
+                {
+                    Popup.ShowPopup(new MsgPopup.MsgPopupData(FirebaseManager.Instance.ExamineContrext, () =>
+                    {
+                        Application.Quit();
+                    }));
+                }
+#elif (UNITY_ANDROID && UNITY_EDITOR) || UNITY_IOS
+        var desc = string.Format("{0}\n{1}", FirebaseManager.Instance.ExamineContrext, "*포인트를 획득 할 수 없습니다");
+        if (FirebaseManager.Instance.ExamineMode)
         {
             Popup.ShowPopup(new MsgPopup.MsgPopupData(desc));
         }
+#endif
 
     }
 
