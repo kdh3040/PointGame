@@ -182,9 +182,7 @@ public class AdsManager : MonoBehaviour {
 
         // this.bannerView.LoadAd(request);
 
-        // TODO 테스트
-        // if (FirebaseManager.Instance.ReviewMode == false && FirebaseManager.Instance.ExamineMode == false)
-        if (FirebaseManager.Instance.ReviewMode == false)
+        if (FirebaseManager.Instance.ReviewMode == false && FirebaseManager.Instance.ExamineMode == false)
             AdsManager.Instance.ShowBanner();
 
     }
