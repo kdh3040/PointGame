@@ -3698,10 +3698,10 @@ RectTransform:
   m_Father: {fileID: 1626253676}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 392.85, y: -67.7}
+  m_SizeDelta: {x: 250, y: 130}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &217127894
 GameObject:
@@ -8214,7 +8214,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &445874452
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8363,7 +8363,7 @@ MonoBehaviour:
     m_Font: {fileID: 12800000, guid: eb766453723569746ad1b55d11109502, type: 3}
     m_FontSize: 44
     m_FontStyle: 0
-    m_BestFit: 0
+    m_BestFit: 1
     m_MinSize: 8
     m_MaxSize: 70
     m_Alignment: 0
@@ -8374,10 +8374,11 @@ MonoBehaviour:
     m_LineSpacing: 1
   m_Text: "(\uC77C \uCD5C\uB300 \uC801\uB9BD \uD3EC\uC778\uD2B8 / \uC801\uB9BD\uAE08)\r\n-----------------------------------\r\n*\uB79C\uB364\uBC88\uD638
     \uBC0F \uAC00\uC704\uBC14\uC704\uBCF4\uB294 \uAC01 \uAC8C\uC784 \uD31D\uC5C5\uCC3D
-    \uCC38\uC870\r\n*Tip - \uC5EC\uBD84\uC758 \uC2A4\uB9C8\uD2B8\uD3F0\uC73C\uB85C
+    \uCC38\uC870\r\n*\uC720\uC800\uC218 \uC99D\uAC00\uC5D0 \uB530\uB77C \uC801\uB9BD
+    \uCE90\uC2DC \uC0C1\uC2B9 \uC608\uC815\n*Tip - \uC5EC\uBD84\uC758 \uC2A4\uB9C8\uD2B8\uD3F0\uC73C\uB85C
     \uC640\uC774\uD30C\uC774\uB97C \uC774\uC6A9\uD558\uC5EC \uAC8C\uC784\uC744 \uC990\uACA8\uBCF4\uC138\uC694.\r\n(\uC6D4
-    \uCD5C\uB300 16\uB9CC\uC6D0 \uC801\uB9BD\uAC00\uB2A5 , \uC2A4\uB9C8\uD2B8\uD3F0
-    2\uB300\uBA74 \uC6D4 32\uB9CC\uC6D0 \uC801\uB9BD \uAC00\uB2A5!!)\n"
+    \uCD5C\uB300 75,000\uC6D0 \uC801\uB9BD\uAC00\uB2A5 , \uC2A4\uB9C8\uD2B8\uD3F0
+    2\uB300\uBA74 \uC6D4 15\uB9CC\uC6D0 \uC801\uB9BD \uAC00\uB2A5!!)"
 --- !u!222 &454200522
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -15319,7 +15320,7 @@ PrefabInstance:
     - target: {fileID: 224127363958183114, guid: 6bbd9cf7641607541953bce8704f1263,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -380
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224127363958183114, guid: 6bbd9cf7641607541953bce8704f1263,
         type: 3}
@@ -16450,7 +16451,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &941453428
 RectTransform:
   m_ObjectHideFlags: 0
@@ -23856,7 +23857,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "500C\r\n1,000C\r\n1,500C\r\n2,100C\r\n2,600C\r\n3,100C\r\n3,600C\r\n4,200C\r\n4,700C\r\n5,300C\r\n"
+  m_Text: "250C\r\n500C\r\n750C\r\n1,000C\r\n1,250C\r\n1,500C\r\n1,750C\r\n2,000C\r\n2,250C\r\n2,500C\r\n"
 --- !u!222 &1296358592
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -31486,7 +31487,7 @@ PrefabInstance:
     - target: {fileID: 224127363958183114, guid: 6bbd9cf7641607541953bce8704f1263,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -884
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224127363958183114, guid: 6bbd9cf7641607541953bce8704f1263,
         type: 3}
@@ -31625,7 +31626,7 @@ MonoBehaviour:
     m_LineSpacing: 1
   m_Text: "- 1000P\uB97C \uC0AC\uC6A9\uD558\uC5EC \uD589\uC6B4 \uBC88\uD638\uB97C
     \uBF51\uC544\uBCF4\uC138\uC694\n- 100\uBA85 \uCC38\uC5EC\uC2DC \uCD94\uC810\uC744
-    \uC9C4\uD589\uD569\uB2C8\uB2E4\n- \uB2F9\uCCA8\uC2DC 2000\uCE90\uC2DC\uAC00 \uC9C0\uAE09\uB429\uB2C8\uB2E4"
+    \uC9C4\uD589\uD569\uB2C8\uB2E4\n- \uB2F9\uCCA8\uC2DC 40,000P\uAC00 \uC9C0\uAE09\uB429\uB2C8\uB2E4"
 --- !u!222 &1747562073
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -36754,7 +36755,7 @@ PrefabInstance:
     - target: {fileID: 224127363958183114, guid: 6bbd9cf7641607541953bce8704f1263,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -632
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224127363958183114, guid: 6bbd9cf7641607541953bce8704f1263,
         type: 3}

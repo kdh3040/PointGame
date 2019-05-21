@@ -14,7 +14,7 @@ public class CommonData : MonoBehaviour
 
     public static int TodayAccumulatePointLimit = 100000;
     public static int PointToCashChange = 1000;
-    public static int PointToCashChangeValue = 50;
+    public static int PointToCashChangeValue = 25;
     public static int MinCashChange = 50000;
     public static int MinCashChangeUnit = 20000;
 
@@ -34,9 +34,9 @@ public class CommonData : MonoBehaviour
 
     public static int ChangePointMax = 100000;
     public static int[] ChangePointBonusArr = { 40000, 80000, 100000 };
-    public static int BonusCash = 100;
-    public static int BonusPoint = 2000;
+    public static int BonusCash = 0;
+    public static int BonusPoint = 0;
 
-    public static int LottoWinBonus = 30000;
+    public static int LottoWinBonus = 40000;
 
 }
