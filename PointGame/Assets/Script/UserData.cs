@@ -27,6 +27,7 @@ public class UserData
     private int AdsViewCount = 0;
 
     public bool NewUser = false;
+    public bool NewCalUser = false;
 
     // TODO 내정보, 로또정보, 가지고 있는 기프티콘 이미지 로드 할때까지 로딩 페이지에서 머무르게끔 해야함
     public void SetData(string index, string nickName)
@@ -85,9 +86,11 @@ public class UserData
 
     public void UpdateOldUserPoint()
     {
-        if(NewUser == false)
+        if(NewUser == false || NewCalUser == false)
         {
+            int PointValue = Point % 1000;
             Point = TKManager.Instance.ChangeCashToPoint(Cash);
+            Point += PointValue;
             FirebaseManager.Instance.SetPoint(Point);
         }
     }
@@ -113,7 +116,9 @@ public class UserData
             if (Cash < 0)
                 Cash = 0;
 
+            int PointValue = Point % 1000;
             Point = TKManager.Instance.ChangeCashToPoint(Cash);
+            Point += PointValue;
             FirebaseManager.Instance.SetPoint(Point);
             FirebaseManager.Instance.SetCash(Cash);
         });
@@ -174,29 +179,10 @@ public class UserData
             if (Point < 0)
                 Point = 0;
 
-            if(minusPoint)
-            {
-                Cash = TKManager.Instance.ChangePointToCash(Point);
+            Cash = TKManager.Instance.ChangePointToCash(Point);
 
-                FirebaseManager.Instance.SetPoint(Point);
-                FirebaseManager.Instance.SetCash(Cash);
-            }
-            else
-            {
-                int tempCash = TKManager.Instance.ChangePointToCash(Point);
-
-                if (tempCash > Cash)
-                {
-                    Cash = TKManager.Instance.ChangePointToCash(Point);
-
-                    FirebaseManager.Instance.SetPoint(Point);
-                    FirebaseManager.Instance.SetCash(Cash);
-                }
-                else
-                {
-                    FirebaseManager.Instance.SetPoint(Point);
-                }
-            }
+            FirebaseManager.Instance.SetPoint(Point);
+            FirebaseManager.Instance.SetCash(Cash);
         });
     }
 

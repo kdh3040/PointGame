@@ -47,7 +47,7 @@ public class FirebaseManager : MonoBehaviour
     public bool FirstLoadingComplete = false;
     public int LoadingCount = 0;
 
-    private int ReviewVersion = 4;
+    private int ReviewVersion = 5;
     public bool ReviewMode = true;
     public bool ExamineMode = true;
 
@@ -556,6 +556,13 @@ public class FirebaseManager : MonoBehaviour
                         TKManager.Instance.MyData.NewUser = true;
 
                     mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("NewUser").SetValueAsync(true);
+
+                    if (tempData.ContainsKey("NewCalUser") == false)
+                        TKManager.Instance.MyData.NewCalUser = false;
+                    else
+                        TKManager.Instance.MyData.NewCalUser = true;
+
+                    mDatabaseRef.Child("Users").Child(TKManager.Instance.MyData.Index).Child("NewCalUser").SetValueAsync(true);
 
                     string tempNick = TKManager.Instance.MyData.NickName;
 

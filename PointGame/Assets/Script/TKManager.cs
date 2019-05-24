@@ -202,7 +202,7 @@ public class TKManager : MonoBehaviour
 
         int count = 0;
         int bonusCount = 0;
-        while(true)
+        while(false)
         {
             bool whileBreak = false;
             for (int i = 0; i < CommonData.ChangePointBonusArr.Length; i++)
@@ -238,7 +238,7 @@ public class TKManager : MonoBehaviour
 
         int count = 0;
         int bonusCount = 0;
-        while (true)
+        while (false)
         {
             bool whileBreak = false;
             for (int i = 0; i < CommonData.ChangePointBonusArr.Length; i++)
