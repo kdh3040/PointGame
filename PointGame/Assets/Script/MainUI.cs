@@ -448,7 +448,7 @@ public class MainUI : MonoBehaviour {
             UnityEngine.ScreenCapture.CaptureScreenshot("shot.png");
         }
 #endif
-        if (FirebaseManager.Instance.ReviewMode)
+        if (FirebaseManager.Instance.ReviewMode || FirebaseManager.Instance.ExamineMode)
             AllPoint.SetValue(string.Format("{0}p", TKManager.Instance.MyData.Point), CountImgFont.IMG_RANGE.LEFT, CountImgFont.IMG_TYPE.YELLOW);
         else
             AllPoint.SetValue(string.Format("{0}p / {1}c", TKManager.Instance.MyData.Point, TKManager.Instance.MyData.Cash), CountImgFont.IMG_RANGE.LEFT, CountImgFont.IMG_TYPE.YELLOW);
