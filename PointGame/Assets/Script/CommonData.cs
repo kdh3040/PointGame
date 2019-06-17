@@ -15,8 +15,8 @@ public class CommonData : MonoBehaviour
     public static int TodayAccumulatePointLimit = 100000;
     public static int PointToCashChange = 1000;
     public static int PointToCashChangeValue = 25;
-    public static int MinCashChange = 50000;
-    public static int MinCashChangeUnit = 20000;
+    public static int MinCashChange = 1000;
+    public static int MinCashChangeUnit = 100;
 
     public static int LottoRefSeries = 1000000;
 
